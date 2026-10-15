@@ -12,15 +12,21 @@ readonly exe='Eidolon - Poo-Brain (native).exe'
 readonly archive_sha256='11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008'
 readonly exe_sha256='376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be'
 readonly scratch='/tmp/opencode/eidolon/T2'
-export WINEPREFIX="$scratch/prefix"
-export WINEARCH=win64
+export AGENT=T2
+export WINE_W=1920 WINE_H=1080
+export WINE_TIMEOUT="${SMOKE_TIMEOUT_SECONDS:-600}"
 export WINEDLLOVERRIDES='winemenubuilder.exe,mscoree,mshtml=d'
 export LC_ALL=C
 export TZ=UTC
+unset DISPLAY WAYLAND_DISPLAY
 
-for tool in wine wineboot wineserver unzip sha256sum timeout; do
+for tool in wine wineboot wineserver gamescope unzip sha256sum timeout; do
     command -v "$tool" >/dev/null
 done
+if [[ ! "$WINE_TIMEOUT" =~ ^[1-9][0-9]{0,2}$ ]]; then
+    printf 'SMOKE_TIMEOUT_SECONDS must be an integer between 1 and 999 seconds.\n' >&2
+    exit 64
+fi
 if [[ "$(wine --version)" != 'wine-11.17' ]]; then
     printf 'Expected wine-11.17; review environment before changing the pin.\n' >&2
     exit 65
@@ -30,22 +36,7 @@ mkdir -p "$scratch/input"
 unzip -p "$archive" "$exe" > "$scratch/input/$exe"
 printf '%s  %s\n' "$exe_sha256" "$scratch/input/$exe" | sha256sum --check --status
 
-if [[ ! -e "$WINEPREFIX/system.reg" ]]; then
-    WINEDEBUG=-all timeout --signal=TERM --kill-after=10s 120s wineboot --init
-    timeout 120s wineserver --wait
-fi
-
-# Use Wine's X11 driver on the recorded Xwayland display. Native Wayland does
-# not provide Wine's virtual-desktop semantics in the same way.
-WINEDEBUG=-all wine reg add 'HKCU\Software\Wine\Drivers' /v Graphics /t REG_SZ /d x11 /f
-WINEDEBUG=-all wine reg add 'HKCU\Software\Wine\Drivers' /v Audio /t REG_SZ /d pulse /f
-WINEDEBUG=-all wine reg add 'HKCU\Software\Wine' /v Version /t REG_SZ /d win10 /f
-WINEDEBUG=-all wine reg add 'HKCU\Software\Wine\Explorer' /v Desktop /t REG_SZ /d EidolonT2 /f
-WINEDEBUG=-all wine reg add 'HKCU\Software\Wine\Explorer\Desktops' /v EidolonT2 /t REG_SZ /d 1920x1080 /f
-timeout 120s wineserver --wait
-
-export WINEDEBUG="${SMOKE_WINEDEBUG:--all,+timestamp,+pid,+tid,+seh,+wgl,+wave,+winmm,+process,+explorer}"
-printf 'Smoke run: prefix=%s desktop=EidolonT2,1920x1080 timeout=%ss\n' "$WINEPREFIX" "${SMOKE_TIMEOUT_SECONDS:-900}" >&2
+export WINEDEBUG="${SMOKE_WINEDEBUG:--all,+timestamp,+pid,+tid,+seh,+wgl,+wave,+winmm,+dsound,+process}"
+printf 'Smoke run: prefix=%s display=gamescope-headless,1920x1080 timeout=%ss\n' "$scratch/prefix" "$WINE_TIMEOUT" >&2
 # 124/137 means failure to finish, never successful timeline termination.
-exec timeout --signal=TERM --kill-after=10s "${SMOKE_TIMEOUT_SECONDS:-900}s" \
-    wine "$scratch/input/$exe"
+exec bash tools/run tools/wine-headless "$scratch/input/$exe"
