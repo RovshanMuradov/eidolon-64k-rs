@@ -1,6 +1,7 @@
 # Draft reference contract
 
-- [H] Owner: T3; schema `eidolon-reference-draft-1`; pending T2 agreement and T1-confirmed capture points.
+- [V] Owner: Verification/T5; assignment: [briefs/T5.md](../briefs/T5.md).
+- [H] Schema `eidolon-reference-draft-2` remains provisional pending T2 agreement and T1-confirmed capture points.
 - [V] Acceptance target: [approved step 1](../GOAL.md#approved-step-1--reproducible-reference-of-the-original).
 - [V] Executable checker: [tools/verify/reference.py](../tools/verify/reference.py); synthetic fixture: [reference_factory.py](reference_factory.py).
 - [H] A `PASS` under this draft reports only the requested integrity/comparison operation; synthetic captures establish neither an original reference nor original repeatability.
@@ -16,19 +17,21 @@
 
 ## Manifest
 
-- [H] `schema`: exactly `eidolon-reference-draft-1`.
+- [H] `schema`: exactly `eidolon-reference-draft-2`; draft-1 manifests fail validation and require an explicit producer update with established display metadata.
 - [H] `run_id`: a unique identifier for a separate invocation; comparing the same ID or manifest is a failure.
-- [H] `source`: `{kind, exe_sha256, inputs}`; `kind` is `original` or `synthetic`; `inputs` maps every other input's stable name to its hash.
+- [H] `source`: `{kind, exe_sha256, inputs}`; `kind` is `original` or `synthetic`; `inputs` maps every other input's stable name to its hash, including the source archive and hook/shim build inputs.
 - [H] `source.exe_sha256` for `original` must equal the approved native EXE hash in `GOAL.md`; synthetic inputs must be labeled `synthetic`.
 - [H] `capture`: `{kind, tool_sha256, command}`; `kind` is `controlled-reference` for originals or `synthetic-reference` for synthetic fixtures; `compatibility-smoke` is rejected.
-- [H] `capture.tool_sha256` hashes the complete capture implementation bundle; `command` is the exact nonempty argument array used to reproduce the capture.
+- [H] `capture.tool_sha256` hashes the complete capture implementation bundle, including `tools/wine-headless` and hooks/shims; `command` is the exact nonempty argument array used to reproduce the capture.
 - [H] `conditions`: `{environment, settings, clock, rng, initial_state_sha256}`; `settings` records every capture/demo setting as a JSON object.
-- [H] `conditions.environment`: `{os, arch, wine, gpu, driver, graphics_api, desktop}`; version/identity strings must be pinned; `desktop` is exactly `[1920,1080]`.
+- [H] `conditions.environment`: `{os, arch, wine, gpu, driver, graphics_api, gamescope, display}`; all fields except `display` are nonempty pinned version/identity strings, including the gamescope version.
+- [H] `conditions.environment.display`: exactly `{kind:"gamescope-headless", width:1920, height:1080, launcher:"tools/wine-headless", wine_virtual_desktop:false}`; dimensions are integer pixels and the flag is a JSON boolean.
+- [V] Display semantics require an invisible gamescope headless display with no Wine virtual desktop or user-screen window; dimensions describe that display, not the captured final buffer ([approved display](../GOAL.md#approved-step-1--reproducible-reference-of-the-original)).
 - [H] `conditions.clock`: `{numerator:1, denominator:60, method}`; `method` identifies how the clock and audio position fed to the demo are controlled.
 - [H] `conditions.rng`: `{method, initial_state_sha256}`; identify RNG initialization/control and hash its initial-state serialization.
-- [H] `conditions.initial_state_sha256`: hash the stable initial-state specification, including Wine-prefix baseline, initial resources and process/FP settings affecting output.
+- [H] `conditions.initial_state_sha256`: hash the stable initial-state specification, including Wine-prefix baseline, initial resources and process/FP settings affecting output; record the prefix initialization recipe and hook/build identifiers in `conditions.settings`.
 - [H] `video`: `{width, height, row_stride, pixel_format, row_order, color_space, frame_count, index, index_sha256, storage}`.
-- [H] `video.width`/`height` are positive final-buffer dimensions, independently recorded from the virtual-desktop dimensions; `row_stride = width * 4` bytes.
+- [H] `video.width`/`height` are positive final-buffer dimensions, independently recorded from `conditions.environment.display`; `row_stride = width * 4` bytes.
 - [H] `video.pixel_format` is `rgba8` or `bgra8`; `row_order` is `top-down` or `bottom-up`; `color_space` names the actual interpretation without applying a conversion.
 - [H] `video.frame_count = N > 0`; `index_sha256` hashes the exact index file bytes, including newlines; `storage` is `reference` or `hashes`.
 - [H] `audio`: `{path, sha256, sample_format, sample_rate, channels, layout, sample_frames, start_sample}`.
@@ -64,20 +67,28 @@
 - [H] Frame comparison uses SHA-256 for all final buffers and rehashes every stored raw frame; unsaved pixel buffers require re-capture from the original to inspect a mismatch.
 - [H] Run IDs, capture-command arguments, file locations, storage mode and index-file hashes need not agree across runs; commands may differ in output paths, while behavioral settings must agree in `conditions`.
 - [H] No tolerance, time alignment, dropped prefix/suffix, frame deduplication, image conversion or audio normalization is permitted.
-- [H] Source/tool/state hashes and end-event evidence are declarations checked for shape/equality, not proof of runtime behavior; capture-point correctness and a full natural end require T1/T2 evidence.
+- [H] Source/tool/state hashes, display metadata and end-event evidence are declarations checked for shape/equality, not proof of runtime behavior; headless execution, capture-point correctness and a full natural end require T1/T2 evidence.
 - [H] A consistently forged/truncated pair with rewritten termination declarations cannot be disproved from these payloads alone; a T1-established endpoint or independently verified exit event is necessary.
+
+## Capture feedback reconciliation
+
+- [V] Proposal: `$EIDOLON_ROOT/handoff/capture-to-verification-format.md`; response: `$EIDOLON_ROOT/handoff/verification-to-capture-format.md`.
+- [H] Native pixel/PCM layout is constant per run and lives once in `video`/`audio`; `pixel_format` specifies byte channel order and unsigned 8-bit components, while `sample_format` specifies scalar type and byte order.
+- [H] Sparse compression is defined by `raw_zst`; raw length and hash are derived from video layout and the frame record, while mandatory selection reasons follow frame numbers and scene bounds without duplicate fields.
+- [H] PCM byte length is derived from sample frames, channel count and sample format; rational cursor phase, completion counters and pre-present ordering follow the definitions above.
 
 ## Commands
 
 - [H] Single-run integrity: `bash tools/run python tools/verify/reference.py validate <manifest> --data-root <run-data>`.
 - [H] Independent run comparison: `bash tools/run python tools/verify/reference.py compare <reference-manifest> <repeat-manifest> --reference-data <reference-data> --candidate-data <repeat-data>`.
 - [H] JSON output contains `status: PASS|FAIL`, `draft:true`, `source_kinds`, operation and failure reasons; exit status is `0` for PASS, `1` for FAIL, `2` for CLI usage errors.
-- [V] Pytest 9.1.1 fails setup if the temporary parent is absent; prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T3').mkdir(parents=True, exist_ok=True)"`.
-- [V] Synthetic regression command: `bash tools/run python -m pytest tests/test_reference.py --basetemp /tmp/opencode/eidolon/T3/pytest -q` → 87 passed with Python 3.14.7 and zstandard 0.25.0.
+- [V] Tool versions: `bash tools/run python --version` → 3.14.7; `bash tools/run python -m pytest --version` → 9.1.1; `bash tools/run python -c "import zstandard; print(zstandard.__version__)"` → 0.25.0.
+- [V] Temporary-parent prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T5').mkdir(parents=True, exist_ok=True)"`.
+- [V] Synthetic regression command: `bash tools/run python -m pytest tests/test_reference.py --basetemp /tmp/opencode/eidolon/T5/pytest -q`; result: [reports/03-tests.md](../reports/03-tests.md).
 
 ## Agreement required
 
-- [?] T2 must confirm the native final-buffer format, row layout, actual API/capture point and clock/audio-cursor semantics before this schema becomes agreed.
+- [?] T2 must confirm the native final-buffer format, row layout, actual API/capture point and clock/audio-cursor semantics before this schema becomes agreed; packed four-byte pixels and the listed PCM formats are draft constraints, not runtime findings.
 - [?] T1/T2 must identify scene boundaries, the exclusive endpoint and whether complete generated PCM includes a tail; this draft preserves that tail and requires coverage through the endpoint.
-- [V] T2's proposal is `$EIDOLON_ROOT/handoff/capture-to-verification-format.md`; T3's response is `$EIDOLON_ROOT/handoff/verification-to-capture-format.md`.
+- [?] T2's independent updated-runtime check must establish the actual headless environment and compatibility outcome; the incoming proposal's earlier failure is not a current-runtime finding.
 - [?] T2 must agree integer-cursor rounding and supply a small real capture; unsupported native pixel/PCM formats require a new draft revision rather than a lossy conversion.

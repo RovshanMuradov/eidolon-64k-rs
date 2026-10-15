@@ -13,7 +13,7 @@ import sys
 import zstandard
 
 
-SCHEMA = "eidolon-reference-draft-1"
+SCHEMA = "eidolon-reference-draft-2"
 ORIGINAL_SHA256 = "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
 SAMPLE_BYTES = {"s16le": 2, "s24le": 3, "s32le": 4, "f32le": 4, "f64le": 8}
 CHUNK = 1024 * 1024
@@ -147,10 +147,17 @@ def load_run(manifest_path, data_root=None):
     conditions = m["conditions"]
     fields(conditions, ("environment", "settings", "clock", "rng", "initial_state_sha256"))
     environment = conditions["environment"]
-    fields(environment, ("os", "arch", "wine", "gpu", "driver", "graphics_api", "desktop"))
-    for key in environment.keys() - {"desktop"}:
+    fields(environment, ("os", "arch", "wine", "gpu", "driver", "graphics_api", "gamescope", "display"))
+    for key in environment.keys() - {"display"}:
         text(environment[key], f"environment.{key}")
-    require(environment["desktop"] == [1920, 1080], "desktop must be 1920x1080")
+    display = environment["display"]
+    fields(display, ("kind", "width", "height", "launcher", "wine_virtual_desktop"))
+    require(display["kind"] == "gamescope-headless", "display.kind must be gamescope-headless")
+    integer(display["width"], "display.width", 1)
+    integer(display["height"], "display.height", 1)
+    require((display["width"], display["height"]) == (1920, 1080), "display must be 1920x1080")
+    require(display["launcher"] == "tools/wine-headless", "display.launcher must be tools/wine-headless")
+    require(display["wine_virtual_desktop"] is False, "Wine virtual desktop must be disabled")
     require(isinstance(conditions["settings"], dict), "settings must be an object")
     fields(conditions["clock"], ("numerator", "denominator", "method"))
     integer(conditions["clock"]["numerator"], "clock numerator", 1)

@@ -67,17 +67,19 @@ def make_capture(root, run_id, storage="reference"):
             record["raw_zst"] = name
         records.append(record)
     manifest = {
-        "schema": "eidolon-reference-draft-1", "run_id": run_id,
+        "schema": "eidolon-reference-draft-2", "run_id": run_id,
         "source": {"kind": "synthetic", "exe_sha256": sha(b"fixture, not original"),
-                   "inputs": {"fixture-seed": sha(b"T3 fixture version 1")}},
-        "capture": {"kind": "synthetic-reference", "tool_sha256": sha(b"synthetic producer v1"),
+                   "inputs": {"fixture-seed": sha(b"T5 fixture version 2")}},
+        "capture": {"kind": "synthetic-reference", "tool_sha256": sha(b"synthetic producer v2"),
                     "command": ["python", "-m", "pytest", "tests/test_reference.py"]},
         "conditions": {
             "environment": {"os": "synthetic Linux", "arch": "synthetic x86",
                             "wine": "synthetic; no Wine", "gpu": "synthetic; no GPU",
                             "driver": "synthetic; no driver", "graphics_api": "synthetic bytes",
-                            "desktop": [1920, 1080]},
-            "settings": {"fixture_version": 1},
+                            "gamescope": "synthetic; no gamescope",
+                            "display": {"kind": "gamescope-headless", "width": 1920, "height": 1080,
+                                        "launcher": "tools/wine-headless", "wine_virtual_desktop": False}},
+            "settings": {"fixture_version": 2},
             "clock": {"numerator": 1, "denominator": 60, "method": "synthetic exact ticks"},
             "rng": {"method": "synthetic deterministic arithmetic",
                     "initial_state_sha256": sha(b"synthetic RNG state")},
