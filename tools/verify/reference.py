@@ -13,8 +13,12 @@ import sys
 import zstandard
 
 
-SCHEMA = "eidolon-reference-draft-2"
+SCHEMA = "eidolon-reference-draft-3"
 ORIGINAL_SHA256 = "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
+# T1's saved-code/trace reconciliation, linked in tests/reference-format.md.
+# The 450-second visual endpoint is independent of the complete WAVEHDR extent.
+ORIGINAL_AUDIO_FRAMES = 19964544
+ORIGINAL_VISUAL_END_TICK = 27000
 SAMPLE_BYTES = {"s16le": 2, "s24le": 3, "s32le": 4, "f32le": 4, "f64le": 8}
 CHUNK = 1024 * 1024
 
@@ -88,6 +92,34 @@ def payload_path(root, relative):
 def hash_file(path):
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def verify_pcm_completion(proof, audio, expected_bytes, manifest_root, original):
+    fields(proof, ("submitted_bytes", "initial_tick", "final_tick", "final_cursor_offset",
+                   "events", "stable_sha256", "evidence", "evidence_sha256"))
+    for key in ("submitted_bytes", "initial_tick", "final_tick", "final_cursor_offset"):
+        integer(proof[key], f"completion.pcm.{key}")
+    require(proof["submitted_bytes"] == expected_bytes,
+            "PCM submitted extent does not match complete file")
+    require(proof["final_tick"] - proof["initial_tick"] == audio["sample_frames"],
+            "PCM synthesis tick delta does not match sample count")
+    if original:
+        require(proof["initial_tick"] == 1, "original synthesis tick must start at 1")
+    require(proof["final_cursor_offset"] == expected_bytes,
+            "PCM final synthesis cursor does not cover submitted extent")
+    events = proof["events"]
+    order = ("synth_complete", "readback_begin", "readback_end", "stability_check")
+    fields(events, order)
+    for key in order:
+        integer(events[key], f"completion.pcm.events.{key}", 1)
+    require(all(events[a] < events[b] for a, b in zip(order, order[1:])),
+            "PCM acquisition must follow synthesis completion and precede stability check")
+    digest(proof["stable_sha256"], "completion.pcm.stable_sha256")
+    require(proof["stable_sha256"] == audio["sha256"], "PCM post-readback stability hash mismatch")
+    digest(proof["evidence_sha256"], "completion.pcm.evidence_sha256")
+    evidence = payload_path(manifest_root, proof["evidence"])
+    require(evidence.stat().st_size > 0, "empty PCM completion evidence")
+    require(hash_file(evidence) == proof["evidence_sha256"], "PCM completion evidence SHA-256 mismatch")
 
 
 def verify_raw(path, size, expected_hash):
@@ -200,6 +232,14 @@ def load_run(manifest_path, data_root=None):
     samples = integer(audio["sample_frames"], "sample_frames", 1)
     integer(audio["start_sample"], "start_sample")
     require(audio["start_sample"] == 0, "PCM start sample must be zero")
+    expected_bytes = samples * len(channels) * SAMPLE_BYTES[audio["sample_format"]]
+    if source["kind"] == "original":
+        require((audio["sample_format"], rate, channels) == ("f32le", 44100, ["L", "R"]),
+                "original PCM must retain native float32le stereo at 44100 Hz")
+        require(samples == ORIGINAL_AUDIO_FRAMES,
+                "original PCM must contain exactly 19964544 submitted sample frames")
+        require(count == ORIGINAL_VISUAL_END_TICK,
+                "original visual endpoint must be tick 27000 (450 seconds)")
 
     term = m["termination"]
     fields(term, ("reason", "end_tick", "audio_position", "audio_position_num", "audio_position_den",
@@ -226,7 +266,7 @@ def load_run(manifest_path, data_root=None):
 
     completion = m["completion"]
     fields(completion, ("finalized", "frames_observed", "frames_hashed", "audio_sample_frames",
-                        "dropped_frames", "dropped_audio_sample_frames", "errors"))
+                        "dropped_frames", "dropped_audio_sample_frames", "errors", "pcm"))
     require(completion["finalized"] is True, "capture not finalized")
     for key, expected in (("frames_observed", count), ("frames_hashed", count),
                           ("audio_sample_frames", samples), ("dropped_frames", 0),
@@ -234,6 +274,8 @@ def load_run(manifest_path, data_root=None):
         integer(completion[key], key)
         require(completion[key] == expected, f"completion {key} does not match required count {expected}")
     require(completion["errors"] == [], "capture reports errors")
+    verify_pcm_completion(completion["pcm"], audio, expected_bytes, manifest_path.parent,
+                          source["kind"] == "original")
 
     scenes = m["scenes"]
     require(isinstance(scenes, list) and bool(scenes), "missing scene partition")
@@ -282,7 +324,6 @@ def load_run(manifest_path, data_root=None):
         require(anchors <= stored, f"missing required raw frames: {sorted(anchors - stored)}")
 
     audio_path = payload_path(root, audio["path"])
-    expected_bytes = samples * len(channels) * SAMPLE_BYTES[audio["sample_format"]]
     require(audio_path.stat().st_size == expected_bytes, "PCM byte length does not match sample count/layout")
     require(hash_file(audio_path) == audio["sha256"], "PCM SHA-256 mismatch")
     return Run(manifest_path, m, frames, audio_path)
