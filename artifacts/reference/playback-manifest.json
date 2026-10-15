@@ -13,7 +13,7 @@
     ],
     "validation": "Both installed copies match the dependency manifest; native read size and loaded sample 127 independently confirmed.",
     "prefix_initial_state": "Retained initialized T2 win64 prefix, stopped before installation; existing differing banks rejected.",
-    "checks": ["offline bank verification", "installed-copy hashes", "busy-prefix rejection", "original fault evidence hash and Zstandard integrity"]
+    "checks": ["offline bank verification", "installed-copy hashes", "busy-prefix rejection", "stopped-prefix idempotence after both runs", "original fault evidence hash and Zstandard integrity"]
   },
   "tools": {
     "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
@@ -100,6 +100,29 @@
     "evidence": "reports/evidence/capture/playback-observations.txt",
     "evidence_sha256": "b99a9ff7f9f1da303bcb8238310e15c04922e2f6877da05a72b4f4e5e5c5e292"
   },
+  "direct_native_run": {
+    "command": ["bash", "tools/run", "bash", "tools/capture/smoke-native.sh"],
+    "command_environment": {"PULSE_SINK": "eidolon_T2", "SMOKE_WINEDEBUG": "-all,+timestamp,+pid,+tid,+wgl,+wave"},
+    "initial_state": "Fresh native process in the same retained prefix after the diagnostic run; shader/driver caches were not reset.",
+    "native_debugger": false,
+    "started_utc": "2026-10-15T19:35:32.395681+00:00",
+    "finished_utc": "2026-10-15T19:43:14.911571+00:00",
+    "wall_seconds_including_setup": 462.5158996680402,
+    "headless_runner_seconds": 456,
+    "wine_exit": 0,
+    "gamescope_exit": 139,
+    "launcher_exit": 0,
+    "timeout_fired": false,
+    "native_exit_before_compositor_failure": true,
+    "wgl_swaps_including_loading": 26112,
+    "egl_surface_swaps": 26112,
+    "first_wgl_trace_seconds": 668564.831,
+    "last_wgl_trace_seconds": 669016.695,
+    "wgl_activity_span_seconds": 451.864,
+    "evidence": "reports/evidence/capture/direct-native-observations.txt",
+    "evidence_sha256": "738ee1774396dfad0e35cf3ca54a682b08b3e32f9f523ce6d2048829feee935e",
+    "limits": "Wine call logging remains enabled; timeline clock/scene selection were not breakpoint-observed in this second run."
+  },
   "audio_observations": {
     "native_stream": {
       "application": "Eidolon - Poo-Brain (native).exe",
@@ -116,9 +139,10 @@
     "monitor_probe_command": ["ffmpeg", "-hide_banner", "-f", "pulse", "-i", "eidolon_T2.monitor", "-t", "5", "-af", "astats=metadata=0:reset=0", "-f", "null", "-"],
     "monitor_probe_format": "Host diagnostic only: FFmpeg default pcm_s16le 48000-Hz stereo, 244800 measured frames per astats summary; no PCM file retained.",
     "monitor_probes": [
-      {"start_unix_seconds": 1792092486.524352, "overall_rms_dbfs": -24.823974, "overall_peak_dbfs": -12.282837},
-      {"start_unix_seconds": 1792092603.618195, "overall_rms_dbfs": -17.712103, "overall_peak_dbfs": -1.080864},
-      {"start_unix_seconds": 1792092722.333434, "overall_rms_dbfs": -16.631513, "overall_peak_dbfs": -2.569128}
+      {"run": "diagnostic", "start_unix_seconds": 1792092486.524352, "overall_rms_dbfs": -24.823974, "overall_peak_dbfs": -12.282837},
+      {"run": "diagnostic", "start_unix_seconds": 1792092603.618195, "overall_rms_dbfs": -17.712103, "overall_peak_dbfs": -1.080864},
+      {"run": "diagnostic", "start_unix_seconds": 1792092722.333434, "overall_rms_dbfs": -16.631513, "overall_peak_dbfs": -2.569128},
+      {"run": "direct_native", "start_unix_seconds": 1792093362.053517, "overall_rms_dbfs": -20.850893, "overall_peak_dbfs": -4.803428}
     ],
     "native_pcm_extent": "Submitted header represents 19964544 stereo frames, but synthesis completes with counter 19964545; exact generated extent needs reverse confirmation.",
     "synthesis_concurrency": "waveOutWrite succeeds at debugger t=17.991 s; synthesis completion/thread exit at t=99.399 s; do not treat the whole submission buffer as immutable."
@@ -139,5 +163,16 @@
     "Individual live scene boundaries and 27000 controlled frames remain unverified.",
     "No controlled clock/RNG replay, byte-exact repeated frames or full PCM reference exists.",
     "Authentic bank provenance does not establish the original author's historical bank version."
-  ]
+  ],
+  "resource_release": {
+    "checked_utc": "2026-10-15T19:44:45.632296+00:00",
+    "method": "/proc environment/executable/cmdline scan plus pactl sink inventory after unloading only module 536870916",
+    "T2_prefix_processes": 0,
+    "gamescope_processes": 0,
+    "gamescopereaper_processes": 0,
+    "private_Xwayland_processes": 0,
+    "monitor_ffmpeg_processes": 0,
+    "private_audio_sink_removed": true,
+    "remaining_display": "Pre-existing host Xwayland :0, PID 1593"
+  }
 }
