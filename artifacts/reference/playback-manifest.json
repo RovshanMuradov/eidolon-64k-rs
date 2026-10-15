@@ -1,0 +1,143 @@
+{
+  "kind": "dependency-integrated-playback-diagnostics",
+  "reference_eligible": false,
+  "merged_main": "1f7d09246f3f04f694550c853fe0f35b5e55d84f",
+  "input_identity": "artifacts/reference/wine-smoke-manifest.json#/input",
+  "dependency_identity": "artifacts/reference/dependencies/gm-dls.json",
+  "dependency_setup": {
+    "command": ["bash", "tools/run", "python", "tools/capture/prepare-native.py"],
+    "source": "$EIDOLON_DATA/reference/dependencies/gm.dls",
+    "installed_copies": [
+      "/tmp/opencode/eidolon/T2/prefix/drive_c/windows/system32/drivers/gm.dls",
+      "/tmp/opencode/eidolon/T2/prefix/drive_c/windows/syswow64/drivers/gm.dls"
+    ],
+    "validation": "Both installed copies match the dependency manifest; native read size and loaded sample 127 independently confirmed.",
+    "prefix_initial_state": "Retained initialized T2 win64 prefix, stopped before installation; existing differing banks rejected.",
+    "checks": ["offline bank verification", "installed-copy hashes", "busy-prefix rejection", "original fault evidence hash and Zstandard integrity"]
+  },
+  "tools": {
+    "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
+    "tools/run": "957c9840fa552e115da5a411b1eca71e156e432e88efb390d394849bd114f741",
+    "tools/capture/prepare-native.py": "a7b1061ae147ef84066921ff9e8089291eaa123c65173106e875f99149b2adb5",
+    "tools/capture/smoke-native.sh": "0d18e57f4fb68e8c5b4f6337de156c3bee889bec38eaa5e3f3e905fca2af117a",
+    "tools/capture/diagnose-playback.sh": "de928d012b829db0cb4f1233582a913e8bd7c2a99585387f633a73b7a20ce4e4",
+    "tools/capture/diagnose-playback.c": "5cd395612b38acf7b58411dd01b86b1a91f93dfd59f19b33401a2ac5eb2c69e3"
+  },
+  "environment": {
+    "os": "Linux 7.1.8-arch1-3 x86_64 GNU/Linux",
+    "wine": "wine-11.17; Arch package 11.17-1",
+    "gamescope": "3.16.25 (gcc 16.1.1); Arch package 3.16.25-1",
+    "gpu": "NVIDIA GeForce RTX 3070 Ti",
+    "driver": "NVIDIA 610.57.04; nvidia-utils and lib32-nvidia-utils 610.57.04-1",
+    "mesa_packages": "mesa and lib32-mesa 1:26.1.7-1",
+    "graphics_api": "OpenGL via Wine X11/EGL; Wine pixel format ID 70",
+    "private_display_gl_probe": {
+      "command": "DISPLAY=:1 bash tools/run glxinfo -B",
+      "tool_package": "mesa-utils 9.0.0-7",
+      "vendor": "NVIDIA Corporation",
+      "renderer": "NVIDIA GeForce RTX 3070 Ti/PCIe/SSE2",
+      "version": "4.6.0 NVIDIA 610.57.04",
+      "direct_rendering": true,
+      "limitation": "Separate diagnostic GL context on the same private display; not a query of the demo's final-buffer state."
+    },
+    "display": {
+      "kind": "gamescope-headless",
+      "width": 1920,
+      "height": 1080,
+      "refresh_hz": 60,
+      "wine_virtual_desktop": false,
+      "x11": ":1",
+      "wayland": "gamescope-0",
+      "runner_arguments": ["--backend", "headless", "-W", "1920", "-H", "1080", "-w", "1920", "-h", "1080", "-r", "60"]
+    },
+    "agent": "T2",
+    "wineprefix": "/tmp/opencode/eidolon/T2/prefix",
+    "winearch": "win64",
+    "windows_version": "win10",
+    "winedlloverrides": "winemenubuilder.exe,mscoree,mshtml=d",
+    "winedebug": "-all,+timestamp,+pid,+tid,+wgl,+wave",
+    "lc_all": "C",
+    "tz": "UTC",
+    "host_display_variables": "DISPLAY and WAYLAND_DISPLAY unset before approved runner setup",
+    "show_crash_dialog": false,
+    "aedebug_debuggers": "empty in both 64-bit and 32-bit registry views",
+    "audio_server": "PulseAudio on PipeWire 1.6.8; pactl 17.0-98-gb096",
+    "audio_routing": "PULSE_SINK=eidolon_T2, isolated null sink created at 44100 Hz/stereo; host default sink unchanged",
+    "audio_sink_setup": ["pactl", "load-module", "module-null-sink", "sink_name=eidolon_T2", "rate=44100", "channels=2"],
+    "audio_sink_module_id": 536870916,
+    "python": "3.14.7",
+    "compiler": "i686-w64-mingw32-gcc (GCC) 16.2.0",
+    "ffmpeg": "n9.0.1",
+    "clock_control": "none; real-time waveOut position",
+    "rng_control": "none; fresh process",
+    "timeout_seconds": 600,
+    "D2": "WINE_EXIT authoritative; accept compositor 139 only after native exit"
+  },
+  "diagnostic_run": {
+    "command": ["bash", "tools/run", "bash", "tools/capture/diagnose-playback.sh"],
+    "command_environment": {"PULSE_SINK": "eidolon_T2"},
+    "log_created_utc": "2026-10-15T19:27:18.758441+00:00",
+    "log_finished_utc": "2026-10-15T19:35:14.813401+00:00",
+    "debugger_exe": "/tmp/opencode/eidolon/T2/diagnose-playback.exe",
+    "debugger_exe_sha256": "176736f309de123209598c5e8fe4e2c59b601915d1ac7c1cf201040f1d5206f8",
+    "runtime_source_sha256": "f4697a014ebe333f1cd42e2819c7ee3146bee85ee8ec33510054d81550a985d9",
+    "source_change_after_run": "Only the PCM probe comment was corrected to acknowledge concurrent synthesis; executable statements unchanged.",
+    "native_process_exit": 0,
+    "wine_exit": 0,
+    "gamescope_exit": 139,
+    "headless_runner_seconds": 471,
+    "timeout_fired": false,
+    "native_exit_before_compositor_failure": true,
+    "timeline_seconds_at_exit": 450,
+    "timeline_sample_position_at_exit": 19845000,
+    "timeline_swaps": 26034,
+    "failed_timeline_swaps": 0,
+    "wgl_swaps_including_loading": 26131,
+    "egl_surface_swaps": 26131,
+    "first_wgl_trace_seconds": 668071.466,
+    "last_wgl_trace_seconds": 668538.016,
+    "client_dimensions": [1920, 1080],
+    "evidence": "reports/evidence/capture/playback-observations.txt",
+    "evidence_sha256": "b99a9ff7f9f1da303bcb8238310e15c04922e2f6877da05a72b4f4e5e5c5e292"
+  },
+  "audio_observations": {
+    "native_stream": {
+      "application": "Eidolon - Poo-Brain (native).exe",
+      "display": ":1",
+      "sample_format": "float32le",
+      "channels": ["front-left", "front-right"],
+      "sample_rate_hz": 44100,
+      "target": "eidolon_T2",
+      "corked": false,
+      "muted": false,
+      "channel_volume_percent": [100, 100]
+    },
+    "stream_observation_command": ["pactl", "--format=json", "list", "sink-inputs"],
+    "monitor_probe_command": ["ffmpeg", "-hide_banner", "-f", "pulse", "-i", "eidolon_T2.monitor", "-t", "5", "-af", "astats=metadata=0:reset=0", "-f", "null", "-"],
+    "monitor_probe_format": "Host diagnostic only: FFmpeg default pcm_s16le 48000-Hz stereo, 244800 measured frames per astats summary; no PCM file retained.",
+    "monitor_probes": [
+      {"start_unix_seconds": 1792092486.524352, "overall_rms_dbfs": -24.823974, "overall_peak_dbfs": -12.282837},
+      {"start_unix_seconds": 1792092603.618195, "overall_rms_dbfs": -17.712103, "overall_peak_dbfs": -1.080864},
+      {"start_unix_seconds": 1792092722.333434, "overall_rms_dbfs": -16.631513, "overall_peak_dbfs": -2.569128}
+    ],
+    "native_pcm_extent": "Submitted header represents 19964544 stereo frames, but synthesis completes with counter 19964545; exact generated extent needs reverse confirmation.",
+    "synthesis_concurrency": "waveOutWrite succeeds at debugger t=17.991 s; synthesis completion/thread exit at t=99.399 s; do not treat the whole submission buffer as immutable."
+  },
+  "graphics_limitations": {
+    "confirmed": "Full-duration successful native timeline SwapBuffers returns and independent Wine EGL swap activity.",
+    "pixels_confirmed": false,
+    "diagnostic_probe_results": [
+      "FFmpeg x11grab on the private root and top-level window returned black images; child-drawable read failed with X11 BadMatch.",
+      "gamescopectl screenshot requests produced no file, including a one-shot debug_force_repaint request.",
+      "grim 1.5.0-2 reported that the headless compositor does not support its screen-capture protocol."
+    ],
+    "interpretation": "These probes do not establish whether the native final framebuffer is black or contains scenes; no compositor/driver remediation was attempted.",
+    "capture_gate": "In-process final-buffer inspection/readback requires the shared-checkpoint method approval; no reference-capture implementation is present."
+  },
+  "remaining_limits": [
+    "Final framebuffer bindings, sample count, channel/row layout and sRGB state are unmeasured.",
+    "Individual live scene boundaries and 27000 controlled frames remain unverified.",
+    "No controlled clock/RNG replay, byte-exact repeated frames or full PCM reference exists.",
+    "Authentic bank provenance does not establish the original author's historical bank version."
+  ]
+}
