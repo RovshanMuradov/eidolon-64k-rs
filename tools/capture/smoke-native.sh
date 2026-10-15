@@ -35,6 +35,7 @@ printf '%s  %s\n' "$archive_sha256" "$archive" | sha256sum --check --status
 mkdir -p "$scratch/input"
 unzip -p "$archive" "$exe" > "$scratch/input/$exe"
 printf '%s  %s\n' "$exe_sha256" "$scratch/input/$exe" | sha256sum --check --status
+python tools/capture/prepare-native.py
 
 export WINEDEBUG="${SMOKE_WINEDEBUG:--all,+timestamp,+pid,+tid,+seh,+wgl,+wave,+winmm,+dsound,+process}"
 printf 'Smoke run: prefix=%s display=gamescope-headless,1920x1080 timeout=%ss\n' "$scratch/prefix" "$WINE_TIMEOUT" >&2
