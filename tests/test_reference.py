@@ -1,5 +1,6 @@
 """Fault injection against complete synthetic files; never runs Wine or a demo."""
 
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -24,7 +25,7 @@ def check(pair, capsys, expected=None):
     assert code == (1 if expected else 0), result
     assert result["status"] == ("FAIL" if expected else "PASS"), result
     assert result["draft"] is True
-    assert result["schema"] == "eidolon-reference-draft-2"
+    assert result["schema"] == "eidolon-reference-draft-3"
     if expected:
         assert expected in "\n".join(result["reasons"]), result
     else:
@@ -189,6 +190,9 @@ def test_pcm_comparison_reads_beyond_first_chunk(pair, capsys):
         data = capture.pcm.read_bytes() + bytes(range(256)) * 8192
         capture.manifest["audio"]["sample_frames"] = len(data) // 4
         capture.manifest["completion"]["audio_sample_frames"] = len(data) // 4
+        capture.manifest["completion"]["pcm"].update(
+            submitted_bytes=len(data), final_tick=len(data) // 4 + 1,
+            final_cursor_offset=len(data))
         capture.update_pcm(data)
     data = bytearray(pair[1].pcm.read_bytes())
     data[1048577] ^= 1
@@ -271,7 +275,8 @@ def test_gamescope_version_must_be_recorded(pair, capsys, version):
 
 @pytest.mark.parametrize("schema,reason", [
     ("eidolon-reference-draft-1", "unsupported reference schema"),
-    ("eidolon-reference-draft-2", "invalid fields"),
+    ("eidolon-reference-draft-2", "unsupported reference schema"),
+    ("eidolon-reference-draft-3", "invalid fields"),
 ])
 def test_legacy_desktop_manifest_requires_explicit_revision(pair, capsys, schema, reason):
     capture = pair[1]
@@ -403,6 +408,7 @@ def test_external_data_roots_and_cli_exit_codes(pair, tmp_path):
         manifest = metadata / "manifest.json"
         manifest.write_bytes(capture.path.read_bytes())
         (metadata / "frames.jsonl").write_bytes((capture.root / "frames.jsonl").read_bytes())
+        (metadata / "pcm-completion.txt").write_bytes((capture.root / "pcm-completion.txt").read_bytes())
         manifests.append(manifest)
     script = Path(__file__).resolve().parents[1] / "tools/verify/reference.py"
     args = [sys.executable, str(script), "compare", *map(str, manifests),
@@ -425,3 +431,161 @@ def test_validate_command(pair, capsys):
     result = json.loads(capsys.readouterr().out)
     assert result["status"] == "PASS"
     assert result["operation"] == "validate"
+
+
+@pytest.mark.parametrize("fault,reason", [
+    ("missing", "invalid fields"),
+    ("short-submission", "PCM submitted extent"),
+    ("raw-tick-as-count", "PCM synthesis tick delta"),
+    ("short-cursor", "PCM final synthesis cursor"),
+    ("read-at-submission", "PCM acquisition must follow"),
+    ("simultaneous-read", "PCM acquisition must follow"),
+    ("incomplete-read", "PCM acquisition must follow"),
+    ("early-stability", "PCM acquisition must follow"),
+    ("fractional-event", "expected integer"),
+    ("changed-after-read", "PCM post-readback stability hash mismatch"),
+    ("no-evidence", "missing payload"),
+    ("empty-evidence", "empty PCM completion evidence"),
+    ("changed-evidence", "PCM completion evidence SHA-256 mismatch"),
+])
+def test_matching_incomplete_pcm_evidence_fails_independently(pair, capsys, fault, reason):
+    for capture in pair:
+        proof = capture.manifest["completion"]["pcm"]
+        if fault == "missing":
+            del capture.manifest["completion"]["pcm"]
+        elif fault == "short-submission":
+            proof["submitted_bytes"] -= 4
+        elif fault == "raw-tick-as-count":
+            proof["final_tick"] -= 1
+        elif fault == "short-cursor":
+            proof["final_cursor_offset"] -= 4
+        elif fault == "read-at-submission":
+            proof["events"]["readback_begin"] = 1
+        elif fault == "simultaneous-read":
+            proof["events"]["readback_begin"] = proof["events"]["synth_complete"]
+        elif fault == "incomplete-read":
+            proof["events"]["readback_end"] = proof["events"]["readback_begin"]
+        elif fault == "early-stability":
+            proof["events"]["stability_check"] = proof["events"]["readback_end"]
+        elif fault == "fractional-event":
+            proof["events"]["readback_begin"] = 3.0
+        elif fault == "changed-after-read":
+            proof["stable_sha256"] = "f" * 64
+        else:
+            path = capture.root / proof["evidence"]
+            if fault == "no-evidence":
+                path.unlink()
+            elif fault == "empty-evidence":
+                path.write_bytes(b"")
+                proof["evidence_sha256"] = sha(b"")
+            else:
+                path.write_bytes(b"changed evidence")
+        capture.save()
+    result = check(pair, capsys, reason)
+    assert len(result["reasons"]) == 2
+
+
+def test_run_specific_pcm_event_sequences_and_evidence(pair, capsys):
+    capture = pair[1]
+    proof = capture.manifest["completion"]["pcm"]
+    proof["events"] = {key: value + 100 for key, value in proof["events"].items()}
+    proof["evidence"] = "repeat-observations.txt"
+    data = b"Different synthetic observation IDs; same bytes and completion semantics.\n"
+    (capture.root / proof["evidence"]).write_bytes(data)
+    proof["evidence_sha256"] = sha(data)
+    capture.save()
+    check(pair, capsys)
+
+
+@pytest.mark.parametrize("key,shift", [
+    ("clock_tick", 1), ("audio_position", 1), ("audio_position_num", 1),
+])
+def test_matching_timing_shifts_fail_independently(pair, capsys, key, shift):
+    for capture in pair:
+        for record in capture.records:
+            record[key] += shift
+        capture.save()
+    result = check(pair, capsys, f"frame 0 {key}")
+    assert len(result["reasons"]) == 2
+
+
+@pytest.fixture
+def native_pair(tmp_path):
+    # All bytes are synthetic, even though the extents model T1's native findings.
+    return (make_capture(tmp_path / "reference", "reference", native_shape=True),
+            make_capture(tmp_path / "repeat", "repeat", storage="hashes", native_shape=True))
+
+
+def claim_original_for_rejection(capture):
+    # Deliberately forged identity exercises independent native rejection criteria.
+    capture.manifest["source"].update(
+        kind="original", exe_sha256="376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be")
+    capture.manifest["capture"]["kind"] = "controlled-reference"
+    capture.save()
+
+
+def test_native_sized_synthetic_pcm_tail_is_independent_of_visual_end(native_pair, capsys):
+    capture = native_pair[0]
+    assert capture.manifest["video"]["frame_count"] == 27000
+    assert capture.manifest["termination"]["audio_position"] == 19845000
+    assert capture.manifest["audio"]["sample_frames"] == 19964544
+    assert capture.pcm.stat().st_size == 159716352
+    assert capture.manifest["completion"]["pcm"]["final_tick"] == 19964545
+    assert capture.records[-1]["audio_position"] == 19844265
+    check(native_pair, capsys)
+
+
+@pytest.mark.parametrize("samples", [19845000, 19964543, 19964545])
+def test_matching_native_pcm_trim_or_extra_frame_cannot_redefine_extent(native_pair, capsys, samples):
+    for capture in native_pair:
+        with capture.pcm.open("r+b") as stream:
+            stream.truncate(samples * 8)
+        with capture.pcm.open("rb") as stream:
+            checksum = hashlib.file_digest(stream, "sha256").hexdigest()
+        capture.manifest["audio"].update(sample_frames=samples, sha256=checksum)
+        capture.manifest["completion"]["audio_sample_frames"] = samples
+        capture.manifest["completion"]["pcm"].update(
+            submitted_bytes=samples * 8, final_tick=samples + 1,
+            final_cursor_offset=samples * 8, stable_sha256=checksum)
+        capture.save()
+        load_run(capture.path)  # Internally consistent synthetic payload, counts and hashes.
+        claim_original_for_rejection(capture)
+    result = check(native_pair, capsys, "original PCM must contain exactly 19964544")
+    assert len(result["reasons"]) == 2
+
+
+def test_matching_native_visual_truncation_cannot_redefine_endpoint(native_pair, capsys):
+    for capture in native_pair:
+        capture.records.pop()
+        capture.manifest["video"]["frame_count"] = 26999
+        capture.manifest["scenes"][-1]["last"] = 26998
+        capture.manifest["termination"].update(end_tick=26999, audio_position=19844265,
+                                               audio_position_num=1190655900)
+        capture.manifest["completion"].update(frames_observed=26999, frames_hashed=26999)
+        if capture.manifest["video"]["storage"] == "reference":
+            raw = bytes((26998 * 13 + byte * 29) % 256 for byte in range(24))
+            (capture.root / "026998.raw.zst").write_bytes(zstandard.ZstdCompressor().compress(raw))
+            capture.records[-1]["raw_zst"] = "026998.raw.zst"
+        capture.save()
+        load_run(capture.path)
+        claim_original_for_rejection(capture)
+    result = check(native_pair, capsys, "original visual endpoint must be tick 27000")
+    assert len(result["reasons"]) == 2
+
+
+@pytest.mark.parametrize("fault,reason", [
+    ("integer-pcm", "original PCM must retain native float32le"),
+    ("zero-based-tick", "original synthesis tick must start at 1"),
+    ("off-by-one-tick", "PCM synthesis tick delta"),
+])
+def test_native_completion_interpretation(native_pair, capsys, fault, reason):
+    for capture in native_pair:
+        if fault == "integer-pcm":
+            capture.manifest["audio"]["sample_format"] = "s32le"
+        elif fault == "zero-based-tick":
+            capture.manifest["completion"]["pcm"].update(initial_tick=0, final_tick=19964544)
+        else:
+            capture.manifest["completion"]["pcm"]["final_tick"] = 19964544
+        claim_original_for_rejection(capture)
+    result = check(native_pair, capsys, reason)
+    assert len(result["reasons"]) == 2
