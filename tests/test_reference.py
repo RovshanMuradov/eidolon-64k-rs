@@ -24,6 +24,7 @@ def check(pair, capsys, expected=None):
     assert code == (1 if expected else 0), result
     assert result["status"] == ("FAIL" if expected else "PASS"), result
     assert result["draft"] is True
+    assert result["schema"] == "eidolon-reference-draft-2"
     if expected:
         assert expected in "\n".join(result["reasons"]), result
     else:
@@ -34,6 +35,9 @@ def check(pair, capsys, expected=None):
 
 def test_exact_synthetic_pair_and_fractional_phase(pair, capsys):
     run = load_run(pair[0].path)
+    display = run.manifest["conditions"]["environment"]["display"]
+    assert (display["width"], display["height"]) == (1920, 1080)
+    assert (run.manifest["video"]["width"], run.manifest["video"]["height"]) == (3, 2)
     assert run.frames[1]["audio_position"] == 367
     assert run.frames[1]["audio_position_num"] / run.frames[1]["audio_position_den"] == 367.5
     assert {r["n"] for r in run.frames if "raw_zst" in r} == {0, 7, 8, 42, 43, 60, 64}
@@ -228,6 +232,57 @@ def test_both_runs_share_same_bad_clock_still_fail(pair, capsys):
     assert len(result["reasons"]) == 2
 
 
+@pytest.mark.parametrize("key,value,reason", [
+    ("kind", "wine-virtual-desktop", "display.kind must be gamescope-headless"),
+    ("kind", "gamescope-nested", "display.kind must be gamescope-headless"),
+    ("width", 1280, "display must be 1920x1080"),
+    ("height", 720, "display must be 1920x1080"),
+    ("width", 1920.0, "display.width: expected integer"),
+    ("height", 1080.0, "display.height: expected integer"),
+    ("width", True, "display.width: expected integer"),
+    ("launcher", "wine", "display.launcher must be tools/wine-headless"),
+    ("wine_virtual_desktop", True, "Wine virtual desktop must be disabled"),
+    ("wine_virtual_desktop", 0, "Wine virtual desktop must be disabled"),
+])
+def test_matching_unapproved_displays_fail_independently(pair, capsys, key, value, reason):
+    for capture in pair:
+        capture.manifest["conditions"]["environment"]["display"][key] = value
+        capture.save()
+    result = check(pair, capsys, reason)
+    assert len(result["reasons"]) == 2
+
+
+@pytest.mark.parametrize("field", ["gamescope", "display", "kind", "width", "height",
+                                  "launcher", "wine_virtual_desktop"])
+def test_display_metadata_cannot_be_omitted(pair, capsys, field):
+    environment = pair[1].manifest["conditions"]["environment"]
+    target = environment if field in ("gamescope", "display") else environment["display"]
+    del target[field]
+    pair[1].save()
+    check(pair, capsys, "invalid fields")
+
+
+@pytest.mark.parametrize("version", ["", "  ", None, 3])
+def test_gamescope_version_must_be_recorded(pair, capsys, version):
+    pair[1].manifest["conditions"]["environment"]["gamescope"] = version
+    pair[1].save()
+    check(pair, capsys, "environment.gamescope: expected nonempty text")
+
+
+@pytest.mark.parametrize("schema,reason", [
+    ("eidolon-reference-draft-1", "unsupported reference schema"),
+    ("eidolon-reference-draft-2", "invalid fields"),
+])
+def test_legacy_desktop_manifest_requires_explicit_revision(pair, capsys, schema, reason):
+    capture = pair[1]
+    capture.manifest["schema"] = schema
+    environment = capture.manifest["conditions"]["environment"]
+    del environment["gamescope"], environment["display"]
+    environment["desktop"] = [1920, 1080]
+    capture.save()
+    check(pair, capsys, reason)
+
+
 def test_consistently_shortened_repeat_fails_comparison(pair, capsys):
     capture = pair[1]
     capture.records.pop()
@@ -254,7 +309,8 @@ def test_video_layout(pair, capsys, field, value, reason):
 
 
 @pytest.mark.parametrize("fault,reason", [
-    ("driver", "conditions mismatch"), ("rng", "conditions mismatch"),
+    ("driver", "conditions mismatch"), ("gamescope", "conditions mismatch"),
+    ("rng", "conditions mismatch"),
     ("state", "conditions mismatch"), ("tool", "capture tool SHA-256 mismatch"),
     ("input", "source mismatch"), ("settings-type", "conditions mismatch"),
     ("channel-order", "audio layout/count mismatch"),
@@ -264,8 +320,8 @@ def test_video_layout(pair, capsys, field, value, reason):
 ])
 def test_identity_and_completeness_metadata(pair, capsys, fault, reason):
     m = pair[1].manifest
-    if fault == "driver":
-        m["conditions"]["environment"]["driver"] = "other driver"
+    if fault in ("driver", "gamescope"):
+        m["conditions"]["environment"][fault] = f"other {fault}"
     elif fault == "rng":
         m["conditions"]["rng"]["initial_state_sha256"] = "f" * 64
     elif fault == "state":
