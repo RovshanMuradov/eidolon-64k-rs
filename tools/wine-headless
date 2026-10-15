@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Unattended Wine run in an invisible gamescope display. Never needs a click:
+# no crash dialog, no auto-debugger, every prefix process is killed on exit.
+# Usage: AGENT=<id> bash tools/run tools/wine-headless <program.exe> [args...]
+# Env:   WINE_TIMEOUT (s, default 600), WINE_W/WINE_H (default 1920x1080), WINEDEBUG (default -all).
+# Last stdout line: WINE_EXIT=<code|none> GAMESCOPE_EXIT=<code> SECONDS=<n>. Exit code = WINE_EXIT
+# (124 if the timeout fired). Crash: Wine prints "Unhandled ..." to stderr and exits nonzero.
+set -uo pipefail
+: "${AGENT:?set AGENT to your task id}"
+(( $# >= 1 )) || { echo 'usage: AGENT=<id> tools/wine-headless <exe> [args...]' >&2; exit 64; }
+
+scratch="/tmp/opencode/eidolon/$AGENT"
+export WINEPREFIX="$scratch/prefix" WINEARCH=win64
+export WINEDLLOVERRIDES="${WINEDLLOVERRIDES:-winemenubuilder.exe,mscoree,mshtml=d}"
+export LC_ALL=C TZ=UTC
+unset WAYLAND_DISPLAY
+mkdir -p "$scratch"
+
+# Wine services can outlive wineserver as orphans; kill wine processes of this prefix only.
+killprefix() {
+  wineserver -k 2>/dev/null; sleep 1
+  for d in /proc/[0-9]*; do
+    [[ $(readlink "$d/exe" 2>/dev/null) == */wine* ]] || continue
+    grep -qzx "WINEPREFIX=$WINEPREFIX" "$d/environ" 2>/dev/null && kill -9 "${d#/proc/}" 2>/dev/null
+  done
+}
+export -f killprefix
+trap killprefix EXIT INT TERM
+
+[[ -e $WINEPREFIX/system.reg ]] || WINEDEBUG=-all timeout 120 wineboot --init
+reg() { WINEDEBUG=-all wine reg add "$@" /f >/dev/null; }
+reg 'HKCU\Software\Wine\Drivers' /v Graphics /t REG_SZ /d x11
+reg 'HKCU\Software\Wine' /v Version /t REG_SZ /d win10
+reg 'HKCU\Software\Wine\WineDbg' /v ShowCrashDialog /t REG_DWORD /d 0
+reg 'HKLM\Software\Microsoft\Windows NT\CurrentVersion\AeDebug' /v Debugger /t REG_SZ /d ''
+reg 'HKLM\Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\AeDebug' /v Debugger /t REG_SZ /d ''
+timeout 60 wineserver --wait
+
+export RC_FILE="$scratch/wine.rc"; rc_file=$RC_FILE; rm -f "$rc_file"
+export WINEDEBUG="${WINEDEBUG:--all}"
+w="${WINE_W:-1920}" h="${WINE_H:-1080}" start=$(date +%s)
+timeout --signal=TERM --kill-after=10s "${WINE_TIMEOUT:-600}s" \
+  gamescope --backend headless -W "$w" -H "$h" -w "$w" -h "$h" -r 60 -- \
+  bash -c 'wine "$@"; echo $? > "$RC_FILE"; killprefix' _ "$@" 
+gs=$?
+rc=$(cat "$rc_file" 2>/dev/null || echo none)
+echo "WINE_EXIT=$rc GAMESCOPE_EXIT=$gs SECONDS=$(( $(date +%s) - start ))"
+[[ $rc == none && ( $gs == 124 || $gs == 137 ) ]] && { echo "TIMEOUT after ${WINE_TIMEOUT:-600}s" >&2; exit 124; }
+[[ $rc == none ]] && exit 125
+exit "$rc"
