@@ -1,0 +1,7 @@
+pytest
+numpy
+pillow
+zstandard
+scipy
+scikit-image
+frida-tools

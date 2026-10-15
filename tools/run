@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Checkout running this script (main or a task worktree).
+CHECKOUT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+# Main checkout: holds .tools/, .venv/, data/ and handoff/ shared by all worktrees.
+ROOT="$(dirname -- "$(git -C "$CHECKOUT" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || printf '%s/.git' "$CHECKOUT")")"
+export EIDOLON_ROOT="$ROOT"
+export EIDOLON_DATA="${EIDOLON_DATA:-$ROOT/data}"
+
+export GHIDRA_INSTALL_DIR="${GHIDRA_INSTALL_DIR:-$ROOT/.tools/ghidra_12.1.4_PUBLIC}"
+if [[ -z "${JAVA_HOME:-}" ]]; then
+    JAVA_HOME="$(dirname -- "$(dirname -- "$(readlink -f -- "$(command -v javac)")")")"
+    export JAVA_HOME
+fi
+export CARGO_HOME="$ROOT/.tools/cargo"
+export RUSTUP_HOME="$ROOT/.tools/rustup"
+export CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER="${CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER:-i686-w64-mingw32-gcc}"
+export WINEPREFIX="${WINEPREFIX:-/tmp/opencode/eidolon/tools/prefix}"
+export PYTHONNOUSERSITE=1
+export PATH="$ROOT/.tools/rea/node_modules/.bin:$CARGO_HOME/bin:$ROOT/.venv/bin:$GHIDRA_INSTALL_DIR:$GHIDRA_INSTALL_DIR/support:$PATH"
+
+if (( $# == 0 )); then
+    printf 'Usage: bash tools/run COMMAND [ARGUMENTS...]\n' >&2
+    exit 64
+fi
+
+exec "$@"
