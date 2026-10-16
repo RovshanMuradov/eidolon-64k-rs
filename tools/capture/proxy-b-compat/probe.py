@@ -22,6 +22,14 @@ def sha(path):
         return hashlib.file_digest(stream,'sha256').hexdigest()
 
 
+def durable(path, value):
+    with path.open('x') as stream:
+        json.dump(value, stream, indent=2)
+        stream.write('\n')
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
 def tree(path):
     return {str(p.relative_to(path)): ('link:' + os.readlink(p) if p.is_symlink() else sha(p))
             for p in sorted(path.rglob('*')) if p.is_symlink() or p.is_file()}
@@ -174,6 +182,18 @@ def main():
             env['EIDOLON_B_BAD_FINGERPRINT'] = '1'
     command = ['bash', 'tools/run', 'tools/wine-headless', str(native)]
     started = datetime.now(timezone.utc).isoformat()
+    environment = dict(os=platform.platform(), wine=subprocess.check_output(['wine', '--version'], text=True).strip(),
+                       packages=subprocess.check_output(['pacman', '-Q', 'wine', 'gamescope', 'nvidia-utils', 'lib32-nvidia-utils'], text=True).splitlines(),
+                       gpu=subprocess.check_output(['nvidia-smi', '--query-gpu=name,driver_version', '--format=csv,noheader'], text=True).strip(),
+                       display=original['environment']['display'], parent_settings=parent_settings,
+                       settings={k: v for k, v in env.items() if k.startswith(('WINE', 'EIDOLON_B_')) or k in
+                                 ('AGENT', 'PULSE_SINK', 'XDG_CACHE_HOME', '__GL_SHADER_DISK_CACHE_PATH', 'LC_ALL', 'TZ')})
+    durable(data/'preflight.json', dict(run_id=args.run_id, started_utc=started, command=command,
+            arguments=vars(args) | {k: str(v) for k, v in vars(args).items() if isinstance(v, Path)},
+            build=build_manifest, host_runner=dict(path=str(runner_snapshot), sha256=sha(runner_snapshot)),
+            launcher_sha256=sha('tools/wine-headless'), environment=environment, supervision=supervision,
+            exe_before_sha256=exe_before_sha256, prefix_inventory_sha256=sha(inventory), fresh_tree_equal=True,
+            input=original['input'], dependency=bank_manifest))
     monotonic_start = time.monotonic()
     sink = subprocess.check_output(['pactl', 'load-module', 'module-null-sink',
                                     'sink_name=eidolon_T16_compat', 'rate=44100', 'channels=2'], text=True).strip()
@@ -204,12 +224,20 @@ def main():
     except AssertionError as error:
         prefix_released = False
         cleanup_errors.append(str(error))
+    durable(data/'native-return.json', dict(run_id=args.run_id, launcher_exit=launcher_exit,
+            supervisor_timeout=supervisor_timeout, exe_after_sha256=sha(native),
+            prefix_processes_released=prefix_released, private_sink_unloaded=sink_result.returncode == 0,
+            errors=cleanup_errors, finished_utc=datetime.now(timezone.utc).isoformat()))
     # Stream every observation; retain only bounded summaries in Git. The full
     # byte-exact ordered log stays hash-bound in data, including on failure.
     observations=[]; sources=[]; event_counts={}; last_seq=0
     omitted={'lookup','clock','shader_source','pre_present','post_present','frame_state','scene_state',
              'scene_pass','clock_routes_checked','node_rng','node_probe_restoration','node_coverage'}
     for e in read_events(data/'backend.jsonl') if (data/'backend.jsonl').exists() else []:
+        if 'seq' not in e:
+            assert e['event']=='backend_probe' and e['result']=='distinct_backend' and e['error']==0
+            event_counts['out_of_band_backend_probe']=event_counts.get('out_of_band_backend_probe',0)+1
+            continue
         assert e['seq']==last_seq+1
         last_seq=e['seq']; name=e['event']; event_counts[name]=event_counts.get(name,0)+1
         if name=='shader_source':
@@ -247,12 +275,7 @@ def main():
                     prefix_baseline=dict(recipe='persistent copy of stopped T11/T2 baseline; cp -a --reflink=auto; verify full tree before each invocation; launcher applies pinned registry defaults',
                                          directory=str(baseline), inventory=str(inventory), inventory_sha256=sha(inventory),
                                          fresh_tree_equal=True),
-                    environment=dict(os=platform.platform(), wine=subprocess.check_output(['wine', '--version'], text=True).strip(),
-                                     packages=subprocess.check_output(['pacman', '-Q', 'wine', 'gamescope', 'nvidia-utils', 'lib32-nvidia-utils'], text=True).splitlines(),
-                                     gpu=subprocess.check_output(['nvidia-smi', '--query-gpu=name,driver_version', '--format=csv,noheader'], text=True).strip(),
-                                     display=original['environment']['display'], parent_settings=parent_settings,
-                                     settings={k: v for k, v in env.items() if k.startswith(('WINE', 'EIDOLON_B_')) or k in
-                                               ('AGENT', 'PULSE_SINK', 'XDG_CACHE_HOME', '__GL_SHADER_DISK_CACHE_PATH', 'LC_ALL', 'TZ')}),
+                     environment=environment,
                       reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-compat/probe.py', '--run-id', '<fresh-id>', '--mode', args.mode, '--frames', str(args.frames)] + ([('--full' if args.full else '--active-volume' if args.active_volume else '--first-boundary'),'--throughput-from',str(args.throughput_from)] if args.first_boundary or args.active_volume or args.full else []) + (['--storage',args.storage] if args.full else []) + (['--reference-variant',args.reference_variant] if args.reference_variant else []) + (['--build-from',str(args.build_from)] if args.build_from else []) + (['--fault',args.fault] if args.fault else []),
                     command=command, started_utc=started, finished_utc=datetime.now(timezone.utc).isoformat(),
                     launcher_exit=launcher_exit, first_failed_check=failure, supervision=supervision,

@@ -66,6 +66,9 @@ def main():
             'wave_open','wave_prepare','wave_write','full_run'}
     events=[]; positions=[]; expected_seq=1
     for e in read_events(backend):
+        if 'seq' not in e:
+            assert e['event']=='backend_probe' and e['result']=='distinct_backend' and e['error']==0
+            continue
         assert e['seq']==expected_seq
         expected_seq+=1
         if e['event'] in needed:
