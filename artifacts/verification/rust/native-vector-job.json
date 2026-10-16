@@ -2,6 +2,7 @@
   "request": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/jobs/native-d28-vectors01/request.json",
   "request_sha256": "3153cbd6eb28ea699640b1658b91e767436e0de7f46150ca33c62a8175c74748",
   "pid": 2500922,
+  "phase": "closed",
   "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/native-d28-vectors01/state.json",
   "log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/jobs/native-d28-vectors01/detached.log",
   "production_accepted": false

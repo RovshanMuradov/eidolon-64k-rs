@@ -1,0 +1,87 @@
+{
+  "phase": "running",
+  "state_sha256": "277c2119c22ff329228fd47ffeb73d3dddb948283ab47d352eb5bfff9fe2af9d",
+  "processes": [
+    {
+      "pid": 2507052,
+      "exists": true,
+      "state": "S",
+      "ppid": 1311,
+      "sid": 2507052,
+      "start_ticks": 73450388,
+      "command": "python -u tools/capture/rust/live.py live-d28-curves01 --full --semantic --curves",
+      "cwd": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24",
+      "environment": {
+        "AGENT": "1"
+      }
+    },
+    {
+      "pid": 2507093,
+      "exists": true,
+      "state": "S",
+      "ppid": 2507052,
+      "sid": 2507052,
+      "start_ticks": 73450528,
+      "command": "bash /home/rovshan/Work/asm/Eidolon/.worktrees/T24/tools/wine-headless /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d28-curves01/launch.exe Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\builds\\T22\\candidates\\48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa\\eidolon-runtime.exe Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\verification\\rust\\live-d28-curves01\\live.dll Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\verification\\rust\\live-d28-curves01\\output",
+      "cwd": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24",
+      "environment": {
+        "AGENT": "T24",
+        "EIDOLON_RUST_FRAMES": "27000",
+        "PULSE_SINK": "eidolon_T24_rust",
+        "EIDOLON_RUST_KEEP": "Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\verification\\rust\\live-d28-curves01\\retention.bin",
+        "EIDOLON_RUST_FULL": "1"
+      }
+    }
+  ],
+  "data_bytes": 29994461728,
+  "live_mappings": [
+    {
+      "pid": 2507307,
+      "candidate_mapped": true,
+      "helper_mapped": true,
+      "mappings": [
+        "00400000-00401000 r--p 00000000 00:1d 10459925                           /home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe",
+        "00454000-004a7000 r--p 00052000 00:1d 10459925                           /home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe",
+        "79440000-79441000 r--p 00000000 00:1d 10525686                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d28-curves01/live.dll",
+        "79469000-7946b000 r--p 00013000 00:1d 10525686                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d28-curves01/live.dll"
+      ],
+      "wine_executable": "/usr/lib/wine/x86_64-unix/wine-preloader",
+      "wine_executable_sha256": "c877731fa29324bb8a9bfba575e9ca47ddfe9d97ea07587d71afda3bd6208e96"
+    }
+  ],
+  "output_bytes": {
+    "events.bin": 43604,
+    "uniforms.bin": 0,
+    "programs.bin": 761747,
+    "objects.bin": 140,
+    "curves.bin": 67784,
+    "seed-phase.bin": 20,
+    "ready-seed.bin": 16,
+    "ready-tick.bin": 4,
+    "seed-before-gpr.bin": 36,
+    "seed-before-fx.bin": 512,
+    "seed-after-fx.bin": 512,
+    "seed-after-gpr.bin": 36,
+    "entry-before.bin": 576,
+    "entry-after.bin": 576,
+    "marker-before-gpr.bin": 36,
+    "marker-before-fx.bin": 512,
+    "marker-restored-fx.bin": 512,
+    "marker-restored-gpr.bin": 36,
+    "previous-seconds.bin": 4,
+    "initial-physics-live.bin": 256,
+    "previous-phase.bin": 12,
+    "position-before-fx.bin": 512,
+    "position-after-fx.bin": 512,
+    "position-before-gpr.bin": 36,
+    "position-after-gpr.bin": 36,
+    "draw-before-gpr.bin": 36,
+    "draw-before-fx.bin": 512,
+    "draw-after-fx.bin": 512,
+    "draw-after-gpr.bin": 36
+  },
+  "production_accepted": false,
+  "complete_curve_draws": 96,
+  "pending_curve_bytes": 0,
+  "matching_float_words": 942
+}

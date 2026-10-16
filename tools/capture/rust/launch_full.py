@@ -12,7 +12,7 @@ from conformance import CHECKOUT, DATA, need, sha
 from review_live import review
 
 
-def launch(name,semantic=False):
+def launch(name,semantic=False,curves=False):
     checks={key:review(DATA/"verification/rust"/job) for key,job in
             (("short","live-d26-02"),("marker_fp_fault","live-d26-fp-reject"),("entry_gpr_fault","live-d26-entry-gpr"))}
     short=checks["short"]
@@ -28,6 +28,8 @@ def launch(name,semantic=False):
     root=DATA/"verification/rust/jobs"/name;root.mkdir(parents=True,exist_ok=False)
     command=["setsid","nohup","bash","tools/run","python","-u","tools/capture/rust/live.py",name,"--full"]
     if semantic:command.append("--semantic")
+    if curves:
+        need(semantic,"curve mode requires semantic adapter");command.append("--curves")
     request=dict(schema="eidolon-rust-detached-job-1",decision="D26",phase="launching",
                  created_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),command=command,
                  source_commit=subprocess.check_output(["git","rev-parse","HEAD"],cwd=CHECKOUT,text=True).strip(),
@@ -41,11 +43,11 @@ def launch(name,semantic=False):
     (root/"pid").write_text(str(process.pid)+"\n")
     pointer=dict(schema=request["schema"],request=str(path.relative_to(DATA)),request_sha256=sha(path),pid=process.pid,
                  state=request["state_path"],log=request["log_path"],expected_seconds=4500,production_accepted=False)
-    (CHECKOUT/"artifacts/verification/rust"/("semantic-job.json" if semantic else "full-job.json")).write_text(json.dumps(pointer,indent=2)+"\n")
+    (CHECKOUT/"artifacts/verification/rust"/("curve-job.json" if curves else "semantic-job.json" if semantic else "full-job.json")).write_text(json.dumps(pointer,indent=2)+"\n")
     print(json.dumps(pointer))
 
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument("name")
-    parser.add_argument("--semantic",action="store_true");args=parser.parse_args()
-    launch(args.name,args.semantic)
+    parser.add_argument("--semantic",action="store_true");parser.add_argument("--curves",action="store_true");args=parser.parse_args()
+    launch(args.name,args.semantic,args.curves)

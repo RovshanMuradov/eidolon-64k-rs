@@ -18,6 +18,7 @@ static void fail(const char*s){printf("SEMANTIC_FAILURE %s\n",s);fflush(stdout);
 static FILE *open_file(const char*name){char path[2304];snprintf(path,sizeof(path),"%s/%s",folder,name);FILE*f=fopen(path,"wb");if(!f)fail("file open");return f;}
 static void write_bytes(FILE*f,const void*p,size_t n){if(fwrite(p,1,n,f)!=n)fail("file write");}
 static void save(const char*name,const void*p,size_t n){FILE*f=open_file(name);write_bytes(f,p,n);fclose(f);}
+#include "curves.c"
 static void **iat(const char*name){IMAGE_NT_HEADERS32*n=(void*)(image+((IMAGE_DOS_HEADER*)image)->e_lfanew);IMAGE_IMPORT_DESCRIPTOR*d=(void*)(image+n->OptionalHeader.DataDirectory[1].VirtualAddress);for(;d->Name;d++){DWORD*names=(void*)(image+d->OriginalFirstThunk);void**slots=(void*)(image+d->FirstThunk);for(unsigned i=0;names[i];i++)if(!(names[i]&0x80000000)&&!strcmp((char*)(image+names[i]+2),name))return slots+i;}fail("IAT name");return NULL;}
 static void *route(const char*name,void*replacement){void**slot=iat(name);void*old=*slot;DWORD protect;if(!VirtualProtect(slot,4,PAGE_READWRITE,&protect))fail("IAT protect");*slot=replacement;VirtualProtect(slot,4,protect,&protect);return old;}
 static GLuint APIENTRY program(GLenum type,GLsizei count,const char*const*strings){
@@ -44,6 +45,7 @@ void draw_observe(DWORD*s,BYTE*fp){
  DWORD ret=*(DWORD*)(uintptr_t)(s[3]+4);if(ret!=(DWORD)(uintptr_t)image+0x143d5)fail("draw caller");
  if(!location){location=(void*)lookup("glGetUniformLocation");uniform_i=(void*)lookup("glGetUniformiv");uniform_f=(void*)lookup("glGetUniformfv");active_texture=(void*)lookup("glActiveTexture");if(!location||!uniform_i||!uniform_f||!active_texture)fail("query functions");}
  if(!draw_calls){save("draw-before-gpr.bin",s,36);save("draw-before-fx.bin",fp,512);}
+ if(curves_only){curve_draw(ret,ordinal++);draw_calls++;return;}
  DWORD record[19]={frame,ordinal++};GLint prog,fbo,viewport[4],before,after,unit=-1,tex=0;GLfloat time[4]={0};
  GLenum error=glGetError();if(error)fail("preexisting draw GL error");
  glGetIntegerv(0x8b8d,&prog);glGetIntegerv(0x8ca6,&fbo);glGetIntegerv(GL_VIEWPORT,viewport);glGetIntegerv(0x84e0,&before);
@@ -65,6 +67,7 @@ void semantic_arm(BYTE*base,const char*output){
  char mode[32];if(!GetEnvironmentVariableA("EIDOLON_RUST_SEMANTIC",mode,sizeof(mode)))return;enabled=1;image=base;strcpy(folder,output);
  seed_fault=GetEnvironmentVariableA("EIDOLON_SEED_FAULT",mode,sizeof(mode))!=0;
  uniform_file=open_file("uniforms.bin");program_file=open_file("programs.bin");object_file=open_file("objects.bin");
+ char samples[2304];if(GetEnvironmentVariableA("EIDOLON_CURVE_SAMPLES",samples,sizeof(samples))){FILE*f=fopen(samples,"rb");if(!f||fread(curve_samples,1,27000,f)!=27000||fgetc(f)!=EOF)fail("curve sample mask");fclose(f);curves_only=1;curve_file=open_file("curves.bin");}
  BYTE*site=base+0xa3b5;const BYTE expected[]={0x8b,0x5c,0x24,0x18,0x31,0xff,0x89,0x30,0xbe,0,0x0d,0,0};if(memcmp(site,expected,sizeof(expected)))fail("seed fingerprint");
  BYTE*t=VirtualAlloc(NULL,32,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);if(!t)fail("seed trampoline");seed_trampoline=t;memcpy(t,site,6);t[6]=0xe9;*(DWORD*)(t+7)=(DWORD)(uintptr_t)(site+6)-(DWORD)(uintptr_t)(t+11);
  DWORD protect;if(!VirtualProtect(site,6,PAGE_EXECUTE_READWRITE,&protect))fail("seed protect");site[0]=0xe9;*(DWORD*)(site+1)=(DWORD)(uintptr_t)seed_gate-(DWORD)(uintptr_t)(site+5);site[5]=0x90;VirtualProtect(site,6,protect,&protect);

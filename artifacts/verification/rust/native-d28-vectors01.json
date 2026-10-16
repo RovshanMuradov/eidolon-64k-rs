@@ -1,0 +1,12 @@
+{
+  "status": "NATIVE_SAMPLED_PHYSICS_EXACT_CURVES_UNPAIRED",
+  "physics_frames": 151,
+  "physics_differences": 0,
+  "first_difference": null,
+  "sampled_curve_draws": 302,
+  "curve_float_words": 3824,
+  "state_sha256": "f5a9a5d47cc649b05178dc47f7bc7579e44a4327806ae6138cd2e60a5d6afc63",
+  "candidate_state_sha256": "654ce6e2e363b023843222c8441b43da2fda85554769b1a6fc4650b8cdcc6c25",
+  "cleanup_verified": true,
+  "production_accepted": false
+}

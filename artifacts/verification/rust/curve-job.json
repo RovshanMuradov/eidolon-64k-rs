@@ -1,0 +1,10 @@
+{
+  "schema": "eidolon-rust-detached-job-1",
+  "request": "verification/rust/jobs/live-d28-curves01/request.json",
+  "request_sha256": "519871238ad016468149369ce93d3e427ce5be7f33ecbcca66a4355e1efccd7e",
+  "pid": 2507052,
+  "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d28-curves01/state.json",
+  "log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/jobs/live-d28-curves01/detached.log",
+  "expected_seconds": 4500,
+  "production_accepted": false
+}
