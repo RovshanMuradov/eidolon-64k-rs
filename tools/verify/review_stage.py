@@ -104,19 +104,20 @@ def check_baseline(baseline):
     return len(actual)
 
 
-def check_clock(events, nframes=N):
+def check_clock(events, nframes=N, terminal_query=False):
     clocks = [e for e in events if e["event"] == "clock"]
     startup = [e for e in clocks if e.get("timeline") is False]
     require([e["value"] for e in startup] == list(range(1001)), "startup schedule")
     clocks = [e for e in clocks if e.get("timeline") is not False]
-    require(len(clocks) == nframes*9, "clock route coverage")
+    queries = nframes+int(terminal_query)
+    require(len(clocks) == queries*9, "clock route coverage")
     epoch = one(events, "epoch")
     require(epoch["E"] == 1001 and epoch["seq"] < clocks[0]["seq"], "clock epoch")
     expected_apis = ["waveOutGetPosition"] + ["GetTickCount", "timeGetTime",
                     "QueryPerformanceCounter", "QueryPerformanceFrequency"]*2
     g = group(events)
-    require(len(g["clock_routes_checked"]) == nframes, "clock canary coverage")
-    for n in range(nframes):
+    require(len(g["clock_routes_checked"]) == queries, "clock canary coverage")
+    for n in range(queries):
         chunk = clocks[n*9:(n+1)*9]
         require([e["api"] for e in chunk] == expected_apis, "clock route order")
         values = [735*n] + [1001+n*1000//60, 1001+n*1000//60,
@@ -127,7 +128,8 @@ def check_clock(events, nframes=N):
         require((canary["n"], canary["epoch_ms"], canary["milliseconds"], canary["qpc"],
                  canary["qpf"], canary["repeats"], canary["sample_cursor"])
                 == (n, 1001, values[1], values[3], 60000000, 2, 735*n), "clock canary mismatch")
-        require(chunk[-1]["seq"] < canary["seq"] < g["pre_present"][n]["seq"], "clock/pre-present order")
+        after = g["pre_present"][n] if n < nframes else one(events, "native_endpoint")
+        require(chunk[-1]["seq"] < canary["seq"] < after["seq"], "clock/pre-present order")
 
 
 def check_state(events, nframes=N):
