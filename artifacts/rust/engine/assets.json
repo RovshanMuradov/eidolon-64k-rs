@@ -1,0 +1,1074 @@
+{
+  "schema": "eidolon-rust-engine-assets-v1",
+  "recovery_manifest_sha256": "ce3518a518a2a14a82cba4a0f18ae48810b4e98d9f9561bd29147cd7875bfba4",
+  "inputs": [
+    {
+      "path": "shaders/00409918.glsl",
+      "bytes": 1310,
+      "sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182"
+    },
+    {
+      "path": "shaders/00409e38.glsl",
+      "bytes": 4113,
+      "sha256": "12fabc3cd1110a549423eb68318d99562c7b65f1b5e4eea2c5358180e063bb63"
+    },
+    {
+      "path": "shaders/0040ae60.glsl",
+      "bytes": 836,
+      "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+    },
+    {
+      "path": "shaders/0040b1a8.glsl",
+      "bytes": 8620,
+      "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+    },
+    {
+      "path": "shaders/0040d358.glsl",
+      "bytes": 3657,
+      "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+    },
+    {
+      "path": "shaders/0040e1c0.glsl",
+      "bytes": 477,
+      "sha256": "d3da2520283f4e83d9aed9fded5531573664b061558c01a47f4fbf49d8cb5d44"
+    },
+    {
+      "path": "shaders/0040e3a0.glsl",
+      "bytes": 77,
+      "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+    },
+    {
+      "path": "shaders/0040e3f0.glsl",
+      "bytes": 316,
+      "sha256": "b04719a74d5e807a978023801be68cfe3c873543a49b82634b3d62d251ed131d"
+    },
+    {
+      "path": "shaders/0040e530.glsl",
+      "bytes": 756,
+      "sha256": "d7010a245d60871c329fe2f8e3a838b1ed7b6d6b04ef4df0fcbfa34118c3e8ed"
+    },
+    {
+      "path": "shaders/0040e828.glsl",
+      "bytes": 1178,
+      "sha256": "e2e15b1dfb17acfeec357eb737d8f2eaceb48674749d0eec30619e9d3312743f"
+    },
+    {
+      "path": "shaders/0040ecd0.glsl",
+      "bytes": 116,
+      "sha256": "472fd6d03d901d8d8bb7f3bf63321583a22647ee5812215d0b3222a9c4ede08b"
+    },
+    {
+      "path": "shaders/0040ed48.glsl",
+      "bytes": 208,
+      "sha256": "734c0b6199c04eb864159e342e73c49c1a2783ec47e21269efde2a17c279efd3"
+    },
+    {
+      "path": "shaders/0040ee1c.glsl",
+      "bytes": 37,
+      "sha256": "5953e28d5a8d064f90b0ef3a1ccf1fd0d381dcf55924a70d762e49f31c394b41"
+    },
+    {
+      "path": "shaders/0040ee58.glsl",
+      "bytes": 201,
+      "sha256": "c1f31337991507a451eb99cfe973e998bb58b500d406707c9fd6c24bb3795ec2"
+    },
+    {
+      "path": "shaders/0040ef30.glsl",
+      "bytes": 201,
+      "sha256": "88c473e4febd9c2b636529d39398b2e6b3a31cb363a3994635ac971802d2c1d1"
+    },
+    {
+      "path": "shaders/0040f008.glsl",
+      "bytes": 1137,
+      "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+    },
+    {
+      "path": "shaders/0040f488.glsl",
+      "bytes": 9052,
+      "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+    },
+    {
+      "path": "shaders/004117e8.glsl",
+      "bytes": 3003,
+      "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+    },
+    {
+      "path": "shaders/004123a8.glsl",
+      "bytes": 12190,
+      "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+    },
+    {
+      "path": "shaders/00415348.glsl",
+      "bytes": 2745,
+      "sha256": "66c4e21332065b428c6be2569bb00ab156a0cd654dd70323f91106467ad76235"
+    },
+    {
+      "path": "shaders/00415e10.glsl",
+      "bytes": 107,
+      "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+    },
+    {
+      "path": "shaders/00415e80.glsl",
+      "bytes": 4703,
+      "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+    },
+    {
+      "path": "shaders/004170e4.glsl",
+      "bytes": 37,
+      "sha256": "e94939c33f1710ca89471459dc3eb360992333bfc908521912103e9768205615"
+    },
+    {
+      "path": "shaders/00417118.glsl",
+      "bytes": 3754,
+      "sha256": "dbe906ec774e232c9f10626e4907e3fcffd3138076397a08a6dcb6fe9d4f4b21"
+    },
+    {
+      "path": "shaders/00417fd0.glsl",
+      "bytes": 554,
+      "sha256": "9257c11007792c664cecd79331bc18ec89543d38aa903bd9947acffee9e9d762"
+    },
+    {
+      "path": "shaders/00418210.glsl",
+      "bytes": 504,
+      "sha256": "b01f5d68c2d7467945585c38b7f32fe294374f06064144046eed25c060b87001"
+    },
+    {
+      "path": "shaders/0041840c.glsl",
+      "bytes": 13,
+      "sha256": "7c46792a5259e8f078e5bb7084ec85e458a42f370c8c64382b8d231faa26d1db"
+    },
+    {
+      "path": "shaders/00418430.glsl",
+      "bytes": 114,
+      "sha256": "db27a49b5a4d08de5a9f22be198ddd2d778c980bffd36e5b9a6639b571ebeb15"
+    },
+    {
+      "path": "shaders/004184b8.glsl",
+      "bytes": 6249,
+      "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+    },
+    {
+      "path": "shaders/00419d48.glsl",
+      "bytes": 638,
+      "sha256": "262237606f1f81f7ec87a0b164e0b73bef6011afe745d36ef0730bab14a758b7"
+    },
+    {
+      "path": "shaders/00419fc8.glsl",
+      "bytes": 305,
+      "sha256": "4663d501dd110410388866d4fe08461a7fc44433c57d0c72c339a09d63c1417f"
+    },
+    {
+      "path": "shaders/0041a108.glsl",
+      "bytes": 1069,
+      "sha256": "fe4fe8e78bd6a02c79b4cb104a800625b297da02d181e6a42a32654afa76eafb"
+    },
+    {
+      "path": "shaders/0041a538.glsl",
+      "bytes": 217,
+      "sha256": "215542d7a666e355bbc23bdf1907f47009d2dde47dae5c83b40a9f0993442659"
+    },
+    {
+      "path": "shaders/0041a614.glsl",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "shaders/0041a618.glsl",
+      "bytes": 558,
+      "sha256": "dbd99a251a3545a016113327093ea49df3a1677d1f704f816c65db0728b9a34b"
+    },
+    {
+      "path": "shaders/0041a848.glsl",
+      "bytes": 2095,
+      "sha256": "3d57abff765a08cb09154a6ca45d3ac674303cf7521e09f69a9632629fcabcde"
+    },
+    {
+      "path": "shaders/0041b0b0.glsl",
+      "bytes": 888,
+      "sha256": "71208edb9484dc211cb09cac6ac8e29612864f36df9641e9ea704db52fc2a8f9"
+    },
+    {
+      "path": "shaders/0041b480.glsl",
+      "bytes": 2808,
+      "sha256": "f319a9ccbf777d390a929902c442a1a489a8da992941fb9614819648655e60a7"
+    },
+    {
+      "path": "shaders/0041bf84.glsl",
+      "bytes": 58,
+      "sha256": "c300c3dd397d3500e467c62e6279656ed11be924b158f0da3aeaa59fe9a63a9e"
+    },
+    {
+      "path": "shaders/0041bfc0.glsl",
+      "bytes": 1146,
+      "sha256": "9a00350d47163f360f0c894c1109691e6f2b5760eff3e34a4c597a9208d56fc1"
+    },
+    {
+      "path": "shaders/0041c450.glsl",
+      "bytes": 500,
+      "sha256": "9df59ed87c8ada9a3ff21c22a85198fd1ad186836add9f6858ecc2c9979655c0"
+    },
+    {
+      "path": "shaders/0041c648.glsl",
+      "bytes": 477,
+      "sha256": "e2ef43e0aa91c9697f0b5d75df1b9b46fb214be84e1bd38a3d7a73cadea99f96"
+    },
+    {
+      "path": "shaders/0041c828.glsl",
+      "bytes": 172,
+      "sha256": "af0c94d7ceeb3176dbf5f4ae417e900ae292a674bd625e150d4187bf692f7b85"
+    },
+    {
+      "path": "shaders/0041c8f8.glsl",
+      "bytes": 857,
+      "sha256": "e402f5b679498426e5653c947fc7d0b270bc805868500034ff35e27608941766"
+    },
+    {
+      "path": "shaders/0041cc78.glsl",
+      "bytes": 1733,
+      "sha256": "a49f1a0a2055a7c7fdf5122000fdaaf768eb0127edd49a45348e2fdaf10db259"
+    },
+    {
+      "path": "shaders/0041d340.glsl",
+      "bytes": 972,
+      "sha256": "3746b0ede020d6857a7a354cb9a459d91dc3f81eddf31771bc1200b2fc2d56a7"
+    },
+    {
+      "path": "shaders/0041d710.glsl",
+      "bytes": 608,
+      "sha256": "302f53ff113f83087db5a986ae2fb17e0e482a0d95f3c292a7a28569d0a7c7a5"
+    },
+    {
+      "path": "shaders/0041d990.glsl",
+      "bytes": 193,
+      "sha256": "a4c8ee87593f4c6545c892154507da9e49eee54b97d5d688594e9ecafa3fca74"
+    },
+    {
+      "path": "shaders/0041da68.glsl",
+      "bytes": 970,
+      "sha256": "f2d8b1ac561c62e38b4e70ce2dd881c4cfa07d86a1c6c8701768515cbf3092f3"
+    },
+    {
+      "path": "shaders/0041de34.glsl",
+      "bytes": 58,
+      "sha256": "c0e14e53659b4c2cbaba51e9543cf3c748147a1256c773160e54139324a46c5b"
+    },
+    {
+      "path": "shaders/0041de70.glsl",
+      "bytes": 2042,
+      "sha256": "ca52bdba945423bdb702ce34eb03b4c14b270e2310e90c10fa63dc303dc1838c"
+    },
+    {
+      "path": "shaders/0041e66c.glsl",
+      "bytes": 57,
+      "sha256": "d283636cc80c66affa046822dc97408df7f6f094cd6581c4c5b0180f9e63ea94"
+    },
+    {
+      "path": "shaders/0041e6a8.glsl",
+      "bytes": 745,
+      "sha256": "3596848d96641c61a246d1846e0c24c19ca2a641628e23901fdcd40d24ace3f1"
+    },
+    {
+      "path": "shaders/0041e9b8.glsl",
+      "bytes": 499,
+      "sha256": "b5403ab2cfb245c9ab833383d48b80d2e5f736fcc3a4260475b8c64515d060f3"
+    },
+    {
+      "path": "shaders/0041ebb0.glsl",
+      "bytes": 1125,
+      "sha256": "eea3f6c88d4f420ca2518e984bd21907d90cfbb69b23965ed268036636e926ae"
+    },
+    {
+      "path": "shaders/0041f020.glsl",
+      "bytes": 368,
+      "sha256": "43de43901ddd256bc9e52e2f607f36710b57a99131077116a50747e2947c9cd4"
+    },
+    {
+      "path": "shaders/0041f1b8.glsl",
+      "bytes": 1719,
+      "sha256": "b739d4a2d634466d82a8a77742b6488a1af95bb0d115bebe1fb55f622e442d63"
+    },
+    {
+      "path": "shaders/0041f874.glsl",
+      "bytes": 44,
+      "sha256": "227062c5cd8bceedcced20ed1d7f9be4ce07d98741142e77c245272051e1cb5a"
+    },
+    {
+      "path": "shaders/0041f8d0.glsl",
+      "bytes": 161,
+      "sha256": "01c0db1f051d2f0b2c4ef13da1d8fc314d3616b286fb45c76a823bb43a7ddd5d"
+    },
+    {
+      "path": "shaders/0041f980.glsl",
+      "bytes": 535,
+      "sha256": "99bb81909ee36299e8673865cfe44c3fb1bbe7f21ce2c6c731c4a3172eb3f644"
+    },
+    {
+      "path": "shaders/0041fbd0.glsl",
+      "bytes": 116,
+      "sha256": "9a7baa978e06027c12513c4cfa90258cd82379946504dbde9770cd744f349682"
+    },
+    {
+      "path": "shaders/0041fc48.glsl",
+      "bytes": 1518,
+      "sha256": "de23d25ca1380a0ba23f24ca804d931826f3fb5fe254b4ee24e7ead8cfe001c9"
+    },
+    {
+      "path": "shaders/00420238.glsl",
+      "bytes": 19,
+      "sha256": "4d4418d974fd44f137de7f53fba9dd65b5647607fb92eed245ee76fd78724c02"
+    },
+    {
+      "path": "shaders/00420250.glsl",
+      "bytes": 892,
+      "sha256": "0f164498f62d755cd39f1cee88d0ab3490983a388a3989d6170f8e1c682655d4"
+    },
+    {
+      "path": "shaders/004205d0.glsl",
+      "bytes": 330,
+      "sha256": "3d45d7d2c548764d2878bac6600cb1df853d2a20866d6aa0c6595d3a095efecb"
+    },
+    {
+      "path": "shaders/00420728.glsl",
+      "bytes": 132,
+      "sha256": "496dbdd5170c8fcf63effee73bb74f76b1426a85817d7714b117dd57e1850a95"
+    },
+    {
+      "path": "shaders/004207b0.glsl",
+      "bytes": 1003,
+      "sha256": "3402ea50c99ee112444315798e5851327927fe3e83d956a42cb7aee173ecd88a"
+    },
+    {
+      "path": "shaders/00420ba0.glsl",
+      "bytes": 1161,
+      "sha256": "fb73b36160f90ad0192bb59663708be5b5139b76ea8aa8babb0561674b45fcad"
+    },
+    {
+      "path": "shaders/00421040.glsl",
+      "bytes": 201,
+      "sha256": "563f542d5201558728432719710dbe2721fb6e305634085978ccf704c71bd82c"
+    },
+    {
+      "path": "shaders/00421130.glsl",
+      "bytes": 311,
+      "sha256": "23ff849fb2916a2b71a14d0be41faebc1e1594ed3710b7eb8628f9c14cd4ae33"
+    },
+    {
+      "path": "shaders/00421290.glsl",
+      "bytes": 69,
+      "sha256": "c61e37749ecaf0a63915abc3cc0d492e33b9f91f7913d74fb3d9e4e04c4d3134"
+    },
+    {
+      "path": "shaders/004212d8.glsl",
+      "bytes": 1911,
+      "sha256": "dd6ad535300495471c21132d5c2eb5b1b909b2216e2f415b2d7432c2b120386d"
+    },
+    {
+      "path": "shaders/00421a68.glsl",
+      "bytes": 707,
+      "sha256": "9bc4a200d96be45411f08166a60a58d403b6303dc5a40eb0c838b644cd8c5a78"
+    },
+    {
+      "path": "shaders/00421d30.glsl",
+      "bytes": 504,
+      "sha256": "f7678e60f7b3cb5664ba763fadec6ab249e2f4816cdbd29015bc541e33303c90"
+    },
+    {
+      "path": "shaders/00421f40.glsl",
+      "bytes": 328,
+      "sha256": "a7a2feb92ed190e2c0e8580577aaa040d82b9b97da9e3f20f226e362ffa70b91"
+    },
+    {
+      "path": "shaders/004220d0.glsl",
+      "bytes": 125,
+      "sha256": "bfe93d40dced318b655551ee667b01a323855fff5c977aa4f7b3c9f3e452a19e"
+    },
+    {
+      "path": "shaders/00422150.glsl",
+      "bytes": 2377,
+      "sha256": "902e6a6a407ad242d71d6dbd0d2ceb72952ca50d1572dd83ddc4bf7c7a2c29a4"
+    },
+    {
+      "path": "shaders/00422ac0.glsl",
+      "bytes": 2449,
+      "sha256": "97b30d0c1c08f4a4ac96be48b105f269d4cb1bb8f0de1936ff89bd231812b28b"
+    },
+    {
+      "path": "shaders/00423470.glsl",
+      "bytes": 538,
+      "sha256": "05a39d5d79c83fd4c78b2feb2629b83f159442669e1c007326cc9ffa32f4456d"
+    },
+    {
+      "path": "shaders/00423690.glsl",
+      "bytes": 808,
+      "sha256": "14e7f8250c9f47c542199f033aa3bb1afd1fcf1b9dfc4eda59b16509390462d7"
+    },
+    {
+      "path": "shaders/004239c0.glsl",
+      "bytes": 137,
+      "sha256": "d263f2ad13f36927606293c0febbd07fd81c862ea2e8a2845990487d90c05638"
+    },
+    {
+      "path": "shaders/00423a50.glsl",
+      "bytes": 1997,
+      "sha256": "9b92ba2ef75a6e1b0e48ba4164669ca76f077c4b8de8ed3a2b880360cec02dcc"
+    },
+    {
+      "path": "shaders/00424220.glsl",
+      "bytes": 1482,
+      "sha256": "4226096bcb1f6bbe48411b69d364e0b64a491295ee83e478ed269508d91950e7"
+    },
+    {
+      "path": "shaders/004247f0.glsl",
+      "bytes": 323,
+      "sha256": "4c5bdc495e7ce136e75afb909239df49bbb312ad59bbc9da540d72ded229bd15"
+    },
+    {
+      "path": "shaders/00424938.glsl",
+      "bytes": 263,
+      "sha256": "de15b08a799e897673f540bfaeb5cc17d7909aa1e9953f8052fc2b9a9084c221"
+    },
+    {
+      "path": "shaders/00424a48.glsl",
+      "bytes": 450,
+      "sha256": "6e0d4269fac1c0430f72244c44549c2c53b65138e5fe920f0afc052411aefc44"
+    },
+    {
+      "path": "shaders/00424c10.glsl",
+      "bytes": 1106,
+      "sha256": "fd846ecba6c439bccbec8b27be255d17782c4a9065d3cd524ef1ae7aae429a5a"
+    },
+    {
+      "path": "shaders/00425068.glsl",
+      "bytes": 196,
+      "sha256": "77f3e3c59933f4938990bfe6d3d67ea3173583e3a41f39ad7f5de025b20ec400"
+    },
+    {
+      "path": "shaders/00425130.glsl",
+      "bytes": 2061,
+      "sha256": "d28e74279acebf9b25147af866a8c72a4d708c15895670605fa5b25caeafa961"
+    },
+    {
+      "path": "shaders/00425940.glsl",
+      "bytes": 2958,
+      "sha256": "24ba0951852bd3d6335a8bd1e68d708b29d159d3d545b64d10a36d1c21ef9734"
+    },
+    {
+      "path": "shaders/004264d0.glsl",
+      "bytes": 193,
+      "sha256": "f796bec33af828077d0e1e188b20e04ffb6dfc1a7238a981d746a8530b39311e"
+    },
+    {
+      "path": "shaders/00426598.glsl",
+      "bytes": 113,
+      "sha256": "2e528f48d93b17b3a1d13d0bd3194071c69318e35ac08aba902b46e249ff82b1"
+    },
+    {
+      "path": "shaders/00426c58.glsl",
+      "bytes": 286,
+      "sha256": "626f3c0846673e3042345939cd3f065b87e7d76ca68af0ee60490c24a8bbf523"
+    },
+    {
+      "path": "tables/curve_pool.bin",
+      "bytes": 36468,
+      "sha256": "d3d36a40905b4a7a7db9a95deb482b446be87e5176d8af3233cc1bb6d7e71aad"
+    },
+    {
+      "path": "tables/timeline_ranges.bin",
+      "bytes": 400,
+      "sha256": "6d39dac2d0a9499fafdecf7ed246ba6f82e284d27cd37e061f0400596b4b56e5"
+    },
+    {
+      "path": "tables/timeline_tokens.bin",
+      "bytes": 200,
+      "sha256": "7817dbb4cab10c1680c7483ac1225cbe320d3be74dcb9ba9060790172b78417c"
+    },
+    {
+      "path": "tables/timeline_track_ranges.bin",
+      "bytes": 400,
+      "sha256": "24cd2d6cae6bbcf5f319964750be0908286e0552ad4b19bec8644b6fae2a8f00"
+    },
+    {
+      "path": "tables/uniform_descriptors.bin",
+      "bytes": 22440,
+      "sha256": "c643c34b5ca195b7ab8e34e45774b0b08a1239a714c69f93b52bd1e14f59d1ea"
+    },
+    {
+      "path": "tables/program_recipes.bin",
+      "bytes": 240,
+      "sha256": "05494b311c017529ebe8ead21480d77e564f258426d78d62fff0d18d3393a990"
+    },
+    {
+      "path": "tables/framebuffers.bin",
+      "bytes": 260,
+      "sha256": "6d4021e8ff4fdc6a360214adb78a1657d327ed0bd27c2b4683524fb12e8b8072"
+    },
+    {
+      "path": "tables/pass_routes.bin",
+      "bytes": 240,
+      "sha256": "58151541ca88be59f6bd79d966b9682b4e2ef166da9289ed737cafd2671ba16d"
+    },
+    {
+      "path": "tables/pass_static_uniform_views.bin",
+      "bytes": 132,
+      "sha256": "2fc8801d6bb016804526a9d412773aaa5c6dd16e2c887bedb65f6e1ba1b25bfe"
+    },
+    {
+      "path": "tables/pass_inputs.bin",
+      "bytes": 840,
+      "sha256": "3d4fe5cc7c7caac6bce5ccabdff7f98b20fa605af0c59a701df89968b7c6045f"
+    },
+    {
+      "path": "tables/scene_pass_lists.bin",
+      "bytes": 960,
+      "sha256": "70d252a21bc459479d32c0605b8f4fdc8e88bbbd15cc7a613ee168f05f82a829"
+    },
+    {
+      "path": "tables/physics_constants.bin",
+      "bytes": 192,
+      "sha256": "1336f9575609d871a19b7372270432aa6e9112f1369c0157a48efd525d844a2d"
+    },
+    {
+      "path": "engine-tables.json",
+      "bytes": 447995,
+      "sha256": "a20e4426780be721d706105d5f22d2e8fd3907468945c2ed7cb99024be3e0810"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "shaders/00409918-effective.glsl",
+      "bytes": 1324,
+      "sha256": "cb62ed7fd0878836b763b892f64cb9e4a789f49f304d32d0a2fc334aecb433ea"
+    },
+    {
+      "path": "shaders/00409918.glsl",
+      "bytes": 1310,
+      "sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182"
+    },
+    {
+      "path": "shaders/00409e38.glsl",
+      "bytes": 4113,
+      "sha256": "12fabc3cd1110a549423eb68318d99562c7b65f1b5e4eea2c5358180e063bb63"
+    },
+    {
+      "path": "shaders/0040ae60.glsl",
+      "bytes": 836,
+      "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+    },
+    {
+      "path": "shaders/0040b1a8.glsl",
+      "bytes": 8620,
+      "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+    },
+    {
+      "path": "shaders/0040d358.glsl",
+      "bytes": 3657,
+      "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+    },
+    {
+      "path": "shaders/0040e1c0.glsl",
+      "bytes": 477,
+      "sha256": "d3da2520283f4e83d9aed9fded5531573664b061558c01a47f4fbf49d8cb5d44"
+    },
+    {
+      "path": "shaders/0040e3a0.glsl",
+      "bytes": 77,
+      "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+    },
+    {
+      "path": "shaders/0040e3f0.glsl",
+      "bytes": 316,
+      "sha256": "b04719a74d5e807a978023801be68cfe3c873543a49b82634b3d62d251ed131d"
+    },
+    {
+      "path": "shaders/0040e530.glsl",
+      "bytes": 756,
+      "sha256": "d7010a245d60871c329fe2f8e3a838b1ed7b6d6b04ef4df0fcbfa34118c3e8ed"
+    },
+    {
+      "path": "shaders/0040e828.glsl",
+      "bytes": 1178,
+      "sha256": "e2e15b1dfb17acfeec357eb737d8f2eaceb48674749d0eec30619e9d3312743f"
+    },
+    {
+      "path": "shaders/0040ecd0.glsl",
+      "bytes": 116,
+      "sha256": "472fd6d03d901d8d8bb7f3bf63321583a22647ee5812215d0b3222a9c4ede08b"
+    },
+    {
+      "path": "shaders/0040ed48.glsl",
+      "bytes": 208,
+      "sha256": "734c0b6199c04eb864159e342e73c49c1a2783ec47e21269efde2a17c279efd3"
+    },
+    {
+      "path": "shaders/0040ee1c.glsl",
+      "bytes": 37,
+      "sha256": "5953e28d5a8d064f90b0ef3a1ccf1fd0d381dcf55924a70d762e49f31c394b41"
+    },
+    {
+      "path": "shaders/0040ee58.glsl",
+      "bytes": 201,
+      "sha256": "c1f31337991507a451eb99cfe973e998bb58b500d406707c9fd6c24bb3795ec2"
+    },
+    {
+      "path": "shaders/0040ef30.glsl",
+      "bytes": 201,
+      "sha256": "88c473e4febd9c2b636529d39398b2e6b3a31cb363a3994635ac971802d2c1d1"
+    },
+    {
+      "path": "shaders/0040f008.glsl",
+      "bytes": 1137,
+      "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+    },
+    {
+      "path": "shaders/0040f488.glsl",
+      "bytes": 9052,
+      "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+    },
+    {
+      "path": "shaders/004117e8.glsl",
+      "bytes": 3003,
+      "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+    },
+    {
+      "path": "shaders/004123a8.glsl",
+      "bytes": 12190,
+      "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+    },
+    {
+      "path": "shaders/00415348.glsl",
+      "bytes": 2745,
+      "sha256": "66c4e21332065b428c6be2569bb00ab156a0cd654dd70323f91106467ad76235"
+    },
+    {
+      "path": "shaders/00415e10.glsl",
+      "bytes": 107,
+      "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+    },
+    {
+      "path": "shaders/00415e80.glsl",
+      "bytes": 4703,
+      "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+    },
+    {
+      "path": "shaders/004170e4.glsl",
+      "bytes": 37,
+      "sha256": "e94939c33f1710ca89471459dc3eb360992333bfc908521912103e9768205615"
+    },
+    {
+      "path": "shaders/00417118.glsl",
+      "bytes": 3754,
+      "sha256": "dbe906ec774e232c9f10626e4907e3fcffd3138076397a08a6dcb6fe9d4f4b21"
+    },
+    {
+      "path": "shaders/00417fd0.glsl",
+      "bytes": 554,
+      "sha256": "9257c11007792c664cecd79331bc18ec89543d38aa903bd9947acffee9e9d762"
+    },
+    {
+      "path": "shaders/00418210.glsl",
+      "bytes": 504,
+      "sha256": "b01f5d68c2d7467945585c38b7f32fe294374f06064144046eed25c060b87001"
+    },
+    {
+      "path": "shaders/0041840c.glsl",
+      "bytes": 13,
+      "sha256": "7c46792a5259e8f078e5bb7084ec85e458a42f370c8c64382b8d231faa26d1db"
+    },
+    {
+      "path": "shaders/00418430.glsl",
+      "bytes": 114,
+      "sha256": "db27a49b5a4d08de5a9f22be198ddd2d778c980bffd36e5b9a6639b571ebeb15"
+    },
+    {
+      "path": "shaders/004184b8.glsl",
+      "bytes": 6249,
+      "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+    },
+    {
+      "path": "shaders/00419d48.glsl",
+      "bytes": 638,
+      "sha256": "262237606f1f81f7ec87a0b164e0b73bef6011afe745d36ef0730bab14a758b7"
+    },
+    {
+      "path": "shaders/00419fc8.glsl",
+      "bytes": 305,
+      "sha256": "4663d501dd110410388866d4fe08461a7fc44433c57d0c72c339a09d63c1417f"
+    },
+    {
+      "path": "shaders/0041a108.glsl",
+      "bytes": 1069,
+      "sha256": "fe4fe8e78bd6a02c79b4cb104a800625b297da02d181e6a42a32654afa76eafb"
+    },
+    {
+      "path": "shaders/0041a538.glsl",
+      "bytes": 217,
+      "sha256": "215542d7a666e355bbc23bdf1907f47009d2dde47dae5c83b40a9f0993442659"
+    },
+    {
+      "path": "shaders/0041a614.glsl",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "shaders/0041a618.glsl",
+      "bytes": 558,
+      "sha256": "dbd99a251a3545a016113327093ea49df3a1677d1f704f816c65db0728b9a34b"
+    },
+    {
+      "path": "shaders/0041a848.glsl",
+      "bytes": 2095,
+      "sha256": "3d57abff765a08cb09154a6ca45d3ac674303cf7521e09f69a9632629fcabcde"
+    },
+    {
+      "path": "shaders/0041b0b0.glsl",
+      "bytes": 888,
+      "sha256": "71208edb9484dc211cb09cac6ac8e29612864f36df9641e9ea704db52fc2a8f9"
+    },
+    {
+      "path": "shaders/0041b480.glsl",
+      "bytes": 2808,
+      "sha256": "f319a9ccbf777d390a929902c442a1a489a8da992941fb9614819648655e60a7"
+    },
+    {
+      "path": "shaders/0041bf84.glsl",
+      "bytes": 58,
+      "sha256": "c300c3dd397d3500e467c62e6279656ed11be924b158f0da3aeaa59fe9a63a9e"
+    },
+    {
+      "path": "shaders/0041bfc0.glsl",
+      "bytes": 1146,
+      "sha256": "9a00350d47163f360f0c894c1109691e6f2b5760eff3e34a4c597a9208d56fc1"
+    },
+    {
+      "path": "shaders/0041c450.glsl",
+      "bytes": 500,
+      "sha256": "9df59ed87c8ada9a3ff21c22a85198fd1ad186836add9f6858ecc2c9979655c0"
+    },
+    {
+      "path": "shaders/0041c648.glsl",
+      "bytes": 477,
+      "sha256": "e2ef43e0aa91c9697f0b5d75df1b9b46fb214be84e1bd38a3d7a73cadea99f96"
+    },
+    {
+      "path": "shaders/0041c828.glsl",
+      "bytes": 172,
+      "sha256": "af0c94d7ceeb3176dbf5f4ae417e900ae292a674bd625e150d4187bf692f7b85"
+    },
+    {
+      "path": "shaders/0041c8f8.glsl",
+      "bytes": 857,
+      "sha256": "e402f5b679498426e5653c947fc7d0b270bc805868500034ff35e27608941766"
+    },
+    {
+      "path": "shaders/0041cc78.glsl",
+      "bytes": 1733,
+      "sha256": "a49f1a0a2055a7c7fdf5122000fdaaf768eb0127edd49a45348e2fdaf10db259"
+    },
+    {
+      "path": "shaders/0041d340.glsl",
+      "bytes": 972,
+      "sha256": "3746b0ede020d6857a7a354cb9a459d91dc3f81eddf31771bc1200b2fc2d56a7"
+    },
+    {
+      "path": "shaders/0041d710.glsl",
+      "bytes": 608,
+      "sha256": "302f53ff113f83087db5a986ae2fb17e0e482a0d95f3c292a7a28569d0a7c7a5"
+    },
+    {
+      "path": "shaders/0041d990.glsl",
+      "bytes": 193,
+      "sha256": "a4c8ee87593f4c6545c892154507da9e49eee54b97d5d688594e9ecafa3fca74"
+    },
+    {
+      "path": "shaders/0041da68.glsl",
+      "bytes": 970,
+      "sha256": "f2d8b1ac561c62e38b4e70ce2dd881c4cfa07d86a1c6c8701768515cbf3092f3"
+    },
+    {
+      "path": "shaders/0041de34.glsl",
+      "bytes": 58,
+      "sha256": "c0e14e53659b4c2cbaba51e9543cf3c748147a1256c773160e54139324a46c5b"
+    },
+    {
+      "path": "shaders/0041de70.glsl",
+      "bytes": 2042,
+      "sha256": "ca52bdba945423bdb702ce34eb03b4c14b270e2310e90c10fa63dc303dc1838c"
+    },
+    {
+      "path": "shaders/0041e66c.glsl",
+      "bytes": 57,
+      "sha256": "d283636cc80c66affa046822dc97408df7f6f094cd6581c4c5b0180f9e63ea94"
+    },
+    {
+      "path": "shaders/0041e6a8.glsl",
+      "bytes": 745,
+      "sha256": "3596848d96641c61a246d1846e0c24c19ca2a641628e23901fdcd40d24ace3f1"
+    },
+    {
+      "path": "shaders/0041e9b8.glsl",
+      "bytes": 499,
+      "sha256": "b5403ab2cfb245c9ab833383d48b80d2e5f736fcc3a4260475b8c64515d060f3"
+    },
+    {
+      "path": "shaders/0041ebb0.glsl",
+      "bytes": 1125,
+      "sha256": "eea3f6c88d4f420ca2518e984bd21907d90cfbb69b23965ed268036636e926ae"
+    },
+    {
+      "path": "shaders/0041f020.glsl",
+      "bytes": 368,
+      "sha256": "43de43901ddd256bc9e52e2f607f36710b57a99131077116a50747e2947c9cd4"
+    },
+    {
+      "path": "shaders/0041f1b8.glsl",
+      "bytes": 1719,
+      "sha256": "b739d4a2d634466d82a8a77742b6488a1af95bb0d115bebe1fb55f622e442d63"
+    },
+    {
+      "path": "shaders/0041f874.glsl",
+      "bytes": 44,
+      "sha256": "227062c5cd8bceedcced20ed1d7f9be4ce07d98741142e77c245272051e1cb5a"
+    },
+    {
+      "path": "shaders/0041f8d0.glsl",
+      "bytes": 161,
+      "sha256": "01c0db1f051d2f0b2c4ef13da1d8fc314d3616b286fb45c76a823bb43a7ddd5d"
+    },
+    {
+      "path": "shaders/0041f980.glsl",
+      "bytes": 535,
+      "sha256": "99bb81909ee36299e8673865cfe44c3fb1bbe7f21ce2c6c731c4a3172eb3f644"
+    },
+    {
+      "path": "shaders/0041fbd0.glsl",
+      "bytes": 116,
+      "sha256": "9a7baa978e06027c12513c4cfa90258cd82379946504dbde9770cd744f349682"
+    },
+    {
+      "path": "shaders/0041fc48.glsl",
+      "bytes": 1518,
+      "sha256": "de23d25ca1380a0ba23f24ca804d931826f3fb5fe254b4ee24e7ead8cfe001c9"
+    },
+    {
+      "path": "shaders/00420238.glsl",
+      "bytes": 19,
+      "sha256": "4d4418d974fd44f137de7f53fba9dd65b5647607fb92eed245ee76fd78724c02"
+    },
+    {
+      "path": "shaders/00420250.glsl",
+      "bytes": 892,
+      "sha256": "0f164498f62d755cd39f1cee88d0ab3490983a388a3989d6170f8e1c682655d4"
+    },
+    {
+      "path": "shaders/004205d0.glsl",
+      "bytes": 330,
+      "sha256": "3d45d7d2c548764d2878bac6600cb1df853d2a20866d6aa0c6595d3a095efecb"
+    },
+    {
+      "path": "shaders/00420728.glsl",
+      "bytes": 132,
+      "sha256": "496dbdd5170c8fcf63effee73bb74f76b1426a85817d7714b117dd57e1850a95"
+    },
+    {
+      "path": "shaders/004207b0.glsl",
+      "bytes": 1003,
+      "sha256": "3402ea50c99ee112444315798e5851327927fe3e83d956a42cb7aee173ecd88a"
+    },
+    {
+      "path": "shaders/00420ba0.glsl",
+      "bytes": 1161,
+      "sha256": "fb73b36160f90ad0192bb59663708be5b5139b76ea8aa8babb0561674b45fcad"
+    },
+    {
+      "path": "shaders/00421040.glsl",
+      "bytes": 201,
+      "sha256": "563f542d5201558728432719710dbe2721fb6e305634085978ccf704c71bd82c"
+    },
+    {
+      "path": "shaders/00421130.glsl",
+      "bytes": 311,
+      "sha256": "23ff849fb2916a2b71a14d0be41faebc1e1594ed3710b7eb8628f9c14cd4ae33"
+    },
+    {
+      "path": "shaders/00421290.glsl",
+      "bytes": 69,
+      "sha256": "c61e37749ecaf0a63915abc3cc0d492e33b9f91f7913d74fb3d9e4e04c4d3134"
+    },
+    {
+      "path": "shaders/004212d8.glsl",
+      "bytes": 1911,
+      "sha256": "dd6ad535300495471c21132d5c2eb5b1b909b2216e2f415b2d7432c2b120386d"
+    },
+    {
+      "path": "shaders/00421a68.glsl",
+      "bytes": 707,
+      "sha256": "9bc4a200d96be45411f08166a60a58d403b6303dc5a40eb0c838b644cd8c5a78"
+    },
+    {
+      "path": "shaders/00421d30.glsl",
+      "bytes": 504,
+      "sha256": "f7678e60f7b3cb5664ba763fadec6ab249e2f4816cdbd29015bc541e33303c90"
+    },
+    {
+      "path": "shaders/00421f40.glsl",
+      "bytes": 328,
+      "sha256": "a7a2feb92ed190e2c0e8580577aaa040d82b9b97da9e3f20f226e362ffa70b91"
+    },
+    {
+      "path": "shaders/004220d0.glsl",
+      "bytes": 125,
+      "sha256": "bfe93d40dced318b655551ee667b01a323855fff5c977aa4f7b3c9f3e452a19e"
+    },
+    {
+      "path": "shaders/00422150.glsl",
+      "bytes": 2377,
+      "sha256": "902e6a6a407ad242d71d6dbd0d2ceb72952ca50d1572dd83ddc4bf7c7a2c29a4"
+    },
+    {
+      "path": "shaders/00422ac0.glsl",
+      "bytes": 2449,
+      "sha256": "97b30d0c1c08f4a4ac96be48b105f269d4cb1bb8f0de1936ff89bd231812b28b"
+    },
+    {
+      "path": "shaders/00423470.glsl",
+      "bytes": 538,
+      "sha256": "05a39d5d79c83fd4c78b2feb2629b83f159442669e1c007326cc9ffa32f4456d"
+    },
+    {
+      "path": "shaders/00423690.glsl",
+      "bytes": 808,
+      "sha256": "14e7f8250c9f47c542199f033aa3bb1afd1fcf1b9dfc4eda59b16509390462d7"
+    },
+    {
+      "path": "shaders/004239c0.glsl",
+      "bytes": 137,
+      "sha256": "d263f2ad13f36927606293c0febbd07fd81c862ea2e8a2845990487d90c05638"
+    },
+    {
+      "path": "shaders/00423a50.glsl",
+      "bytes": 1997,
+      "sha256": "9b92ba2ef75a6e1b0e48ba4164669ca76f077c4b8de8ed3a2b880360cec02dcc"
+    },
+    {
+      "path": "shaders/00424220.glsl",
+      "bytes": 1482,
+      "sha256": "4226096bcb1f6bbe48411b69d364e0b64a491295ee83e478ed269508d91950e7"
+    },
+    {
+      "path": "shaders/004247f0.glsl",
+      "bytes": 323,
+      "sha256": "4c5bdc495e7ce136e75afb909239df49bbb312ad59bbc9da540d72ded229bd15"
+    },
+    {
+      "path": "shaders/00424938.glsl",
+      "bytes": 263,
+      "sha256": "de15b08a799e897673f540bfaeb5cc17d7909aa1e9953f8052fc2b9a9084c221"
+    },
+    {
+      "path": "shaders/00424a48.glsl",
+      "bytes": 450,
+      "sha256": "6e0d4269fac1c0430f72244c44549c2c53b65138e5fe920f0afc052411aefc44"
+    },
+    {
+      "path": "shaders/00424c10.glsl",
+      "bytes": 1106,
+      "sha256": "fd846ecba6c439bccbec8b27be255d17782c4a9065d3cd524ef1ae7aae429a5a"
+    },
+    {
+      "path": "shaders/00425068.glsl",
+      "bytes": 196,
+      "sha256": "77f3e3c59933f4938990bfe6d3d67ea3173583e3a41f39ad7f5de025b20ec400"
+    },
+    {
+      "path": "shaders/00425130.glsl",
+      "bytes": 2061,
+      "sha256": "d28e74279acebf9b25147af866a8c72a4d708c15895670605fa5b25caeafa961"
+    },
+    {
+      "path": "shaders/00425940.glsl",
+      "bytes": 2958,
+      "sha256": "24ba0951852bd3d6335a8bd1e68d708b29d159d3d545b64d10a36d1c21ef9734"
+    },
+    {
+      "path": "shaders/004264d0.glsl",
+      "bytes": 193,
+      "sha256": "f796bec33af828077d0e1e188b20e04ffb6dfc1a7238a981d746a8530b39311e"
+    },
+    {
+      "path": "shaders/00426598.glsl",
+      "bytes": 113,
+      "sha256": "2e528f48d93b17b3a1d13d0bd3194071c69318e35ac08aba902b46e249ff82b1"
+    },
+    {
+      "path": "shaders/00426c58.glsl",
+      "bytes": 286,
+      "sha256": "626f3c0846673e3042345939cd3f065b87e7d76ca68af0ee60490c24a8bbf523"
+    },
+    {
+      "path": "src/data/curve_pool.bin",
+      "bytes": 36468,
+      "sha256": "d3d36a40905b4a7a7db9a95deb482b446be87e5176d8af3233cc1bb6d7e71aad"
+    },
+    {
+      "path": "src/data/framebuffers.bin",
+      "bytes": 260,
+      "sha256": "6d4021e8ff4fdc6a360214adb78a1657d327ed0bd27c2b4683524fb12e8b8072"
+    },
+    {
+      "path": "src/data/pass_inputs.bin",
+      "bytes": 840,
+      "sha256": "3d4fe5cc7c7caac6bce5ccabdff7f98b20fa605af0c59a701df89968b7c6045f"
+    },
+    {
+      "path": "src/data/pass_routes.bin",
+      "bytes": 240,
+      "sha256": "58151541ca88be59f6bd79d966b9682b4e2ef166da9289ed737cafd2671ba16d"
+    },
+    {
+      "path": "src/data/pass_static_uniform_views.bin",
+      "bytes": 132,
+      "sha256": "2fc8801d6bb016804526a9d412773aaa5c6dd16e2c887bedb65f6e1ba1b25bfe"
+    },
+    {
+      "path": "src/data/physics_constants.bin",
+      "bytes": 192,
+      "sha256": "1336f9575609d871a19b7372270432aa6e9112f1369c0157a48efd525d844a2d"
+    },
+    {
+      "path": "src/data/program_recipes.bin",
+      "bytes": 240,
+      "sha256": "05494b311c017529ebe8ead21480d77e564f258426d78d62fff0d18d3393a990"
+    },
+    {
+      "path": "src/data/scene_pass_lists.bin",
+      "bytes": 960,
+      "sha256": "70d252a21bc459479d32c0605b8f4fdc8e88bbbd15cc7a613ee168f05f82a829"
+    },
+    {
+      "path": "src/data/timeline_ranges.bin",
+      "bytes": 400,
+      "sha256": "6d39dac2d0a9499fafdecf7ed246ba6f82e284d27cd37e061f0400596b4b56e5"
+    },
+    {
+      "path": "src/data/timeline_tokens.bin",
+      "bytes": 200,
+      "sha256": "7817dbb4cab10c1680c7483ac1225cbe320d3be74dcb9ba9060790172b78417c"
+    },
+    {
+      "path": "src/data/timeline_track_ranges.bin",
+      "bytes": 400,
+      "sha256": "24cd2d6cae6bbcf5f319964750be0908286e0552ad4b19bec8644b6fae2a8f00"
+    },
+    {
+      "path": "src/data/uniform_descriptors.bin",
+      "bytes": 22440,
+      "sha256": "c643c34b5ca195b7ab8e34e45774b0b08a1239a714c69f93b52bd1e14f59d1ea"
+    },
+    {
+      "path": "src/generated.rs",
+      "bytes": 16984,
+      "sha256": "18511f00f56ebb7c2265c6833b0af84751c45f30075e4cd7cce7e7745ab0e5e4"
+    }
+  ],
+  "effective_change": "program0 only: #version 450\\n -> #version 450 compatibility\\n"
+}

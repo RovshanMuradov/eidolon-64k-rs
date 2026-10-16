@@ -1,0 +1,5 @@
+#version 450
+uniform vec3 uTimeResolution;uniform sampler2D sTD2DInputs[1];out vec4 outColor0;const float numSpirals=4.0;const float samplesPerSpiral=15.0;const float edges=7.0;uniform float uSharpDistance=100.0;const float sharpWidth=0.0;uniform float uBlurSize=5000.0;const float maxCoC=0.3;float CoC(float a,vec2 uv){return clamp((abs(a-uSharpDistance)-sharpWidth)/uBlurSize,0.0,maxCoC);}
+#define PI 3.14159265359
+#define TAU (2*PI)
+void main(){vec2 uv=gl_FragCoord.xy/uTimeResolution.yz;outColor0=texture2D(sTD2DInputs[0],uv);float coc=CoC(outColor0.a,uv);if(coc==0.0)return;vec2 scale=vec2(1.0)/uTimeResolution.yz;vec3 col=vec3(0.0);float asum=0.0;float a=PI/edges,b=cos(a),c=a+a;for(float t=0.0;t<numSpirals*TAU;t+=TAU/samplesPerSpiral){float r=b/cos(mod(t,c)-a);vec2 offset=vec2(sin(t),cos(t))*r*t*scale*coc;float modCoC=CoC(texture2D(sTD2DInputs[0],uv).a,uv+offset);offset=vec2(sin(t),cos(t))*r*t*scale*modCoC;vec4 samp=texture2D(sTD2DInputs[0],uv+offset);modCoC=CoC(samp.a,uv+offset)*t;col+=samp.rgb*modCoC;asum+=modCoC;}col=col/asum;outColor0=vec4(col,1.0);}

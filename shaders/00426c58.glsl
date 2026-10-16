@@ -1,0 +1,2 @@
+#version 420
+uniform vec4 u;out vec3 o;void main(){vec2 t=(gl_FragCoord.xy * 2.0 - u.yz)/u.z,q=abs(t);q=q-vec2(.99,.1);float d=max(q.x,q.y);o=mix(vec3(255,196,34)/255.,vec3(255,106,34)/255.,floor(fract((t.x-t.y)*3.)*1.999))*step(0.,-max(t.x-u.x*2.+1.,d+0.01));o+=step(0.,0.003-abs(d));}
