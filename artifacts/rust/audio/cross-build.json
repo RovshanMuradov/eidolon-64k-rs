@@ -1,0 +1,9 @@
+{
+  "target": "i686-pc-windows-gnu",
+  "execution": false,
+  "path": "/home/rovshan/Work/asm/Eidolon/data/builds/T23/standalone/render-i686.exe",
+  "bytes": 5188815,
+  "sha256": "278dbb5c91407c6fc7a835788f1c7157c7e4c478a197078761023f2cd170d68d",
+  "machine": "0x14c",
+  "command": "bash tools/run rustc --edition=2021 -A dead_code --target i686-pc-windows-gnu -C linker=i686-w64-mingw32-gcc -C opt-level=2 -C target-feature=+sse4.1 tools/rust-audio/render.rs -o $EIDOLON_DATA/builds/T23/standalone/render-i686.exe"
+}

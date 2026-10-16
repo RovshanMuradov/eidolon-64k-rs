@@ -14,7 +14,7 @@ def sha(path):
 
 
 def main():
-    temporary = Path('/tmp/opencode/eidolon/T11/build-tmp')
+    temporary = Path('/tmp/opencode/eidolon/T16/build-tmp')
     temporary.mkdir(parents=True, exist_ok=True)
     os.environ['TMPDIR'] = str(temporary)
     original_path = Path('artifacts/reference/proxy-b-g1-20261016.json')
@@ -70,7 +70,14 @@ def main():
         wrappers += [f'.globl _native_{name}', f'_native_{name}:','pushl $0',*save,
                      'movl %ebp,(%esp)','leal 32(%esp),%eax','movl %eax,4(%esp)',
                      f'movl ${number},8(%esp)','call _native_resumed',
-                     'movl %eax,36(%ebp)',*restore,'ret']
+                      'movl %eax,36(%ebp)',*restore,'ret']
+    # Non-returning native IAT observer: restore the original call's complete
+    # machine state, independently snapshot it, then tail-jump to ExitProcess.
+    wrappers += ['.globl _full_exit', '_full_exit:', *save,
+                 'movl %ebp,(%esp)', 'leal 32(%esp),%eax', 'movl %eax,4(%esp)',
+                 'call _full_exit_observe', *restore, *save,
+                 'movl %ebp,(%esp)', 'leal 32(%esp),%eax', 'movl %eax,4(%esp)',
+                 'call _full_exit_restored', *restore, 'jmp *_full_exit_target']
     for number, (name,displaced,next_pc) in enumerate((
             ('initialize','0x0f,0x28,0x46,0x40,0x0f,0x29,0x46,0x50',0x405446),
             ('before','0x0f,0x28,0x86,0x90,0x01,0x00,0x00',0x405645),

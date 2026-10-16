@@ -1,0 +1,63 @@
+{
+  "schema": "eidolon-rust-audio-standalone-v1",
+  "kind": "standalone-rust-native-comparison",
+  "standalone_rust_synth": true,
+  "frames": 19964544,
+  "bytes": 159716352,
+  "format": "stereo interleaved f32le 44100 Hz",
+  "equal": true,
+  "first_mismatch_byte": null,
+  "elapsed_seconds": 148.88667254400207,
+  "output": "/home/rovshan/Work/asm/Eidolon/data/builds/T23/standalone/pcm-19964544.f32le",
+  "output_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+  "reference_pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+  "reference_manifest": "artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
+  "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+  "rust_files": {
+    "src/audio/mod.rs": "1c89f9481433e9bf4969c1f61ec64693aeed77142a11a827433e077dd59756d5",
+    "src/audio/math.rs": "ac4f838b776eb7e873ce98180960e980af9920331d346ca4c2a23913e40751f1",
+    "src/audio/score.rs": "95f983c4126d6e8a52f673cf0735add23abde08997bbcfd291dda20463673f09",
+    "src/audio/data.rs": "7fea7c8b68aefedf36735aa405fafc3cc886c662a8414daac56ebf3da82663de",
+    "src/audio/graph.rs": "b1c5d3929065d699a08cda34a80f72292a0a85155cb8717b176365b8233b543d",
+    "src/audio/nodes.rs": "76ce95f50e75043d90e6ab0570a17dd241ea63d48c9864a0640d2b6c02a53efa",
+    "src/audio/voice.rs": "3835d93451648315f55140f08f16e04dae1126c6b181f4f55b80bd04c8673b1e",
+    "src/audio/arp.rs": "e09bd5cc56d30061efbbb9030a658a3937d2dd834ef646c6795522d84a99d86a",
+    "src/audio/effects.rs": "be1e83d0d9dbabdb23537cb36c098b8c6ded97f5ae30fd79450095082199f3df",
+    "src/audio/sources.rs": "84b6b2fd1b383846938c74d52fcbb01cf7e8fc3656ea337b69deddc6eaec8eae",
+    "src/audio/formants.rs": "0e488d62c42d3320fa3707adf884b5eb1da0340aa618ea8f6c17fd4555cd3ca7",
+    "src/audio/oscillator.rs": "b745465c9dadbda3d4598286742c3963a5303eea0f79e31d956bab962be5375b",
+    "src/audio/sequencer.rs": "e666e0a006a0a57f6c807adc5d382e7497658b5b37c259dc1d0e840da7bff9d6",
+    "src/audio/glitch.rs": "02d42f2367e6b3a62f25432d6191c33c5f9ed80bb935043497156780e87a99b0",
+    "src/audio/runtime.rs": "a3ac804f6bb814b403a3b684f7583db39b96c3fb5e54ffe3728b6bd1a947298a"
+  },
+  "harness_sha256": "69fca2e69eb8d038bb0814352066307654162203cc6ab57053cc8924cbc24f47",
+  "compile_command": [
+    "rustc",
+    "--edition=2021",
+    "-A",
+    "dead_code",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "target-feature=+sse4.1",
+    "tools/rust-audio/render.rs",
+    "-o",
+    "/home/rovshan/Work/asm/Eidolon/data/builds/T23/standalone/render"
+  ],
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+  "binary_sha256": "cbb128191ada3ec088d5558a3b5752cdaeea3329e444c9512af96f71e10fac1e",
+  "stdout": "RUST_RENDERED frames=19964544 standalone=true\n",
+  "stderr": "",
+  "fp": {
+    "initialization_mxcsr": "0x1f80",
+    "synthesis_mxcsr": "0xffc0",
+    "caller_restored": true
+  },
+  "environment": {
+    "resolution": null,
+    "gpu": null,
+    "driver": null,
+    "wine": null
+  },
+  "scope": "Linux CPU executable, using production render entrypoint for full score; Windows runtime validation pending"
+}
