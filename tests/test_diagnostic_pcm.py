@@ -13,10 +13,8 @@ from tools.verify import reference
 @pytest.fixture
 def observed():
     root = Path(os.environ.get("EIDOLON_ROOT", Path(__file__).resolve().parents[1]))
-    manifest = root / ".worktrees/T2/artifacts/reference/proxy-b-g1-20261016.json"
+    manifest = Path(__file__).resolve().parents[1] / "artifacts/reference/proxy-b-g1-20261016.json"
     data = Path(os.environ.get("EIDOLON_DATA", root / "data"))
-    if not manifest.is_file():
-        pytest.skip("immutable B diagnostic not present")
     assert reference.hash_file(manifest) == diagnostic.B_MANIFEST_SHA256
     m = reference.load_json(manifest.read_text())
     evidence = f'reference/{m["run_id"]}/backend.jsonl'

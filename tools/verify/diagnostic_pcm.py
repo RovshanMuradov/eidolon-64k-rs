@@ -233,12 +233,12 @@ def assess(manifest_path, data_root, source_root, corruptions=False):
         "failure": failure, "terminal": terminals,
         "full_reference_rejected": rejected,
         "limitations": [
-            "One failed B invocation; no independent repeatability or A gate evidence.",
+            "One failed B invocation; no independent repeatability or later capture gate evidence.",
             "No real pixels, layout/read-buffer validation, scene anchors or controlled visual endpoint.",
             "Source review supports EBP+8 cursor, locked event ordering and separate source-memory hashes; runtime instrumentation claims are not authenticated by hashes alone.",
             "The B manifest binds source/run/dependency identity; backend.jsonl alone lacks that envelope for draft-3 completion evidence.",
             "The context event repeats one hash; it does not establish complete hook/FP/ABI preservation.",
-            "GL_initial_error records GetLastError=183, not a GL enum; preexisting/query error cause is unresolved.",
+            "This G1 stream records GetLastError=183, not a GL enum; the separate merged D7 diagnosis attributes the GL failure to original shader/program use.",
         ],
     }
     if corruptions:

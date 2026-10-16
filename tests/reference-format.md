@@ -1,7 +1,7 @@
 # Draft reference contract
 
 - [V] Owner: Verification/T10; assignment: [briefs/T10.md](../briefs/T10.md).
-- [H] Schema `eidolon-reference-draft-3` remains provisional pending T2's A producer agreement and live capture validation.
+- [H] Schema `eidolon-reference-draft-3` remains provisional pending producer agreement and live capture validation; D9 experiment provenance is specified separately below.
 - [V] Acceptance target: [approved step 1](../GOAL.md#approved-step-1--reproducible-reference-of-the-original).
 - [V] Executable checker: [tools/verify/reference.py](../tools/verify/reference.py); synthetic fixture: [reference_factory.py](reference_factory.py).
 - [H] A `PASS` under this draft reports only the requested integrity/comparison operation; synthetic captures establish neither an original reference nor original repeatability.
@@ -89,7 +89,7 @@
 - [H] Run IDs, capture-command arguments, file locations, storage mode and index-file hashes need not agree across runs; commands may differ in output paths, while behavioral settings must agree in `conditions`.
 - [H] PCM evidence paths/hashes and event sequence numbers are run-specific and need not agree; each run independently passes all final-data invariants and matches its entire PCM to its stability hash.
 - [H] No tolerance, time alignment, dropped prefix/suffix, frame deduplication, image conversion or audio normalization is permitted.
-- [H] Source/tool/state hashes, display metadata, end-event evidence and PCM observation artifacts do not by themselves prove runtime behavior; headless execution, capture-point correctness and a full natural end require T1/T2 validation.
+- [H] Source/tool/state hashes, display metadata, end-event evidence and PCM observation artifacts do not by themselves prove runtime behavior; headless execution, capture-point correctness and a full natural end require independent runtime validation.
 - [V] Native PCM extent/layout and the derived visual endpoint are checked independently of pair equality; identically trimmed native pairs with rewritten hashes/counts/termination cannot pass ([test_reference.py](test_reference.py)).
 - [H] Consistently forged full-length bytes, event histories or synthetic endpoints cannot be disproved from self-declarations alone; independent runtime evidence remains necessary.
 
@@ -106,15 +106,54 @@
 
 ## B diagnostic assessment
 
-- [V] Immutable input: `$EIDOLON_ROOT/.worktrees/T2/artifacts/reference/proxy-b-g1-20261016.json`; [diagnostic_pcm.py](../tools/verify/diagnostic_pcm.py) pins its SHA-256, rehashes its three evidence files and six capture sources, and checks the original observation stream independently.
+- [V] Immutable input: [canonical merged B manifest](../artifacts/reference/proxy-b-g1-20261016.json); [diagnostic_pcm.py](../tools/verify/diagnostic_pcm.py) pins its SHA-256, rehashes its three evidence files and six capture sources, and checks the original observation stream independently; the removed T2 worktree is not an input.
 - [V] `completion_from_events` projects only observed PCM fields into `verify_pcm_completion`; it creates no reference manifest, frame records, successful termination or accepted-reference identity.
 - [V] The source-pinned `core.c` reads `[EBP+8]` at `0x401765`, serializes event IDs under a critical section, waits for completion, writes the entire submitted range and separately hashes source memory twice; independent saved-file hashing agrees.
 - [V] `hook_context` logs the same digest twice after a context comparison; this limited observation does not establish complete ABI/FP/state-preservation gates.
-- [V] The manifest supplies run/source/dependency identity; `backend.jsonl` alone does not contain that envelope. A must publish self-identifying, hash-bound completion evidence under the existing draft-3 requirements.
+- [V] The manifest supplies run/source/dependency identity; `backend.jsonl` alone does not contain that envelope. New captures must publish self-identifying, hash-bound completion evidence under the existing draft-3 requirements.
 - [V] Real PCM content statistics are descriptive; finite/nonzero values and peaks outside ±1 neither establish musical correctness nor authorize clipping, normalization or tolerance.
 - [V] Diagnostic assessment returns `DIAGNOSTIC_ONLY`, `reference_accepted:false`, exit 0 for successfully checked diagnostics; changed/missing evidence returns `FAIL`, exit 1. Full-run `validate` rejects B.
 - [V] `--corruptions` modifies disposable PCM copies, checks first/tail bytes, missing/short/extra data, the complete visual-tail trim and a one-sample-frame shift; refreshed hashes cannot defeat direct byte comparison. Completion-field faults also fail.
 - [?] B contains zero real pre-present buffers and one frame-zero sample-cursor observation; final layout, raw pixels, scene anchors, advancing controlled clocks, visual completion, exact repeatability and outstanding G1–G4 evidence remain absent.
+
+## D9 compatibility experiment eligibility
+
+- [V] Authority: D9 in [STATE.md](../STATE.md); semantic basis: `$EIDOLON_ROOT/handoff/reverse-to-capture-glsl-compatibility.md`; independent file-only checker: [compatibility.py](../tools/verify/compatibility.py).
+- [H] D9 authorizes a proxy-only experiment, not acceptance of a restored original; preserve native EXE/source memory, original failure artifacts and all exact PCM/frame/timing criteria.
+- [H] Keep candidates labeled `compatibility-modified-diagnostic`, `reference_eligible:false`; draft-3's `original` kind cannot describe runtime shader modifications, and the full-reference checker rejects modified kinds/diagnostic sidecars.
+- [H] Successful provenance/edit checking returns `PROVENANCE_ONLY`, `runtime_semantics_verified:false`, `reference_accepted:false`; it establishes neither capture G5/G6 nor scene identity, even if a producer reports successful compilation.
+
+### Provenance sidecar: `eidolon-d9-eligibility-1`
+
+- [H] Exact top-level fields: `schema`, `kind`, `decision`, `run_id`, `reference_eligible`, `run_manifest`, `inputs`, `build`, `transformation`, `calls`, `fallback`; duplicate/unknown/missing fields fail.
+- [H] `schema` is `eidolon-d9-eligibility-1`, `kind` is `compatibility-modified-diagnostic`, `decision` is `D9`, `reference_eligible` is false, and `run_id` is nonempty.
+- [H] Each artifact binding is exactly `{root,path,sha256}`: `root` selects `checkout`, `shared` (`$EIDOLON_ROOT`) or `data` (`$EIDOLON_DATA`); `path` is root-relative POSIX with the existing traversal/symlink rules; exact bytes must rehash successfully.
+- [H] `run_manifest` binds the unmodified producer manifest, whose `run_id` must agree and `reference_eligible` must be false; retain its actual stop/failure and environment observations, not synthesized draft-3 completion fields.
+- [H] `inputs` is exactly `{exe,archive,bank,launcher}` of artifact bindings; native EXE/archive/bank identities are pinned independently in the checker to merged B's inputs; launcher bytes are bound and require independent review against `tools/wine-headless`.
+- [H] `build` is exactly `{inputs,outputs,compiler,commands}`; `inputs`/`outputs` are nonempty name→artifact-binding maps; outputs require at least `opengl32.dll` and `winmm.dll`; compiler is a pinned identity/version string and commands are nonempty exact argv arrays.
+- [H] Build coverage must include every source/build script, generated wrapper/export file, header, linker/compiler flag and backend dependency; bind immutable snapshots and actual loaded shim bytes. File hashing alone cannot establish that the build inventory is exhaustive or that the process loaded it.
+- [H] The producer manifest must preserve GPU/driver/Wine/GL/GLSL/gamescope identities, approved display, full invocation/settings, dependency hashes, fresh prefix/RNG/resource/FP initial state and hash-bound raw observations; provenance checker does not certify these opaque runtime claims.
+- [H] `transformation` is `450-compatibility` or `450-explicit-output-0`; primary `fallback` is null; explicit-output `fallback` is exactly `{failed_primary,routing}` of nonempty artifact bindings requiring semantic review, not automatically approved by their hashes.
+- [H] `calls` is a nonempty complete ledger of `glCreateShaderProgramv` calls; each record is exactly `{sequence,stage,count,caller,return,source_addresses,input,forwarded,forward_calls,program}`.
+- [H] `sequence` enumerates creations from 1 without gaps/duplicates/reordering; `stage`, `count`, `forward_calls` and returned `program` are integers, never booleans; `forward_calls` must be 1 and the actual returned handle is retained, not assumed to equal 2.
+- [H] `caller`/`return` and every `source_addresses` entry use lowercase `0x` plus eight hex digits; source-address/input/forwarded arrays have exactly `count>0` entries; input/forwarded entries bind full source-string bytes excluding NUL in their original order.
+- [H] Exactly one call may use creation PC `0x00406dcc`: require return `0x00406dce`, fragment stage `0x8b30`, count 1, source address `0x00409918`, and the D7-pinned 1310-byte source; zero/duplicate target calls or any fingerprint mismatch fail closed.
+- [H] Primary replaces only `#version 450\n` with `#version 450 compatibility\n`, retaining all 1297 body bytes; fallback inserts `layout(location=0) out vec4 eidolon_FragColor;\n` after the original version line and replaces the sole `gl_FragColor` identifier; all unrelated arrays must remain byte-identical.
+- [V] Candidate byte lengths/hashes independently agree with T1's [static review](../tools/reverse/review_glsl.py): 1324 bytes for primary, 1362 for fallback; test pins and malformed/edit/provenance faults are in [test_compatibility.py](test_compatibility.py).
+- [H] Runtime review must establish ledger completeness, exact one-time forwarding and byte lifetime; a complete-looking declared ledger can omit runtime calls, and a refreshed hash cannot authorize an otherwise forbidden edit.
+
+### Semantic prerequisites for later review
+
+- [H] Fresh unchanged-source control on the pinned backend must reproduce D7 source/context, C7616, false link status and original-use `0x0502`; preserve original failure records.
+- [H] Remedy evidence must establish every startup/later program's complete link log/status, returned handle, successful original use/expected current program, HDC/HGLRC/TID and clean error boundaries through initialization/acquisition; nonzero handles or successful swaps do not establish linking.
+- [H] Verify stdcall/stack/register/MXCSR/x87 preservation, unchanged source memory, separately allocated NUL-terminated replacement lifetime and normal acquisition with diagnostic callbacks/breakpoints removed; copied context hashes are insufficient.
+- [H] Observe first-pass FBO completeness, texture dimensions/internal format, draw-buffer map, viewport, masks, blend/clamp/sRGB and fixed-function vertex path; save the native-float 16384×128 atlas before upload into the 128³ RGBA32F volume with observed pack layout and complete extent.
+- [H] Meaningful atlas variation, expected alpha=0 and downstream scene use are required diagnostics, not proof of historical scene identity; no normalization, clipping or visual-similarity tolerance is authorized.
+- [H] Fallback requires a distinct failed-primary compile/link/use experiment and only output location 0 enabled at every actual use; static single-attachment tables or one sampled draw cannot establish all-use routing equivalence. A pixel mismatch is not permission to switch remedies.
+- [H] Two fresh identical-state candidate runs must compare atlas, controlled pre-present pixels including alpha and complete PCM byte-for-byte; if both remedies execute, their atlas/final pixels must also agree exactly or the difference must be resolved before reference selection.
+- [H] Real G5 acquisition review still requires actual final-buffer layout/read/draw bindings/components/samples/sRGB, sequential frame zero/advancing clocks, scene anchors, lossless raw buffers, run-specific PCM completion/stability evidence and actual stop state.
+- [H] T12 independently reviews G5/G6 when real capture exists; the coordinator resolves restoration acceptance before any modified-source full-reference schema is admitted. Missing observations remain missing and cannot be inferred from static tables or a shader fix.
+- [?] Historical driver/compiler output and author bank identity remain unknown; exact candidate agreement proves pinned compatibility-run agreement only.
 
 ## Commands
 
@@ -123,12 +162,14 @@
 - [H] JSON output contains `status: PASS|FAIL`, `draft:true`, `source_kinds`, operation and failure reasons; exit status is `0` for PASS, `1` for FAIL, `2` for CLI usage errors.
 - [V] Tool versions: Python 3.14.7, pytest 9.1.1, NumPy 2.5.4, Zstandard 0.25.0; check with `bash tools/run python -c 'import sys,pytest,numpy,zstandard; print(sys.version,pytest.__version__,numpy.__version__,zstandard.__version__)'`.
 - [V] Temporary-parent prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T10').mkdir(parents=True, exist_ok=True)"`; pytest requires the parent before `--basetemp` initialization.
-- [V] Regression command: `bash tools/run python -m pytest tests/test_reference.py tests/test_diagnostic_pcm.py --basetemp /tmp/opencode/eidolon/T10/pytest -q`; B tests require immutable external assets and skip if its manifest is absent; result: [reports/03-tests.md](../reports/03-tests.md).
-- [V] B acquisition/corruption command: `bash tools/run python tools/verify/diagnostic_pcm.py /home/rovshan/Work/asm/Eidolon/.worktrees/T2/artifacts/reference/proxy-b-g1-20261016.json --corruptions`; data root defaults to `$EIDOLON_DATA`, source root to the manifest's checkout.
+- [V] Regression command: `bash tools/run python -m pytest tests/test_reference.py tests/test_diagnostic_pcm.py tests/test_compatibility.py --basetemp /tmp/opencode/eidolon/T10/pytest -q`; real-input tests require merged manifests and immutable shared assets and fail if these are absent; result: [reports/03-tests.md](../reports/03-tests.md).
+- [V] B acquisition/corruption command: `bash tools/run python tools/verify/diagnostic_pcm.py artifacts/reference/proxy-b-g1-20261016.json --corruptions`; data root defaults to `$EIDOLON_DATA`, source root to the manifest's checkout.
+- [V] D7 saved-evidence recheck: `bash tools/run python tools/reverse/review_glsl.py` → four manifests, four compressed evidence files, producer sources and source/dump equality; no target/GPU execution.
+- [H] D9 sidecar check: `bash tools/run python tools/verify/compatibility.py <sidecar.json>`; roots default to the checker's checkout and shared environment, with explicit `--checkout-root`, `--shared-root`, `--data-root` overrides; exit 0 means `PROVENANCE_ONLY`, exit 1 means `FAIL`, never reference acceptance.
 
 ## Agreement required
 
-- [?] T2 must acknowledge draft-3 fields for A through the named handoff and satisfy its runtime gates independently of B diagnostics.
-- [?] T2 must confirm native final-buffer layout, actual read-buffer/samples/sRGB, pre-present ordering, scene boundaries and controlled frame zero/endpoint; packed four-byte pixels remain provisional.
-- [?] T2 must supply A's own observed PCM final-cursor/full-range stability evidence and exact-repeat controlled captures; native clock integer mapping is `735*n` at 44100 Hz, preserving the original float conversion path.
+- [?] T11 must acknowledge draft-3 acquisition fields and D9 provenance through the named handoff and satisfy runtime gates independently of old B diagnostics.
+- [?] T11 must confirm native final-buffer layout, actual read-buffer/samples/sRGB, pre-present ordering, scene boundaries and controlled frame zero/endpoint; packed four-byte pixels remain provisional.
+- [?] Each new run needs its own observed PCM final-cursor/full-range stability evidence and exact-repeat controlled captures; native clock integer mapping is `735*n` at 44100 Hz, preserving the original float conversion path.
 - [?] A small real capture must establish acquisition semantics before full-reference comparison; unsupported native pixel formats require a contract revision rather than a lossy conversion.
