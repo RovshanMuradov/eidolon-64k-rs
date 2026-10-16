@@ -1,0 +1,76 @@
+{
+  "schema": "eidolon-small-real-capture-diagnostic-1",
+  "kind": "compatibility-modified-diagnostic",
+  "run_id": "proxy-b-d9-primary-20261016",
+  "reference_eligible": false,
+  "finalized": false,
+  "run_manifest": {
+    "root": "checkout",
+    "path": "artifacts/reference/proxy-b-d9-primary-20261016.json",
+    "sha256": "bb467b21f1fc6e3af9b88a95bc79dd85e2314c6cd8b6f0e2558dbe876c419c23"
+  },
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "row_stride": 7680,
+    "pixel_format": "rgba8",
+    "row_order": "bottom-up",
+    "color_space": "native attachment encoding GL_2601; sRGB enable 0",
+    "frame_count": 3,
+    "index": "proxy-b-d9-primary-20261016-frames.jsonl",
+    "index_sha256": "95f1d7c02157e6e84615b380057b93fca2a8773335e8e21ac27abacc190a7c54",
+    "storage": "reference"
+  },
+  "audio": {
+    "path": "pcm.f32le",
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "sample_format": "f32le",
+    "sample_rate": 44100,
+    "channels": [
+      "L",
+      "R"
+    ],
+    "layout": "interleaved",
+    "sample_frames": 19964544,
+    "start_sample": 0
+  },
+  "completion": {
+    "finalized": false,
+    "frames_observed": 3,
+    "frames_hashed": 3,
+    "audio_sample_frames": 19964544,
+    "pcm": {
+      "submitted_bytes": 159716352,
+      "initial_tick": 1,
+      "final_tick": 19964545,
+      "final_cursor_offset": 159716352,
+      "events": {
+        "synth_complete": 7204,
+        "readback_begin": 7206,
+        "readback_end": 7207,
+        "stability_check": 7208
+      },
+      "stable_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "evidence": "proxy-b-d9-primary-20261016-pcm-observations.json",
+      "evidence_sha256": "baa7a3b56ae37c32d5402a37d2c836bdccf8e7796b07415f5ec2861a51667956"
+    }
+  },
+  "actual_stop": {
+    "seq": 8416,
+    "event": "planned_partial_stop",
+    "pid": 240,
+    "tid": 244,
+    "frames": 3,
+    "exit_code": 0,
+    "finalized": false
+  },
+  "scene_boundaries_observed": false,
+  "limits": [
+    "Partial acquisition only; full G1 ABI/canary gates, scene identity, controlled full endpoint and restoration acceptance remain open."
+  ],
+  "package_tool": {
+    "root": "checkout",
+    "path": "tools/capture/proxy-b-compat/package.py",
+    "sha256": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e"
+  }
+}

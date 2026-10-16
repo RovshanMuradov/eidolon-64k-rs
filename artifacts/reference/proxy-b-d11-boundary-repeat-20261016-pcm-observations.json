@@ -1,0 +1,241 @@
+{
+  "kind": "compatibility-modified-diagnostic-pcm-evidence",
+  "run_id": "proxy-b-d11-boundary-repeat-20261016",
+  "reference_eligible": false,
+  "run_manifest": {
+    "root": "checkout",
+    "path": "artifacts/reference/proxy-b-d11-boundary-repeat-20261016.json",
+    "sha256": "6f4017f5ef72a4612c87bc383830731a31ea66227a6bae32b72fcbed174e831f"
+  },
+  "input": {
+    "archive": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+    "archive_sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008",
+    "exe": "Eidolon - Poo-Brain (native).exe",
+    "exe_bytes": 60928,
+    "exe_sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+    "executed_copy": "/tmp/opencode/eidolon/T11/proxy-b-d11-boundary-repeat-20261016/Eidolon - Poo-Brain (native).exe"
+  },
+  "dependency": {
+    "schema_version": 1,
+    "dependency": "Windows system GM DLS (Microsoft-distributed Roland GS sound set)",
+    "acquired_utc_date": "2026-10-15",
+    "storage": "$EIDOLON_DATA/reference/dependencies/",
+    "source": {
+      "filename": "directx_apr2006_redist.exe",
+      "release": "Microsoft DirectX End-User Redistributable, April 2006",
+      "bytes": 54549776,
+      "sha256": "dd8c3d401efe4561b67bd88475201b2f62f43cd23e4acc947bb34a659fa74952",
+      "original_url": "http://download.microsoft.com/download/3/9/7/3972f80c-5711-4e14-9483-959d48a2d03b/directx_apr2006_redist.exe",
+      "archive_url": "https://web.archive.org/web/20100920035904id_/https://download.microsoft.com/download/3/9/7/3972f80c-5711-4e14-9483-959d48a2d03b/directx_apr2006_redist.exe",
+      "archive_capture_utc": "2010-09-20T03:59:04Z",
+      "archive_original_last_modified_utc": "2006-04-04T16:37:22Z",
+      "live_https_origin_status": "404 on 2026-10-15",
+      "sha256_corroboration": {
+        "url": "https://github.com/Winetricks/winetricks/blob/f3890f670867b5ffbc3938726db45c0f7d16c8ba/src/winetricks",
+        "function": "load_gmdls",
+        "check": "Archive SHA-256 and DirectX.cab -> gm16.dls -> gm.dls derivation match the pinned recipe."
+      }
+    },
+    "signature_check": {
+      "authenticode_sha1": "9faaa6a4466acff31e9e483fa87fe0affc5f027e",
+      "signer_certificate_sha256": "094028660b2b8f926da010f77333d171c250014603cc5f4d971ae20070a27dab",
+      "signer_subject": "C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Corporation",
+      "signer_issuer": "C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, OU=Copyright (c) 2000 Microsoft Corp., CN=Microsoft Code Signing PCA",
+      "verified": "PE digest equals signed SHA-1 digest; OpenSSL verifies PKCS#7 signature against embedded signer certificate; signer fingerprint pinned.",
+      "limitations": "openssl smime -noverify: certificate chain trust, expiry, timestamp countersignature and revocation are not validated. SHA-256 corroboration is independent of this signature check."
+    },
+    "cabinet": {
+      "filename": "DirectX.cab",
+      "bytes": 15493481,
+      "sha256": "0e8c0ea0a9bc50012fd9286d8941736f8a99d43af10413f9062db7773199efc2"
+    },
+    "bank": {
+      "filename": "gm.dls",
+      "archive_member": "gm16.dls",
+      "bytes": 3440660,
+      "sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "transformation": "Byte-identical extraction; filename only changes to gm.dls.",
+      "vendor_mapping": "DirectX.cab/directx.inf, [GM98_Drivers], gm.dls,gm16.dls",
+      "vendor_notice": "$EIDOLON_DATA/reference/dependencies/source/gmreadme.txt"
+    },
+    "dls": {
+      "riff_type": "DLS ",
+      "version": "1.0.16.2",
+      "info": {
+        "ICMT": "960920 ver. 1.00.16",
+        "ICOP": "Copyright 1996 Roland Corporation U.S.",
+        "IENG": "Roland Corporation",
+        "INAM": "GS sound set (16 bit)",
+        "ISFT": "dls_cnv v0.27y",
+        "ISBJ": "226 melodic + 9 drum instruments"
+      },
+      "instrument_count": 235,
+      "wave_count": 495,
+      "pool_cues": 495,
+      "pcm_format": "signed little-endian 16-bit mono",
+      "sample_rate_hz_counts": {
+        "22050": 492,
+        "24000": 3
+      },
+      "literal_data_scan_matches_wave_order": true,
+      "sample_127": {
+        "physical_wave_index_zero_based": 127,
+        "name": "DSTGT77",
+        "data_chunk_offset": 1012298,
+        "pcm_offset": 1012306,
+        "pcm_bytes": 2252,
+        "pcm_frames": 1126,
+        "sample_rate_hz": 22050,
+        "pcm_sha256": "bd61722423100a4d6f97d4f3f47c78d03ddb19c78a771b669933ce9721c3aa8b"
+      }
+    },
+    "local_asset_search": {
+      "patterns": [
+        "gm.dl*",
+        "*.dls"
+      ],
+      "roots": [
+        "$EIDOLON_ROOT",
+        "/tmp/opencode/eidolon",
+        "/usr/share",
+        "/usr/lib",
+        "/opt",
+        "/mnt",
+        "/media",
+        "$HOME/.wine",
+        "$HOME/Downloads",
+        "$HOME/.local/share"
+      ],
+      "result": "No matching bank before acquisition; absent roots skipped; /opt/containerd inaccessible."
+    },
+    "validation_environment": {
+      "python": "3.14.7",
+      "bsdtar_libarchive": "3.8.9",
+      "openssl": "3.6.3",
+      "initial_download_curl": "8.21.0",
+      "sha256sum_coreutils": "9.11",
+      "settings": "File-only extraction and validation; no executable installation or playback.",
+      "resolution": null,
+      "gpu": null,
+      "driver": null,
+      "wine_version": null
+    },
+    "uncertainty": [
+      "The original author's Windows release and gm.dls hash are unknown; this pins an authentic Microsoft-distributed version, not historical bank equivalence.",
+      "T2 must establish Wine path resolution, nonzero loaded sample 127, initialization recovery and full playback."
+    ]
+  },
+  "build_id": "20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10",
+  "backend": {
+    "root": "data",
+    "path": "reference/proxy-b-d11-boundary-repeat-20261016/backend.jsonl",
+    "sha256": "4b989a59d0c2c082857cd862f88b40befa662240f42f844c76d12dc8171dfc3a"
+  },
+  "observations": [
+    {
+      "seq": 1,
+      "event": "bootstrap_before_synth",
+      "pid": 240,
+      "tid": 244,
+      "site": "0x00406379",
+      "mapping_sha256": "2f5a0e029bfa5d9a814f4c5ec9d754b50f646a6065c1212630250b9f965ecb2f",
+      "context_sha256": "bb4d6cd3c14a25c460ccdf037cfbe6673e62736eed2553963e2152f7990d92e1",
+      "initial_tick_before_init": 0
+    },
+    {
+      "seq": 17,
+      "event": "synth_launch",
+      "pid": 240,
+      "tid": 244,
+      "caller": "0x004063a5",
+      "entry": "0x00401636",
+      "initial_tick": 1
+    },
+    {
+      "seq": 18,
+      "event": "synth_thread",
+      "pid": 240,
+      "tid": 244,
+      "synth_tid": 248
+    },
+    {
+      "seq": 7208,
+      "event": "wave_open",
+      "pid": 240,
+      "tid": 244,
+      "result": 0,
+      "format": "f32le",
+      "channels": 2,
+      "rate": 44100
+    },
+    {
+      "seq": 7210,
+      "event": "wave_prepare",
+      "pid": 240,
+      "tid": 244,
+      "result": 0
+    },
+    {
+      "seq": 7212,
+      "event": "wave_write",
+      "pid": 240,
+      "tid": 244,
+      "result": 0,
+      "base": "0x00f02070",
+      "bytes": 159716352
+    },
+    {
+      "seq": 7224,
+      "event": "synth_complete",
+      "pid": 240,
+      "tid": 248,
+      "site": "0x00401765",
+      "synth_tid": 248,
+      "initial_tick": 1,
+      "final_tick": 19964545,
+      "final_cursor": "0x0a753470"
+    },
+    {
+      "seq": 7226,
+      "event": "readback_begin",
+      "pid": 240,
+      "tid": 244,
+      "base": "0x00f02070",
+      "bytes": 159716352
+    },
+    {
+      "seq": 7228,
+      "event": "readback_end",
+      "pid": 240,
+      "tid": 244,
+      "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d"
+    },
+    {
+      "seq": 7229,
+      "event": "stability_check",
+      "pid": 240,
+      "tid": 244,
+      "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "bytes": 159716352
+    },
+    {
+      "seq": 7230,
+      "event": "epoch",
+      "pid": 240,
+      "tid": 244,
+      "E": 1001
+    },
+    {
+      "seq": 630638,
+      "event": "planned_partial_stop",
+      "pid": 240,
+      "tid": 244,
+      "frames": 1443,
+      "exit_code": 0,
+      "finalized": false,
+      "dropped_frames": 0,
+      "dropped_audio_sample_frames": 0,
+      "errors": []
+    }
+  ]
+}

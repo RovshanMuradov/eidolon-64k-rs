@@ -1,0 +1,241 @@
+{
+  "acquisition": {
+    "path": "artifacts/reference/proxy-b-d12-volume-20261016-acquisition.json",
+    "root": "checkout",
+    "sha256": "b55e682e73890cb7a05ffacc7579cc24e9892362beb4d2f2bad05442f9b9ab5f"
+  },
+  "backend": {
+    "path": "reference/proxy-b-d12-volume-20261016/backend.jsonl",
+    "root": "data",
+    "sha256": "5f686fbebc153ad0bc27077a9a74bc0592c1399337d31b45553a3174b2c44c40"
+  },
+  "build_id": "a68589a49331c31a6c4eecc00895c9a79e437656245d91db2fd05ed318c2ec12",
+  "dependency": {
+    "acquired_utc_date": "2026-10-15",
+    "bank": {
+      "archive_member": "gm16.dls",
+      "bytes": 3440660,
+      "filename": "gm.dls",
+      "sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "transformation": "Byte-identical extraction; filename only changes to gm.dls.",
+      "vendor_mapping": "DirectX.cab/directx.inf, [GM98_Drivers], gm.dls,gm16.dls",
+      "vendor_notice": "$EIDOLON_DATA/reference/dependencies/source/gmreadme.txt"
+    },
+    "cabinet": {
+      "bytes": 15493481,
+      "filename": "DirectX.cab",
+      "sha256": "0e8c0ea0a9bc50012fd9286d8941736f8a99d43af10413f9062db7773199efc2"
+    },
+    "dependency": "Windows system GM DLS (Microsoft-distributed Roland GS sound set)",
+    "dls": {
+      "info": {
+        "ICMT": "960920 ver. 1.00.16",
+        "ICOP": "Copyright 1996 Roland Corporation U.S.",
+        "IENG": "Roland Corporation",
+        "INAM": "GS sound set (16 bit)",
+        "ISBJ": "226 melodic + 9 drum instruments",
+        "ISFT": "dls_cnv v0.27y"
+      },
+      "instrument_count": 235,
+      "literal_data_scan_matches_wave_order": true,
+      "pcm_format": "signed little-endian 16-bit mono",
+      "pool_cues": 495,
+      "riff_type": "DLS ",
+      "sample_127": {
+        "data_chunk_offset": 1012298,
+        "name": "DSTGT77",
+        "pcm_bytes": 2252,
+        "pcm_frames": 1126,
+        "pcm_offset": 1012306,
+        "pcm_sha256": "bd61722423100a4d6f97d4f3f47c78d03ddb19c78a771b669933ce9721c3aa8b",
+        "physical_wave_index_zero_based": 127,
+        "sample_rate_hz": 22050
+      },
+      "sample_rate_hz_counts": {
+        "22050": 492,
+        "24000": 3
+      },
+      "version": "1.0.16.2",
+      "wave_count": 495
+    },
+    "local_asset_search": {
+      "patterns": [
+        "gm.dl*",
+        "*.dls"
+      ],
+      "result": "No matching bank before acquisition; absent roots skipped; /opt/containerd inaccessible.",
+      "roots": [
+        "$EIDOLON_ROOT",
+        "/tmp/opencode/eidolon",
+        "/usr/share",
+        "/usr/lib",
+        "/opt",
+        "/mnt",
+        "/media",
+        "$HOME/.wine",
+        "$HOME/Downloads",
+        "$HOME/.local/share"
+      ]
+    },
+    "schema_version": 1,
+    "signature_check": {
+      "authenticode_sha1": "9faaa6a4466acff31e9e483fa87fe0affc5f027e",
+      "limitations": "openssl smime -noverify: certificate chain trust, expiry, timestamp countersignature and revocation are not validated. SHA-256 corroboration is independent of this signature check.",
+      "signer_certificate_sha256": "094028660b2b8f926da010f77333d171c250014603cc5f4d971ae20070a27dab",
+      "signer_issuer": "C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, OU=Copyright (c) 2000 Microsoft Corp., CN=Microsoft Code Signing PCA",
+      "signer_subject": "C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Corporation",
+      "verified": "PE digest equals signed SHA-1 digest; OpenSSL verifies PKCS#7 signature against embedded signer certificate; signer fingerprint pinned."
+    },
+    "source": {
+      "archive_capture_utc": "2010-09-20T03:59:04Z",
+      "archive_original_last_modified_utc": "2006-04-04T16:37:22Z",
+      "archive_url": "https://web.archive.org/web/20100920035904id_/https://download.microsoft.com/download/3/9/7/3972f80c-5711-4e14-9483-959d48a2d03b/directx_apr2006_redist.exe",
+      "bytes": 54549776,
+      "filename": "directx_apr2006_redist.exe",
+      "live_https_origin_status": "404 on 2026-10-15",
+      "original_url": "http://download.microsoft.com/download/3/9/7/3972f80c-5711-4e14-9483-959d48a2d03b/directx_apr2006_redist.exe",
+      "release": "Microsoft DirectX End-User Redistributable, April 2006",
+      "sha256": "dd8c3d401efe4561b67bd88475201b2f62f43cd23e4acc947bb34a659fa74952",
+      "sha256_corroboration": {
+        "check": "Archive SHA-256 and DirectX.cab -> gm16.dls -> gm.dls derivation match the pinned recipe.",
+        "function": "load_gmdls",
+        "url": "https://github.com/Winetricks/winetricks/blob/f3890f670867b5ffbc3938726db45c0f7d16c8ba/src/winetricks"
+      }
+    },
+    "storage": "$EIDOLON_DATA/reference/dependencies/",
+    "uncertainty": [
+      "The original author's Windows release and gm.dls hash are unknown; this pins an authentic Microsoft-distributed version, not historical bank equivalence.",
+      "T2 must establish Wine path resolution, nonzero loaded sample 127, initialization recovery and full playback."
+    ],
+    "validation_environment": {
+      "bsdtar_libarchive": "3.8.9",
+      "driver": null,
+      "gpu": null,
+      "initial_download_curl": "8.21.0",
+      "openssl": "3.6.3",
+      "python": "3.14.7",
+      "resolution": null,
+      "settings": "File-only extraction and validation; no executable installation or playback.",
+      "sha256sum_coreutils": "9.11",
+      "wine_version": null
+    }
+  },
+  "input": {
+    "archive": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+    "archive_sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008",
+    "exe": "Eidolon - Poo-Brain (native).exe",
+    "exe_bytes": 60928,
+    "exe_sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+    "executed_copy": "/tmp/opencode/eidolon/T11/proxy-b-d12-volume-20261016/Eidolon - Poo-Brain (native).exe"
+  },
+  "kind": "D9-restored-native-pcm-observations",
+  "observations": [
+    {
+      "caller": "0x004063a5",
+      "entry": "0x00401636",
+      "event": "synth_launch",
+      "initial_tick": 1,
+      "pid": 240,
+      "seq": 35,
+      "tid": 244
+    },
+    {
+      "event": "synth_thread",
+      "pid": 240,
+      "seq": 36,
+      "synth_tid": 248,
+      "tid": 244
+    },
+    {
+      "channels": 2,
+      "event": "wave_open",
+      "format": "f32le",
+      "pid": 240,
+      "rate": 44100,
+      "result": 0,
+      "seq": 7228,
+      "tid": 244
+    },
+    {
+      "event": "wave_prepare",
+      "pid": 240,
+      "result": 0,
+      "seq": 7230,
+      "tid": 244
+    },
+    {
+      "base": "0x00f02070",
+      "bytes": 159716352,
+      "event": "wave_write",
+      "pid": 240,
+      "result": 0,
+      "seq": 7232,
+      "tid": 244
+    },
+    {
+      "event": "synth_complete",
+      "final_cursor": "0x0a753470",
+      "final_tick": 19964545,
+      "initial_tick": 1,
+      "pid": 240,
+      "seq": 7302,
+      "site": "0x00401765",
+      "synth_tid": 248,
+      "tid": 248
+    },
+    {
+      "event": "native_thread_exit",
+      "exit_code": 8064,
+      "expected_eax": 8064,
+      "pid": 240,
+      "resumed_epilogue_observed": true,
+      "seq": 7318,
+      "synth_tid": 248,
+      "tid": 244
+    },
+    {
+      "base": "0x00f02070",
+      "bytes": 159716352,
+      "event": "readback_begin",
+      "pid": 240,
+      "seq": 7324,
+      "tid": 244
+    },
+    {
+      "event": "readback_end",
+      "pid": 240,
+      "seq": 7325,
+      "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "tid": 244
+    },
+    {
+      "bytes": 159716352,
+      "event": "stability_check",
+      "pid": 240,
+      "seq": 7326,
+      "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "tid": 244
+    },
+    {
+      "E": 1001,
+      "event": "epoch",
+      "pid": 240,
+      "seq": 7327,
+      "tid": 244
+    },
+    {
+      "dropped_audio_sample_frames": 0,
+      "dropped_frames": 0,
+      "errors": [],
+      "event": "planned_partial_stop",
+      "exit_code": 0,
+      "finalized": false,
+      "frames": 5763,
+      "pid": 240,
+      "seq": 2641178,
+      "tid": 244
+    }
+  ],
+  "reference_eligible": false,
+  "run_id": "proxy-b-d12-volume-20261016"
+}

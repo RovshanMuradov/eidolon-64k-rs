@@ -1,0 +1,3262 @@
+{
+  "schema": "eidolon-d9-eligibility-1",
+  "kind": "compatibility-modified-diagnostic",
+  "decision": "D9",
+  "run_id": "proxy-b-d9-repeat-20261016",
+  "reference_eligible": false,
+  "run_manifest": {
+    "root": "checkout",
+    "path": "artifacts/reference/proxy-b-d9-repeat-20261016.json",
+    "sha256": "2b773c817d5895a4f85f32b60f349114b843ebafee93a1e1656f0b35f3396760"
+  },
+  "inputs": {
+    "exe": {
+      "root": "data",
+      "path": "reference/proxy-b-d9-repeat-20261016/native-input.exe",
+      "sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
+    },
+    "archive": {
+      "root": "shared",
+      "path": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+      "sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008"
+    },
+    "bank": {
+      "root": "data",
+      "path": "reference/dependencies/gm.dls",
+      "sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0"
+    },
+    "launcher": {
+      "root": "checkout",
+      "path": "tools/wine-headless",
+      "sha256": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a"
+    }
+  },
+  "build": {
+    "inputs": {
+      "tools/capture/proxy-b/bootstrap.c": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b/bootstrap.c",
+        "sha256": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e"
+      },
+      "tools/capture/proxy-b/build.py": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b/build.py",
+        "sha256": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e"
+      },
+      "tools/capture/proxy-b/canary.c": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b/canary.c",
+        "sha256": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89"
+      },
+      "tools/capture/proxy-b/core.c": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b/core.c",
+        "sha256": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6"
+      },
+      "tools/capture/proxy-b/probe.py": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b/probe.py",
+        "sha256": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2"
+      },
+      "tools/capture/proxy-b/proxy.c": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b/proxy.c",
+        "sha256": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62"
+      },
+      "tools/capture/proxy-b-compat/audit.py": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b-compat/audit.py",
+        "sha256": "e75513080aec0f111c07cafbc65a7ecb914e7dab78ab5477bd08c364ffcb9967"
+      },
+      "tools/capture/proxy-b-compat/build.py": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b-compat/build.py",
+        "sha256": "95f291d65f8eb62124bff2316a7e7f428dc632e21c26ae6c52ceddd2caf3181d"
+      },
+      "tools/capture/proxy-b-compat/core.c": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b-compat/core.c",
+        "sha256": "1cf7451310e32401675f704c7d918ede5c3387855e5ff4e97a3da4b22a61a02e"
+      },
+      "tools/capture/proxy-b-compat/probe.py": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/source-snapshot/tools/capture/proxy-b-compat/probe.py",
+        "sha256": "00caf3ce56c6fdd6f623b8c112f5e4cf494306e46cd1e3aca04defe0c2a3b94c"
+      },
+      "compat.S": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/compat.S",
+        "sha256": "d620cc4470c600c4d616a5378111a5bf6a55bbe69b3e57161e862443840c1715"
+      },
+      "opengl32/exports.h": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/exports.h",
+        "sha256": "bfb7a883e2df3bd4e344b23ff932edf68a87abfb8a82ee492d2f9ed34ac63807"
+      },
+      "opengl32/exports.json": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/exports.json",
+        "sha256": "e62cb5b2895239c90fa794d89d60f5399948195f340c0066502bcfc71ad2ef93"
+      },
+      "opengl32/forward.S": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/forward.S",
+        "sha256": "7419107a6892070ae8486ba10bbb47e5aa43bf95fb9f3b407bea717607d27b82"
+      },
+      "opengl32/proxy.def": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/proxy.def",
+        "sha256": "4569859a20c452dcef074d1ab938c7c7f5d063ae3d7ab2442dc244c9f78cc09f"
+      },
+      "opengl32/wrappers.S": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/wrappers.S",
+        "sha256": "b9c4b626802e152f431b824b500c4e8046f45aa4eeee9f5556b3f4e0adcabb4e"
+      },
+      "winmm/exports.h": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm/exports.h",
+        "sha256": "a1ed975abb02ee76cb6a95eb30c299289c04a58f17f08f9be2e401f87dfb2ee5"
+      },
+      "winmm/exports.json": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm/exports.json",
+        "sha256": "3b5fbf5d759fc3d6c4b22b0e929a4a76e527f120f52a9cf82f6410f64f1be741"
+      },
+      "winmm/forward.S": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm/forward.S",
+        "sha256": "c8354ce8620a0fcdbc73c16ed02b49426a6e8717b511403f52f6473b79010ded"
+      },
+      "winmm/proxy.def": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm/proxy.def",
+        "sha256": "9053c8931573521f18270cb7d5a363450f0300ba695a826e8c70659d32ada125"
+      }
+    },
+    "outputs": {
+      "canary.exe": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/canary.exe",
+        "sha256": "5200997c6ea7abeffa16cb7676bc2a8935d04ee4ebda312b43919a70eff4fc8f"
+      },
+      "opengl32.dll": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32.dll",
+        "sha256": "2ad87df1442954bef9efb2c515f0f007e24550a17c6eb70207a6cff3fcbd6645"
+      },
+      "winmm.dll": {
+        "root": "shared",
+        "path": ".tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm.dll",
+        "sha256": "30b69e0fc31592e277df907b4816d60afed528e0eadd63446102bae7229255f9"
+      }
+    },
+    "compiler": "i686-w64-mingw32-gcc (GCC) 16.2.0",
+    "commands": [
+      [
+        "i686-w64-mingw32-gcc",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/compat.S",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "-DHAS_BOOTSTRAP",
+        "tools/capture/proxy-b/bootstrap.c",
+        "tools/capture/proxy-b-compat/core.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/wrappers.S",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32",
+        "tools/capture/proxy-b/proxy.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/forward.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32/proxy.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/opengl32.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm",
+        "tools/capture/proxy-b/proxy.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm/forward.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm/proxy.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/winmm.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "tools/capture/proxy-b/canary.c",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/ce60c2f8edf06cfd9846265ff320a2d4e45c057176f93501a00d4dfd6f3f1582/canary.exe"
+      ]
+    ]
+  },
+  "transformation": "450-compatibility",
+  "calls": [
+    {
+      "sequence": 1,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406440",
+      "return": "0x00406442",
+      "source_addresses": [
+        "0x00426c58"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-001-000-raw.glsl",
+          "sha256": "626f3c0846673e3042345939cd3f065b87e7d76ca68af0ee60490c24a8bbf523"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-001-000-effective.glsl",
+          "sha256": "626f3c0846673e3042345939cd3f065b87e7d76ca68af0ee60490c24a8bbf523"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 1
+    },
+    {
+      "sequence": 2,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x00409918"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-002-000-raw.glsl",
+          "sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-002-000-effective.glsl",
+          "sha256": "cb62ed7fd0878836b763b892f64cb9e4a789f49f304d32d0a2fc334aecb433ea"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 2
+    },
+    {
+      "sequence": 3,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x00409e38"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-003-000-raw.glsl",
+          "sha256": "12fabc3cd1110a549423eb68318d99562c7b65f1b5e4eea2c5358180e063bb63"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-003-000-effective.glsl",
+          "sha256": "12fabc3cd1110a549423eb68318d99562c7b65f1b5e4eea2c5358180e063bb63"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 3
+    },
+    {
+      "sequence": 4,
+      "stage": 35632,
+      "count": 5,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040e1c0",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-003-raw.glsl",
+          "sha256": "d3da2520283f4e83d9aed9fded5531573664b061558c01a47f4fbf49d8cb5d44"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-004-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-003-effective.glsl",
+          "sha256": "d3da2520283f4e83d9aed9fded5531573664b061558c01a47f4fbf49d8cb5d44"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-004-004-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 4
+    },
+    {
+      "sequence": 5,
+      "stage": 35632,
+      "count": 5,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040e3f0",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-003-raw.glsl",
+          "sha256": "b04719a74d5e807a978023801be68cfe3c873543a49b82634b3d62d251ed131d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-004-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-003-effective.glsl",
+          "sha256": "b04719a74d5e807a978023801be68cfe3c873543a49b82634b3d62d251ed131d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-005-004-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 5
+    },
+    {
+      "sequence": 6,
+      "stage": 35632,
+      "count": 5,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040e530",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-003-raw.glsl",
+          "sha256": "d7010a245d60871c329fe2f8e3a838b1ed7b6d6b04ef4df0fcbfa34118c3e8ed"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-004-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-003-effective.glsl",
+          "sha256": "d7010a245d60871c329fe2f8e3a838b1ed7b6d6b04ef4df0fcbfa34118c3e8ed"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-006-004-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 6
+    },
+    {
+      "sequence": 7,
+      "stage": 35632,
+      "count": 6,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040e828",
+        "0x0040ecd0",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-003-raw.glsl",
+          "sha256": "e2e15b1dfb17acfeec357eb737d8f2eaceb48674749d0eec30619e9d3312743f"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-004-raw.glsl",
+          "sha256": "472fd6d03d901d8d8bb7f3bf63321583a22647ee5812215d0b3222a9c4ede08b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-005-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-003-effective.glsl",
+          "sha256": "e2e15b1dfb17acfeec357eb737d8f2eaceb48674749d0eec30619e9d3312743f"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-004-effective.glsl",
+          "sha256": "472fd6d03d901d8d8bb7f3bf63321583a22647ee5812215d0b3222a9c4ede08b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-007-005-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 7
+    },
+    {
+      "sequence": 8,
+      "stage": 35632,
+      "count": 6,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040e828",
+        "0x0040ed48",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-003-raw.glsl",
+          "sha256": "e2e15b1dfb17acfeec357eb737d8f2eaceb48674749d0eec30619e9d3312743f"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-004-raw.glsl",
+          "sha256": "734c0b6199c04eb864159e342e73c49c1a2783ec47e21269efde2a17c279efd3"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-005-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-003-effective.glsl",
+          "sha256": "e2e15b1dfb17acfeec357eb737d8f2eaceb48674749d0eec30619e9d3312743f"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-004-effective.glsl",
+          "sha256": "734c0b6199c04eb864159e342e73c49c1a2783ec47e21269efde2a17c279efd3"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-008-005-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 8
+    },
+    {
+      "sequence": 9,
+      "stage": 35632,
+      "count": 5,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040ee58",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-003-raw.glsl",
+          "sha256": "c1f31337991507a451eb99cfe973e998bb58b500d406707c9fd6c24bb3795ec2"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-004-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-003-effective.glsl",
+          "sha256": "c1f31337991507a451eb99cfe973e998bb58b500d406707c9fd6c24bb3795ec2"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-009-004-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 9
+    },
+    {
+      "sequence": 10,
+      "stage": 35632,
+      "count": 5,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040ef30",
+        "0x0040e3a0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-003-raw.glsl",
+          "sha256": "88c473e4febd9c2b636529d39398b2e6b3a31cb363a3994635ac971802d2c1d1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-004-raw.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-003-effective.glsl",
+          "sha256": "88c473e4febd9c2b636529d39398b2e6b3a31cb363a3994635ac971802d2c1d1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-010-004-effective.glsl",
+          "sha256": "5a123c4088bae17a71b368be5afea9cff4c9f40a8a5bf1cca0544196d8b7ac03"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 10
+    },
+    {
+      "sequence": 11,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x00415348",
+        "0x00415e10",
+        "0x00415e80",
+        "0x00417118",
+        "0x00417fd0",
+        "0x00418210",
+        "0x00418430",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-007-raw.glsl",
+          "sha256": "66c4e21332065b428c6be2569bb00ab156a0cd654dd70323f91106467ad76235"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-010-raw.glsl",
+          "sha256": "dbe906ec774e232c9f10626e4907e3fcffd3138076397a08a6dcb6fe9d4f4b21"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-011-raw.glsl",
+          "sha256": "9257c11007792c664cecd79331bc18ec89543d38aa903bd9947acffee9e9d762"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-012-raw.glsl",
+          "sha256": "b01f5d68c2d7467945585c38b7f32fe294374f06064144046eed25c060b87001"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-013-raw.glsl",
+          "sha256": "db27a49b5a4d08de5a9f22be198ddd2d778c980bffd36e5b9a6639b571ebeb15"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-007-effective.glsl",
+          "sha256": "66c4e21332065b428c6be2569bb00ab156a0cd654dd70323f91106467ad76235"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-010-effective.glsl",
+          "sha256": "dbe906ec774e232c9f10626e4907e3fcffd3138076397a08a6dcb6fe9d4f4b21"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-011-effective.glsl",
+          "sha256": "9257c11007792c664cecd79331bc18ec89543d38aa903bd9947acffee9e9d762"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-012-effective.glsl",
+          "sha256": "b01f5d68c2d7467945585c38b7f32fe294374f06064144046eed25c060b87001"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-013-effective.glsl",
+          "sha256": "db27a49b5a4d08de5a9f22be198ddd2d778c980bffd36e5b9a6639b571ebeb15"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-011-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 11
+    },
+    {
+      "sequence": 12,
+      "stage": 35632,
+      "count": 2,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ee1c",
+        "0x00419d48"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-012-000-raw.glsl",
+          "sha256": "5953e28d5a8d064f90b0ef3a1ccf1fd0d381dcf55924a70d762e49f31c394b41"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-012-001-raw.glsl",
+          "sha256": "262237606f1f81f7ec87a0b164e0b73bef6011afe745d36ef0730bab14a758b7"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-012-000-effective.glsl",
+          "sha256": "5953e28d5a8d064f90b0ef3a1ccf1fd0d381dcf55924a70d762e49f31c394b41"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-012-001-effective.glsl",
+          "sha256": "262237606f1f81f7ec87a0b164e0b73bef6011afe745d36ef0730bab14a758b7"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 12
+    },
+    {
+      "sequence": 13,
+      "stage": 35632,
+      "count": 2,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x004170e4",
+        "0x00419d48"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-013-000-raw.glsl",
+          "sha256": "e94939c33f1710ca89471459dc3eb360992333bfc908521912103e9768205615"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-013-001-raw.glsl",
+          "sha256": "262237606f1f81f7ec87a0b164e0b73bef6011afe745d36ef0730bab14a758b7"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-013-000-effective.glsl",
+          "sha256": "e94939c33f1710ca89471459dc3eb360992333bfc908521912103e9768205615"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-013-001-effective.glsl",
+          "sha256": "262237606f1f81f7ec87a0b164e0b73bef6011afe745d36ef0730bab14a758b7"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 13
+    },
+    {
+      "sequence": 14,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x00419fc8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-014-000-raw.glsl",
+          "sha256": "4663d501dd110410388866d4fe08461a7fc44433c57d0c72c339a09d63c1417f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-014-000-effective.glsl",
+          "sha256": "4663d501dd110410388866d4fe08461a7fc44433c57d0c72c339a09d63c1417f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 14
+    },
+    {
+      "sequence": 15,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0041a108"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-015-000-raw.glsl",
+          "sha256": "fe4fe8e78bd6a02c79b4cb104a800625b297da02d181e6a42a32654afa76eafb"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-015-000-effective.glsl",
+          "sha256": "fe4fe8e78bd6a02c79b4cb104a800625b297da02d181e6a42a32654afa76eafb"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 15
+    },
+    {
+      "sequence": 16,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0041a538"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-016-000-raw.glsl",
+          "sha256": "215542d7a666e355bbc23bdf1907f47009d2dde47dae5c83b40a9f0993442659"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-016-000-effective.glsl",
+          "sha256": "215542d7a666e355bbc23bdf1907f47009d2dde47dae5c83b40a9f0993442659"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 16
+    },
+    {
+      "sequence": 17,
+      "stage": 35632,
+      "count": 2,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ee1c",
+        "0x0041a618"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-017-000-raw.glsl",
+          "sha256": "5953e28d5a8d064f90b0ef3a1ccf1fd0d381dcf55924a70d762e49f31c394b41"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-017-001-raw.glsl",
+          "sha256": "dbd99a251a3545a016113327093ea49df3a1677d1f704f816c65db0728b9a34b"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-017-000-effective.glsl",
+          "sha256": "5953e28d5a8d064f90b0ef3a1ccf1fd0d381dcf55924a70d762e49f31c394b41"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-017-001-effective.glsl",
+          "sha256": "dbd99a251a3545a016113327093ea49df3a1677d1f704f816c65db0728b9a34b"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 17
+    },
+    {
+      "sequence": 18,
+      "stage": 35632,
+      "count": 2,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x004170e4",
+        "0x0041a618"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-018-000-raw.glsl",
+          "sha256": "e94939c33f1710ca89471459dc3eb360992333bfc908521912103e9768205615"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-018-001-raw.glsl",
+          "sha256": "dbd99a251a3545a016113327093ea49df3a1677d1f704f816c65db0728b9a34b"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-018-000-effective.glsl",
+          "sha256": "e94939c33f1710ca89471459dc3eb360992333bfc908521912103e9768205615"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-018-001-effective.glsl",
+          "sha256": "dbd99a251a3545a016113327093ea49df3a1677d1f704f816c65db0728b9a34b"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 18
+    },
+    {
+      "sequence": 19,
+      "stage": 35632,
+      "count": 3,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0041840c",
+        "0x0040d358",
+        "0x0041a848"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-019-000-raw.glsl",
+          "sha256": "7c46792a5259e8f078e5bb7084ec85e458a42f370c8c64382b8d231faa26d1db"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-019-001-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-019-002-raw.glsl",
+          "sha256": "3d57abff765a08cb09154a6ca45d3ac674303cf7521e09f69a9632629fcabcde"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-019-000-effective.glsl",
+          "sha256": "7c46792a5259e8f078e5bb7084ec85e458a42f370c8c64382b8d231faa26d1db"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-019-001-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-019-002-effective.glsl",
+          "sha256": "3d57abff765a08cb09154a6ca45d3ac674303cf7521e09f69a9632629fcabcde"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 19
+    },
+    {
+      "sequence": 20,
+      "stage": 35632,
+      "count": 1,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0041b0b0"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-020-000-raw.glsl",
+          "sha256": "71208edb9484dc211cb09cac6ac8e29612864f36df9641e9ea704db52fc2a8f9"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-020-000-effective.glsl",
+          "sha256": "71208edb9484dc211cb09cac6ac8e29612864f36df9641e9ea704db52fc2a8f9"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 20
+    },
+    {
+      "sequence": 21,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x0041b480",
+        "0x00415e10",
+        "0x00415e80",
+        "0x0041bfc0",
+        "0x0041c450",
+        "0x0041c648",
+        "0x0041c828",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-007-raw.glsl",
+          "sha256": "f319a9ccbf777d390a929902c442a1a489a8da992941fb9614819648655e60a7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-010-raw.glsl",
+          "sha256": "9a00350d47163f360f0c894c1109691e6f2b5760eff3e34a4c597a9208d56fc1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-011-raw.glsl",
+          "sha256": "9df59ed87c8ada9a3ff21c22a85198fd1ad186836add9f6858ecc2c9979655c0"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-012-raw.glsl",
+          "sha256": "e2ef43e0aa91c9697f0b5d75df1b9b46fb214be84e1bd38a3d7a73cadea99f96"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-013-raw.glsl",
+          "sha256": "af0c94d7ceeb3176dbf5f4ae417e900ae292a674bd625e150d4187bf692f7b85"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-007-effective.glsl",
+          "sha256": "f319a9ccbf777d390a929902c442a1a489a8da992941fb9614819648655e60a7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-010-effective.glsl",
+          "sha256": "9a00350d47163f360f0c894c1109691e6f2b5760eff3e34a4c597a9208d56fc1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-011-effective.glsl",
+          "sha256": "9df59ed87c8ada9a3ff21c22a85198fd1ad186836add9f6858ecc2c9979655c0"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-012-effective.glsl",
+          "sha256": "e2ef43e0aa91c9697f0b5d75df1b9b46fb214be84e1bd38a3d7a73cadea99f96"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-013-effective.glsl",
+          "sha256": "af0c94d7ceeb3176dbf5f4ae417e900ae292a674bd625e150d4187bf692f7b85"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-021-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 21
+    },
+    {
+      "sequence": 22,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x0041c8f8",
+        "0x00415e10",
+        "0x00415e80",
+        "0x0041cc78",
+        "0x0041d340",
+        "0x0041d710",
+        "0x0041d990",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-007-raw.glsl",
+          "sha256": "e402f5b679498426e5653c947fc7d0b270bc805868500034ff35e27608941766"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-010-raw.glsl",
+          "sha256": "a49f1a0a2055a7c7fdf5122000fdaaf768eb0127edd49a45348e2fdaf10db259"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-011-raw.glsl",
+          "sha256": "3746b0ede020d6857a7a354cb9a459d91dc3f81eddf31771bc1200b2fc2d56a7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-012-raw.glsl",
+          "sha256": "302f53ff113f83087db5a986ae2fb17e0e482a0d95f3c292a7a28569d0a7c7a5"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-013-raw.glsl",
+          "sha256": "a4c8ee87593f4c6545c892154507da9e49eee54b97d5d688594e9ecafa3fca74"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-007-effective.glsl",
+          "sha256": "e402f5b679498426e5653c947fc7d0b270bc805868500034ff35e27608941766"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-010-effective.glsl",
+          "sha256": "a49f1a0a2055a7c7fdf5122000fdaaf768eb0127edd49a45348e2fdaf10db259"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-011-effective.glsl",
+          "sha256": "3746b0ede020d6857a7a354cb9a459d91dc3f81eddf31771bc1200b2fc2d56a7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-012-effective.glsl",
+          "sha256": "302f53ff113f83087db5a986ae2fb17e0e482a0d95f3c292a7a28569d0a7c7a5"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-013-effective.glsl",
+          "sha256": "a4c8ee87593f4c6545c892154507da9e49eee54b97d5d688594e9ecafa3fca74"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-022-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 22
+    },
+    {
+      "sequence": 23,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x0041da68",
+        "0x00415e10",
+        "0x00415e80",
+        "0x0041de70",
+        "0x0041e6a8",
+        "0x0041e9b8",
+        "0x0041ebb0",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-007-raw.glsl",
+          "sha256": "f2d8b1ac561c62e38b4e70ce2dd881c4cfa07d86a1c6c8701768515cbf3092f3"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-010-raw.glsl",
+          "sha256": "ca52bdba945423bdb702ce34eb03b4c14b270e2310e90c10fa63dc303dc1838c"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-011-raw.glsl",
+          "sha256": "3596848d96641c61a246d1846e0c24c19ca2a641628e23901fdcd40d24ace3f1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-012-raw.glsl",
+          "sha256": "b5403ab2cfb245c9ab833383d48b80d2e5f736fcc3a4260475b8c64515d060f3"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-013-raw.glsl",
+          "sha256": "eea3f6c88d4f420ca2518e984bd21907d90cfbb69b23965ed268036636e926ae"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-007-effective.glsl",
+          "sha256": "f2d8b1ac561c62e38b4e70ce2dd881c4cfa07d86a1c6c8701768515cbf3092f3"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-010-effective.glsl",
+          "sha256": "ca52bdba945423bdb702ce34eb03b4c14b270e2310e90c10fa63dc303dc1838c"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-011-effective.glsl",
+          "sha256": "3596848d96641c61a246d1846e0c24c19ca2a641628e23901fdcd40d24ace3f1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-012-effective.glsl",
+          "sha256": "b5403ab2cfb245c9ab833383d48b80d2e5f736fcc3a4260475b8c64515d060f3"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-013-effective.glsl",
+          "sha256": "eea3f6c88d4f420ca2518e984bd21907d90cfbb69b23965ed268036636e926ae"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-023-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 23
+    },
+    {
+      "sequence": 24,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x0041f020",
+        "0x00415e10",
+        "0x00415e80",
+        "0x0041f1b8",
+        "0x0041f8d0",
+        "0x0041f980",
+        "0x0041fbd0",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-007-raw.glsl",
+          "sha256": "43de43901ddd256bc9e52e2f607f36710b57a99131077116a50747e2947c9cd4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-010-raw.glsl",
+          "sha256": "b739d4a2d634466d82a8a77742b6488a1af95bb0d115bebe1fb55f622e442d63"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-011-raw.glsl",
+          "sha256": "01c0db1f051d2f0b2c4ef13da1d8fc314d3616b286fb45c76a823bb43a7ddd5d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-012-raw.glsl",
+          "sha256": "99bb81909ee36299e8673865cfe44c3fb1bbe7f21ce2c6c731c4a3172eb3f644"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-013-raw.glsl",
+          "sha256": "9a7baa978e06027c12513c4cfa90258cd82379946504dbde9770cd744f349682"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-007-effective.glsl",
+          "sha256": "43de43901ddd256bc9e52e2f607f36710b57a99131077116a50747e2947c9cd4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-010-effective.glsl",
+          "sha256": "b739d4a2d634466d82a8a77742b6488a1af95bb0d115bebe1fb55f622e442d63"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-011-effective.glsl",
+          "sha256": "01c0db1f051d2f0b2c4ef13da1d8fc314d3616b286fb45c76a823bb43a7ddd5d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-012-effective.glsl",
+          "sha256": "99bb81909ee36299e8673865cfe44c3fb1bbe7f21ce2c6c731c4a3172eb3f644"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-013-effective.glsl",
+          "sha256": "9a7baa978e06027c12513c4cfa90258cd82379946504dbde9770cd744f349682"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-024-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 24
+    },
+    {
+      "sequence": 25,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x0041fc48",
+        "0x00420238",
+        "0x00415e80",
+        "0x00420250",
+        "0x0041f874",
+        "0x004205d0",
+        "0x00420728",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-007-raw.glsl",
+          "sha256": "de23d25ca1380a0ba23f24ca804d931826f3fb5fe254b4ee24e7ead8cfe001c9"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-008-raw.glsl",
+          "sha256": "4d4418d974fd44f137de7f53fba9dd65b5647607fb92eed245ee76fd78724c02"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-010-raw.glsl",
+          "sha256": "0f164498f62d755cd39f1cee88d0ab3490983a388a3989d6170f8e1c682655d4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-011-raw.glsl",
+          "sha256": "227062c5cd8bceedcced20ed1d7f9be4ce07d98741142e77c245272051e1cb5a"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-012-raw.glsl",
+          "sha256": "3d45d7d2c548764d2878bac6600cb1df853d2a20866d6aa0c6595d3a095efecb"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-013-raw.glsl",
+          "sha256": "496dbdd5170c8fcf63effee73bb74f76b1426a85817d7714b117dd57e1850a95"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-007-effective.glsl",
+          "sha256": "de23d25ca1380a0ba23f24ca804d931826f3fb5fe254b4ee24e7ead8cfe001c9"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-008-effective.glsl",
+          "sha256": "4d4418d974fd44f137de7f53fba9dd65b5647607fb92eed245ee76fd78724c02"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-010-effective.glsl",
+          "sha256": "0f164498f62d755cd39f1cee88d0ab3490983a388a3989d6170f8e1c682655d4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-011-effective.glsl",
+          "sha256": "227062c5cd8bceedcced20ed1d7f9be4ce07d98741142e77c245272051e1cb5a"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-012-effective.glsl",
+          "sha256": "3d45d7d2c548764d2878bac6600cb1df853d2a20866d6aa0c6595d3a095efecb"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-013-effective.glsl",
+          "sha256": "496dbdd5170c8fcf63effee73bb74f76b1426a85817d7714b117dd57e1850a95"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-025-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 25
+    },
+    {
+      "sequence": 26,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x004207b0",
+        "0x0041a614",
+        "0x00415e80",
+        "0x00420ba0",
+        "0x00421040",
+        "0x00421130",
+        "0x00421290",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-007-raw.glsl",
+          "sha256": "3402ea50c99ee112444315798e5851327927fe3e83d956a42cb7aee173ecd88a"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-008-raw.glsl",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-010-raw.glsl",
+          "sha256": "fb73b36160f90ad0192bb59663708be5b5139b76ea8aa8babb0561674b45fcad"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-011-raw.glsl",
+          "sha256": "563f542d5201558728432719710dbe2721fb6e305634085978ccf704c71bd82c"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-012-raw.glsl",
+          "sha256": "23ff849fb2916a2b71a14d0be41faebc1e1594ed3710b7eb8628f9c14cd4ae33"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-013-raw.glsl",
+          "sha256": "c61e37749ecaf0a63915abc3cc0d492e33b9f91f7913d74fb3d9e4e04c4d3134"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-007-effective.glsl",
+          "sha256": "3402ea50c99ee112444315798e5851327927fe3e83d956a42cb7aee173ecd88a"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-008-effective.glsl",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-010-effective.glsl",
+          "sha256": "fb73b36160f90ad0192bb59663708be5b5139b76ea8aa8babb0561674b45fcad"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-011-effective.glsl",
+          "sha256": "563f542d5201558728432719710dbe2721fb6e305634085978ccf704c71bd82c"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-012-effective.glsl",
+          "sha256": "23ff849fb2916a2b71a14d0be41faebc1e1594ed3710b7eb8628f9c14cd4ae33"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-013-effective.glsl",
+          "sha256": "c61e37749ecaf0a63915abc3cc0d492e33b9f91f7913d74fb3d9e4e04c4d3134"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-026-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 26
+    },
+    {
+      "sequence": 27,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x004212d8",
+        "0x00415e10",
+        "0x00415e80",
+        "0x00421a68",
+        "0x00421d30",
+        "0x00421f40",
+        "0x004220d0",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-007-raw.glsl",
+          "sha256": "dd6ad535300495471c21132d5c2eb5b1b909b2216e2f415b2d7432c2b120386d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-010-raw.glsl",
+          "sha256": "9bc4a200d96be45411f08166a60a58d403b6303dc5a40eb0c838b644cd8c5a78"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-011-raw.glsl",
+          "sha256": "f7678e60f7b3cb5664ba763fadec6ab249e2f4816cdbd29015bc541e33303c90"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-012-raw.glsl",
+          "sha256": "a7a2feb92ed190e2c0e8580577aaa040d82b9b97da9e3f20f226e362ffa70b91"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-013-raw.glsl",
+          "sha256": "bfe93d40dced318b655551ee667b01a323855fff5c977aa4f7b3c9f3e452a19e"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-007-effective.glsl",
+          "sha256": "dd6ad535300495471c21132d5c2eb5b1b909b2216e2f415b2d7432c2b120386d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-010-effective.glsl",
+          "sha256": "9bc4a200d96be45411f08166a60a58d403b6303dc5a40eb0c838b644cd8c5a78"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-011-effective.glsl",
+          "sha256": "f7678e60f7b3cb5664ba763fadec6ab249e2f4816cdbd29015bc541e33303c90"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-012-effective.glsl",
+          "sha256": "a7a2feb92ed190e2c0e8580577aaa040d82b9b97da9e3f20f226e362ffa70b91"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-013-effective.glsl",
+          "sha256": "bfe93d40dced318b655551ee667b01a323855fff5c977aa4f7b3c9f3e452a19e"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-027-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 27
+    },
+    {
+      "sequence": 28,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x00422150",
+        "0x00415e10",
+        "0x00415e80",
+        "0x00422ac0",
+        "0x00423470",
+        "0x00423690",
+        "0x004239c0",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-007-raw.glsl",
+          "sha256": "902e6a6a407ad242d71d6dbd0d2ceb72952ca50d1572dd83ddc4bf7c7a2c29a4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-010-raw.glsl",
+          "sha256": "97b30d0c1c08f4a4ac96be48b105f269d4cb1bb8f0de1936ff89bd231812b28b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-011-raw.glsl",
+          "sha256": "05a39d5d79c83fd4c78b2feb2629b83f159442669e1c007326cc9ffa32f4456d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-012-raw.glsl",
+          "sha256": "14e7f8250c9f47c542199f033aa3bb1afd1fcf1b9dfc4eda59b16509390462d7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-013-raw.glsl",
+          "sha256": "d263f2ad13f36927606293c0febbd07fd81c862ea2e8a2845990487d90c05638"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-007-effective.glsl",
+          "sha256": "902e6a6a407ad242d71d6dbd0d2ceb72952ca50d1572dd83ddc4bf7c7a2c29a4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-010-effective.glsl",
+          "sha256": "97b30d0c1c08f4a4ac96be48b105f269d4cb1bb8f0de1936ff89bd231812b28b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-011-effective.glsl",
+          "sha256": "05a39d5d79c83fd4c78b2feb2629b83f159442669e1c007326cc9ffa32f4456d"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-012-effective.glsl",
+          "sha256": "14e7f8250c9f47c542199f033aa3bb1afd1fcf1b9dfc4eda59b16509390462d7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-013-effective.glsl",
+          "sha256": "d263f2ad13f36927606293c0febbd07fd81c862ea2e8a2845990487d90c05638"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-028-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 28
+    },
+    {
+      "sequence": 29,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x00423a50",
+        "0x00415e10",
+        "0x00415e80",
+        "0x00424220",
+        "0x0041bf84",
+        "0x004247f0",
+        "0x00424938",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-007-raw.glsl",
+          "sha256": "9b92ba2ef75a6e1b0e48ba4164669ca76f077c4b8de8ed3a2b880360cec02dcc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-010-raw.glsl",
+          "sha256": "4226096bcb1f6bbe48411b69d364e0b64a491295ee83e478ed269508d91950e7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-011-raw.glsl",
+          "sha256": "c300c3dd397d3500e467c62e6279656ed11be924b158f0da3aeaa59fe9a63a9e"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-012-raw.glsl",
+          "sha256": "4c5bdc495e7ce136e75afb909239df49bbb312ad59bbc9da540d72ded229bd15"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-013-raw.glsl",
+          "sha256": "de15b08a799e897673f540bfaeb5cc17d7909aa1e9953f8052fc2b9a9084c221"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-007-effective.glsl",
+          "sha256": "9b92ba2ef75a6e1b0e48ba4164669ca76f077c4b8de8ed3a2b880360cec02dcc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-010-effective.glsl",
+          "sha256": "4226096bcb1f6bbe48411b69d364e0b64a491295ee83e478ed269508d91950e7"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-011-effective.glsl",
+          "sha256": "c300c3dd397d3500e467c62e6279656ed11be924b158f0da3aeaa59fe9a63a9e"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-012-effective.glsl",
+          "sha256": "4c5bdc495e7ce136e75afb909239df49bbb312ad59bbc9da540d72ded229bd15"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-013-effective.glsl",
+          "sha256": "de15b08a799e897673f540bfaeb5cc17d7909aa1e9953f8052fc2b9a9084c221"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-029-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 29
+    },
+    {
+      "sequence": 30,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x00424a48",
+        "0x00415e10",
+        "0x00415e80",
+        "0x00424c10",
+        "0x0041de34",
+        "0x00425068",
+        "0x0041a614",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-007-raw.glsl",
+          "sha256": "6e0d4269fac1c0430f72244c44549c2c53b65138e5fe920f0afc052411aefc44"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-010-raw.glsl",
+          "sha256": "fd846ecba6c439bccbec8b27be255d17782c4a9065d3cd524ef1ae7aae429a5a"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-011-raw.glsl",
+          "sha256": "c0e14e53659b4c2cbaba51e9543cf3c748147a1256c773160e54139324a46c5b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-012-raw.glsl",
+          "sha256": "77f3e3c59933f4938990bfe6d3d67ea3173583e3a41f39ad7f5de025b20ec400"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-013-raw.glsl",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-007-effective.glsl",
+          "sha256": "6e0d4269fac1c0430f72244c44549c2c53b65138e5fe920f0afc052411aefc44"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-010-effective.glsl",
+          "sha256": "fd846ecba6c439bccbec8b27be255d17782c4a9065d3cd524ef1ae7aae429a5a"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-011-effective.glsl",
+          "sha256": "c0e14e53659b4c2cbaba51e9543cf3c748147a1256c773160e54139324a46c5b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-012-effective.glsl",
+          "sha256": "77f3e3c59933f4938990bfe6d3d67ea3173583e3a41f39ad7f5de025b20ec400"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-013-effective.glsl",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-030-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 30
+    },
+    {
+      "sequence": 31,
+      "stage": 35632,
+      "count": 15,
+      "caller": "0x00406dcc",
+      "return": "0x00406dce",
+      "source_addresses": [
+        "0x0040ae60",
+        "0x0040b1a8",
+        "0x0040d358",
+        "0x0040f008",
+        "0x0040f488",
+        "0x004117e8",
+        "0x004123a8",
+        "0x00425130",
+        "0x00415e10",
+        "0x00415e80",
+        "0x00425940",
+        "0x0041e66c",
+        "0x004264d0",
+        "0x00426598",
+        "0x004184b8"
+      ],
+      "input": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-000-raw.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-001-raw.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-002-raw.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-003-raw.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-004-raw.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-005-raw.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-006-raw.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-007-raw.glsl",
+          "sha256": "d28e74279acebf9b25147af866a8c72a4d708c15895670605fa5b25caeafa961"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-008-raw.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-009-raw.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-010-raw.glsl",
+          "sha256": "24ba0951852bd3d6335a8bd1e68d708b29d159d3d545b64d10a36d1c21ef9734"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-011-raw.glsl",
+          "sha256": "d283636cc80c66affa046822dc97408df7f6f094cd6581c4c5b0180f9e63ea94"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-012-raw.glsl",
+          "sha256": "f796bec33af828077d0e1e188b20e04ffb6dfc1a7238a981d746a8530b39311e"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-013-raw.glsl",
+          "sha256": "2e528f48d93b17b3a1d13d0bd3194071c69318e35ac08aba902b46e249ff82b1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-014-raw.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forwarded": [
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-000-effective.glsl",
+          "sha256": "b00d303bb8e410e2857324a558f32fc608d1add298c338ff2f9a3014d015dab4"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-001-effective.glsl",
+          "sha256": "4a6121ae57c07450995de785f79f62c69f8cba5ff9c48c0052307a0b69ef5d39"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-002-effective.glsl",
+          "sha256": "d806624c4f608ec9245b6f68f117c1779c4690f636e9f36e49a636488c175591"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-003-effective.glsl",
+          "sha256": "348c02eaa19e4e37b8db529364485c42b04512a2a4c38ab4bf52843649ed3451"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-004-effective.glsl",
+          "sha256": "936c330004c168706c5e272067cec69cf788cfab5e482aaa2457f318b065e4f8"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-005-effective.glsl",
+          "sha256": "aec2ddfbebd2bbb4ddaebb361a7ddf607b71bb909bb76a8729e7e25beacc1470"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-006-effective.glsl",
+          "sha256": "1a7bb62e4e23b91be20a969a7dd4eb6eca1231202d6dee88fb70348d7d73f8cc"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-007-effective.glsl",
+          "sha256": "d28e74279acebf9b25147af866a8c72a4d708c15895670605fa5b25caeafa961"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-008-effective.glsl",
+          "sha256": "4c28f60d733253e5f875766f065db6a5e50faf01bfec627927c91c9c13378002"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-009-effective.glsl",
+          "sha256": "4a6ebff61de9bbb512870bf7ec019b9125ed56350360c51e650cce602b97e782"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-010-effective.glsl",
+          "sha256": "24ba0951852bd3d6335a8bd1e68d708b29d159d3d545b64d10a36d1c21ef9734"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-011-effective.glsl",
+          "sha256": "d283636cc80c66affa046822dc97408df7f6f094cd6581c4c5b0180f9e63ea94"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-012-effective.glsl",
+          "sha256": "f796bec33af828077d0e1e188b20e04ffb6dfc1a7238a981d746a8530b39311e"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-013-effective.glsl",
+          "sha256": "2e528f48d93b17b3a1d13d0bd3194071c69318e35ac08aba902b46e249ff82b1"
+        },
+        {
+          "root": "data",
+          "path": "reference/proxy-b-d9-repeat-20261016/shader-031-014-effective.glsl",
+          "sha256": "bfd4baf4122c301596df61cb9f83897054d6681109aa459e7bf9e874abb8f37f"
+        }
+      ],
+      "forward_calls": 1,
+      "program": 31
+    }
+  ],
+  "fallback": null
+}

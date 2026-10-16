@@ -1,0 +1,1059 @@
+{
+  "kind": "proxy-B-D9-compatibility-diagnostic",
+  "run_id": "proxy-b-d12-native-preflight-20261016",
+  "reference_eligible": false,
+  "finalized": false,
+  "staged_scope": {
+    "sequential_frames": 61,
+    "retained_indices": [
+      0,
+      1,
+      2,
+      60
+    ],
+    "native_rows": [
+      {
+        "row": 0,
+        "first": 0,
+        "last": 1439,
+        "token": 0,
+        "start_beat": 0.0,
+        "end_beat": 32.0
+      },
+      {
+        "row": 1,
+        "first": 1440,
+        "last": 2159,
+        "token": 0,
+        "start_beat": 32.0,
+        "end_beat": 48.0
+      },
+      {
+        "row": 2,
+        "first": 2160,
+        "last": 2879,
+        "token": 0,
+        "start_beat": 48.0,
+        "end_beat": 64.0
+      },
+      {
+        "row": 3,
+        "first": 2880,
+        "last": 3599,
+        "token": 0,
+        "start_beat": 64.0,
+        "end_beat": 80.0
+      },
+      {
+        "row": 4,
+        "first": 3600,
+        "last": 4319,
+        "token": 0,
+        "start_beat": 80.0,
+        "end_beat": 96.0
+      },
+      {
+        "row": 5,
+        "first": 4320,
+        "last": 5759,
+        "token": 20,
+        "start_beat": 96.0,
+        "end_beat": 128.0
+      },
+      {
+        "row": 6,
+        "first": 5760,
+        "last": 6119,
+        "token": 40,
+        "start_beat": 128.0,
+        "end_beat": 136.0
+      },
+      {
+        "row": 7,
+        "first": 6120,
+        "last": 6569,
+        "token": 40,
+        "start_beat": 136.0,
+        "end_beat": 146.0
+      },
+      {
+        "row": 8,
+        "first": 6570,
+        "last": 7199,
+        "token": 40,
+        "start_beat": 146.0,
+        "end_beat": 160.0
+      },
+      {
+        "row": 9,
+        "first": 7200,
+        "last": 7919,
+        "token": 40,
+        "start_beat": 160.0,
+        "end_beat": 176.0
+      },
+      {
+        "row": 10,
+        "first": 7920,
+        "last": 8639,
+        "token": 60,
+        "start_beat": 176.0,
+        "end_beat": 192.0
+      },
+      {
+        "row": 11,
+        "first": 8640,
+        "last": 10079,
+        "token": 60,
+        "start_beat": 192.0,
+        "end_beat": 224.0
+      },
+      {
+        "row": 12,
+        "first": 10080,
+        "last": 10619,
+        "token": 80,
+        "start_beat": 224.0,
+        "end_beat": 236.0
+      },
+      {
+        "row": 13,
+        "first": 10620,
+        "last": 11159,
+        "token": 80,
+        "start_beat": 236.0,
+        "end_beat": 248.0
+      },
+      {
+        "row": 14,
+        "first": 11160,
+        "last": 11879,
+        "token": 80,
+        "start_beat": 248.0,
+        "end_beat": 264.0
+      },
+      {
+        "row": 15,
+        "first": 11880,
+        "last": 12599,
+        "token": 100,
+        "start_beat": 264.0,
+        "end_beat": 280.0
+      },
+      {
+        "row": 16,
+        "first": 12600,
+        "last": 12959,
+        "token": 100,
+        "start_beat": 280.0,
+        "end_beat": 288.0
+      },
+      {
+        "row": 17,
+        "first": 12960,
+        "last": 13364,
+        "token": 100,
+        "start_beat": 288.0,
+        "end_beat": 297.0
+      },
+      {
+        "row": 18,
+        "first": 13365,
+        "last": 13544,
+        "token": 100,
+        "start_beat": 297.0,
+        "end_beat": 301.0
+      },
+      {
+        "row": 19,
+        "first": 13545,
+        "last": 13724,
+        "token": 100,
+        "start_beat": 301.0,
+        "end_beat": 305.0
+      },
+      {
+        "row": 20,
+        "first": 13725,
+        "last": 13904,
+        "token": 100,
+        "start_beat": 305.0,
+        "end_beat": 309.0
+      },
+      {
+        "row": 21,
+        "first": 13905,
+        "last": 14084,
+        "token": 100,
+        "start_beat": 309.0,
+        "end_beat": 313.0
+      },
+      {
+        "row": 22,
+        "first": 14085,
+        "last": 14444,
+        "token": 100,
+        "start_beat": 313.0,
+        "end_beat": 321.0
+      },
+      {
+        "row": 23,
+        "first": 14445,
+        "last": 14714,
+        "token": 100,
+        "start_beat": 321.0,
+        "end_beat": 327.0
+      },
+      {
+        "row": 24,
+        "first": 14715,
+        "last": 15119,
+        "token": 100,
+        "start_beat": 327.0,
+        "end_beat": 336.0
+      },
+      {
+        "row": 25,
+        "first": 15120,
+        "last": 15479,
+        "token": 140,
+        "start_beat": 336.0,
+        "end_beat": 344.0
+      },
+      {
+        "row": 26,
+        "first": 15480,
+        "last": 15839,
+        "token": 140,
+        "start_beat": 344.0,
+        "end_beat": 352.0
+      },
+      {
+        "row": 27,
+        "first": 15840,
+        "last": 16199,
+        "token": 140,
+        "start_beat": 352.0,
+        "end_beat": 360.0
+      },
+      {
+        "row": 28,
+        "first": 16200,
+        "last": 16559,
+        "token": 140,
+        "start_beat": 360.0,
+        "end_beat": 368.0
+      },
+      {
+        "row": 29,
+        "first": 16560,
+        "last": 16919,
+        "token": 140,
+        "start_beat": 368.0,
+        "end_beat": 376.0
+      },
+      {
+        "row": 30,
+        "first": 16920,
+        "last": 17279,
+        "token": 140,
+        "start_beat": 376.0,
+        "end_beat": 384.0
+      },
+      {
+        "row": 31,
+        "first": 17280,
+        "last": 17459,
+        "token": 140,
+        "start_beat": 384.0,
+        "end_beat": 388.0
+      },
+      {
+        "row": 32,
+        "first": 17460,
+        "last": 17999,
+        "token": 140,
+        "start_beat": 388.0,
+        "end_beat": 400.0
+      },
+      {
+        "row": 33,
+        "first": 18000,
+        "last": 18719,
+        "token": 160,
+        "start_beat": 400.0,
+        "end_beat": 416.0
+      },
+      {
+        "row": 34,
+        "first": 18720,
+        "last": 19079,
+        "token": 160,
+        "start_beat": 416.0,
+        "end_beat": 424.0
+      },
+      {
+        "row": 35,
+        "first": 19080,
+        "last": 19439,
+        "token": 160,
+        "start_beat": 424.0,
+        "end_beat": 432.0
+      },
+      {
+        "row": 36,
+        "first": 19440,
+        "last": 19799,
+        "token": 160,
+        "start_beat": 432.0,
+        "end_beat": 440.0
+      },
+      {
+        "row": 37,
+        "first": 19800,
+        "last": 20159,
+        "token": 160,
+        "start_beat": 440.0,
+        "end_beat": 448.0
+      },
+      {
+        "row": 38,
+        "first": 20160,
+        "last": 20699,
+        "token": 180,
+        "start_beat": 448.0,
+        "end_beat": 460.0
+      },
+      {
+        "row": 39,
+        "first": 20700,
+        "last": 21869,
+        "token": 180,
+        "start_beat": 460.0,
+        "end_beat": 486.0
+      },
+      {
+        "row": 40,
+        "first": 21870,
+        "last": 22499,
+        "token": 180,
+        "start_beat": 486.0,
+        "end_beat": 500.0
+      },
+      {
+        "row": 41,
+        "first": 22500,
+        "last": 22769,
+        "token": 180,
+        "start_beat": 500.0,
+        "end_beat": 506.0
+      },
+      {
+        "row": 42,
+        "first": 22770,
+        "last": 23039,
+        "token": 180,
+        "start_beat": 506.0,
+        "end_beat": 512.0
+      },
+      {
+        "row": 43,
+        "first": 23040,
+        "last": 23399,
+        "token": 60,
+        "start_beat": 512.0,
+        "end_beat": 520.0
+      },
+      {
+        "row": 44,
+        "first": 23400,
+        "last": 23579,
+        "token": 200,
+        "start_beat": 520.0,
+        "end_beat": 524.0
+      },
+      {
+        "row": 45,
+        "first": 23580,
+        "last": 23759,
+        "token": 200,
+        "start_beat": 524.0,
+        "end_beat": 528.0
+      },
+      {
+        "row": 46,
+        "first": 23760,
+        "last": 25019,
+        "token": 220,
+        "start_beat": 528.0,
+        "end_beat": 556.0
+      },
+      {
+        "row": 47,
+        "first": 25020,
+        "last": 25739,
+        "token": 40,
+        "start_beat": 556.0,
+        "end_beat": 572.0
+      },
+      {
+        "row": 48,
+        "first": 25740,
+        "last": 26279,
+        "token": 100,
+        "start_beat": 572.0,
+        "end_beat": 584.0
+      },
+      {
+        "row": 49,
+        "first": 26280,
+        "last": 26999,
+        "token": 60,
+        "start_beat": 584.0,
+        "end_beat": 600.0
+      }
+    ]
+  },
+  "status": "failed",
+  "transformation": "450-compatibility",
+  "substitutions": 0,
+  "input": {
+    "archive": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+    "archive_sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008",
+    "exe": "Eidolon - Poo-Brain (native).exe",
+    "exe_bytes": 60928,
+    "exe_sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+    "executed_copy": "/tmp/opencode/eidolon/T11/proxy-b-d12-native-preflight-20261016/Eidolon - Poo-Brain (native).exe"
+  },
+  "dependency": {
+    "schema_version": 1,
+    "dependency": "Windows system GM DLS (Microsoft-distributed Roland GS sound set)",
+    "acquired_utc_date": "2026-10-15",
+    "storage": "$EIDOLON_DATA/reference/dependencies/",
+    "source": {
+      "filename": "directx_apr2006_redist.exe",
+      "release": "Microsoft DirectX End-User Redistributable, April 2006",
+      "bytes": 54549776,
+      "sha256": "dd8c3d401efe4561b67bd88475201b2f62f43cd23e4acc947bb34a659fa74952",
+      "original_url": "http://download.microsoft.com/download/3/9/7/3972f80c-5711-4e14-9483-959d48a2d03b/directx_apr2006_redist.exe",
+      "archive_url": "https://web.archive.org/web/20100920035904id_/https://download.microsoft.com/download/3/9/7/3972f80c-5711-4e14-9483-959d48a2d03b/directx_apr2006_redist.exe",
+      "archive_capture_utc": "2010-09-20T03:59:04Z",
+      "archive_original_last_modified_utc": "2006-04-04T16:37:22Z",
+      "live_https_origin_status": "404 on 2026-10-15",
+      "sha256_corroboration": {
+        "url": "https://github.com/Winetricks/winetricks/blob/f3890f670867b5ffbc3938726db45c0f7d16c8ba/src/winetricks",
+        "function": "load_gmdls",
+        "check": "Archive SHA-256 and DirectX.cab -> gm16.dls -> gm.dls derivation match the pinned recipe."
+      }
+    },
+    "signature_check": {
+      "authenticode_sha1": "9faaa6a4466acff31e9e483fa87fe0affc5f027e",
+      "signer_certificate_sha256": "094028660b2b8f926da010f77333d171c250014603cc5f4d971ae20070a27dab",
+      "signer_subject": "C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Corporation",
+      "signer_issuer": "C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, OU=Copyright (c) 2000 Microsoft Corp., CN=Microsoft Code Signing PCA",
+      "verified": "PE digest equals signed SHA-1 digest; OpenSSL verifies PKCS#7 signature against embedded signer certificate; signer fingerprint pinned.",
+      "limitations": "openssl smime -noverify: certificate chain trust, expiry, timestamp countersignature and revocation are not validated. SHA-256 corroboration is independent of this signature check."
+    },
+    "cabinet": {
+      "filename": "DirectX.cab",
+      "bytes": 15493481,
+      "sha256": "0e8c0ea0a9bc50012fd9286d8941736f8a99d43af10413f9062db7773199efc2"
+    },
+    "bank": {
+      "filename": "gm.dls",
+      "archive_member": "gm16.dls",
+      "bytes": 3440660,
+      "sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "transformation": "Byte-identical extraction; filename only changes to gm.dls.",
+      "vendor_mapping": "DirectX.cab/directx.inf, [GM98_Drivers], gm.dls,gm16.dls",
+      "vendor_notice": "$EIDOLON_DATA/reference/dependencies/source/gmreadme.txt"
+    },
+    "dls": {
+      "riff_type": "DLS ",
+      "version": "1.0.16.2",
+      "info": {
+        "ICMT": "960920 ver. 1.00.16",
+        "ICOP": "Copyright 1996 Roland Corporation U.S.",
+        "IENG": "Roland Corporation",
+        "INAM": "GS sound set (16 bit)",
+        "ISFT": "dls_cnv v0.27y",
+        "ISBJ": "226 melodic + 9 drum instruments"
+      },
+      "instrument_count": 235,
+      "wave_count": 495,
+      "pool_cues": 495,
+      "pcm_format": "signed little-endian 16-bit mono",
+      "sample_rate_hz_counts": {
+        "22050": 492,
+        "24000": 3
+      },
+      "literal_data_scan_matches_wave_order": true,
+      "sample_127": {
+        "physical_wave_index_zero_based": 127,
+        "name": "DSTGT77",
+        "data_chunk_offset": 1012298,
+        "pcm_offset": 1012306,
+        "pcm_bytes": 2252,
+        "pcm_frames": 1126,
+        "sample_rate_hz": 22050,
+        "pcm_sha256": "bd61722423100a4d6f97d4f3f47c78d03ddb19c78a771b669933ce9721c3aa8b"
+      }
+    },
+    "local_asset_search": {
+      "patterns": [
+        "gm.dl*",
+        "*.dls"
+      ],
+      "roots": [
+        "$EIDOLON_ROOT",
+        "/tmp/opencode/eidolon",
+        "/usr/share",
+        "/usr/lib",
+        "/opt",
+        "/mnt",
+        "/media",
+        "$HOME/.wine",
+        "$HOME/Downloads",
+        "$HOME/.local/share"
+      ],
+      "result": "No matching bank before acquisition; absent roots skipped; /opt/containerd inaccessible."
+    },
+    "validation_environment": {
+      "python": "3.14.7",
+      "bsdtar_libarchive": "3.8.9",
+      "openssl": "3.6.3",
+      "initial_download_curl": "8.21.0",
+      "sha256sum_coreutils": "9.11",
+      "settings": "File-only extraction and validation; no executable installation or playback.",
+      "resolution": null,
+      "gpu": null,
+      "driver": null,
+      "wine_version": null
+    },
+    "uncertainty": [
+      "The original author's Windows release and gm.dls hash are unknown; this pins an authentic Microsoft-distributed version, not historical bank equivalence.",
+      "T2 must establish Wine path resolution, nonzero loaded sample 127, initialization recovery and full playback."
+    ]
+  },
+  "build": {
+    "sources": {
+      "tools/capture/proxy-b-compat/README.md": "5174c978d6d9149da5c2f939f245c25a22fcf096dd3182201f9d764bdfb91861",
+      "tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+      "tools/capture/proxy-b-compat/build.py": "dab0490ddef639b3c6ea63514776c63884d14fc28c6f14be98a808a1c45038be",
+      "tools/capture/proxy-b-compat/check_controls.py": "e6a489e71363446203ff42d9b4a8fdcc7e794d6bc7053973765c57c834d8a294",
+      "tools/capture/proxy-b-compat/check_stage.py": "57c4896bc256237d0c663023c4fcf859c36a0132e2a3174aad56d664babe81a9",
+      "tools/capture/proxy-b-compat/check_stage_faults.py": "ec6a0ad92f9521a5bcfff979e733020151383421895c26a0a7122234b97f3a98",
+      "tools/capture/proxy-b-compat/consumer.c": "e2361131b44c5fc383e78bb9a70dd23d9532a7ef0c78293fc9b52b6e9929f0bc",
+      "tools/capture/proxy-b-compat/core.c": "0284bdc34b34df97b1a59bc6a90ef8ed4ceb967c7a74616d58bf449bd6411a15",
+      "tools/capture/proxy-b-compat/native.c": "8b926dbc8eae91b3368186d8ab1e4c0054e401419ffc72a5598d409397ebe72b",
+      "tools/capture/proxy-b-compat/negative_stage.py": "e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a",
+      "tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+      "tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+      "tools/capture/proxy-b-compat/package_stage.py": "3b64c74c2b630f0152e55e130df2a0d43fcd3cf1aa4e961a9589269a2d3ee8f5",
+      "tools/capture/proxy-b-compat/probe.py": "174343e16fb106d608402523a7b4780411dc136e06d991c4d33abc4448492663",
+      "tools/capture/proxy-b-compat/reconcile_scene.py": "97ce79e33819d398e37fcd390bf51b508e221cef2094ae6f7f589c58215e4b81",
+      "tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+      "tools/capture/proxy-b-compat/stage.c": "e6091e6bde7a2f688823b2cb123be6761e94a0fa6380422763ccf0c41b4ded44",
+      "tools/capture/proxy-b-compat/timeline.py": "42f93731050be9295fcd77306751e3a44cf9556547ae2897c07871308da3cfe8"
+    },
+    "original_manifest_sha256": "21fdd559b26651474bee6c3b0820630dd71f2d0e85b452b85b97f3fa992fdf13",
+    "compiler": "i686-w64-mingw32-gcc (GCC) 16.2.0",
+    "flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wl,--no-insert-timestamp"
+    ],
+    "original_sources": {
+      "tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+      "tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+      "tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+      "tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+      "tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+      "tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62"
+    },
+    "backends": {
+      "opengl32": {
+        "path": "/usr/lib/wine/i386-windows/opengl32.dll",
+        "sha256": "4a6cb3ae1064d0c0ed2e5742a9edaf2fb54056f31166e1451b5edd20e10c6839"
+      },
+      "winmm": {
+        "path": "/usr/lib/wine/i386-windows/winmm.dll",
+        "sha256": "63e590695c6780525edf79bcca0df5054c2fb4849866fa2d90e91ba28a9bd959"
+      }
+    },
+    "build_id": "4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631",
+    "build_directory": "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631",
+    "commands": [
+      [
+        "i686-w64-mingw32-gcc",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/compat.S",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "-DHAS_BOOTSTRAP",
+        "tools/capture/proxy-b/bootstrap.c",
+        "tools/capture/proxy-b-compat/core.c",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/opengl32",
+        "tools/capture/proxy-b/proxy.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/opengl32/forward.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/opengl32/proxy.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/opengl32.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/winmm",
+        "tools/capture/proxy-b/proxy.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/winmm/forward.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/winmm/proxy.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/winmm.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "tools/capture/proxy-b/canary.c",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/4a62db4aaab632d3f5e22f9cd30c68257ec130a42d99ebbb98493c083e291631/canary.exe"
+      ]
+    ],
+    "export_maps_equal": true,
+    "outputs": {
+      "canary.exe": "5200997c6ea7abeffa16cb7676bc2a8935d04ee4ebda312b43919a70eff4fc8f",
+      "compat.S": "edd33d31f2ebb1ba65730494a85c916d567b1c58ade9971f76a3af90f2ee4b68",
+      "opengl32/exports.h": "bfb7a883e2df3bd4e344b23ff932edf68a87abfb8a82ee492d2f9ed34ac63807",
+      "opengl32/exports.json": "e62cb5b2895239c90fa794d89d60f5399948195f340c0066502bcfc71ad2ef93",
+      "opengl32/forward.S": "7419107a6892070ae8486ba10bbb47e5aa43bf95fb9f3b407bea717607d27b82",
+      "opengl32/proxy.def": "4569859a20c452dcef074d1ab938c7c7f5d063ae3d7ab2442dc244c9f78cc09f",
+      "opengl32/wrappers.S": "b9c4b626802e152f431b824b500c4e8046f45aa4eeee9f5556b3f4e0adcabb4e",
+      "opengl32.dll": "7fd7e6dd1424f379884841b177d8b6bcb2b1736b4fc9a7408e96fe20007657d1",
+      "source-snapshot/tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+      "source-snapshot/tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+      "source-snapshot/tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+      "source-snapshot/tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+      "source-snapshot/tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+      "source-snapshot/tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62",
+      "source-snapshot/tools/capture/proxy-b-compat/README.md": "5174c978d6d9149da5c2f939f245c25a22fcf096dd3182201f9d764bdfb91861",
+      "source-snapshot/tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+      "source-snapshot/tools/capture/proxy-b-compat/build.py": "dab0490ddef639b3c6ea63514776c63884d14fc28c6f14be98a808a1c45038be",
+      "source-snapshot/tools/capture/proxy-b-compat/check_controls.py": "e6a489e71363446203ff42d9b4a8fdcc7e794d6bc7053973765c57c834d8a294",
+      "source-snapshot/tools/capture/proxy-b-compat/check_stage.py": "57c4896bc256237d0c663023c4fcf859c36a0132e2a3174aad56d664babe81a9",
+      "source-snapshot/tools/capture/proxy-b-compat/check_stage_faults.py": "ec6a0ad92f9521a5bcfff979e733020151383421895c26a0a7122234b97f3a98",
+      "source-snapshot/tools/capture/proxy-b-compat/consumer.c": "e2361131b44c5fc383e78bb9a70dd23d9532a7ef0c78293fc9b52b6e9929f0bc",
+      "source-snapshot/tools/capture/proxy-b-compat/core.c": "0284bdc34b34df97b1a59bc6a90ef8ed4ceb967c7a74616d58bf449bd6411a15",
+      "source-snapshot/tools/capture/proxy-b-compat/native.c": "8b926dbc8eae91b3368186d8ab1e4c0054e401419ffc72a5598d409397ebe72b",
+      "source-snapshot/tools/capture/proxy-b-compat/negative_stage.py": "e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a",
+      "source-snapshot/tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+      "source-snapshot/tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+      "source-snapshot/tools/capture/proxy-b-compat/package_stage.py": "3b64c74c2b630f0152e55e130df2a0d43fcd3cf1aa4e961a9589269a2d3ee8f5",
+      "source-snapshot/tools/capture/proxy-b-compat/probe.py": "174343e16fb106d608402523a7b4780411dc136e06d991c4d33abc4448492663",
+      "source-snapshot/tools/capture/proxy-b-compat/reconcile_scene.py": "97ce79e33819d398e37fcd390bf51b508e221cef2094ae6f7f589c58215e4b81",
+      "source-snapshot/tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+      "source-snapshot/tools/capture/proxy-b-compat/stage.c": "e6091e6bde7a2f688823b2cb123be6761e94a0fa6380422763ccf0c41b4ded44",
+      "source-snapshot/tools/capture/proxy-b-compat/timeline.py": "42f93731050be9295fcd77306751e3a44cf9556547ae2897c07871308da3cfe8",
+      "winmm/exports.h": "a1ed975abb02ee76cb6a95eb30c299289c04a58f17f08f9be2e401f87dfb2ee5",
+      "winmm/exports.json": "3b5fbf5d759fc3d6c4b22b0e929a4a76e527f120f52a9cf82f6410f64f1be741",
+      "winmm/forward.S": "c8354ce8620a0fcdbc73c16ed02b49426a6e8717b511403f52f6473b79010ded",
+      "winmm/proxy.def": "9053c8931573521f18270cb7d5a363450f0300ba695a826e8c70659d32ada125",
+      "winmm.dll": "3b6282761191d59c24c50150aefac7edac6e15a18d383b178a57be2b24339298"
+    }
+  },
+  "bundle": {
+    "tools/run": "957c9840fa552e115da5a411b1eca71e156e432e88efb390d394849bd114f741",
+    "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
+    "tools/capture/prepare-native.py": "a7b1061ae147ef84066921ff9e8089291eaa123c65173106e875f99149b2adb5",
+    "tools/capture/proxy-b-compat/README.md": "5174c978d6d9149da5c2f939f245c25a22fcf096dd3182201f9d764bdfb91861",
+    "tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+    "tools/capture/proxy-b-compat/build.py": "dab0490ddef639b3c6ea63514776c63884d14fc28c6f14be98a808a1c45038be",
+    "tools/capture/proxy-b-compat/check_controls.py": "e6a489e71363446203ff42d9b4a8fdcc7e794d6bc7053973765c57c834d8a294",
+    "tools/capture/proxy-b-compat/check_stage.py": "57c4896bc256237d0c663023c4fcf859c36a0132e2a3174aad56d664babe81a9",
+    "tools/capture/proxy-b-compat/check_stage_faults.py": "ec6a0ad92f9521a5bcfff979e733020151383421895c26a0a7122234b97f3a98",
+    "tools/capture/proxy-b-compat/consumer.c": "e2361131b44c5fc383e78bb9a70dd23d9532a7ef0c78293fc9b52b6e9929f0bc",
+    "tools/capture/proxy-b-compat/core.c": "0284bdc34b34df97b1a59bc6a90ef8ed4ceb967c7a74616d58bf449bd6411a15",
+    "tools/capture/proxy-b-compat/native.c": "8b926dbc8eae91b3368186d8ab1e4c0054e401419ffc72a5598d409397ebe72b",
+    "tools/capture/proxy-b-compat/negative_stage.py": "e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a",
+    "tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+    "tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+    "tools/capture/proxy-b-compat/package_stage.py": "3b64c74c2b630f0152e55e130df2a0d43fcd3cf1aa4e961a9589269a2d3ee8f5",
+    "tools/capture/proxy-b-compat/probe.py": "174343e16fb106d608402523a7b4780411dc136e06d991c4d33abc4448492663",
+    "tools/capture/proxy-b-compat/reconcile_scene.py": "97ce79e33819d398e37fcd390bf51b508e221cef2094ae6f7f589c58215e4b81",
+    "tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+    "tools/capture/proxy-b-compat/stage.c": "e6091e6bde7a2f688823b2cb123be6761e94a0fa6380422763ccf0c41b4ded44",
+    "tools/capture/proxy-b-compat/timeline.py": "42f93731050be9295fcd77306751e3a44cf9556547ae2897c07871308da3cfe8"
+  },
+  "host_runner": {
+    "path": "/home/rovshan/Work/asm/Eidolon/.tools/capture/runner-snapshots/174343e16fb106d608402523a7b4780411dc136e06d991c4d33abc4448492663/probe.py",
+    "sha256": "174343e16fb106d608402523a7b4780411dc136e06d991c4d33abc4448492663"
+  },
+  "source_provenance": [],
+  "stage": "/tmp/opencode/eidolon/T11/proxy-b-d12-native-preflight-20261016",
+  "prefix_baseline": {
+    "recipe": "persistent copy of stopped T11/T2 baseline; cp -a --reflink=auto; verify full tree before each invocation; launcher applies pinned registry defaults",
+    "directory": "/home/rovshan/Work/asm/Eidolon/.tools/capture/T11-prefix-baseline",
+    "inventory": "/home/rovshan/Work/asm/Eidolon/.tools/capture/T11-prefix-baseline.json",
+    "inventory_sha256": "6099ea696a5fe088be478eb4a4c96eb7679445e978c5833e2f036c59d3db5a48",
+    "fresh_tree_equal": true
+  },
+  "environment": {
+    "os": "Linux-7.1.8-arch1-3-x86_64-with-glibc2.44",
+    "wine": "wine-11.17",
+    "packages": [
+      "wine 11.17-1",
+      "gamescope 3.16.25-1",
+      "nvidia-utils 610.57.04-1",
+      "lib32-nvidia-utils 610.57.04-1"
+    ],
+    "gpu": "NVIDIA GeForce RTX 3070 Ti, 610.57.04",
+    "display": {
+      "kind": "gamescope-headless",
+      "width": 1920,
+      "height": 1080,
+      "launcher": "tools/wine-headless",
+      "wine_virtual_desktop": false
+    },
+    "parent_settings": {
+      "WINEPREFIX": "/tmp/opencode/eidolon/tools/prefix"
+    },
+    "settings": {
+      "AGENT": "T11",
+      "WINEPREFIX": "/tmp/opencode/eidolon/T11/prefix",
+      "XDG_CACHE_HOME": "/tmp/opencode/eidolon/T11/proxy-b-d12-native-preflight-20261016/cache",
+      "WINE_TIMEOUT": "600",
+      "WINE_W": "1920",
+      "WINE_H": "1080",
+      "WINEARCH": "win64",
+      "WINEDLLOVERRIDES": "opengl32,winmm=n,b;winemenubuilder.exe,mscoree,mshtml=d",
+      "WINEDEBUG": "-all,+loaddll",
+      "EIDOLON_B_LOG": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d12-native-preflight-20261016/backend.jsonl",
+      "EIDOLON_B_BOOTSTRAP": "capture-probe",
+      "EIDOLON_B_OUTPUT": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d12-native-preflight-20261016",
+      "EIDOLON_B_FRAMES": "61",
+      "EIDOLON_B_COMPAT": "450-compatibility",
+      "EIDOLON_B_RETENTION": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d12-native-preflight-20261016/retention.txt",
+      "PULSE_SINK": "eidolon_T11_compat",
+      "LC_ALL": "C",
+      "TZ": "UTC",
+      "__GL_SHADER_DISK_CACHE_PATH": "/tmp/opencode/eidolon/T11/proxy-b-d12-native-preflight-20261016/cache/nvidia"
+    }
+  },
+  "reproduce": [
+    "bash",
+    "tools/run",
+    "python",
+    "tools/capture/proxy-b-compat/probe.py",
+    "--run-id",
+    "<fresh-id>",
+    "--mode",
+    "450-compatibility",
+    "--frames",
+    "61"
+  ],
+  "command": [
+    "bash",
+    "tools/run",
+    "tools/wine-headless",
+    "/tmp/opencode/eidolon/T11/proxy-b-d12-native-preflight-20261016/Eidolon - Poo-Brain (native).exe"
+  ],
+  "started_utc": "2026-10-16T03:08:22.959084+00:00",
+  "finished_utc": "2026-10-16T03:08:33.095441+00:00",
+  "launcher_exit": 125,
+  "first_failed_check": {
+    "seq": 28,
+    "event": "failure",
+    "pid": 240,
+    "tid": 244,
+    "reason": "physical_exception_resume_canary",
+    "error": 183
+  },
+  "supervision": {
+    "runner_seconds": 600,
+    "cleanup_margin_seconds": 600,
+    "tool": "background; no external deadline",
+    "python_supervisor_seconds": 1200
+  },
+  "supervisor_timeout": false,
+  "elapsed_seconds": 10.136363202007487,
+  "runner_terminal": [
+    "WINE_EXIT=125 GAMESCOPE_EXIT=139 SECONDS=4"
+  ],
+  "observations": [
+    {
+      "seq": 1,
+      "event": "bootstrap_before_synth",
+      "pid": 240,
+      "tid": 244,
+      "site": "0x00406379",
+      "mapping_sha256": "2f5a0e029bfa5d9a814f4c5ec9d754b50f646a6065c1212630250b9f965ecb2f",
+      "context_sha256": "b9de8dffb4bd9ad036ce79e21f297055b1ffa563fa3e58dab2bb9656ab00c6a2",
+      "initial_tick_before_init": 0
+    },
+    {
+      "seq": 2,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409018",
+      "target": "0x7a401712"
+    },
+    {
+      "seq": 3,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409024",
+      "target": "0x7a401490"
+    },
+    {
+      "seq": 4,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409008",
+      "target": "0x7a4016a7"
+    },
+    {
+      "seq": 5,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409090",
+      "target": "0x7a40177d"
+    },
+    {
+      "seq": 6,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x0040908c",
+      "target": "0x7a4017e8"
+    },
+    {
+      "seq": 7,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409094",
+      "target": "0x7a401853"
+    },
+    {
+      "seq": 8,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409098",
+      "target": "0x7a40163c"
+    },
+    {
+      "seq": 9,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409050",
+      "target": "0x7a401929"
+    },
+    {
+      "seq": 10,
+      "event": "hooks_installed",
+      "pid": 240,
+      "tid": 244,
+      "main_tid": 244,
+      "synth_not_launched": true
+    },
+    {
+      "seq": 11,
+      "event": "compatibility_experiment",
+      "pid": 240,
+      "tid": 244,
+      "transformation": "450-compatibility",
+      "expected_raw_sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182",
+      "reference_eligible": false
+    },
+    {
+      "seq": 12,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x0040905c",
+      "target": "0x7a401a6a"
+    },
+    {
+      "seq": 13,
+      "event": "route",
+      "pid": 240,
+      "tid": 244,
+      "slot": "0x00409044",
+      "target": "0x7a401ad5"
+    },
+    {
+      "seq": 14,
+      "event": "initial_resources",
+      "pid": 240,
+      "tid": 244,
+      "base": "0x00409100",
+      "exclusive_end": "0x0043edc0",
+      "sha256": "0cbe16c09ff3602c426997b1f8ee05ab024e4b148175404a53c29f8b3b9ed6cf",
+      "initial_synth_tick": 0,
+      "priority_class": 32,
+      "rng_scope": "fresh native process; explicit RNG-state ownership requires Reverse review"
+    },
+    {
+      "seq": 15,
+      "event": "stage_runtime",
+      "pid": 240,
+      "tid": 244,
+      "schema": 2,
+      "diagnostic_breakpoints": false,
+      "driver_callbacks": false,
+      "completion_trap": "one-shot software INT3 at 0x401765",
+      "fault": "",
+      "log_policy": "ordered checked WriteFile and close per event; OS-cache flush per completed frame; payload flush per file"
+    },
+    {
+      "seq": 16,
+      "event": "native_state",
+      "pid": 240,
+      "tid": 244,
+      "phase": "entry",
+      "role": "physics",
+      "base": 186105328,
+      "bytes": 256,
+      "file": "native-entry-physics.bin",
+      "sha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1"
+    },
+    {
+      "seq": 17,
+      "event": "native_state",
+      "pid": 240,
+      "tid": 244,
+      "phase": "entry",
+      "role": "rng",
+      "base": 186038272,
+      "bytes": 1312,
+      "file": "native-entry-rng.bin",
+      "sha256": "2c7663e809c9827df482ce260d079467d02f9f181a6d1fcc5a942b2a7e1bd3e6"
+    },
+    {
+      "seq": 18,
+      "event": "native_state",
+      "pid": 240,
+      "tid": 244,
+      "phase": "entry",
+      "role": "tick",
+      "base": 186039584,
+      "bytes": 4,
+      "file": "native-entry-tick.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "seq": 20,
+      "event": "abi_canary",
+      "pid": 240,
+      "tid": 244,
+      "api": 10,
+      "ordinal": 1,
+      "n": 0,
+      "argbytes": 8,
+      "entry_esp": 2258480,
+      "return_esp": 2258492,
+      "return_pc": 2051033983,
+      "expected_eax": 2074987888,
+      "observed_eax": 2074987888,
+      "before_fx_sha256": "e81682ea49bccc2195da6a7601a6ff619c60f26f12b8c1c1f4264c71f3f160e1",
+      "after_fx_sha256": "e81682ea49bccc2195da6a7601a6ff619c60f26f12b8c1c1f4264c71f3f160e1",
+      "equal": true
+    },
+    {
+      "seq": 25,
+      "event": "resolver_control",
+      "pid": 240,
+      "tid": 244,
+      "name": "GetCurrentThreadId",
+      "ordinal": 562,
+      "expected": 2074987888,
+      "by_name": 2074987888,
+      "by_ordinal": 2074987888,
+      "routed_name": "GetTickCount",
+      "routed": 2051019920,
+      "expected_routed": 2051019920,
+      "missing_name": 0,
+      "missing_ordinal": 0,
+      "calls": 5
+    },
+    {
+      "seq": 26,
+      "event": "native_resume_arm",
+      "pid": 240,
+      "tid": 244,
+      "kind": 0,
+      "native_pc": 4219769,
+      "observer_pc": 2051021804
+    },
+    {
+      "seq": 27,
+      "event": "native_resumed",
+      "pid": 240,
+      "tid": 244,
+      "kind": 0,
+      "target": 4219769,
+      "expected_esp": 2293572,
+      "observed_esp": 2293572,
+      "fx_sha256": "38726c0857a7cea65a2d67de0441f22665b8cba3e424acf23298dc6cc2d7d83c",
+      "x87_cw": 639,
+      "mxcsr": 8064,
+      "equal": false,
+      "observation": "independent PUSHFD/PUSHAD/FXSAVE after physical resumption"
+    },
+    {
+      "seq": 28,
+      "event": "failure",
+      "pid": 240,
+      "tid": 244,
+      "reason": "physical_exception_resume_canary",
+      "error": 183
+    }
+  ],
+  "evidence": {
+    "reference/proxy-b-d12-native-preflight-20261016/abi-10-1-after-fx.bin": "e81682ea49bccc2195da6a7601a6ff619c60f26f12b8c1c1f4264c71f3f160e1",
+    "reference/proxy-b-d12-native-preflight-20261016/abi-10-1-after-gpr.bin": "681ed0bb21a8ff4de8e3a0038373e834a91ccc35c4ebfe71ef05d7a2f4ad605d",
+    "reference/proxy-b-d12-native-preflight-20261016/abi-10-1-before-fx.bin": "e81682ea49bccc2195da6a7601a6ff619c60f26f12b8c1c1f4264c71f3f160e1",
+    "reference/proxy-b-d12-native-preflight-20261016/abi-10-1-before-gpr.bin": "ffa59f94b11aea1fd2a0870fa9c3f4fb5d0cd49ac02cdd493b49d291d2060436",
+    "reference/proxy-b-d12-native-preflight-20261016/backend.jsonl": "3ced0c3dc9e855d006541506be21edbcbb80f23c524158764de673f34bdc8eb3",
+    "reference/proxy-b-d12-native-preflight-20261016/bootstrap-context-after.bin": "f9d69eb8b67db0b3d43e3ed31d60c3fc3212c8829b203fa11f3589c67c1bc19c",
+    "reference/proxy-b-d12-native-preflight-20261016/bootstrap-context-before.bin": "b9de8dffb4bd9ad036ce79e21f297055b1ffa563fa3e58dab2bb9656ab00c6a2",
+    "reference/proxy-b-d12-native-preflight-20261016/native-entry-main-fx.bin": "61ecc684f7a3f0952fad20930766c756492136b2b83a0bef2d27128b7cb43bd4",
+    "reference/proxy-b-d12-native-preflight-20261016/native-entry-physics.bin": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+    "reference/proxy-b-d12-native-preflight-20261016/native-entry-rng.bin": "2c7663e809c9827df482ce260d079467d02f9f181a6d1fcc5a942b2a7e1bd3e6",
+    "reference/proxy-b-d12-native-preflight-20261016/native-entry-tick.bin": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+    "reference/proxy-b-d12-native-preflight-20261016/resume-0-expected-context.bin": "b9de8dffb4bd9ad036ce79e21f297055b1ffa563fa3e58dab2bb9656ab00c6a2",
+    "reference/proxy-b-d12-native-preflight-20261016/resume-0-fx.bin": "38726c0857a7cea65a2d67de0441f22665b8cba3e424acf23298dc6cc2d7d83c",
+    "reference/proxy-b-d12-native-preflight-20261016/resume-0-gpr.bin": "df06b162d0e955dfa197583c4f11a35df4287cc268ea91eaef29db98c67d71c5",
+    "reference/proxy-b-d12-native-preflight-20261016/retention.txt": "9290d28a3747170fbd136621f4bdb8dbfe8e37aed757ba2e594962c97df43dc3",
+    "reference/proxy-b-d12-native-preflight-20261016/runner.log": "f0f801a85aff47827a43dbbbfd9e4f707559c2c799a63a1ebf1fa70bb7246f95"
+  },
+  "D2": "WINE_EXIT authoritative; post-native GAMESCOPE_EXIT=139 never changes G1 status.",
+  "resources": {
+    "prefix_processes_released": true,
+    "private_sink_unloaded": true,
+    "errors": []
+  },
+  "gates": "Diagnostic observations only; G1 ABI/canaries, G2-G4 and T10 eligibility require independent review."
+}

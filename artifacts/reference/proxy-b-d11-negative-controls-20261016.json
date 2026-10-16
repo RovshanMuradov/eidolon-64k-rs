@@ -1,0 +1,342 @@
+{
+  "kind": "bounded-live-negative-controls",
+  "reference_eligible": false,
+  "host_tool": {
+    "path": "/home/rovshan/Work/asm/Eidolon/.tools/capture/control-tools/e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a/negative_stage.py",
+    "sha256": "e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a"
+  },
+  "build": {
+    "sources": {
+      "tools/capture/proxy-b-compat/README.md": "43d242f0fa2028a29dd5a1cb09c0146f84bb342be476869fbae86e73972429b7",
+      "tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+      "tools/capture/proxy-b-compat/build.py": "220b93f575ea9e5be7df1808a60531ff87b51117c5047558238d69096afb435c",
+      "tools/capture/proxy-b-compat/check_stage.py": "fdf288cf86119b8f32b46c9f6b2e39067f9a85aad41d0a8e34e0f5f64d19d55a",
+      "tools/capture/proxy-b-compat/core.c": "776c40ad535cbeab6eb21175b2fc183f68a20d50b373f6fa79b35c26a86dbd81",
+      "tools/capture/proxy-b-compat/negative_stage.py": "9a6a8a728b551846b8786cd29ea57d8e483c124c0e070626d021f89dea394dd1",
+      "tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+      "tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+      "tools/capture/proxy-b-compat/package_stage.py": "e281eb7ccc76430c0cd61fdfb7be2af0fd2b1dab38e65f5747c59db0c7f46835",
+      "tools/capture/proxy-b-compat/probe.py": "07c39c6b4ab1fa4fc16d416ffaf193760328769625c8d9d3149a755beb3702ec",
+      "tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+      "tools/capture/proxy-b-compat/stage.c": "b9d14144ec036e59bc958f383e604069f976acb0ae51518836e2ed2003db78e6"
+    },
+    "original_manifest_sha256": "21fdd559b26651474bee6c3b0820630dd71f2d0e85b452b85b97f3fa992fdf13",
+    "compiler": "i686-w64-mingw32-gcc (GCC) 16.2.0",
+    "flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wl,--no-insert-timestamp"
+    ],
+    "original_sources": {
+      "tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+      "tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+      "tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+      "tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+      "tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+      "tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62"
+    },
+    "backends": {
+      "opengl32": {
+        "path": "/usr/lib/wine/i386-windows/opengl32.dll",
+        "sha256": "4a6cb3ae1064d0c0ed2e5742a9edaf2fb54056f31166e1451b5edd20e10c6839"
+      },
+      "winmm": {
+        "path": "/usr/lib/wine/i386-windows/winmm.dll",
+        "sha256": "63e590695c6780525edf79bcca0df5054c2fb4849866fa2d90e91ba28a9bd959"
+      }
+    },
+    "build_id": "20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10",
+    "build_directory": "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10",
+    "commands": [
+      [
+        "i686-w64-mingw32-gcc",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/compat.S",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "-DHAS_BOOTSTRAP",
+        "tools/capture/proxy-b/bootstrap.c",
+        "tools/capture/proxy-b-compat/core.c",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/opengl32",
+        "tools/capture/proxy-b/proxy.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/opengl32/forward.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/opengl32/proxy.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/opengl32.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/winmm",
+        "tools/capture/proxy-b/proxy.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/winmm/forward.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/winmm/proxy.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/winmm.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "tools/capture/proxy-b/canary.c",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/B-compat/20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10/canary.exe"
+      ]
+    ],
+    "export_maps_equal": true,
+    "outputs": {
+      "canary.exe": "5200997c6ea7abeffa16cb7676bc2a8935d04ee4ebda312b43919a70eff4fc8f",
+      "compat.S": "2170d52eda5fa6968f15f66810067d17b456f5ecfde61e8d7e5e04be1dc1a0ce",
+      "opengl32/exports.h": "bfb7a883e2df3bd4e344b23ff932edf68a87abfb8a82ee492d2f9ed34ac63807",
+      "opengl32/exports.json": "e62cb5b2895239c90fa794d89d60f5399948195f340c0066502bcfc71ad2ef93",
+      "opengl32/forward.S": "7419107a6892070ae8486ba10bbb47e5aa43bf95fb9f3b407bea717607d27b82",
+      "opengl32/proxy.def": "4569859a20c452dcef074d1ab938c7c7f5d063ae3d7ab2442dc244c9f78cc09f",
+      "opengl32/wrappers.S": "b9c4b626802e152f431b824b500c4e8046f45aa4eeee9f5556b3f4e0adcabb4e",
+      "opengl32.dll": "3e309ec2e38d32639439393548590af8ca98bde00eaeeeac018c9516098288f0",
+      "source-snapshot/tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+      "source-snapshot/tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+      "source-snapshot/tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+      "source-snapshot/tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+      "source-snapshot/tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+      "source-snapshot/tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62",
+      "source-snapshot/tools/capture/proxy-b-compat/README.md": "43d242f0fa2028a29dd5a1cb09c0146f84bb342be476869fbae86e73972429b7",
+      "source-snapshot/tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+      "source-snapshot/tools/capture/proxy-b-compat/build.py": "220b93f575ea9e5be7df1808a60531ff87b51117c5047558238d69096afb435c",
+      "source-snapshot/tools/capture/proxy-b-compat/check_stage.py": "fdf288cf86119b8f32b46c9f6b2e39067f9a85aad41d0a8e34e0f5f64d19d55a",
+      "source-snapshot/tools/capture/proxy-b-compat/core.c": "776c40ad535cbeab6eb21175b2fc183f68a20d50b373f6fa79b35c26a86dbd81",
+      "source-snapshot/tools/capture/proxy-b-compat/negative_stage.py": "9a6a8a728b551846b8786cd29ea57d8e483c124c0e070626d021f89dea394dd1",
+      "source-snapshot/tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+      "source-snapshot/tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+      "source-snapshot/tools/capture/proxy-b-compat/package_stage.py": "e281eb7ccc76430c0cd61fdfb7be2af0fd2b1dab38e65f5747c59db0c7f46835",
+      "source-snapshot/tools/capture/proxy-b-compat/probe.py": "07c39c6b4ab1fa4fc16d416ffaf193760328769625c8d9d3149a755beb3702ec",
+      "source-snapshot/tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+      "source-snapshot/tools/capture/proxy-b-compat/stage.c": "b9d14144ec036e59bc958f383e604069f976acb0ae51518836e2ed2003db78e6",
+      "winmm/exports.h": "a1ed975abb02ee76cb6a95eb30c299289c04a58f17f08f9be2e401f87dfb2ee5",
+      "winmm/exports.json": "3b5fbf5d759fc3d6c4b22b0e929a4a76e527f120f52a9cf82f6410f64f1be741",
+      "winmm/forward.S": "c8354ce8620a0fcdbc73c16ed02b49426a6e8717b511403f52f6473b79010ded",
+      "winmm/proxy.def": "9053c8931573521f18270cb7d5a363450f0300ba695a826e8c70659d32ada125",
+      "winmm.dll": "908af40732080cb18e4684a1fa562ed8ad5eb2b0e1293a10bd51b245b10e32ec"
+    }
+  },
+  "results": [
+    {
+      "fault": "fingerprint",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-fingerprint-20261016.json",
+      "sha256": "f96776b9f0c6a596934a5c581c3994226a3274abf750d24b8032b2caf7b81336",
+      "observed": "completion_fingerprint_rejected_before_patch"
+    },
+    {
+      "fault": "wrong-thread",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-wrong-thread-20261016.json",
+      "sha256": "84f7402861cd895a0b660746a53f18a5d3103a8d9f0a87ce354e4cfd84770a49",
+      "observed": "wrong_hook_thread"
+    },
+    {
+      "fault": "unknown-route",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-unknown-route-20261016.json",
+      "sha256": "165649a35f54eb65203039f388efc43b06c8dcfdb33efd6afbb7a8cfac52cc01",
+      "observed": "unknown_hook_route"
+    },
+    {
+      "fault": "shader-count",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-shader-count-20261016.json",
+      "sha256": "d1c835e262af2e6604f50798d3fde9fbcae1d7de31e64f7d529d7583dd89491e",
+      "observed": "shader_source_array_extent"
+    },
+    {
+      "fault": "wrong-hdc",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-wrong-hdc-20261016.json",
+      "sha256": "b81401783ed1fa54db2814985cd2b45c6ce00fec287c9c106fe099150340d77b",
+      "observed": "GL_owning_context"
+    },
+    {
+      "fault": "wrong-hglrc",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-wrong-hglrc-20261016.json",
+      "sha256": "7a0d2ac2d3b79826e915f649b168b1c30e26ebef0ad857afe54a7008f6a265b9",
+      "observed": "GL_owning_context"
+    },
+    {
+      "fault": "preexisting-error",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-preexisting-error-20261016.json",
+      "sha256": "fd033f38ed465862165a09257b20fc1ebe48020fb4a3fb04003634d39b12ae0a",
+      "observed": "GL_initial_error"
+    },
+    {
+      "fault": "readback-error",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-readback-error-20261016.json",
+      "sha256": "2645cee9aab539fa6d1fd3ec7e54eea2d2eab556819b3bd187da197f0445b6e6",
+      "observed": "GL_readback_state_or_error"
+    },
+    {
+      "fault": "restore-error",
+      "manifest": "artifacts/reference/proxy-b-d11-negative-restore-error-20261016.json",
+      "sha256": "718f4cf23e758001ca262f932ce32a76543641ebdc92845232942c4b0f1e3d75",
+      "observed": "GL_readback_state_or_error"
+    },
+    {
+      "fault": "backend-missing",
+      "command": [
+        "bash",
+        "tools/run",
+        "tools/wine-headless",
+        "/tmp/opencode/eidolon/T11/proxy-b-d11-backend-missing-20261016/canary.exe"
+      ],
+      "backend_override": "Z:/eidolon-intentionally-missing.dll",
+      "launcher_exit": 125,
+      "observations": [
+        {
+          "event": "backend_probe",
+          "dll": "opengl32.dll",
+          "pid": 240,
+          "tid": 244,
+          "self": "0x7b140000",
+          "backend": "0x00000000",
+          "symbol": "0x00000000",
+          "symbol_owner": "0x00000000",
+          "error": 126,
+          "result": "backend_load_failed",
+          "self_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-missing-20261016\\opengl32.dll",
+          "requested_path": "Z:/eidolon-intentionally-missing.dll",
+          "backend_path": ""
+        },
+        {
+          "event": "backend_probe",
+          "dll": "winmm.dll",
+          "pid": 240,
+          "tid": 244,
+          "self": "0x7ac60000",
+          "backend": "0x00000000",
+          "symbol": "0x00000000",
+          "symbol_owner": "0x00000000",
+          "error": 126,
+          "result": "backend_load_failed",
+          "self_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-missing-20261016\\winmm.dll",
+          "requested_path": "Z:/eidolon-intentionally-missing.dll",
+          "backend_path": ""
+        }
+      ],
+      "evidence": {
+        "reference/proxy-b-d11-backend-missing-20261016/runner.log": "007d577a2c0daeecc2a1b4a4e31955497af13db2c7c421263e9a537f6df3e697",
+        "reference/proxy-b-d11-backend-missing-20261016/backend.jsonl": "0bb1dbd651a2f3f859b1e9fcd6db5247f487a68d875469614a8889bfec224bbb"
+      },
+      "supervisor_seconds": 660,
+      "runner_seconds": 60
+    },
+    {
+      "fault": "backend-wrong",
+      "command": [
+        "bash",
+        "tools/run",
+        "tools/wine-headless",
+        "/tmp/opencode/eidolon/T11/proxy-b-d11-backend-wrong-20261016/canary.exe"
+      ],
+      "backend_override": "C:/windows/system32/kernel32.dll",
+      "launcher_exit": 125,
+      "observations": [
+        {
+          "event": "backend_probe",
+          "dll": "opengl32.dll",
+          "pid": 240,
+          "tid": 244,
+          "self": "0x7b140000",
+          "backend": "0x7bac0000",
+          "symbol": "0x00000000",
+          "symbol_owner": "0x00000000",
+          "error": 0,
+          "result": "backend_symbol_missing_or_self",
+          "self_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-wrong-20261016\\opengl32.dll",
+          "requested_path": "C:/windows/system32/kernel32.dll",
+          "backend_path": "C:\\windows\\system32\\kernel32.dll"
+        },
+        {
+          "event": "backend_probe",
+          "dll": "winmm.dll",
+          "pid": 240,
+          "tid": 244,
+          "self": "0x7ac60000",
+          "backend": "0x7bac0000",
+          "symbol": "0x7baeafa0",
+          "symbol_owner": "0x7bac0000",
+          "error": 0,
+          "result": "distinct_backend",
+          "self_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-wrong-20261016\\winmm.dll",
+          "requested_path": "C:/windows/system32/kernel32.dll",
+          "backend_path": "C:\\windows\\system32\\kernel32.dll"
+        }
+      ],
+      "evidence": {
+        "reference/proxy-b-d11-backend-wrong-20261016/runner.log": "c55b03e8aee3c98a34882f87245870df11231e1794cf99de8408b335983aa71f",
+        "reference/proxy-b-d11-backend-wrong-20261016/backend.jsonl": "e99555fc8a4a3778a42e6b7152961938c46e53e41cbdb46fcbaa5f156f271db8"
+      },
+      "supervisor_seconds": 660,
+      "runner_seconds": 60
+    },
+    {
+      "fault": "backend-self",
+      "command": [
+        "bash",
+        "tools/run",
+        "tools/wine-headless",
+        "/tmp/opencode/eidolon/T11/proxy-b-d11-backend-self-20261016/canary.exe"
+      ],
+      "backend_override": "Z:/tmp/opencode/eidolon/T11/proxy-b-d11-backend-self-20261016/opengl32.dll",
+      "launcher_exit": 125,
+      "observations": [
+        {
+          "event": "backend_probe",
+          "dll": "opengl32.dll",
+          "pid": 240,
+          "tid": 244,
+          "self": "0x7b140000",
+          "backend": "0x7b140000",
+          "symbol": "0x7b14914d",
+          "symbol_owner": "0x7b140000",
+          "error": 0,
+          "result": "backend_is_proxy",
+          "self_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-self-20261016\\opengl32.dll",
+          "requested_path": "Z:/tmp/opencode/eidolon/T11/proxy-b-d11-backend-self-20261016/opengl32.dll",
+          "backend_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-self-20261016\\opengl32.dll"
+        },
+        {
+          "event": "backend_probe",
+          "dll": "winmm.dll",
+          "pid": 240,
+          "tid": 244,
+          "self": "0x7ac60000",
+          "backend": "0x7b140000",
+          "symbol": "0x00000000",
+          "symbol_owner": "0x00000000",
+          "error": 0,
+          "result": "backend_symbol_missing_or_self",
+          "self_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-self-20261016\\winmm.dll",
+          "requested_path": "Z:/tmp/opencode/eidolon/T11/proxy-b-d11-backend-self-20261016/opengl32.dll",
+          "backend_path": "Z:\\tmp\\opencode\\eidolon\\T11\\proxy-b-d11-backend-self-20261016\\opengl32.dll"
+        }
+      ],
+      "evidence": {
+        "reference/proxy-b-d11-backend-self-20261016/runner.log": "149af5e70f43a19612f2345e8cc4bf22ea6a2c45c256da03d02106ae13e21a36",
+        "reference/proxy-b-d11-backend-self-20261016/backend.jsonl": "318d219aa78ef9ef3712604df8f08feec82e2b2e4406a42200fdaf4e4ccb09c9"
+      },
+      "supervisor_seconds": 660,
+      "runner_seconds": 60
+    }
+  ],
+  "resources_released": true
+}

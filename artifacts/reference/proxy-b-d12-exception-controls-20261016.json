@@ -1,0 +1,29 @@
+{
+  "kind": "bounded-native-exception-controls",
+  "reference_eligible": false,
+  "measured_build_manifest": {
+    "path": "artifacts/reference/proxy-b-d12-volume-20261016-acquisition.json",
+    "sha256": "b55e682e73890cb7a05ffacc7579cc24e9892362beb4d2f2bad05442f9b9ab5f"
+  },
+  "host_tool": {
+    "path": "/home/rovshan/Work/asm/Eidolon/.tools/capture/runner-snapshots/0fd06c1b0d9c40d9c8b9c293cd47cdf722f48eee58d313e3a701c0b104446ae0/exception_controls.py",
+    "sha256": "0fd06c1b0d9c40d9c8b9c293cd47cdf722f48eee58d313e3a701c0b104446ae0"
+  },
+  "results": [
+    {
+      "fault": "exception-gpr",
+      "manifest": "artifacts/reference/proxy-b-d12-exception-gpr-20261016.json",
+      "sha256": "79da4f871804e3df3cc886b1ebedc9fdbdf10f204574c5c2437dcc1116b5e2ce",
+      "native_exit": 125
+    },
+    {
+      "fault": "exception-fp",
+      "manifest": "artifacts/reference/proxy-b-d12-exception-fp-20261016.json",
+      "sha256": "70b5c5be706f67cedf4e12c2821765521f3ad74e621f5ef4fe107a3ae7b7d09e",
+      "native_exit": 125
+    }
+  ],
+  "accepted_frames": 0,
+  "resources_released": true,
+  "scope": "Physical resumption after live completion-CONTEXT EAX or MXCSR mutation; not arbitrary exception coverage."
+}

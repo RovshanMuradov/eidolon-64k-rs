@@ -1,0 +1,71 @@
+{
+  "schema": "eidolon-small-real-capture-diagnostic-1",
+  "kind": "compatibility-modified-diagnostic",
+  "run_id": "proxy-b-d9-boundary-20261016",
+  "reference_eligible": false,
+  "finalized": false,
+  "status": "failed",
+  "run_manifest": "proxy-b-d9-boundary-20261016.json",
+  "run_manifest_sha256": "7ece95df55b281eb9e2ba211e71a96008f9cb406297e7aeb2bfeca8c012951b9",
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "row_stride": 7680,
+    "pixel_format": "rgba8",
+    "row_order": "bottom-up",
+    "color_space": "native GL_LINEAR attachment; framebuffer sRGB disabled",
+    "frame_count": 67,
+    "index": "proxy-b-d9-boundary-20261016-frames.jsonl",
+    "index_sha256": "944720dba48d1a6a0a32a886b901914f929564e72c1adb178108b5b2fc85400c",
+    "storage": "reference"
+  },
+  "audio": {
+    "path": "pcm.f32le",
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "sample_format": "f32le",
+    "sample_rate": 44100,
+    "channels": [
+      "L",
+      "R"
+    ],
+    "layout": "interleaved",
+    "sample_frames": 19964544,
+    "start_sample": 0
+  },
+  "completion": {
+    "finalized": false,
+    "frames_observed": 67,
+    "frames_hashed": 67,
+    "audio_sample_frames": 19964544,
+    "pcm": {
+      "submitted_bytes": 159716352,
+      "initial_tick": 1,
+      "final_tick": 19964545,
+      "final_cursor_offset": 159716352,
+      "events": {
+        "synth_complete": 7205,
+        "readback_begin": 7207,
+        "readback_end": 7208,
+        "stability_check": 7209
+      },
+      "stable_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "evidence": "proxy-b-d9-boundary-20261016-pcm-observations.json",
+      "evidence_sha256": "34dc3f541a479b1c13c5d393e37540f351f14487e10ce7bb73c9f18538e589d4"
+    }
+  },
+  "actual_stop": {
+    "event": "supervisor_timeout",
+    "limit_ms": 120000,
+    "shell_id": "sh_14240f6c6001ksbq0saMLQD0EA",
+    "detail": "Tool deadline interrupted Python/outer runner before manifest publication; remaining prefix processes released during recovery.",
+    "native_exit_observed": false
+  },
+  "scene_boundaries_observed": false,
+  "limits": [
+    "Interrupted run, native exit unknown, next frame incomplete; no scene-boundary/G1/G4/G5/reference acceptance."
+  ],
+  "package_tool": {
+    "path": "tools/capture/proxy-b-compat/package_interrupted.py",
+    "sha256": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089"
+  }
+}
