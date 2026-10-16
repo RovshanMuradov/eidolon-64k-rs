@@ -12,6 +12,10 @@ path = "src/lib.rs"
 name = "eidolon-engine"
 path = "src/main.rs"
 
+[[bin]]
+name = "eidolon-runtime"
+path = "src/runtime_main.rs"
+
 [profile.release]
 opt-level = "s"
 lto = true

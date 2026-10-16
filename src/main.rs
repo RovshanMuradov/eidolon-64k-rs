@@ -29,6 +29,7 @@ fn main() -> io::Result<()> {
         let mut engine = Engine::default();
         let initialization = engine.evaluate(0, true).unwrap();
         engine.draw_schedule(&initialization, true);
+        engine.loading_draw();
         for n in 0..contract::PRESENTED_FRAMES {
             let frame = engine.evaluate(n * contract::CONTROLLED_STEP, mode == "--state-stream").unwrap();
             write_words(&mut out, [n, frame.clock.cursor, frame.clock.seconds.to_bits(), frame.clock.beat.to_bits(),
@@ -46,7 +47,7 @@ fn main() -> io::Result<()> {
         out.flush()?;
     } else {
         let shader_bytes: usize = assets::PROGRAM_SOURCES.iter().flat_map(|p| p.iter()).map(|s| s.len() - 1).sum();
-        println!("Eidolon CPU engine candidate; audiovisual runtime pending");
+        println!("Eidolon CPU engine probe; WGL/waveOut candidate is eidolon-runtime");
         println!("rows={} programs={} source_array_bytes={} loading_bytes={} pcm_bytes={}",
             assets::ROW_COUNT, assets::PROGRAM_COUNT, shader_bytes, assets::LOADING_SOURCE.len() - 1, contract::PCM_BYTES);
         println!("--raw-stream / --state-stream: binary controlled-clock diagnostics");

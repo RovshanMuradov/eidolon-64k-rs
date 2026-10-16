@@ -2,6 +2,9 @@
 use std::collections::BTreeMap;
 use crate::{assets::{self, Row}, contract::Clock, physics::{self, Record}, timeline};
 
+/// Loading shader is outside the thirty timeline program/pass indices.
+pub const LOADING_PASS: usize = 30;
+
 #[derive(Clone, Copy, Debug)]
 pub struct Uniform {
     pub name_index: u32,
@@ -35,6 +38,8 @@ impl Default for Engine {
 }
 
 impl Engine {
+    pub fn loading_draw(&mut self) { self.active_pass = Some(LOADING_PASS); }
+
     /// Raw tracks or physics-updated tracks in descriptor order. No row-triggered state reset.
     pub fn evaluate(&mut self, cursor: u32, apply_physics: bool) -> Option<Frame> {
         let clock = Clock::from_samples(cursor);
@@ -61,8 +66,11 @@ impl Engine {
     pub fn draw_schedule(&mut self, frame: &Frame, initialization: bool) -> Vec<(usize, usize, bool)> {
         frame.row.passes().map(|index| {
             let pass = assets::pass(index);
-            let skip = !initialization && pass.framebuffer
-                .is_some_and(|fbo| assets::framebuffer(fbo).initialization_only);
+            // Native initialization skips setup for default-FBO pass18, but still draws.
+            // Native timeline skips setup for the nine initialization-only FBO passes.
+            let skip = if initialization { pass.framebuffer.is_none() } else {
+                pass.framebuffer.is_some_and(|fbo| assets::framebuffer(fbo).initialization_only)
+            };
             if !skip {
                 self.active_pass = Some(index);
                 let state = &mut self.program_uniforms[pass.program];

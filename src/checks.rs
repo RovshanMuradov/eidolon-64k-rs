@@ -49,7 +49,10 @@ fn complete_state_schedule_retains_program_values_and_unused_record() {
     let unused = engine.records[3].words();
     let initial = engine.evaluate(0, true).unwrap();
     assert_eq!(engine.records[0].words(), physics::initial_records()[0].words());
-    assert!(engine.draw_schedule(&initial, true).iter().all(|(_, _, setup)| *setup));
+    let initialization = engine.draw_schedule(&initial, true);
+    assert!(initialization[..18].iter().all(|(_, _, setup)| *setup));
+    assert_eq!(initialization[18], (18, 17, false));
+    engine.loading_draw();
     let mut retained_position = None;
     for n in 0..PRESENTED_FRAMES {
         let frame = engine.evaluate(n * CONTROLLED_STEP, true).unwrap();
@@ -58,7 +61,8 @@ fn complete_state_schedule_retains_program_values_and_unused_record() {
         }
         let schedule = engine.draw_schedule(&frame, false);
         assert_eq!(schedule.len(), 19);
-        assert!(schedule[..9].iter().all(|(_, active, setup)| *active == 18 && !setup));
+        let previous = if n == 0 { crate::engine::LOADING_PASS } else { 18 };
+        assert!(schedule[..9].iter().all(|(_, active, setup)| *active == previous && !setup));
         assert!(schedule[9..].iter().all(|(requested, active, setup)| requested == active && *setup));
         if frame.row.index == 11 {
             retained_position = Some(engine.program_uniforms[21]["uMainCharacterPos"].value.map(f32::to_bits));

@@ -1,6 +1,6 @@
 {
   "schema": "eidolon-rust-engine-build-v1",
-  "scope": "CPU candidate, not audiovisual runtime or native equivalence",
+  "scope": "CPU probe and cross-built WGL/waveOut runtime; synth not integrated; target runtime unexecuted",
   "tools": {
     "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
     "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
@@ -13,7 +13,7 @@
   "pe": {
     "path": "builds/T22/cross/i686-pc-windows-gnu/release/eidolon-engine.exe",
     "bytes": 533504,
-    "sha256": "f6bcfab3908abe25aed815ba760dc52e391895fee5bd70dbf123ca8123bcdbe7",
+    "sha256": "49954102a654665896d784faa67014f94228c007e413ee1f120d13d1104a60b3",
     "machine": 332,
     "sections": 8,
     "timestamp": 0,
@@ -33,7 +33,7 @@
     ]
   },
   "independent_build_equal": true,
-  "host_probe_sha256": "741a8b2fd0a8238a13dd72a0511e919e5664f307d1bde948459f3d3c9ca0c059",
+  "host_probe_sha256": "fb9e42bed68cb53f75c9c93b7983b54bc400b4c9dc63731c0937a03377865136",
   "host_tests": 4,
   "raw_track_check": {
     "status": "RUST_TRACK_BITS_MATCH_STATIC_MODEL",
@@ -43,21 +43,53 @@
     "native_equivalence": false
   },
   "embedded_shader_array_elements": 235,
+  "runtime_candidate": {
+    "path": "builds/T22/cross/i686-pc-windows-gnu/release/eidolon-runtime.exe",
+    "bytes": 551936,
+    "sha256": "85f452208d1bf41dcb7ab7b3cfcf45136659aa2967d09c8094964bcd646c26fb",
+    "imports": [
+      "api-ms-win-core-synch-l1-2-0.dll",
+      "GDI32.dll",
+      "KERNEL32.dll",
+      "api-ms-win-crt-convert-l1-1-0.dll",
+      "api-ms-win-crt-environment-l1-1-0.dll",
+      "api-ms-win-crt-heap-l1-1-0.dll",
+      "api-ms-win-crt-locale-l1-1-0.dll",
+      "api-ms-win-crt-math-l1-1-0.dll",
+      "api-ms-win-crt-private-l1-1-0.dll",
+      "api-ms-win-crt-runtime-l1-1-0.dll",
+      "api-ms-win-crt-stdio-l1-1-0.dll",
+      "api-ms-win-crt-string-l1-1-0.dll",
+      "NTDLL.dll",
+      "OPENGL32.DLL",
+      "USER32.dll",
+      "WINMM.DLL"
+    ],
+    "independent_build_equal": true,
+    "synth_integrated": false,
+    "target_executed": false
+  },
   "inputs": {
-    "Cargo.toml": "5c7c28e5c20b154c19e2019e85c517bf12c5d970067b60738cdadc0f204fdcbd",
+    "Cargo.toml": "f5eb6f00715516d310f7da4ec57cddd1fe61414f9c1ce535a70b65ddaff9b9a9",
     "Cargo.lock": "86610f26695139daeb72cb776cc30cc5a10676179dc18af88c65af10695b217c",
+    "build.rs": "d6f8be052923cfeee83877e6ec293d3e32c77cd365345b6160f576f77582bcc9",
     "rust-toolchain.toml": "cf6558506271bdc50c8f86cca70c288704e12172abea0e82e4b2751a952332d5",
     ".cargo/config.toml": "222d43db249dddf5d010852d1b1a0c578e709fadcab3c4c3586553951d0092ab",
     "src/assets.rs": "549e96755f337771b2a4889b7b835c866a8ddbdcaa1516e8cf330eb7dba16aa4",
-    "src/checks.rs": "a970978a43fda93e48878be4fc8aad0e39fa6ba4d58d3c23ba2baab054852afd",
+    "src/checks.rs": "f90be3923b3226af05ee1d207b530ae589ab68c7904008f92d9d0380cc303cb3",
     "src/contract.rs": "9713aeaeda6738a91705d7dd05b317a9839f6e47daa9e50857297bac88114e3f",
-    "src/engine.rs": "51e23dd4896d2be9369264c7290a893e3f25438f5c31040c20cd147f767f7303",
+    "src/engine.rs": "65a8067f4e0c718c20a8dd23f700b51f5a951dc83c015790590b079b7bde64a3",
     "src/fp.rs": "210e090b0c9d7e608ea356d49931b18fc8dcb823edb54cb0a5720b8ab74464ab",
     "src/generated.rs": "18511f00f56ebb7c2265c6833b0af84751c45f30075e4cd7cce7e7745ab0e5e4",
-    "src/lib.rs": "153ee799a61579c0f75e20f115298b295180d458cce9f71edf5388a1c390ee5f",
-    "src/main.rs": "3229ea95e71dcc306ed6a28d7556ccd9190b0370be5d1e38a108ca50352b5f84",
+    "src/graphics.rs": "50edc69a97fd6637ffd40e0341c02d2fc49e89db53fe6cf97fc6f110894d2d37",
+    "src/lib.rs": "8a09df7f2cc4d156343aee475da8fc119cb9d76e29ded1ba015138f3ecbd84f2",
+    "src/main.rs": "d8310d7d47ace66996aae9f540efbc27d83873d4f3ccaf191c3e756ba01e0ec8",
+    "src/observe.rs": "4aed08be1ff6657fc417e94e0b55fa83571ef1df928f18440dfc9bf47146bfaf",
     "src/physics.rs": "072deb31c88a12095dfe8610481188519f05442cd514609f2e654b3b7f24b83a",
+    "src/runtime.rs": "e5cbe33046a2ccb03c0ca9d333f565a6e0249378d876c65cc46c7b2d1c215c08",
+    "src/runtime_main.rs": "1527c2d5e4c9f6b14a79f4b0b355da13db8a31ff6cb510049a323ab208e12080",
     "src/timeline.rs": "4c25df34f0777bde2a1abc66a4de2a778c3930e3ed1c52752c6322c2fcda0af2",
+    "src/windows.rs": "f3f18de05bb7aea4d180828b5105fc07c56c3de4f4c0fe9f232196f58f9548f5",
     "artifacts/rust/engine/assets.json": "f798a078bb1307b5a7fe5a963b6303dc6b6d889f899e251e3fd7530b3a4c125d"
   },
   "runtime": {
