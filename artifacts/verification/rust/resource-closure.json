@@ -1,0 +1,26 @@
+{
+  "status": "OBSERVED_RUNTIME_RESOURCE_CLOSURE",
+  "capture_review_sha256": "d344de77c13235ef5b65af47a5e20642b2eaca175cade389ca8fd536c0a137e6",
+  "records": 14267379,
+  "resource_roles": {
+    "directory navigation": 405,
+    "kernel/device/anonymous memory": 984,
+    "system runtime": 2712,
+    "driver/font runtime cache": 8,
+    "audio server authentication": 1,
+    "font/graphics runtime configuration": 6,
+    "immutable production image": 1,
+    "fresh Wine runtime prefix": 120,
+    "inherited diagnostic output": 1,
+    "runtime IPC/scratch": 61
+  },
+  "classified_resources": 4299,
+  "route_probe_connects": 24,
+  "route_probe_payload_transfers": 0,
+  "private_system_v_segments": 1,
+  "cleanup_verified": true,
+  "external_demo_media_resources": 0,
+  "immutable_file_binding_scope": "Post-run hashes bind regular files; mutable runtime cache/registry content is not claimed immutable at each read",
+  "runtime_resource_closure": true,
+  "production_accepted": false
+}

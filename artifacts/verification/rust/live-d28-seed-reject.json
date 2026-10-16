@@ -1,0 +1,6 @@
+{
+  "status": "SEED_PHYSICAL_FAULT_REJECTED",
+  "job": "live-d28-seed-reject",
+  "state_sha256": "9ca866e32640591269510e4c0c39e71306a510d9e2fba7ed6f6987550f69841b",
+  "production_accepted": false
+}

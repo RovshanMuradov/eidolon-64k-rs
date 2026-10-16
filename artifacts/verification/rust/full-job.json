@@ -1,0 +1,10 @@
+{
+  "schema": "eidolon-rust-detached-job-1",
+  "request": "verification/rust/jobs/live-d26-full01/request.json",
+  "request_sha256": "af087db7f6bcc1966ac2a00ddc5add0b91fa5f560d461e43d4b8d3ab493bbea6",
+  "pid": 2440688,
+  "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d26-full01/state.json",
+  "log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/jobs/live-d26-full01/detached.log",
+  "expected_seconds": 4500,
+  "production_accepted": false
+}

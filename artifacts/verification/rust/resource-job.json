@@ -1,0 +1,17 @@
+{
+  "pid": 2477233,
+  "phase": "closed",
+  "sid": 2477233,
+  "command": [
+    "bash",
+    "tools/run",
+    "python",
+    "-u",
+    "tools/capture/rust/resources.py",
+    "resource-d26-all02",
+    "--target-only"
+  ],
+  "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-d26-all02/state.json",
+  "log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/jobs/resource-d26-all02/detached.log",
+  "production_accepted": false
+}

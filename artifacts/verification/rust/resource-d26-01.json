@@ -1,0 +1,40 @@
+{
+  "schema": "eidolon-resource-review-1",
+  "job": "resource-d26-01",
+  "status": "SELECTED_IO_CAPTURED_NOT_COMPLETE_SYSCALL_CLOSURE",
+  "state_sha256": "4731d46267fdf89b7d89b37942689ae29be9c4c493731158f35020c2f8baa7bc",
+  "inventory": "verification/rust/resource-d26-01/resource-inventory.json",
+  "inventory_sha256": "34b6d8508f1ad262556fc3c936fa3aaf4e90c6f1f646e959ce699c3655365a02",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "all_syscalls": false,
+  "raw_bytes": 1183261928,
+  "records": 8607677,
+  "process_threads": 2053,
+  "candidate_mappers": [
+    2470216,
+    2470353
+  ],
+  "resource_categories": {
+    "unclassified_REVIEW": 22,
+    "kernel_or_device": 1821,
+    "system_runtime": 2849,
+    "host_cache_REVIEW": 44,
+    "host_configuration_REVIEW": 2,
+    "launcher_checkout_REVIEW": 8,
+    "project_data_REVIEW": 6,
+    "immutable_candidate": 1,
+    "wine_prefix": 130,
+    "runtime_ipc_or_scratch": 71
+  },
+  "successful_async_engines": 0,
+  "unknown_syscalls": 0,
+  "unresolved_successful_opens": 0,
+  "unterminated_pids": [],
+  "natural_endpoint": {
+    "queries": 24826,
+    "frames": 24825,
+    "cursor": 19845000
+  },
+  "runtime_resource_closure": false,
+  "production_accepted": false
+}

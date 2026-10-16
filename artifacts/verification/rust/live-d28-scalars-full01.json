@@ -1,0 +1,22 @@
+{
+  "status": "SEMANTIC_FULL_EXACT",
+  "job": "live-d28-scalars-full01",
+  "frames": 27000,
+  "uniform_passes": 513000,
+  "ready_seed": true,
+  "ready_tick": true,
+  "previous_seconds": true,
+  "initial_physics": true,
+  "program_sources": 31,
+  "framebuffer_role_bijection": {
+    "0": 0,
+    "10": 10,
+    "11": 11,
+    "12": 12,
+    "13": 13
+  },
+  "state_sha256": "f0b5140b0fa67fd6b3c211c5873e82c79afd15ce14395ab8e8e4cb7138b3be93",
+  "native_uniform_projection_sha256": "280c8359c77a329f39e7a964e5af87018e09dd77ef4da741a8ea1c5e1404bdd9",
+  "cleanup_verified": true,
+  "production_accepted": false
+}

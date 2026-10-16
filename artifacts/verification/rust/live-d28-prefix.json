@@ -1,0 +1,21 @@
+{
+  "status": "SEMANTIC_PREFIX_EXACT",
+  "job": "live-d28-prefix",
+  "frames": 3,
+  "uniform_passes": 57,
+  "ready_seed": true,
+  "ready_tick": true,
+  "previous_seconds": true,
+  "initial_physics": true,
+  "program_sources": 31,
+  "framebuffer_role_bijection": {
+    "0": 0,
+    "10": 10,
+    "11": 11,
+    "12": 12,
+    "13": 13
+  },
+  "state_sha256": "22b3847c5d325b8efc7bea426fa2c4ac17642667605763c7007565b7ddd9815f",
+  "native_uniform_projection_sha256": "280c8359c77a329f39e7a964e5af87018e09dd77ef4da741a8ea1c5e1404bdd9",
+  "production_accepted": false
+}

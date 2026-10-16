@@ -1,0 +1,30 @@
+{
+  "schema": "eidolon-rust-native-inputs-1",
+  "reference_manifest": "artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
+  "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+  "reference_kind": "D9-restored-native",
+  "reference_accepted": true,
+  "acceptance_scope": "T17 G6 accepted D9-restored-native; reports/03-tests.md and tools/verify/review_full.py",
+  "production_accepted": false,
+  "observed_time_projection": {
+    "source": "hash-bound ordered native reference1 stream",
+    "format": "27000 little-endian 5*u32 records",
+    "fields": ["n", "cursor", "seconds_bits", "local_beat_bits", "scene_token"],
+    "sha256": "363ca20b3e537f57da1d0dd937a3e1fc9f3c92e3377af9c7d8d12706186cf406"
+  },
+  "coverage": {
+    "frames": 27000,
+    "raw_frames": 510,
+    "rows": 50,
+    "native_time_records": 27000,
+    "native_initial_state_payloads": 7,
+    "pcm_bytes": 159716352,
+    "pcm_tail_bytes": 956352
+  },
+  "reference_environment_source": "reference_manifest.conditions.environment",
+  "reference_settings_source": "reference_manifest.conditions",
+  "derived_only": ["beat", "dt"],
+  "unavailable_native_coverage": ["complete post-update physics", "curve/uniform values throughout run"],
+  "command": "bash tools/run python tools/verify/rust/conformance.py native",
+  "status": "OFFLINE_CONFORMANCE_ONLY"
+}

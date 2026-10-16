@@ -1,0 +1,8 @@
+{
+  "status": "INDEPENDENT_CLEAN_BUILD_EXACT",
+  "result": "verification/rust/clean-build-03/result.json",
+  "sha256": "e0b54a8efec7287f884105d0e3f10cf8e9ece7772f258421015d9e83c0d6dcd1",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "elapsed_seconds": 2.9109119860222563,
+  "production_accepted": false
+}

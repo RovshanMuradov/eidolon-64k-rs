@@ -1,0 +1,113 @@
+{
+  "schema": "eidolon-step3-independent-audit-1",
+  "status": "STEP3_INDEPENDENT_VERIFICATION_PASS",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+  "reference_variant": "D9-restored-native",
+  "state_mapping_decision": "D28",
+  "production_verification_passed": true,
+  "production_accepted": false,
+  "coordinator_step3_acceptance": "pending",
+  "evidence": {
+    "full-progress": {
+      "path": "artifacts/verification/rust/full-progress.json",
+      "sha256": "a1918d6b4581f931f4df42a4ebb6b290f4942c711057d482f06c9663d8e56a30"
+    },
+    "rebuild": {
+      "path": "artifacts/verification/rust/rebuild.json",
+      "sha256": "32ea617c37e2a557e4d647bc898de8d4e080fdb543c0c1a06415739cc8da76ff"
+    },
+    "build-closure": {
+      "path": "artifacts/verification/rust/build-closure.json",
+      "sha256": "385ff8a6445a06736beb847ff3f2383c53b85e64a00c02154e6332719c09040e"
+    },
+    "standalone": {
+      "path": "artifacts/verification/rust/standalone.json",
+      "sha256": "3d1eb02649d68ed40b21892e8a01b84f74b1344e95b06904b431ed3e92eec794"
+    },
+    "playback": {
+      "path": "artifacts/verification/rust/playback.json",
+      "sha256": "8c0254a9172e8212d3e44169b1e36a7dd20d44a04e7a84da63c29a66e8efb540"
+    },
+    "resource-closure": {
+      "path": "artifacts/verification/rust/resource-closure.json",
+      "sha256": "dd9d305ff348acc2057e597f6e6087d40106225f131a23d96baccb3f913d250d"
+    },
+    "resource-d26-all02": {
+      "path": "artifacts/verification/rust/resource-d26-all02.json",
+      "sha256": "d344de77c13235ef5b65af47a5e20642b2eaca175cade389ca8fd536c0a137e6"
+    },
+    "live-d28-scalars-full01": {
+      "path": "artifacts/verification/rust/live-d28-scalars-full01.json",
+      "sha256": "0cad70718f75834573ba1fce43dd528bfd889a9fd0f9e42d31e50a3c786263f8"
+    },
+    "native-d28-vectors01": {
+      "path": "artifacts/verification/rust/native-d28-vectors01.json",
+      "sha256": "11e33fbed91a7c83ec4cacd91497a2a3a11c3ee1b1b33b3aa94363df71952e42"
+    },
+    "curves": {
+      "path": "artifacts/verification/rust/curves.json",
+      "sha256": "ead098657654337d9a83bd150bac5126a339c268b2c74b98d05c7a004f19d45c"
+    },
+    "control-gl": {
+      "path": "artifacts/verification/rust/control-gl.json",
+      "sha256": "ace4f05ad0ad836acec0ac8f862447573e42f183f33738af007d0dd334182a6d"
+    },
+    "control-position": {
+      "path": "artifacts/verification/rust/control-position.json",
+      "sha256": "37f84d2522aa9dfe3d69c3c8a4111c1e932c31487f888e45397758ad298f6e8f"
+    },
+    "live-fp-reject": {
+      "path": "artifacts/verification/rust/live-fp-reject.json",
+      "sha256": "8566fe02abef902ad22fbe169b0d7b171400faaa5161c160297effe80f7ad61e"
+    },
+    "live-entry-reject": {
+      "path": "artifacts/verification/rust/live-entry-reject.json",
+      "sha256": "e4676bdfd2426cf220468359b98de0977bbb3ada2bdfb67bf1c514cf8cc22490"
+    },
+    "live-d28-seed-reject": {
+      "path": "artifacts/verification/rust/live-d28-seed-reject.json",
+      "sha256": "46a86a2fddae9e8a68781fc2a71532da20ca6bc77031e49f5c661759651bae52"
+    },
+    "curve_live_identity": {
+      "path": "artifacts/verification/rust/curve-live-identity.json",
+      "sha256": "d3f222c80dbdc99517370fef5e4f0fdab7d6f5f18d24649cf5982cf56f52eaad"
+    },
+    "D28_correspondence": {
+      "path": "artifacts/rust/state/correspondence.json",
+      "sha256": "be817ac616512d3a0f126f028e64e32d743e6d96733f68ff3655f81d152eb38c"
+    }
+  },
+  "coverage": {
+    "full_frames": 27000,
+    "byte_compared_raw_anchors": 510,
+    "pcm_bytes": 159716352,
+    "time_cloud_draws": 513000,
+    "later_physics_samples": 151,
+    "curve_draws": 302,
+    "curve_float_words": 3824,
+    "native_static_duplicated_constant_vectors": 79
+  },
+  "baseline": {
+    "executable_bytes": 728576,
+    "startup_seconds": 270.34,
+    "presents_per_audio_second": 57.72888888888889,
+    "host_peak_hwm_bytes": 782598144
+  },
+  "limitations": [
+    "Later physics/curve certification is exactly151 scene-edge frames and draw ordinals9/18; unobserved hidden state is not certified",
+    "Native entry storage and contiguous constant-array layout are replaced only by D28 exact live-field/lifetime correspondence; static constants are not runtime dumps",
+    "Mutable runtime file hashes have post-run scope; playback uses a private null sink and external <=1.065s sampling",
+    "Prior full-media/rebuild/runtime reviews are carried forward through their hash-bound results and immutable state records; this audit does not duplicate acquisitions"
+  ],
+  "verifier_sources": {
+    "completion.py": "d4841f529639d3ce8860c1955adbc551cffb061f3242073bdd6b9e29e56a2153",
+    "curves.py": "675a9cc0e442f240e89184f0f4ac53d19c5601207b4fdb8695b5eba2322ec304",
+    "native_vectors.py": "20186b7ac784ce56bedc7b175e3e16d6f53e70db13444784592962a0830047a3",
+    "semantic.py": "b305e09799577f7e978f3f22ca1b0722a75f10da84dce0eff4c3768a3833ce0b",
+    "monitor_full.py": "97a3d2a9acf2975c8b1f44ff0f64945432270e00e098c8577ecb8f171714db83",
+    "conformance.py": "0e20bbe883067f65d27e9167455f8c9d5a35b70818ff7e9659a3b494163cf9b3"
+  },
+  "data_bytes": 29994747427,
+  "remaining_verification_blockers": []
+}

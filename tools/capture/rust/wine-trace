@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ ${1:-} == "$EIDOLON_TRACE_EXE" && ${2:-} == --play ]]; then
+  exec "$EIDOLON_STRACE" -f -ttt -yy -s 4096 -e trace=all \
+    -e raw=read,readv,pread64,preadv,preadv2,write,writev,pwrite64,pwritev,pwritev2,ioctl,sendmsg,sendmmsg,sendto,recvfrom \
+    -e signal=none -o "$EIDOLON_TRACE_FIFO" /usr/bin/wine "$@"
+fi
+exec /usr/bin/wine "$@"

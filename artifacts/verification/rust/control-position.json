@@ -1,0 +1,12 @@
+{
+  "job": "live-d26-position-reject",
+  "mode": "position",
+  "status": "PHYSICAL_FAULT_REJECTED",
+  "exit_code": 125,
+  "accepted_pixels": 0,
+  "state_sha256": "2e5209e955238c12b209131f0632782011c1de7a198bc45ba413332b13752142",
+  "gpr_scope": "position gate compares seven saved GPRs and EFLAGS; EAX is the MMRESULT output",
+  "helper_scope": "follow-up diagnostic helper; original full capture remains bound to its prior source/helper hashes",
+  "cleanup_verified": true,
+  "production_accepted": false
+}

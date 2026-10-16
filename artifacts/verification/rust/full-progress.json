@@ -1,0 +1,90 @@
+{
+  "schema": "eidolon-rust-full-observation-1",
+  "observed_utc": "2026-10-16T12:10:24.017678+00:00",
+  "status": "CLOSED_EXACT_FILES",
+  "phase": "closed",
+  "pointer_sha256": "b6d1ecb37e66930167220520dc480542e2731e972dabf14b0f3cb5946be3e4b2",
+  "request_sha256": "af087db7f6bcc1966ac2a00ddc5add0b91fa5f560d461e43d4b8d3ab493bbea6",
+  "state_snapshot_sha256": "654ce6e2e363b023843222c8441b43da2fda85554769b1a6fc4650b8cdcc6c25",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "identities_rehashed": true,
+  "processes": [
+    {
+      "pid": 2440688,
+      "exists": false
+    },
+    {
+      "pid": 2440725,
+      "exists": false
+    }
+  ],
+  "live_mappings": [],
+  "ledger_snapshot_bytes": 27864752,
+  "ledger_snapshot_sha256": "261759675ab4f770b000734b75e8f7e3e683ad1eb6446a76f969e267da486988",
+  "pending_record_bytes": 0,
+  "progress": {
+    "records": 135005,
+    "queries": 27001,
+    "post_presents": 27000,
+    "frame_hashes": 27000,
+    "matching_frame_hashes": 27000,
+    "frame_mismatches": 0,
+    "first_frame_mismatch": null,
+    "time_mismatches": 0,
+    "first_time_mismatch": null,
+    "initial_physics": true,
+    "pcm_digest_observations": 3,
+    "endpoint": true,
+    "terminal_stability": true
+  },
+  "retained_raws_checked": 510,
+  "retained_native_mismatches": [],
+  "retained_raws_byte_compared": 510,
+  "gl_restoration_witnesses": 27000,
+  "pcm": "EXACT_NATIVE_PCM",
+  "physical_restoration": {
+    "entry_gpr": true,
+    "entry_fp": true,
+    "marker_gpr": true,
+    "marker_fp": true
+  },
+  "errors": [],
+  "timing_lines": [
+    "RUNTIME_TIMING kind=6 elapsed_ms=267636",
+    "RUNTIME_TIMING kind=1 elapsed_ms=268607",
+    "RUNTIME_TIMING kind=5 elapsed_ms=1108610",
+    "EIDOLON_RUNTIME mode=playback reason=natural_exit queries=27001 frames=27000 terminal_cursor=19845000",
+    "CHILD_METRICS peak_working_set_bytes=782987264 wall_ms=1108833",
+    "CHILD_EXIT 0 entry_proof=1",
+    "WINE_EXIT=0 GAMESCOPE_EXIT=0 SECONDS=1111"
+  ],
+  "storage": {
+    "current_bytes": 29543439373,
+    "launch_reserved_total": 29584706177,
+    "limit_bytes": 30000000000
+  },
+  "native_post_update_state_verified": false,
+  "production_accepted": false,
+  "gpu_reservation": "T24 exclusive; preserve through closure/cleanup",
+  "exit_code": 0,
+  "complete_capture": true,
+  "cleanup": {
+    "wine_pids": [],
+    "session_pids": [],
+    "private_sink_present": false,
+    "runner_alive": false
+  },
+  "natural_exit_log": true,
+  "performance": {
+    "executable_bytes": 728576,
+    "startup_pcm_ready_ms": 267636,
+    "timeline_ready_ms": 268607,
+    "terminal_marker_ms": 1108610,
+    "child_peak_working_set_bytes": 782987264,
+    "child_wall_ms": 1108833,
+    "runner_elapsed_seconds": 1117.889226720028,
+    "scope": "instrumented controlled-clock run; not an uninstrumented baseline",
+    "controlled_present_interval_ms": 840003,
+    "controlled_mean_fps": 32.14274234734876
+  }
+}

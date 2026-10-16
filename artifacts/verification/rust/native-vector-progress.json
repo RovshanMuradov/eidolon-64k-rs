@@ -1,0 +1,20 @@
+{
+  "phase": "closed",
+  "state_sha256": "f5a9a5d47cc649b05178dc47f7bc7579e44a4327806ae6138cd2e60a5d6afc63",
+  "processes": [
+    {
+      "pid": 2500922,
+      "exists": false
+    },
+    {
+      "pid": 2500943,
+      "exists": false
+    }
+  ],
+  "data_bytes": 29993217359,
+  "physics_samples": 151,
+  "physics_mismatches": 0,
+  "first_physics_mismatch": null,
+  "live_mappings": [],
+  "production_accepted": false
+}

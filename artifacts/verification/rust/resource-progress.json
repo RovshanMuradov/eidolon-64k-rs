@@ -1,0 +1,14 @@
+{
+  "phase": "closed",
+  "observed_utc": "2026-10-16T13:29:14+00:00",
+  "processes": [],
+  "trace_bytes": 98886660,
+  "data_bytes": 29924412322,
+  "review": "artifacts/verification/rust/resource-d26-all02.json",
+  "closure": "artifacts/verification/rust/resource-closure.json",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "all_syscalls": true,
+  "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-d26-all02/state.json",
+  "runner_log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-d26-all02/runner.log",
+  "production_accepted": false
+}

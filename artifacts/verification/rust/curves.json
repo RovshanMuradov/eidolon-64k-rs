@@ -1,0 +1,16 @@
+{
+  "status": "SAMPLED_NATIVE_CURVES_AND_PHYSICS_EXACT",
+  "physics_samples": 151,
+  "curve_draws": 302,
+  "float_words": 3824,
+  "sampled_coverage": "151 scene-edge frames, draw ordinals9/18; full sequential27000-frame execution; no exhaustive hidden-state claim",
+  "state_sha256": "8ec7f67473d80faee62675ddea737f5a3d0b1793097bfe8f6054c122aab05e9e",
+  "native_state_sha256": "f5a9a5d47cc649b05178dc47f7bc7579e44a4327806ae6138cd2e60a5d6afc63",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "cleanup": {
+    "wine_pids": [],
+    "session_pids": [],
+    "private_sink_present": false
+  },
+  "production_accepted": false
+}

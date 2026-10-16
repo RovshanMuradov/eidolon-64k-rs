@@ -1,0 +1,50 @@
+{
+  "status": "UNINSTRUMENTED_PLAYBACK_BASELINE",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "job": "playback-d26-01",
+  "state_sha256": "bbba6777f281389eff2aa60bc860c8aff03d0a97e6b1b3dec49da47eb071edee",
+  "frames": 25978,
+  "queries": 25979,
+  "terminal_cursor": 19845000,
+  "executable_bytes": 728576,
+  "launch_to_first_audio_seconds": 270.34,
+  "first_audio_to_last_sample_seconds": 448.37600000000003,
+  "terminal_audio_seconds": 450.0,
+  "mean_present_fps": 57.72888888888889,
+  "launcher_wall_seconds": 722.7430696589872,
+  "host_process_peak_rss_bytes": 768786432,
+  "host_process_peak_hwm_bytes": 782598144,
+  "sample_interval_max_seconds": 1.0650000000000004,
+  "audio_samples_observed": 446,
+  "mapped_file_count": 157,
+  "cleanup_verified": true,
+  "environment": {
+    "wine": "wine-11.17",
+    "command": [
+      "bash",
+      "tools/run",
+      "tools/wine-headless",
+      "/home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe",
+      "--play"
+    ],
+    "launcher": {
+      "AGENT": "T24",
+      "WINE_TIMEOUT": "1200",
+      "WINEDEBUG": "-all",
+      "PULSE_SINK": "eidolon_T24_playback",
+      "WINEDLLOVERRIDES": "winemenubuilder.exe,mscoree,mshtml=d"
+    },
+    "context_log_lines": [
+      "[gamescope] [\u001b[0;34mInfo\u001b[0m]  \u001b[0;37mconsole:\u001b[0m gamescope version 3.16.25 (gcc 16.1.1)",
+      "GL renderer: NVIDIA GeForce RTX 3070 Ti",
+      "GL version: 4.6.0 NVIDIA 610.57.04"
+    ]
+  },
+  "limitations": [
+    "External approximately one-second sampling; first audio stream is not an internal synth-completion timestamp",
+    "Private null sink verifies actual live-clock device submission, not physical-speaker output",
+    "Loaded mappings are observed closure, not a syscall-complete file-access trace",
+    "Startup overlapped bounded host rebuild/state-audit work; this is a measured baseline, not an isolated microbenchmark"
+  ],
+  "production_accepted": false
+}

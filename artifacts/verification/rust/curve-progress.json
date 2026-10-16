@@ -1,0 +1,56 @@
+{
+  "phase": "closed",
+  "state_sha256": "8ec7f67473d80faee62675ddea737f5a3d0b1793097bfe8f6054c122aab05e9e",
+  "processes": [
+    {
+      "pid": 2507052,
+      "exists": false
+    },
+    {
+      "pid": 2507093,
+      "exists": false
+    }
+  ],
+  "data_bytes": 29994747427,
+  "live_mappings": [],
+  "output_bytes": {
+    "events.bin": 136652,
+    "uniforms.bin": 0,
+    "programs.bin": 761747,
+    "objects.bin": 140,
+    "curves.bin": 255348,
+    "seed-phase.bin": 20,
+    "ready-seed.bin": 16,
+    "ready-tick.bin": 4,
+    "seed-before-gpr.bin": 36,
+    "seed-before-fx.bin": 512,
+    "seed-after-fx.bin": 512,
+    "seed-after-gpr.bin": 36,
+    "entry-before.bin": 576,
+    "entry-after.bin": 576,
+    "marker-before-gpr.bin": 36,
+    "marker-before-fx.bin": 512,
+    "marker-restored-fx.bin": 512,
+    "marker-restored-gpr.bin": 36,
+    "previous-seconds.bin": 4,
+    "initial-physics-live.bin": 256,
+    "previous-phase.bin": 12,
+    "position-before-fx.bin": 512,
+    "position-after-fx.bin": 512,
+    "position-before-gpr.bin": 36,
+    "position-after-gpr.bin": 36,
+    "draw-before-gpr.bin": 36,
+    "draw-before-fx.bin": 512,
+    "draw-after-fx.bin": 512,
+    "draw-after-gpr.bin": 36
+  },
+  "production_accepted": false,
+  "complete_curve_draws": 302,
+  "pending_curve_bytes": 0,
+  "matching_float_words": 3824,
+  "cleanup": {
+    "wine_pids": [],
+    "session_pids": [],
+    "private_sink_present": false
+  }
+}

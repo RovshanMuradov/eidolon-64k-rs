@@ -1,0 +1,12 @@
+{
+  "job": "live-d26-gl-reject",
+  "mode": "gl",
+  "status": "PHYSICAL_FAULT_REJECTED",
+  "exit_code": 125,
+  "accepted_pixels": 0,
+  "state_sha256": "576727dc9bfff5d15443df2d17f9619f16b0aaaf8547d84d751a6bb7e17c8142",
+  "gpr_scope": "position gate compares seven saved GPRs and EFLAGS; EAX is the MMRESULT output",
+  "helper_scope": "follow-up diagnostic helper; original full capture remains bound to its prior source/helper hashes",
+  "cleanup_verified": true,
+  "production_accepted": false
+}
