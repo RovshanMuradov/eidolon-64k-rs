@@ -1,0 +1,17 @@
+{
+  "kind": "independent-native-counter-review-binding",
+  "reviewer": "T14",
+  "consumer": "T13",
+  "counter_handoff": {
+    "root": "shared",
+    "path": "handoff/reverse-to-capture-gate-confirmation.md",
+    "sha256": "9b17909a279eb58ebc41aa4e4da3783f2e92f850ddef48341590988e7a70b366"
+  },
+  "review_tool": {
+    "root": "T14-checkout",
+    "path": "tools/reverse/confirm_capture_gate.py",
+    "sha256": "d5f0c63d00c8d01671d591408a6921c8cdfbcd532d8d1afcbbe478ac0b302465"
+  },
+  "interpretation": "Frame-1440 row transition confirmed; runtime RNG/physics/interior-FP, active cloud consumer and controlled endpoint remain missing.",
+  "reference_accepted": false
+}

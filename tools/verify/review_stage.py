@@ -359,7 +359,7 @@ def assess(roots):
             "unchanged_source_control": control["negative_control"],
             "limitations": ["Canary raw snapshots cover 16 first returns; 626647 total returns are source-enforced counters.",
                             "Exception CONTEXT equality does not observe physical post-resume epilogue/return; lookup ID 10 uninvoked.",
-                            "Native semantics and RNG ownership require T14 named handoff; active cloud sampling absent.",
+                            "Runtime RNG/physics snapshots, interior synth FP and active cloud sampling remain absent; native interpretation is in T14's handoff.",
                             "Modified-source full-reference schema/authorization and full-duration endpoint/repeat remain open."]}
 
 
