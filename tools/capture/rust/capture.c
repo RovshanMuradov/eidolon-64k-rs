@@ -47,13 +47,14 @@ __declspec(dllexport) DWORD __cdecl capture_init(const char *output,const unsign
 static int read_pixels(void) {
     const GLenum keys[8]={0x0d00,0x0d01,0x0d02,0x0d03,0x0d04,0x0d05,0x806b,0x806c};
     GLint old[8], read, draw_fbo, read_fbo, pbo, viewport[4], bits[4], samples, srgb;
-    if(glGetError()!=GL_NO_ERROR) return 0;
+    GLenum initial_error=glGetError();
+    if(initial_error!=GL_NO_ERROR) {printf("CAPTURE_GL_PREEXISTING_ERROR %x\n",initial_error);fflush(stdout);return 0;}
     glGetIntegerv(0x8ca6,&draw_fbo); glGetIntegerv(0x8caa,&read_fbo); glGetIntegerv(0x88ed,&pbo);
     glGetIntegerv(GL_VIEWPORT,viewport); glGetIntegerv(GL_READ_BUFFER,&read);
     for(unsigned i=0;i<4;i++) glGetIntegerv(GL_RED_BITS+i,&bits[i]);
     glGetIntegerv(0x80a9,&samples); glGetIntegerv(0x8db9,&srgb);
-    if(draw_fbo || read_fbo || pbo || viewport[0] || viewport[1] || viewport[2]!=1920 || viewport[3]!=1080) return 0;
-    if(bits[0]!=8 || bits[1]!=8 || bits[2]!=8 || bits[3]!=8 || samples || srgb) return 0;
+    if(draw_fbo || read_fbo || pbo || viewport[0] || viewport[1] || viewport[2]!=1920 || viewport[3]!=1080) {printf("CAPTURE_GL_BINDING fbo=%d/%d pbo=%d viewport=%d,%d,%d,%d\n",draw_fbo,read_fbo,pbo,viewport[0],viewport[1],viewport[2],viewport[3]);fflush(stdout);return 0;}
+    if(bits[0]!=8 || bits[1]!=8 || bits[2]!=8 || bits[3]!=8 || samples || srgb) {printf("CAPTURE_GL_LAYOUT bits=%d,%d,%d,%d samples=%d srgb=%d\n",bits[0],bits[1],bits[2],bits[3],samples,srgb);fflush(stdout);return 0;}
     for(unsigned i=0;i<8;i++) glGetIntegerv(keys[i],&old[i]);
     for(unsigned i=0;i<8;i++) glPixelStorei(keys[i],i==5?1:0);
     glReadBuffer(GL_BACK); glReadPixels(0,0,1920,1080,GL_RGBA,GL_UNSIGNED_BYTE,pixels);
@@ -62,6 +63,11 @@ static int read_pixels(void) {
     if(error!=GL_NO_ERROR || glGetError()!=GL_NO_ERROR) return 0;
     for(unsigned i=0;i<8;i++) { GLint value; glGetIntegerv(keys[i],&value); if(value!=old[i]) return 0; }
     GLint restored; glGetIntegerv(GL_READ_BUFFER,&restored); if(restored!=read) return 0;
+    GLint witness[18];memcpy(witness,old,32);witness[8]=read;
+    for(unsigned i=0;i<8;i++)glGetIntegerv(keys[i],&witness[9+i]);
+    witness[17]=restored;
+    char witness_name[64];snprintf(witness_name,sizeof(witness_name),"gl-%05lu.bin",frame);
+    if(!save(witness_name,witness,sizeof(witness)))return 0;
     DWORD layout[16]={frame,1920,1080,8,8,8,8,0,0,0,0,0,0x405,0,0,0};
     if(!event(10,layout,sizeof(layout))) return 0;
     unsigned char record[36]; memcpy(record,&frame,4);

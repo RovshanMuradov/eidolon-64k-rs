@@ -1,0 +1,29 @@
+{
+  "job": "verification/rust/live-d26-01",
+  "exit_code": 0,
+  "reference_accepted": true,
+  "production_accepted": false,
+  "control": false,
+  "fault": false,
+  "checks": {
+    "entry": true,
+    "marker_fp": true,
+    "marker_gpr": "missing",
+    "pcm": "EXACT_NATIVE_PCM",
+    "raw_gl_restoration": "missing",
+    "queries": 3,
+    "pre_presents": 3,
+    "post_presents": 3,
+    "pixels": 3,
+    "layouts": 3,
+    "pre_post_equal": true,
+    "planned_stop": true
+  },
+  "failures": [],
+  "status": "SHORT_EXACT_PARTIAL",
+  "remaining": [
+    "complete native post-update state",
+    "full-duration runtime/endpoint and performance",
+    "all-hook live fault controls"
+  ]
+}

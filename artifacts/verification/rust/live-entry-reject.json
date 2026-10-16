@@ -1,0 +1,31 @@
+{
+  "job": "verification/rust/live-d26-entry-gpr",
+  "exit_code": 125,
+  "reference_accepted": true,
+  "production_accepted": false,
+  "control": false,
+  "fault": null,
+  "checks": {
+    "entry": false,
+    "marker_fp": "missing",
+    "marker_gpr": "missing",
+    "queries": 0,
+    "pre_presents": 0,
+    "post_presents": 0,
+    "pixels": 0,
+    "layouts": 0,
+    "gl_restoration_witnesses": 0,
+    "pre_post_equal": true,
+    "planned_stop": false,
+    "physical_fault_changed_and_rejected": true
+  },
+  "failures": [
+    "entry physical restoration"
+  ],
+  "status": "FAULT_REJECTED",
+  "remaining": [
+    "complete native post-update state",
+    "full-duration runtime/endpoint and performance",
+    "all-hook live fault controls"
+  ]
+}
