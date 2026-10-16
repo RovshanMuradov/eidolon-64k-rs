@@ -156,6 +156,22 @@
 - [H] T12 independently reviews G5/G6 when real capture exists; the coordinator resolves restoration acceptance before any modified-source full-reference schema is admitted. Missing observations remain missing and cannot be inferred from static tables or a shader fix.
 - [?] Historical driver/compiler output and author bank identity remain unknown; exact candidate agreement proves pinned compatibility-run agreement only.
 
+## T12 saved short-capture assessment
+
+- [V] Recheck: [review_short.py](../tools/verify/review_short.py) pins T11's control3/primary/repeat/boundary manifests and sidecars, rehashes evidence/build snapshots/shims/backends, reconstructs all ordered source arrays from original MOV initialization and the creation-loop table, and compares each raw string with the pinned unpacked image.
+- [V] Startup creation 1 returns at `0x406442` with source `0x426c58`; creations 2–31 return at `0x406dce`. Creation 2 alone uses `0x409918`; creation 3 also has count 1 but source `0x409e38`. The checker correction removes only the disproven unique-callsite assumption.
+- [V] Both real eligibility sidecars return `PROVENANCE_ONLY`: exactly one authorized directive replacement, 234 other source-array entries unchanged; source bytes, stage/count/address, actual returned handles and all 31 creation records reconcile with original roles and the saved stream.
+- [V] Unchanged-source control3 preserves C7616, false link status and original-use `0x0502`; primary/repeat have 31 linked programs and clean recorded uses in the owning context. These observations cover only the captured execution prefix.
+- [V] Primary/repeat match byte-for-byte for the 33554432-byte atlas, complete 159716352-byte PCM and all three 8294400-byte RGBA buffers; six Zstandard files independently reproduce their exact raw hashes. Atlas RGB has 2097152 distinct finite triples, range 0…0.9385188817977905, alpha zero.
+- [V] Frame 0 is all-zero RGBA; frames 1/2 have 8/19 distinct RGBA tuples and constant alpha 1/2. These are acquisition/content observations, not scene-fidelity acceptance.
+- [V] Each run's self-identifying PCM envelope reconciles with the hash-bound original stream: completion on the synthesis thread at `0x401765`, cursor delta 159716352, ticks 1→19964545, ordered whole-range acquisition and later source-memory hashing; primary/repeat retain the nonzero 119544-frame tail.
+- [V] Pinned `proxy-b/core.c` guards default read/draw FBOs, 8-bit normalized RGBA components, zero samples, owning context, `GL_BACK` readback and state restoration before present. Events observe bottom-up 1920×1080, linear encoding, sRGB disabled and cursors 0/735/1470; they retain state digests rather than raw queried arrays.
+- [V] Pinned compatibility wrapper forwards once with a separate NUL-terminated replacement alive until return and rehashes original target memory afterward. Primary/repeat sidecar `forward_calls=1` is source-derived; copied context/state digests do not establish independent complete ABI/FP canaries.
+- [V] Boundary recovery preserves 67 successful presents, 67 hashes, raw frames 0/1/2/60, its own complete PCM and the actual supervisor timeout/native-exit-unknown state. Frame 60 has 16956 distinct RGBA tuples; the build differs from primary/repeat. This failed attempt establishes no scene boundary or endpoint.
+- [H] Verdict: partial G5 acquisition review only; G1/G4, downstream volume/scene identity, full G5 and G6 remain open. Precise runtime prerequisites and producer metadata corrections are in `$EIDOLON_ROOT/handoff/verification-to-capture-format.md`.
+- [V] [test_review_short.py](test_review_short.py) exercises the real shared-site ledger, missing/reordered/shifted frame records, changed alpha, invalid Zstandard extents, and first/tail/shifted PCM bytes including refreshed hashes; originals remain untouched.
+- [H] The pinned review adapter understands both saved diagnostic envelope shapes; it does not ratify their inconsistent `eidolon-small-real-capture-diagnostic-1` fields as a new reference schema. Both partial and failed packages remain rejected by the full-reference checker.
+
 ## Commands
 
 - [H] Single-run integrity: `bash tools/run python tools/verify/reference.py validate <manifest> --data-root <run-data>`.
@@ -167,10 +183,12 @@
 - [V] B acquisition/corruption command: `bash tools/run python tools/verify/diagnostic_pcm.py artifacts/reference/proxy-b-g1-20261016.json --corruptions`; data root defaults to `$EIDOLON_DATA`, source root to the manifest's checkout.
 - [V] D7 saved-evidence recheck: `bash tools/run python tools/reverse/review_glsl.py` → four manifests, four compressed evidence files, producer sources and source/dump equality; no target/GPU execution.
 - [H] D9 sidecar check: `bash tools/run python tools/verify/compatibility.py <sidecar.json>`; roots default to the checker's checkout and shared environment, with explicit `--checkout-root`, `--shared-root`, `--data-root` overrides; exit 0 means `PROVENANCE_ONLY`, exit 1 means `FAIL`, never reference acceptance.
+- [V] T12 file-only review from its worktree: `bash tools/run python tools/verify/review_short.py --capture-root ../T11` → `DIAGNOSTIC_ONLY`, partial G5, G6 open; omit `--capture-root` once T11's artifacts/tools are merged into the invoking checkout.
+- [V] T12 regressions: `bash tools/run env EIDOLON_CAPTURE_ROOT=../T11 python -m pytest tests/test_reference.py tests/test_diagnostic_pcm.py tests/test_compatibility.py tests/test_review_short.py --basetemp /tmp/opencode/eidolon/T12/pytest -q` → 215 passed, zero skips; omit the environment override when T11 inputs are merged locally.
 
 ## Agreement required
 
-- [?] T11 must acknowledge draft-3 acquisition fields and D9 provenance through the named handoff and satisfy runtime gates independently of old B diagnostics.
-- [?] T11 must confirm native final-buffer layout, actual read-buffer/samples/sRGB, pre-present ordering, scene boundaries and controlled frame zero/endpoint; packed four-byte pixels remain provisional.
+- [V] T11 acknowledged draft-3 acquisition and D9 provenance through the named handoff; T12 independently assessed its new per-run evidence in the section above.
+- [?] Explicit final read/draw/pack state observations, live scene boundaries and controlled endpoint remain required beyond the source-guarded short acquisition.
 - [?] Each new run needs its own observed PCM final-cursor/full-range stability evidence and exact-repeat controlled captures; native clock integer mapping is `735*n` at 44100 Hz, preserving the original float conversion path.
 - [?] A small real capture must establish acquisition semantics before full-reference comparison; unsupported native pixel formats require a contract revision rather than a lossy conversion.
