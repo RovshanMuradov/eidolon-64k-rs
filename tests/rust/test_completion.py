@@ -25,6 +25,11 @@ def test_timeout_cannot_become_natural_endpoint():
     with pytest.raises(Failure):full_gate(evidence)
 
 
+def test_missing_physical_restoration_witnesses_reject():
+    evidence=full();evidence['physical_restoration']={}
+    with pytest.raises(Failure,match='physical'):full_gate(evidence)
+
+
 def test_unpaired_native_curve_oracle_cannot_close_audit():
     native=json.loads((CHECKOUT/'artifacts/verification/rust/native-d28-vectors01.json').read_text())
     with pytest.raises(Failure,match='paired'):sampled_gate(native,native)

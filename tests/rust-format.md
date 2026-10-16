@@ -21,9 +21,9 @@
 - [V] `EIDRAW01` and `EIDSTA01` follow T22's shared handoff:27000 ordered records, eight little-endian u32 header words `(n,cursor,seconds_bits,beat_bits,row,local_beat_bits,dt_bits,uniform_count)`, then `(name_index,components,component_words...)`; state records append64 u32 words; no footer/padding.
 - [V] Native observed checks compare every cursor, seconds bit-pattern and local-beat bit-pattern; row attribution comes from reference1's independently reviewed50-row scene partition, including adjacent rows sharing a token.
 - [V] Native ordered-stream projection is27000 little-endian `<5I` tuples `(n,cursor,seconds_bits,local_beat_bits,scene_token)`; decoded and compressed stream hashes are checked before trusting it.
-- [V] Native frame-zero physics is exactly256 bytes from `native-first-query-physics.bin`; all seven initial-state dumps are available for future candidate serialization in native layout.
+- [V] Native frame-zero physics is exactly256 bytes from `native-first-query-physics.bin`; seven original initialization dumps remain independent inputs. D28 compares corresponding live fields/lifetimes and separately pins constants rather than constructing nonexistent candidate storage.
 - [V] Beat and dt checks are explicitly derived f32 models; `delta_f32_bits` in the native scene event is not treated as an authenticated dt oracle.
-- [?] Reference1 does not supply independently authenticated post-update physics/curve-uniform vectors throughout the run; later state records and uniform values are structurally parsed but not certified.
+- [V] Supplementary original-provenance observations certify151 later physics samples and302 GPU-active curve draws/3824 raw float words against the actual immutable production EXE. Coverage is predeclared scene-edge frames at draw ordinals9/18; unobserved hidden fields/frames remain outside this vector claim.
 - [V] Shader stream `EIDGLS01` compares31 programs/235 NUL-terminated source-array elements directly with hash-bound effective native shader files; loading program appears last in the probe ABI.
 - [V] Host-probe agreement establishes neither Windows x86 numeric behavior nor graphics linking/pass output; standalone production-entrypoint PCM now independently matches natively, with host/target scope kept separate.
 
@@ -49,7 +49,7 @@
 - [V] `runtime_events.py LEDGER` validates that protocol; `runtime_events.py ENVELOPE --request-sha256 PIN` additionally rehashes the pinned request inventory, full PCM,510 raws, process evidence, actual command/environment/EXE identities, exit0/no timeout/zero losses.
 - [V] Runtime envelope fields are exactly `schema:"eidolon-rust-runtime-envelope-1",status:"CLOSED",request,events,pcm,process`; file fields are `{path,sha256}`. Process fields are `command,environment,exe_before_sha256,exe_after_sha256,exit_code,timeout,dropped_frames,dropped_audio_sample_frames,evidence`.
 - [V] D26 validates the separate native `launch.c`/`live.c`/`hook.S` route through `tools/wine-headless`: suspended creation, pinned PE-entry stub, dynamic marker/IAT routing, physical GPR/EFLAGS/FP restoration, and short exact native comparisons. Prepared Frida JavaScript is not the executed attachment route.
-- [?] Marker ABI exposes initial physics but not seven native-layout initialization payloads required by the separate general file-envelope below; those must not be fabricated from native copies.
+- [V] Marker ABI exposes initial physics; private live observations supply seed/tick/previous-seconds under D28. The separate raw-layout file envelope still requires seven literal payloads and is not populated with fabricated data.
 
 ## Candidate file envelope
 
@@ -64,7 +64,7 @@
 - [V] `bash tools/run python tools/verify/rust/monitor_full.py` reconciles the pinned full-job request, immutable EXE/helper/source hashes, ledger and every closed output; growing ledgers admit only complete prefix records. Tests: `tests/rust/test_monitor.py`.
 - [V] `live-d26-full01` passes27000 native RGBA hashes,510 directly byte-compared native raw anchors, all159716352 PCM bytes including tail,27000 native time/row records, initial physics,27001-query endpoint and three stable PCM digests; [closed result](../artifacts/verification/rust/full-progress.json).
 - [V] Every present has a raw GL pack/read-buffer restoration witness; entry/marker GPR/EFLAGS/FP witnesses agree. Existing physical entry-GPR and marker-MXCSR fault controls remain bounded to their reviewed routes.
-- [V] Natural completion reports child/Wine/gamescope exit0; process/session/prefix/private-sink cleanup is independently checked. T24's GPU allocation remains exclusive across handoff despite completed acquisition.
+- [V] Natural completion reports child/Wine/gamescope exit0; process/session/prefix/private-sink cleanup is independently checked. All T24 acquisitions are closed; the coordinator may release the exclusive GPU reservation.
 - [V] Actual mapped candidate/helper paths and Wine executable hash were observed while running; the20872-frame observation is preserved in Git commit1b9c140's `artifacts/verification/rust/full-progress.json`.
 - [V] The measured baseline is instrumented and controlled-clock: size728576 bytes, PCM-ready267636ms, timeline-ready268607ms, mean32.142742 FPS, peak working set782987264 bytes, child wall1108833ms; it includes capture/readback/I/O overhead.
 - [V] `bash tools/run python tools/verify/rust/state_scope.py` rehashes/decodes the accepted native stream and audits all seven initialization payloads; [state-scope.json](../artifacts/verification/rust/state-scope.json) records per-payload coverage and every available observation field.
@@ -81,13 +81,17 @@
 - [V] Resource audit fails closed on malformed/truncated records and records successful async-I/O engines, unknown syscalls, unfinished processes and unclassified paths for review; capturing an inventory alone does not establish resource closure.
 - [V] `semantic.c` reads live fields and queries GPU-active uniforms before the actual glRecti call, with FP/GPR restoration and active-texture restoration checks. A physical seed-hook MXCSR mutation rejects with exit125; [control](../artifacts/verification/rust/live-d28-seed-reject.json).
 - [V] `live-d28-scalars-full01` closes naturally with27000 frames/513000 GPU-active time/cloud comparisons exact,31 observed shader-source identities, native clock/terminal cursor, stable PCM digests and verified process/session/prefix/private-sink cleanup. [Full scalar review](../artifacts/verification/rust/live-d28-scalars-full01.json); expectations derive solely from the hash-checked native stream.
-- [?] Bounded native oracle `native-d28-vectors01` is detached after scalar closure:151 predeclared scene-edge physics samples and302 pre-draw floating-uniform records at ordinals9/18, while executing all27000 frames sequentially. [PID/log/state](../artifacts/verification/rust/native-vector-job.json). Sampled coverage does not certify unobserved fields/frames; curve runtime counterparts remain pending.
+- [V] Native oracle `native-d28-vectors01` and production counterpart `live-d28-curves01` close naturally after sequential27000-frame execution.151 sampled physics states and302 pre-draw curve records/3824 float words match exactly, with original/candidate/shader provenance and process/session/prefix/sink cleanup; [paired result](../artifacts/verification/rust/curves.json).
 - [V] Native observer builds from the hash-checked accepted G6 shim/source snapshot and original archive; output suppresses duplicate PCM/pixels/volume/shader files. Source transformations and compiler commands are bound in its build.json; native scalar writes have a3MB guard inside a5MB acquisition reservation.
 - [V] Uninjected production `--play` completes on its real waveOut clock:25978 presents/25979 queries, terminal cursor19845000,450 audio seconds, child/Wine/gamescope exit0. The actual process publishes uncorked float32le stereo44100Hz to the private null sink; [playback.json](../artifacts/verification/rust/playback.json).
 - [V] External baseline measures270.340s launch-to-first audio,57.728889 mean presents/audio-second, peak host-process RSS768786432 bytes/HWM782598144 bytes,722.743s launcher duration. Sampling interval is at most1.065s; startup overlaps bounded CPU verification and is not an isolated microbenchmark.
 - [V] `tools/capture/rust/playback.py NAME` runs the unchanged EXE directly through `tools/wine-headless`, with no injected helper or clock replacement; it binds157 sampled mapped-file hashes, Wine version, actual process/audio metadata and hash-bound logs. `tools/verify/rust/review_playback.py NAME` verifies these records after cleanup.
 - [?] This live-clock baseline establishes device submission/natural playback and measured throughput, not speaker output or per-present exact numerical comparison under changing real-time cursors; controlled full exactness remains independently established.
-- [V] The general candidate envelope and earlier unexecuted Frida template remain distinct contracts; missing observations are not backfilled with native files. Step3 and production acceptance remain pending.
+- [V] `bash tools/run python tools/verify/rust/completion.py` passes the independent Step3 audit and pins all reused media/build/resource/baseline/physical-control results, new runtime state comparisons, D28 mapping and79 native static constant vectors. [Completion](../artifacts/verification/rust/completion.json) marks verification passed; formal Step3 acceptance remains coordinator-owned.
+
+## Separate raw-layout file envelope
+
+- [V] This strict file-conformance schema is preserved; the executed D28 semantic production audit above does not manufacture its seven native-layout payloads or use the earlier unexecuted Frida template.
 
 - [V] JSON rejects duplicate/unknown/missing fields and non-finite numbers; exact comparisons distinguish booleans, integers and floats; payload paths are relative POSIX paths with no traversal or symlink escape.
 - [V] Every file binding is exactly `{path,sha256}`, relative to the candidate manifest directory; the verifier rehashes every binding, including executable, input inventory, capture tool and observation files.
@@ -105,6 +109,6 @@
 
 ## Production acceptance gate
 
-- [?] Full candidate envelope success remains file conformance until independently reviewed capture sources/ordered observations establish actual executable identity, fresh state, pre-present readback, complete synthesis/source-memory stability, advancing clocks and natural termination.
-- [?] Production acceptance requires the complete shipped audiovisual EXE, reproducible builds, Windows target execution, exact all-frame/PCM comparison, runtime fault controls and measured startup/runtime/memory/size baselines; reference G6 is accepted.
-- [V] Missing native post-update vectors remain explicit; no tolerance, alignment, frame deletion, PCM trimming, normalization or model-as-native substitution is authorized.
+- [V] Independent production audit establishes actual immutable EXE identity, fresh corresponding live state, pre-present readback, complete synthesis/source-memory stability, advancing clocks, natural termination and required fault controls through reviewed capture sources/ordered observations.
+- [V] Reproducible Windows cross-build, exact full-frame/PCM comparison, observed runtime resource closure and size/startup/speed/memory baselines pass. Formal acceptance and stage tagging belong to the coordinator; individual acquisition manifests remain non-self-certifying.
+- [V] Later-state coverage remains exactly151 sampled frames/302 curve draws alongside513000 full time/cloud observations. No tolerance, alignment, frame deletion, PCM trimming, normalization or model-as-native substitution is authorized.
