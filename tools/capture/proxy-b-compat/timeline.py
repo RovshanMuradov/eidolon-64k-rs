@@ -28,9 +28,11 @@ def timeline():
     return rows
 
 
-def retention(count):
+def retention(count, full=False):
     rows = timeline()
-    indices = set(range(0,count,60)) | {0,1,2,count-1} | set(range(1438,1443)) | set(range(5758,5763))
+    indices = set(range(0,count,60)) | {0,count-1}
+    if not full:
+        indices.update({1,2} | set(range(1438,1443)) | set(range(5758,5763)))
     for row in rows:
         indices.update((row['first'],row['last']))
     return rows, sorted(n for n in indices if 0 <= n < count)

@@ -14,10 +14,12 @@ import math
 import signal
 import time
 from timeline import retention
+from observations import events as read_events, pack
 
 
 def sha(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream,'sha256').hexdigest()
 
 
 def tree(path):
@@ -41,6 +43,8 @@ def main():
     parser.add_argument('--frames', type=int, default=3)
     parser.add_argument('--first-boundary', action='store_true')
     parser.add_argument('--active-volume', action='store_true')
+    parser.add_argument('--full', action='store_true')
+    parser.add_argument('--storage', choices=['reference','hashes'], default='reference')
     parser.add_argument('--reference-variant',choices=['D9-restored-native'])
     parser.add_argument('--throughput-from', type=Path)
     parser.add_argument('--build-from', type=Path, help='reuse an immutable measured run build, not a new link')
@@ -50,13 +54,21 @@ def main():
     args = parser.parse_args()
     assert args.run_id and all(c.isalnum() or c in '-_' for c in args.run_id)
     assert 1 <= args.frames <= 600
+    assert not args.full or (not args.active_volume and not args.first_boundary and not args.fault and
+                            args.mode=='450-compatibility' and args.reference_variant=='D9-restored-native' and
+                            args.throughput_from)
+    assert args.full or args.storage=='reference'
     assert not args.first_boundary or (args.mode == '450-compatibility' and args.frames == 3)
     assert not args.first_boundary or (args.throughput_from and not args.fault)
     assert not args.active_volume or (not args.first_boundary and args.mode == '450-compatibility' and
                                       args.frames == 3 and args.throughput_from and not args.fault and
                                       args.reference_variant == 'D9-restored-native')
-    stage_frames = 5763 if args.active_volume else 1443 if args.first_boundary else args.frames
-    rows, retained = retention(stage_frames)
+    stage_frames = 27000 if args.full else 5763 if args.active_volume else 1443 if args.first_boundary else args.frames
+    rows, retained = retention(stage_frames, full=args.full)
+    if args.full:
+        assert len(retained)==510
+    if args.storage=='hashes':
+        retained=[]
     data_root = Path(os.environ['EIDOLON_DATA'])
     data = data_root / 'reference' / args.run_id
     destination = Path('artifacts/reference') / f'{args.run_id}{"-acquisition" if args.reference_variant else ""}.json'
@@ -65,7 +77,7 @@ def main():
     # the measured ~82 MB ordered observation stream before allocating a stage.
     reserve = 1_000_000_000 + 2*len(retained)*8_294_400 + stage_frames*80000
     assert sum(p.stat().st_size for p in data_root.rglob('*') if p.is_file()) + reserve < 30_000_000_000
-    pinned_run = args.build_from or args.throughput_from
+    pinned_run = args.build_from or (args.throughput_from if not args.full else None)
     if pinned_run:
         pinned = json.loads(pinned_run.read_text())
         build = Path(pinned['build']['build_directory'])
@@ -85,7 +97,7 @@ def main():
         runner_snapshot.write_bytes(runner.read_bytes())
     original_path = Path('artifacts/reference/proxy-b-g1-20261016.json')
     original = json.loads(original_path.read_text())
-    scratch = Path('/tmp/opencode/eidolon/T11')
+    scratch = Path('/tmp/opencode/eidolon/T16')
     prefix = scratch / 'prefix'
     baseline = Path(os.environ['EIDOLON_ROOT']) / '.tools/capture/T11-prefix-baseline'
     inventory = baseline.with_suffix('.json')
@@ -125,32 +137,37 @@ def main():
     parent_settings = {k: v for k,v in env.items() if k.startswith('WINE')}
     runner_seconds = 600
     supervision = dict(runner_seconds=runner_seconds, cleanup_margin_seconds=600, tool='background; no external deadline')
-    if args.first_boundary or args.active_volume:
+    if args.first_boundary or args.active_volume or args.full:
         measured = json.loads(args.throughput_from.read_text())
-        assert measured['status'] == 'partial'
-        assert all(measured['build']['outputs'][name] == build_manifest['outputs'][name]
-                   for name in ('opengl32.dll','winmm.dll')), 'throughput must measure the identical shims'
+        assert measured['status'] in ('partial','complete')
+        if not args.full:
+            assert all(measured['build']['outputs'][name] == build_manifest['outputs'][name]
+                       for name in ('opengl32.dll','winmm.dll')), 'throughput must measure the identical shims'
         rate, = [e for e in measured['observations'] if e['event'] == 'throughput']
         assert rate['frames'] >= 60 and rate['wall_ticks'] > 0
         seconds_per_frame = rate['wall_ticks'] / rate['frequency'] / rate['frames']
-        runner_seconds = math.ceil(stage_frames * seconds_per_frame * 4 + 600)
+        multiplier = 8 if args.full else 4
+        runner_seconds = math.ceil(stage_frames * seconds_per_frame * multiplier + 600)
         supervision.update(runner_seconds=runner_seconds, measured_seconds_per_frame=seconds_per_frame,
                            throughput_manifest=str(args.throughput_from), throughput_sha256=sha(args.throughput_from),
-                            multiplier=4, startup_allowance_seconds=600)
+                            measured_build_id=measured['build']['build_id'],
+                            multiplier=multiplier, startup_allowance_seconds=600)
     supervision['python_supervisor_seconds'] = runner_seconds + 600
-    env.update(AGENT='T11', WINE_TIMEOUT=str(runner_seconds), WINE_W='1920', WINE_H='1080',
+    env.update(AGENT='T16', WINE_TIMEOUT=str(runner_seconds), WINE_W='1920', WINE_H='1080',
                WINEPREFIX=str(prefix), WINEARCH='win64',
                WINEDLLOVERRIDES='opengl32,winmm=n,b;winemenubuilder.exe,mscoree,mshtml=d',
                WINEDEBUG='-all,+loaddll', EIDOLON_B_LOG='Z:' + str(data / 'backend.jsonl'),
                EIDOLON_B_BOOTSTRAP='capture-probe', EIDOLON_B_OUTPUT='Z:' + str(data),
                 EIDOLON_B_FRAMES=str(args.frames), EIDOLON_B_COMPAT=args.mode,
                 EIDOLON_B_RETENTION='Z:' + str(data/'retention.txt'),
-               PULSE_SINK='eidolon_T11_compat', LC_ALL='C', TZ='UTC',
+                PULSE_SINK='eidolon_T16_compat', LC_ALL='C', TZ='UTC',
                XDG_CACHE_HOME=str(stage / 'cache'), __GL_SHADER_DISK_CACHE_PATH=str(stage / 'cache/nvidia'))
     env.pop('DISPLAY', None)
     env.pop('WAYLAND_DISPLAY', None)
     if args.first_boundary or args.active_volume:
         env['EIDOLON_B_BOUNDARY_PROBE'] = str(stage_frames)
+    if args.full:
+        env['EIDOLON_B_FULL']='27000'
     if args.fault:
         env['EIDOLON_B_FAULT'] = args.fault
         if args.fault == 'fingerprint':
@@ -159,7 +176,7 @@ def main():
     started = datetime.now(timezone.utc).isoformat()
     monotonic_start = time.monotonic()
     sink = subprocess.check_output(['pactl', 'load-module', 'module-null-sink',
-                                    'sink_name=eidolon_T11_compat', 'rate=44100', 'channels=2'], text=True).strip()
+                                    'sink_name=eidolon_T16_compat', 'rate=44100', 'channels=2'], text=True).strip()
     cleanup_errors = []
     try:
         with (data / 'runner.log').open('wb') as log:
@@ -187,9 +204,32 @@ def main():
     except AssertionError as error:
         prefix_released = False
         cleanup_errors.append(str(error))
-    events = [json.loads(line) for line in (data / 'backend.jsonl').read_text().splitlines()] if (data / 'backend.jsonl').exists() else []
+    # Stream every observation; retain only bounded summaries in Git. The full
+    # byte-exact ordered log stays hash-bound in data, including on failure.
+    observations=[]; sources=[]; event_counts={}; last_seq=0
+    omitted={'lookup','clock','shader_source','pre_present','post_present','frame_state','scene_state',
+             'scene_pass','clock_routes_checked','node_rng','node_probe_restoration','node_coverage'}
+    for e in read_events(data/'backend.jsonl') if (data/'backend.jsonl').exists() else []:
+        assert e['seq']==last_seq+1
+        last_seq=e['seq']; name=e['event']; event_counts[name]=event_counts.get(name,0)+1
+        if name=='shader_source':
+            sources.append(e)
+        if name in omitted or (name=='program_use' and e['program']!=2 and not e['post_error']):
+            continue
+        if name=='scene_anchor_locals' and e['n'] not in {0,1,2,1438,1439,1440,1441,1442,5758,5759,5760,5761,5762,26999}:
+            continue
+        observations.append(e)
+    events=observations
+    stream=pack(data/'backend.jsonl') if args.full and (data/'backend.jsonl').exists() else None
+    if stream:
+        stream['events']=last_seq; stream['event_counts']=event_counts
     failure = next((e for e in events if e['event'] == 'failure'), None)
-    sources = [e for e in events if e['event'] == 'shader_source']
+    endpoint=[e for e in events if e['event']=='native_endpoint']
+    full_ok=(len(endpoint)==1 and event_counts.get('native_exit_forward')==1 and
+             event_counts.get('pre_present')==event_counts.get('post_present')==27000 and
+             not event_counts.get('planned_partial_stop'))
+    if args.full and not full_ok and not failure:
+        failure=dict(event='host_failure',reason='missing_complete_native_endpoint')
     bundle = {p: sha(p) for p in original['bundle']}
     bundle.update(build_manifest['sources'])
     manifest = dict(kind='proxy-B-D9-compatibility-diagnostic', run_id=args.run_id,
@@ -198,7 +238,8 @@ def main():
                      reference_variant=args.reference_variant,
                      executed_file_observation=dict(path=str(native),before_sha256=exe_before_sha256,
                                                     after_sha256=sha(native)),
-                    status='failed' if failure or launcher_exit or cleanup_errors else 'partial',
+                     status='failed' if failure or launcher_exit or cleanup_errors else 'complete' if args.full else 'partial',
+                     storage=args.storage, full_run=args.full, ordered_stream=stream,
                     transformation=args.mode, substitutions=sum(e['transformed'] for e in sources),
                     input=dict(original['input'], executed_copy=str(native)), dependency=bank_manifest, build=build_manifest, bundle=bundle,
                     host_runner=dict(path=str(runner_snapshot),sha256=sha(runner_snapshot)),
@@ -212,15 +253,12 @@ def main():
                                      display=original['environment']['display'], parent_settings=parent_settings,
                                      settings={k: v for k, v in env.items() if k.startswith(('WINE', 'EIDOLON_B_')) or k in
                                                ('AGENT', 'PULSE_SINK', 'XDG_CACHE_HOME', '__GL_SHADER_DISK_CACHE_PATH', 'LC_ALL', 'TZ')}),
-                     reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-compat/probe.py', '--run-id', '<fresh-id>', '--mode', args.mode, '--frames', str(args.frames)] + ([('--active-volume' if args.active_volume else '--first-boundary'),'--throughput-from',str(args.throughput_from)] if args.first_boundary or args.active_volume else []) + (['--reference-variant',args.reference_variant] if args.reference_variant else []) + (['--build-from',str(args.build_from)] if args.build_from else []) + (['--fault',args.fault] if args.fault else []),
+                      reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-compat/probe.py', '--run-id', '<fresh-id>', '--mode', args.mode, '--frames', str(args.frames)] + ([('--full' if args.full else '--active-volume' if args.active_volume else '--first-boundary'),'--throughput-from',str(args.throughput_from)] if args.first_boundary or args.active_volume or args.full else []) + (['--storage',args.storage] if args.full else []) + (['--reference-variant',args.reference_variant] if args.reference_variant else []) + (['--build-from',str(args.build_from)] if args.build_from else []) + (['--fault',args.fault] if args.fault else []),
                     command=command, started_utc=started, finished_utc=datetime.now(timezone.utc).isoformat(),
                     launcher_exit=launcher_exit, first_failed_check=failure, supervision=supervision,
                     supervisor_timeout=supervisor_timeout, elapsed_seconds=time.monotonic()-monotonic_start,
                     runner_terminal=[line for line in (data / 'runner.log').read_text(errors='replace').splitlines() if line.startswith(('WINE_EXIT=', 'TIMEOUT'))],
-                    observations=[e for e in events if e['event'] not in ('lookup', 'clock', 'shader_source', 'pre_present', 'post_present',
-                                  'frame_state','scene_state','scene_pass','clock_routes_checked',
-                                  'node_rng','node_probe_restoration','node_coverage')
-                                  and not (e['event'] == 'program_use' and e['program'] != 2 and not e['post_error'])],
+                     observations=observations,
                     evidence={str(p.relative_to(data_root)): sha(p) for p in sorted(data.iterdir()) if p.is_file()},
                     D2=original['D2'], resources=dict(prefix_processes_released=prefix_released,
                          private_sink_unloaded=sink_result.returncode == 0, errors=cleanup_errors),
@@ -229,7 +267,7 @@ def main():
     print(json.dumps(dict(manifest=str(destination), launcher_exit=launcher_exit, failure=failure,
                          programs=sum(e['event'] == 'shader_program' for e in events),
                          failed_links=[e['program'] for e in events if e['event'] == 'shader_program' and not e['link_status']],
-                         frames=sum(e['event'] == 'post_present' for e in events))))
+                          frames=event_counts.get('post_present',0))))
     return 1 if failure or launcher_exit or cleanup_errors else 0
 
 
