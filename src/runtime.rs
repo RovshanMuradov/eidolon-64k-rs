@@ -1,9 +1,9 @@
 //! Windows audiovisual runtime. Synthesis is injected through the shared Rust contract.
 //! Graphics-only mode is explicitly diagnostic and never supplies placeholder audio.
 use std::{ptr, thread, time::Duration};
-use crate::{contract, engine::Engine, fp::GraphicsFp, graphics::Graphics, observe::{self, RuntimeSnapshot}, windows::*};
+use crate::{contract, engine::Engine, fp::GraphicsFp, graphics::Graphics, observe::{self, RuntimeSnapshot}, synthesis, windows::*};
 
-pub type RenderPcm = fn(&mut [f32]) -> Result<(), &'static str>;
+pub use synthesis::RenderPcm;
 
 unsafe extern "system" fn window_proc(window: Handle, message: u32, wparam: usize, lparam: isize) -> isize {
     if message == 0x10 || message == 0x2 { // WM_CLOSE / WM_DESTROY
@@ -123,7 +123,7 @@ impl Drop for Playback {
     } }
 }
 
-/// Inject the complete T23 renderer after its branch is accepted/merged.
+/// The production executable injects the merged standalone audio::render implementation.
 /// Rendering runs on a separate thread; its FP mode is exclusively T23-owned.
 pub fn run_with_synth(render: RenderPcm) -> Result<(), String> {
     run(Some(render))
@@ -133,11 +133,7 @@ pub fn run_with_synth(render: RenderPcm) -> Result<(), String> {
 pub fn graphics_diagnostic() -> Result<(), String> { run(None) }
 
 fn run(render: Option<RenderPcm>) -> Result<(), String> {
-    let mut worker = render.map(|render| thread::spawn(move || {
-        let mut pcm = vec![0.0_f32; contract::PCM_SAMPLES];
-        render(&mut pcm).map_err(str::to_owned)?;
-        Ok::<_, String>(pcm)
-    }));
+    let mut worker = render.map(synthesis::spawn).transpose()?;
     let mut ready_pcm = None;
     let poll_synth = |worker: &mut Option<thread::JoinHandle<Result<Vec<f32>, String>>>, ready: &mut Option<Vec<f32>>| -> Result<(), String> {
         if worker.as_ref().is_some_and(|w| w.is_finished()) {

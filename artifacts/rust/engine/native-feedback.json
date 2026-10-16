@@ -1,7 +1,7 @@
 {
   "schema": "eidolon-t22-native-feedback-v1",
-  "host_probe_sha256": "fb9e42bed68cb53f75c9c93b7983b54bc400b4c9dc63731c0937a03377865136",
-  "checker_sha256": "cc6ecffe141a130b808c11ab28c0e92a7671be25f1ac91aa380b7becf12ddd50",
+  "host_probe_sha256": "2bc10408032fb2a436c051ab6410c8d1d65e2a37a3840b3690139399c6e06713",
+  "checker_sha256": "0e20bbe883067f65d27e9167455f8c9d5a35b70818ff7e9659a3b494163cf9b3",
   "checker_path": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24/tools/verify/rust/conformance.py",
   "results": {
     "raw": {
@@ -15,7 +15,7 @@
         "native_time_frames": 27000,
         "operation": "probe",
         "production_accepted": false,
-        "reference_accepted": false,
+        "reference_accepted": true,
         "status": "OFFLINE_CONFORMANCE_ONLY",
         "unchecked": [
           "uniform values",
@@ -34,7 +34,7 @@
         "native_time_frames": 27000,
         "operation": "probe",
         "production_accepted": false,
-        "reference_accepted": false,
+        "reference_accepted": true,
         "status": "OFFLINE_CONFORMANCE_ONLY",
         "unchecked": [
           "uniform values",
@@ -48,7 +48,7 @@
         "native_effective_shader_elements": 235,
         "operation": "shaders",
         "production_accepted": false,
-        "reference_accepted": false,
+        "reference_accepted": true,
         "status": "OFFLINE_CONFORMANCE_ONLY"
       }
     }

@@ -10,7 +10,16 @@ fn write_words(out: &mut impl Write, words: impl IntoIterator<Item = u32>) -> io
 fn main() -> io::Result<()> {
     let _fp = GraphicsFp::enter();
     let mode = std::env::args().nth(1).unwrap_or_default();
-    if mode == "--shader-stream" {
+    if mode == "--render-pcm" {
+        let path = std::env::args().nth(2).ok_or_else(|| io::Error::other("--render-pcm requires an output path"))?;
+        let worker = eidolon::synthesis::spawn(eidolon::audio::render).map_err(io::Error::other)?;
+        let pcm = worker.join().map_err(|_| io::Error::other("synthesis worker panicked"))?
+            .map_err(io::Error::other)?;
+        // Both supported x86 targets are little-endian; every float was initialized before exposure.
+        let bytes = unsafe { std::slice::from_raw_parts(pcm.as_ptr().cast::<u8>(), contract::PCM_BYTES) };
+        std::fs::File::create(path)?.write_all(bytes)?;
+        println!("INTEGRATED_RUST_PCM frames={} bytes={} standalone=true", contract::PCM_FRAMES, bytes.len());
+    } else if mode == "--shader-stream" {
         let mut out = io::BufWriter::new(io::stdout().lock());
         out.write_all(b"EIDGLS01")?;
         // Preserve source-array boundaries and terminating NULs for glCreateShaderProgramv.
@@ -52,6 +61,7 @@ fn main() -> io::Result<()> {
             assets::ROW_COUNT, assets::PROGRAM_COUNT, shader_bytes, assets::LOADING_SOURCE.len() - 1, contract::PCM_BYTES);
         println!("--raw-stream / --state-stream: binary controlled-clock diagnostics");
         println!("--shader-stream: exact effective NUL-terminated shader source arrays");
+        println!("--render-pcm PATH: full standalone synthesis using the production worker seam");
     }
     Ok(())
 }

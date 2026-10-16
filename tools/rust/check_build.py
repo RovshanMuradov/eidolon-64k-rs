@@ -108,7 +108,7 @@ def main():
     inputs += [ROOT / 'artifacts/rust/engine/assets.json']
     manifest = {
         'schema': 'eidolon-rust-engine-build-v1',
-        'scope': 'CPU probe and cross-built WGL/waveOut runtime; synth not integrated; target runtime unexecuted',
+        'scope': 'Integrated standalone-Rust WGL/waveOut production candidate; target runtime unexecuted',
         'tools': versions,
         'target': TARGET,
         'profile': 'release; opt-level=s; lto=true; codegen-units=1; panic=abort; strip=symbols',
@@ -123,7 +123,7 @@ def main():
         'runtime_candidate': {'path': str(runtime.relative_to(Path(os.environ['EIDOLON_DATA']))),
                               'bytes': runtime.stat().st_size, 'sha256': sha(runtime),
                               'imports': runtime_imports, 'independent_build_equal': True,
-                              'synth_integrated': False, 'target_executed': False},
+                              'synth_integrated': True, 'target_executed': False},
         'inputs': {str(p.relative_to(ROOT)): sha(p) for p in inputs},
         'runtime': {'resolution': None, 'gpu': None, 'driver': None, 'wine': None,
                     'target_executed': False, 'native_equivalence': False},

@@ -1,11 +1,13 @@
 //! Recovered engine slice. Native runtime equivalence is a separate validation gate.
 pub mod assets;
+pub mod audio;
 pub mod contract;
 pub mod engine;
 pub mod fp;
 pub mod physics;
 pub mod timeline;
 pub mod observe;
+pub mod synthesis;
 #[cfg(target_os = "windows")]
 pub mod runtime;
 #[cfg(target_os = "windows")]
