@@ -3,6 +3,7 @@
 pub mod data;
 pub mod arp;
 pub mod graph;
+pub mod effects;
 pub mod nodes;
 pub mod math;
 pub mod score;

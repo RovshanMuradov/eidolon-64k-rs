@@ -71,6 +71,12 @@ def main():
                         '    sample_t out; eidolon_fraction(&SynthGlobalState,&value,&out); return out;')
     text = replace_body(text, 'void ArpeggiatorStep(',
                         '    eidolon_arp_step(n,&SynthGlobalState,mode);')
+    effect_ports = {'BQFILTER':9,'DELAY':32,'FBDELAY':33,'REVERB':36,'COMPEXP':38,'COMBDELAY':51}
+    for name,opcode in effect_ports.items():
+        text = replace_body(text,f'void SYNTHCALL {name}_tick(',
+                            f'    source_seen[n->valueOffset]=1; eidolon_effect_tick(n,&SynthGlobalState,{opcode});')
+    for name,opcode in {'DELAY':32,'REVERB':36}.items():
+        text = replace_body(text,f'void SYNTHCALL {name}_init(',f'    eidolon_effect_init(n,&rust_graph,{opcode});')
     text = replace_body(text, 'inline sample_t Sampler_Sample(',
                         '    sample_t out; eidolon_sample((void*)n->v[11].l[0], n->v[10].d, index.d, out.d); return out;')
     files['SynthNode.cpp'] = 'extern "C" void eidolon_sample(const void*, const double*, const double*, double*);\n' + text
@@ -148,6 +154,7 @@ extern "C" void eidolon_score_free(void*);
               'rust_slices': ['exp2', 'log2', 'sin', 'signed-two-lane-rng', 'sampler-interpolation', 'embedded-15-wave-bank-initialization', 'fixed-score-decoder-and-event-scheduler'],
               'rust_graph': ['creation', 'global-cache', 'creation-tick-cycle-cache', 'recursive-voice-destruction'],
               'rust_node_ticks': node_ports,
+              'rust_effect_ticks': effect_ports,
               'diagnostic_stdout': completed.stdout,
               'rust_voice': ['note-routing', 'key-rescan', 'polyphony-slot-selection', 'stealing', 'glide', 'voice-create-render-destroy', 'arpeggiator', 'bpm-delay-fraction'],
               'remaining_source': 'unlisted node/effect tick/init functions; allocator callbacks',

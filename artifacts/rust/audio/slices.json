@@ -43,6 +43,14 @@
     "CONSTANT": 64,
     "VOICEPARAM": 65
   },
+  "rust_effect_ticks": {
+    "BQFILTER": 9,
+    "DELAY": 32,
+    "FBDELAY": 33,
+    "REVERB": 36,
+    "COMPEXP": 38,
+    "COMBDELAY": 51
+  },
   "diagnostic_stdout": "RUST_GRAPH created=25692 destroyed=25158 global_hits=70765 voice_hits=44243 ABI=14/14\nSOURCE_RENDERED frames=8388608 tick=8388609\n",
   "rust_voice": [
     "note-routing",
@@ -104,7 +112,7 @@
     "/home/rovshan/Work/asm/Eidolon/data/builds/T23/coverage.bin"
   ],
   "frames": 8388608,
-  "elapsed_seconds": 38.05959372303914,
+  "elapsed_seconds": 40.893016481015366,
   "mxcsr": "0xffc0",
   "environment": {
     "resolution": null,
@@ -122,24 +130,25 @@
   "adapted_files": {
     "Synth.cpp": "d117a02a7bd3fdc157aed87260e1c5681e208cb51b8be6386304ed78db40a70f",
     "Synth.h": "813ca95332d3dc853a9509a14400b91d60ba488afcbbe3d1f004f2f120325877",
-    "SynthNode.cpp": "df6ab336e5692d331a3bc46a23ed2339d0067953ffd4c0b0ffdb19a1f663ce0b",
+    "SynthNode.cpp": "9d5474e7706dc287c8b7a8794c9add8acabf5e9bcc087c8d11abb394ce0cf36b",
     "SynthNode.h": "faab4adcec2e7f9f31660aec1e7eddc0f997f5f8d1e8d6987c94564b59b06941",
     "SynthAllocator.h": "514ab289626772be0ad2a92734ca8c25117bc9c937133ddc5f6642f24a1168a8",
     "sample_t.cpp": "d1deebeb583ec3057bd86df731b057465a7eef60d10db18117a5f8e76704c8e3",
     "sample_t.h": "818c7e609561d9a682b425c26a552ed3519dcabce706a20c1c73442b93803e19",
     "windows.h": "ff55a33246262f211fdc096a70bf02e88c07039494f9e632f5e4a5f325f3e7d5",
     "64k2Patch.h": "fb9f983b01c8cc70c57850a59772e832b92db81db1182b7fbe5d37721d70ebb2",
-    "graph_bridge.h": "30e4dfc033ce234122a6844be4332834fc43ead1668b17cdfe23c80b476202c7"
+    "graph_bridge.h": "9c338901849c3428f39a3599940073042a584f1f783d61a929979470e1bd78b0"
   },
   "rust_files": {
-    "src/audio/mod.rs": "907bc62d12f9d85fce2a1bca3b757f4755361ea4e62d2c55e6cad54d8e7ea9ad",
+    "src/audio/mod.rs": "d26e8874d474ce05bb10b9f641d54242f6964083c9a027155c7dde0b0987ce24",
     "src/audio/math.rs": "82d5ed7629ebee4cb6efdf1e87c6bded73c067dcc54e6befad9f3e1392bd3285",
     "src/audio/score.rs": "95f983c4126d6e8a52f673cf0735add23abde08997bbcfd291dda20463673f09",
     "src/audio/data.rs": "7fea7c8b68aefedf36735aa405fafc3cc886c662a8414daac56ebf3da82663de",
     "src/audio/graph.rs": "b1c5d3929065d699a08cda34a80f72292a0a85155cb8717b176365b8233b543d",
     "src/audio/nodes.rs": "9079e87d7062db786ef1fd75db971ca5c40e910801620a0f3972522cdb9f6ed3",
     "src/audio/voice.rs": "3835d93451648315f55140f08f16e04dae1126c6b181f4f55b80bd04c8673b1e",
-    "src/audio/arp.rs": "e09bd5cc56d30061efbbb9030a658a3937d2dd834ef646c6795522d84a99d86a"
+    "src/audio/arp.rs": "e09bd5cc56d30061efbbb9030a658a3937d2dd834ef646c6795522d84a99d86a",
+    "src/audio/effects.rs": "684cf12b43f0204d7d9fb61c2c63b01e3e119805aeea1b6a0b3c15f4875ede06"
   },
-  "binary_sha256": "1e598e770f5d252cdf1f5fac64f558c795a12e6bdf4caef6f82100ae10ffacbc"
+  "binary_sha256": "5dacf91da8ab7f84120a8e3fa1d26c5f307eb3c70fb8a11ec2ce491f1ccedf87"
 }

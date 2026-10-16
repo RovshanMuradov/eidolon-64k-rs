@@ -21,6 +21,8 @@ void eidolon_voice_tick(SynthNode*, RustGraphContext*);
 void eidolon_note(RustGraphContext*, unsigned, unsigned, unsigned, unsigned);
 void eidolon_fraction(SynthGlobalStateStruct*, const sample_t*, sample_t*);
 void eidolon_arp_step(SynthNode*, SynthGlobalStateStruct*, unsigned);
+void eidolon_effect_tick(SynthNode*, SynthGlobalStateStruct*, unsigned);
+void eidolon_effect_init(SynthNode*, RustGraphContext*, unsigned);
 }
 void ArpeggiatorStep(SynthNode*, int);
 inline sample_t GetDelayTimeFraction(const sample_t&);
