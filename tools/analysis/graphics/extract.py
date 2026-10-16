@@ -175,7 +175,7 @@ def main():
                            'framebuffers': len(framebuffer), 'textures_2d': texture},
                 'limitations': ['Decoded tables are static, not executed GL-state observations',
                                 'Curve float32_bits preserve negative zero and native tangents',
-                                'Fourth-component native gate needs review before supporting vec4 tracks',
+                                'Fourth-component gate has one discarded-W case; see physics.md',
                                 'No graphics equivalence or full-reference acceptance is asserted']}
     target = ROOT / 'analysis/graphics/assets.json'
     if args.write_manifest:
