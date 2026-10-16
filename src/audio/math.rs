@@ -13,10 +13,67 @@ pub struct Stereo(pub __m128d);
 
 impl Stereo {
     #[inline]
+    pub fn splat(x: f64) -> Self { unsafe { Self(_mm_set1_pd(x)) } }
+    #[inline]
+    pub fn zero() -> Self { unsafe { Self(_mm_setzero_pd()) } }
+    #[inline]
+    pub unsafe fn abs(self) -> Self { Self(_mm_andnot_pd(_mm_set1_pd(-0.0), self.0)) }
+    #[inline]
+    pub unsafe fn min(self, b: Self) -> Self { Self(_mm_min_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn max(self, b: Self) -> Self { Self(_mm_max_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn eq(self, b: Self) -> Self { Self(_mm_cmpeq_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn ne(self, b: Self) -> Self { Self(_mm_cmpneq_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn lt(self, b: Self) -> Self { Self(_mm_cmplt_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn le(self, b: Self) -> Self { Self(_mm_cmple_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn gt(self, b: Self) -> Self { Self(_mm_cmpgt_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn ge(self, b: Self) -> Self { Self(_mm_cmpge_pd(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn select(self, yes: Self, no: Self) -> Self { Self(_mm_blendv_pd(no.0, yes.0, self.0)) }
+    #[inline]
+    pub unsafe fn is_zero(self) -> bool { _mm_testz_si128(_mm_castpd_si128(self.0), _mm_castpd_si128(self.0)) != 0 }
+    #[inline]
+    pub unsafe fn sqrt(self) -> Self { Self(_mm_sqrt_pd(self.0)) }
+    #[inline]
+    pub unsafe fn shuffle(self, b: Self) -> Self { Self(_mm_shuffle_pd::<1>(self.0, b.0)) }
+    #[inline]
+    pub unsafe fn left(self) -> Self { Self(_mm_unpacklo_pd(self.0, self.0)) }
+    #[inline]
+    pub unsafe fn right(self) -> Self { Self(_mm_unpackhi_pd(self.0, self.0)) }
+    #[inline]
+    pub unsafe fn clamp(self, high: Self, low: Self) -> Self { low.max(high.min(self)) }
+    #[inline]
     pub unsafe fn load(p: *const f64) -> Self { Self(_mm_loadu_pd(p)) }
     #[inline]
     pub unsafe fn store(self, p: *mut f64) { _mm_storeu_pd(p, self.0) }
 }
+
+macro_rules! arithmetic {
+    ($trait:ident, $method:ident, $intrinsic:ident) => {
+        impl core::ops::$trait for Stereo {
+            type Output = Self;
+            #[inline] fn $method(self, b: Self) -> Self { unsafe { Self($intrinsic(self.0, b.0)) } }
+        }
+    };
+}
+arithmetic!(Add, add, _mm_add_pd);
+arithmetic!(Sub, sub, _mm_sub_pd);
+arithmetic!(Mul, mul, _mm_mul_pd);
+arithmetic!(Div, div, _mm_div_pd);
+arithmetic!(BitAnd, bitand, _mm_and_pd);
+arithmetic!(BitOr, bitor, _mm_or_pd);
+impl core::ops::Neg for Stereo {
+    type Output = Self;
+    #[inline] fn neg(self) -> Self { unsafe { Self(_mm_xor_pd(self.0, _mm_set1_pd(-0.0))) } }
+}
+#[inline]
+pub fn lerp(a: Stereo, b: Stereo, f: Stereo) -> Stereo { (b - a) * f + a }
 
 #[target_feature(enable = "sse4.1")]
 pub unsafe fn exp2(x: Stereo) -> Stereo {

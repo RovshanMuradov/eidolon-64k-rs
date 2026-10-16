@@ -51,9 +51,24 @@ def main():
                         '    sample_t out; eidolon_rand(SC[S_RAND_SEED].l, out.d); return out;')
     files['sample_t.cpp'] = declarations + text
     text = files['SynthNode.cpp']
+    text = text.replace('#include "SynthAllocator.h"', '#include "SynthAllocator.h"\n#include "graph_bridge.h"')
+    text = replace_body(text, 'SynthNode* CreateNode(',
+                        '    rust_check_layout(); return eidolon_create_node(&rust_graph,id,refnodes,offset,isGlobal);')
+    text = replace_body(text, 'SynthNode* CreateNodes(',
+                        '    return eidolon_create_nodes(&rust_graph,offset,global);')
+    text = replace_body(text, 'void DestroyVoiceNodes(',
+                        '    eidolon_destroy_voice(&rust_graph,node);')
+    node_ports = {'CHANNELROOT':1, 'NOTECONTROLLER':2, 'VOICEROOT':4, 'ADSR':5,
+                  'ONEPOLEFILTER':10, 'ONEZEROFILTER':11, 'PANNING':13, 'MUL':15, 'DIV':16,
+                  'ADD':17, 'SUB':18, 'CLIP':19, 'MIX':20, 'MONO':22, 'ENVFOLLOWER':23,
+                  'DCFILTER':34, 'NEG':45, 'MIN':47, 'MAX':48, 'CONSTANT':64, 'VOICEPARAM':65}
+    for name, opcode in node_ports.items():
+        text = replace_body(text, f'void SYNTHCALL {name}_tick(',
+                            f'    source_seen[n->valueOffset] = 1; eidolon_node_tick(n,&SynthGlobalState,{opcode});')
     text = replace_body(text, 'inline sample_t Sampler_Sample(',
                         '    sample_t out; eidolon_sample((void*)n->v[11].l[0], n->v[10].d, index.d, out.d); return out;')
     files['SynthNode.cpp'] = 'extern "C" void eidolon_sample(const void*, const double*, const double*, double*);\n' + text
+    files['graph_bridge.h'] = Path('tools/rust-audio/graph_bridge.h').read_text()
     text = files['Synth.cpp']
     start = text.index('\tchar lpGMDLSName[1024];')
     end = text.index('\t// write out gmdls wave names', start)
@@ -72,13 +87,14 @@ def main():
     start = text.index('\t\tDeltaStream = SynthGlobalState.SongStream+16;', text.index('void _64klang_Render(float*'))
     end = text.index('\t\t// tick samples until next frame', start)
     text = text[:start] + '        eidolon_score_dispatch(rust_score, currentTimeStamp, eidolon_emit_event);\n' + text[end:]
-    text = text.replace('\trenderDone = true;', '\teidolon_score_free(rust_score);\n\trenderDone = true;')
+    text = text.replace('\trenderDone = true;', '\teidolon_score_free(rust_score);\n\teidolon_graph_report();\n\trenderDone = true;')
     text = text.replace('void _64klang_Render(float* dstbuffer)', '''static void eidolon_emit_event(unsigned channel, unsigned kind, unsigned special, unsigned value, unsigned velocity) {
     if (kind == 3) _64klang_MidiSignal(channel, value, special);
     else AddToNoteController(channel, value, velocity, kind == 1);
 }
 void _64klang_Render(float* dstbuffer)''')
     files['Synth.cpp'] = '''#include <cstddef>
+extern void eidolon_graph_report();
 extern "C" size_t eidolon_wave(unsigned, double*, size_t);
 extern "C" void* eidolon_score_new();
 extern "C" void eidolon_score_dispatch(void*, unsigned, void(*)(unsigned,unsigned,unsigned,unsigned,unsigned));
@@ -105,7 +121,8 @@ extern "C" void eidolon_score_free(void*);
     started = time.monotonic()
     run_command = [build / 'slice-player', base / 'score-encoded.bin', base / 'patch-and-trailer.bin',
                    '/unused-embedded-bank', output, str(args.frames), build / 'coverage.bin']
-    run(run_command, timeout=360)
+    completed = subprocess.run(list(map(str,run_command)), check=True, timeout=360, capture_output=True, text=True)
+    print(completed.stdout, end='')
     elapsed = time.monotonic() - started
     reference_manifest = root / '.worktrees/T16/artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json'
     refpin = json.loads(reference_manifest.read_text())
@@ -121,7 +138,10 @@ extern "C" void eidolon_score_free(void*);
               'source_manifest_sha256': sha(Path('analysis/audio/source-check.json').read_bytes()),
               'assets_manifest_sha256': sha(Path('artifacts/rust/audio/assets.json').read_bytes()),
               'rust_slices': ['exp2', 'log2', 'sin', 'signed-two-lane-rng', 'sampler-interpolation', 'embedded-15-wave-bank-initialization', 'fixed-score-decoder-and-event-scheduler'],
-              'remaining_source': 'graph, voices, all node wrappers and effects',
+              'rust_graph': ['creation', 'global-cache', 'creation-tick-cycle-cache', 'recursive-voice-destruction'],
+              'rust_node_ticks': node_ports,
+              'diagnostic_stdout': completed.stdout,
+              'remaining_source': 'voice-manager/arpeggiator and unlisted node/effect ticks; allocator callbacks',
               'rustc': subprocess.check_output(['rustc', '--version'], text=True).strip(),
               'compiler': subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
               'rust_command': list(map(str, rust_command)), 'compile_command': list(map(str, command)),
