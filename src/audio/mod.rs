@@ -10,6 +10,9 @@ pub mod math;
 pub mod score;
 pub mod voice;
 pub mod sources;
+pub mod oscillator;
+pub mod sequencer;
+pub mod glitch;
 
 pub const SAMPLE_RATE: u32 = 44_100;
 pub const CHANNELS: usize = 2;

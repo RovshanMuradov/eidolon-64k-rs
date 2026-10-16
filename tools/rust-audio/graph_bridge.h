@@ -27,6 +27,10 @@ void eidolon_random_tick(SynthNode*, SynthGlobalStateStruct*, void*, unsigned);
 void eidolon_bank_tick(SynthNode*, SynthGlobalStateStruct*, const unsigned*, void*);
 void eidolon_sampler_tick(SynthNode*, SynthGlobalStateStruct*);
 void eidolon_formant_tick(SynthNode*, RustGraphContext*);
+void eidolon_oscillator_tick(SynthNode*, SynthGlobalStateStruct*, void*, unsigned);
+void eidolon_sequencer_tick(SynthNode*, SynthGlobalStateStruct*, void*);
+void eidolon_glitch_init(SynthNode*, RustGraphContext*);
+void eidolon_glitch_tick(SynthNode*, SynthGlobalStateStruct*, void*);
 }
 void ArpeggiatorStep(SynthNode*, int);
 inline sample_t GetDelayTimeFraction(const sample_t&);

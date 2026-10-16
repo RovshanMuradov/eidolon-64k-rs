@@ -87,6 +87,13 @@ def main():
                         '    source_seen[n->valueOffset]=1; eidolon_sampler_tick(n,&SynthGlobalState);')
     text = replace_body(text,'void SYNTHCALL FORMANT_tick(',
                         '    source_seen[n->valueOffset]=1; eidolon_formant_tick(n,&rust_graph);')
+    for name,opcode in {'LFO':6,'OSCILLATOR':7}.items():
+        text=replace_body(text,f'void SYNTHCALL {name}_tick(',f'    source_seen[n->valueOffset]=1; eidolon_oscillator_tick(n,&SynthGlobalState,SC[S_RAND_SEED].l,{opcode});')
+    text=replace_body(text,'void SYNTHCALL TRIGGERSEQ_tick(',
+                      '    source_seen[n->valueOffset]=1; eidolon_sequencer_tick(n,&SynthGlobalState,SC[S_RAND_SEED].l);')
+    text=replace_body(text,'void SYNTHCALL GLITCH_init(', '    eidolon_glitch_init(n,&rust_graph);')
+    text=replace_body(text,'void SYNTHCALL GLITCH_tick(',
+                      '    source_seen[n->valueOffset]=1; eidolon_glitch_tick(n,&SynthGlobalState,SC[S_RAND_SEED].l);')
     text = replace_body(text, 'inline sample_t Sampler_Sample(',
                         '    sample_t out; eidolon_sample((void*)n->v[11].l[0], n->v[10].d, index.d, out.d); return out;')
     files['SynthNode.cpp'] = 'extern "C" void eidolon_sample(const void*, const double*, const double*, double*);\n' + text
@@ -148,7 +155,7 @@ extern "C" void eidolon_score_free(void*);
     completed = subprocess.run(list(map(str,run_command)), check=True, timeout=360, capture_output=True, text=True)
     print(completed.stdout, end='')
     elapsed = time.monotonic() - started
-    reference_manifest = root / '.worktrees/T16/artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json'
+    reference_manifest = Path('artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json')
     refpin = json.loads(reference_manifest.read_text())
     reference_path = data / 'reference/proxy-b-d13-detached-20261016-1/pcm.f32le'
     reference = reference_path.read_bytes()
@@ -167,9 +174,11 @@ extern "C" void eidolon_score_free(void*);
               'rust_effect_ticks': effect_ports,
               'rust_source_ticks': ['NOISEGEN','OSRAND','GMDLS','SAMPLER'],
               'rust_formant': 'all 375 coefficients embedded; initialization and 5-filter tick ported',
+              'rust_oscillator_sequencer': ['LFO','OSCILLATOR','TRIGGERSEQ'],
+              'rust_glitch': 'all four modes; local/global RNG swaps and exact activation seed',
               'diagnostic_stdout': completed.stdout,
               'rust_voice': ['note-routing', 'key-rescan', 'polyphony-slot-selection', 'stealing', 'glide', 'voice-create-render-destroy', 'arpeggiator', 'bpm-delay-fraction'],
-              'remaining_source': 'unlisted node/effect tick/init functions; allocator callbacks',
+              'remaining_source': 'bootstrap, dispatch table, allocator callbacks, FP/output loop, MIDI-CC setter; all used kernels are Rust',
               'rustc': subprocess.check_output(['rustc', '--version'], text=True).strip(),
               'compiler': subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
               'rust_command': list(map(str, rust_command)), 'compile_command': list(map(str, command)),
