@@ -4,12 +4,62 @@ import argparse
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
+import re
 import struct
+import subprocess
 import zstandard
 from conformance import CHECKOUT,DATA,Native,load,checked,sha,need
 from runtime_events import events
-from monitor_full import native_times
+from monitor_full import native_times, process, live_images
+
+
+def compare_uniform(a,b,n,ordinal,actual_program,expected_program,fbo_ids,volume,native_volume,mapping,reverse):
+    need(a[:2]==b[:2]==(n,ordinal),"draw order")
+    need(actual_program[a[2]]==expected_program[b[2]],f"shader identity {n}/{ordinal}")
+    need(a[4:8]==b[4:8],f"viewport {n}/{ordinal}")
+    logical=0 if a[3]==0 else 1+fbo_ids.index(a[3])
+    need(mapping.setdefault(b[3],logical)==logical and reverse.setdefault(logical,b[3])==b[3],"framebuffer role correspondence")
+    need((a[8]!=0xffffffff)==(b[8]!=0xffffffff),"time-uniform liveness")
+    if b[8]!=0xffffffff:need(a[9:12]==b[9:12],f"native time uniform {n}/{ordinal}")
+    need((a[12]!=0xffffffff)==(b[12]!=0xffffffff),"cloud-uniform liveness")
+    if b[12]!=0xffffffff:need(a[13]==b[13] and a[14]==volume and b[14]==native_volume,"cloud sampler/resource")
+    need(a[15]==a[16] and a[17:19]==(0,0),"queried GL restoration")
+
+
+def cleanup(state):
+    leftovers=[];session=[]
+    for p in Path('/proc').iterdir():
+        if not p.name.isdigit():continue
+        try:
+            if os.getsid(int(p.name))==state['sid']:session.append(int(p.name))
+            if b'WINEPREFIX=/tmp/opencode/eidolon/T24/prefix' in (p/'environ').read_bytes().split(b'\0') and 'wine' in str((p/'exe').resolve()):leftovers.append(int(p.name))
+        except OSError:pass
+    sink='eidolon_T24_rust' in subprocess.check_output(['pactl','list','short','sinks'],text=True)
+    need(not leftovers and not session and not sink,'semantic cleanup incomplete')
+    return dict(wine_pids=leftovers,session_pids=session,private_sink_present=sink)
+
+
+def reconcile():
+    pointer=load(CHECKOUT/'artifacts/verification/rust/semantic-job.json')
+    request=load(checked(DATA/pointer['request'],pointer['request_sha256']))
+    path=Path(pointer['state']);state=load(path);job=path.parent
+    need(pointer['pid']==request['pid']==state['pid']==state['sid']==2493456,'scalar supervisor identity')
+    need(state['semantic'] and state['full'] and state['frames_requested']==27000,'scalar mode')
+    for name,digest in state['sources'].items():
+        need(digest==request['sources'][name],'scalar source snapshot');checked(job/name,digest)
+    checked(state['candidate'],state['candidate_sha256']);checked(job/'live.dll',state['helper_sha256'])
+    processes=[process(state[k]) for k in ('pid','runner_pid')]
+    if state['phase']=='running':
+        need(processes[0]['exists'] and processes[0]['sid']==state['sid'] and '--full --semantic' in processes[0]['command'],'lost scalar supervisor')
+        need(processes[1]['exists'] and processes[1]['sid']==state['sid'],'lost scalar runner')
+    used=sum(p.stat().st_size for p in DATA.rglob('*') if p.is_file());need(used<30000000000,'30GB data limit')
+    result=dict(phase=state['phase'],state_sha256=sha(path),processes=processes,data_bytes=used,
+                live_mappings=live_images(state['candidate'],job/'live.dll'),uniform_bytes=(job/'output/uniforms.bin').stat().st_size,
+                production_accepted=False)
+    if state['phase']=='closed':result['cleanup']=cleanup(state)
+    return result
 
 
 def native_uniforms(native):
@@ -83,7 +133,10 @@ def review(name):
         need(words[:3]==expected[:3] and words[5]==expected[3],"native semantic clock")
     if state["full"]:
         terminal=struct.unpack("<7I",records[-2][1][:28]);need(terminal[:3]==(27000,19845000,0x43e10000) and terminal[4]==0xffffffff,"semantic natural endpoint")
-        need("reason=natural_exit" in (job/"runner.log").read_text(errors="replace"),"semantic wrapper stop")
+        log=(job/'runner.log').read_text(errors='replace')
+        need('reason=natural_exit queries=27001 frames=27000 terminal_cursor=19845000' in log and 'CHILD_EXIT 0 entry_proof=1' in log and 'WINE_EXIT=0 GAMESCOPE_EXIT=0' in log and 'PLANNED_SHORT_STOP' not in log,'semantic natural exit log')
+        need(not re.search(r'SEMANTIC_FAILURE|HOOK_(?:FP|GPR)_MISMATCH|LAUNCH_FAILURE|EIDOLON_RUNTIME error:|TIMEOUT',log),'semantic runtime error')
+        cleanup(state)
     for kind,payload in records:
         if kind in (6,7,9):need(payload.hex()==native.manifest["audio"]["sha256"],"semantic PCM digest")
     native_volume=next(e["texture"] for e in native.producer["observations"] if e["event"]=="volume_upload")
@@ -92,25 +145,18 @@ def review(name):
         for n in range(frames):
             for ordinal in range(19):
                 raw=actual.read(76);need(len(raw)==76,"uniform record truncated");a=struct.unpack("<19I",raw);b=struct.unpack("<15I",expected.read(60))
-                need(a[:2]==b[:2]==(n,ordinal),"draw order")
-                need(actual_program[a[2]]==expected_program[b[2]],f"shader identity {n}/{ordinal}")
-                need(a[4:8]==b[4:8],f"viewport {n}/{ordinal}")
-                logical=0 if a[3]==0 else 1+fbo_ids.index(a[3])
-                need(mapping.setdefault(b[3],logical)==logical and reverse.setdefault(logical,b[3])==b[3],"framebuffer role correspondence")
-                need((a[8]!=0xffffffff)==(b[8]!=0xffffffff),"time-uniform liveness")
-                if b[8]!=0xffffffff:need(a[9:12]==b[9:12],f"native time uniform {n}/{ordinal}")
-                need((a[12]!=0xffffffff)==(b[12]!=0xffffffff),"cloud-uniform liveness")
-                if b[12]!=0xffffffff:need(a[13]==b[13] and a[14]==volume and b[14]==native_volume,"cloud sampler/resource")
-                need(a[15]==a[16] and a[17:19]==(0,0),"queried GL restoration")
+                compare_uniform(a,b,n,ordinal,actual_program,expected_program,fbo_ids,volume,native_volume,mapping,reverse)
                 comparisons+=1
         need(not actual.read(1),"extra uniform records")
     return dict(status="SEMANTIC_PREFIX_EXACT" if not state["full"] else "SEMANTIC_FULL_EXACT",job=name,frames=frames,uniform_passes=comparisons,
                 ready_seed=True,ready_tick=True,previous_seconds=True,initial_physics=True,program_sources=31,framebuffer_role_bijection=mapping,
-                state_sha256=sha(job/"state.json"),native_uniform_projection_sha256=sha(native_path),production_accepted=False)
+                state_sha256=sha(job/"state.json"),native_uniform_projection_sha256=sha(native_path),cleanup_verified=state['full'],production_accepted=False)
 
 
 if __name__=="__main__":
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument("name",nargs="?");p.add_argument("--prepare-native",action="store_true");a=p.parse_args()
-    if a.prepare_native:print(native_uniforms(Native()))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument("name",nargs="?");p.add_argument("--prepare-native",action="store_true");p.add_argument('--reconcile',action='store_true');a=p.parse_args()
+    if a.reconcile:
+        result=reconcile();(CHECKOUT/'artifacts/verification/rust/semantic-progress.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+    elif a.prepare_native:print(native_uniforms(Native()))
     else:
         result=review(a.name);(CHECKOUT/f"artifacts/verification/rust/{a.name}.json").write_text(json.dumps(result,indent=2)+"\n");print(json.dumps(result))

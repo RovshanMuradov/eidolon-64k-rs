@@ -1,0 +1,23 @@
+{
+  "phase": "closed",
+  "state_sha256": "f0b5140b0fa67fd6b3c211c5873e82c79afd15ce14395ab8e8e4cb7138b3be93",
+  "processes": [
+    {
+      "pid": 2493456,
+      "exists": false
+    },
+    {
+      "pid": 2493498,
+      "exists": false
+    }
+  ],
+  "data_bytes": 29992538392,
+  "live_mappings": [],
+  "uniform_bytes": 38988000,
+  "production_accepted": false,
+  "cleanup": {
+    "wine_pids": [],
+    "session_pids": [],
+    "private_sink_present": false
+  }
+}
