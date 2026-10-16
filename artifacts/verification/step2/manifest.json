@@ -1,0 +1,73 @@
+{
+  "schema": "eidolon-step2-independent-review-v1",
+  "task": "T21",
+  "reviewed_main": "296ed0d1525dd9096fd92176f659f097ef670212",
+  "verdict": "complete-under-D17",
+  "demonstrated_port_blocking_recovery_gaps": [],
+  "pins": {
+    "analysis/graphics/assets.json": "ce3518a518a2a14a82cba4a0f18ae48810b4e98d9f9561bd29147cd7875bfba4",
+    "analysis/graphics/saved-state.json": "8cc75bbe3d1ca04c72061b730281d77332f223364b3347ece87654aa08cfc28c",
+    "analysis/audio/manifest.json": "ff3ffdff0acad90e4103a95652ed7c80262c251d4d44bcc78516802fca4070d2",
+    "analysis/audio/source-check.json": "7738800191dd8b73ebeb335f804c8439701422fa3f44888df7c24b0f2c59e000",
+    "analysis/audio/source-check-closed.json": "061122806e16db49eef024e5a68300a53f51979eb37c6c1e930a7ed76638b725",
+    "analysis/audio/kernels.json": "75a4cbfa9cab7eaf5695a7680e17b8c6ddb28640fd937f1737ab5082cf376d0a",
+    "analysis/audio/decoder-cost.json": "0b0b3b912ab735fb599feb6d62fa6021253e12d6070747b5333c633660f9141c",
+    "analysis/packing/manifest.json": "63090a18567d895cd3fc86f95a66f8a15ce728548ee1fb579ea8316719bcf86b",
+    "analysis/system-map.md": "dd55336fde563c13bab3e45d16e7c0be7ba36014872959f03303f29bb75146b7",
+    "artifacts/verification/step2/check.py": "e0adabd30157d5f2b9043f377004887ea33d5f0204789aa3c7c3ba2a630f64d2"
+  },
+  "environment": {
+    "python": "3.14.7",
+    "objdump": "2.47",
+    "gcc_gxx": "16.2.1 20260810",
+    "mingw_gcc": "16.2.0",
+    "zstandard_module": "0.25.0",
+    "resolution_gpu_driver_wine": "No live use; saved G5 environment is pinned by graphics/saved-state.json",
+    "scratch": "$EIDOLON_DATA/verification/step2"
+  },
+  "reproduction": {
+    "command": "bash tools/run python artifacts/verification/step2/check.py MODE",
+    "recovery_first": true,
+    "modes_passed": ["recovery", "graphics", "packing", "audio", "closed", "decoder", "kernels"],
+    "recovery": "Exact regenerated manifest, including separate/joint compression round trips",
+    "graphics": "93 fragments; 50 rows; 561 descriptors; 758 curves; 564210 finite track samples; G5_READY; 133 equal pairs",
+    "audio_closed": "Both 19964544-frame renders equal pinned diagnostic PCM; 761 nodes, 46 types, 43 kernels, 15 samples; bit/truncation/shift controls reject",
+    "packing": "Exact manifest match; all20 filter streams reconstruct30279 code bytes",
+    "decoder": "All three PE hashes/sizes reproduced; Linux decode equality; PE never executed",
+    "kernels": "Output-only redirection; regenerated inventory equals pinned inventory",
+    "harness_correction": "Initial G5 reviewer rejected sandbox symlink escape; rerun read-only with original data root passed. Other outputs remain private."
+  },
+  "manual_instruction_review": {
+    "command": "bash tools/run objdump -D -b binary -m i386 -Mintel --adjust-vma=0x400000 --start-address=START --stop-address=END $EIDOLON_DATA/reverse/confirmed-debug/postfix-00400000.bin",
+    "ranges": [
+      ["0x406019", "0x4062d0", "physics lane/order/reset/dt/x87 call semantics agree"],
+      ["0x407b84", "0x407d26", "sample clock, strict row end, curve tie/order agree"],
+      ["0x4082c4", "0x408646", "persistent program uniforms, initialization draws, endpoint and x87 helpers agree"]
+    ]
+  },
+  "step4_recommendation": {
+    "status": "provisional planning target; coordinator decision required",
+    "bundled_target_bytes": 163840,
+    "measured_decoder_only_bytes": 145920,
+    "unproven_integration_allowance_bytes": 17920,
+    "count": "Whole packed EXE including decoder, PE/import layout, restored sample metadata and all15 necessary sample waves; add every other required deliverable file",
+    "platform_exclusions": "Explicitly pinned ordinary Win32/OpenGL runtime and driver; do not silently classify fixed gm.dls content as free platform data",
+    "fallback": "Rebaseline after equivalent Rust build; retain best fully verified bundled result above target if supported optimization attempts stop improving",
+    "optional_system_bank_policy": {
+      "requires": "Explicit coordinator exception retaining and pinning existing external gm.dls dependency",
+      "provisional_exe_target_bytes": 81920,
+      "decoder_only_bytes": 74240,
+      "external_bank_bytes_to_disclose_separately": 3440660,
+      "self_contained": false
+    },
+    "target_32768": "Unsupported stretch, not disproven; decoder scaffolds are neither runnable ports nor lower bounds",
+    "overhead_accounting": "60928=2084+58844; inner1501 is already encoded. Do not add it to the stream or alternate decoder; marginal codec shares are non-additive."
+  },
+  "later_validation": [
+    "G6 full reference remains open; D17 permits research completion only",
+    "Native-versus-Rust post-update physics/x87/uniform and later-pass output equivalence",
+    "Implicit fragment-output linking must be preserved or independently validated",
+    "Rust synth ABI/allocation/completion/startup conformance beyond fixed-score CPU equality",
+    "Equivalent executable size and performance; no guaranteed future shader/curve/code savings"
+  ]
+}
