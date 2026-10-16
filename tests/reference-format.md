@@ -1,7 +1,7 @@
 # Draft reference contract
 
-- [V] Owner: Verification/T9; assignment: [briefs/T9.md](../briefs/T9.md).
-- [H] Schema `eidolon-reference-draft-3` remains provisional pending T4 agreement and live capture validation.
+- [V] Owner: Verification/T10; assignment: [briefs/T10.md](../briefs/T10.md).
+- [H] Schema `eidolon-reference-draft-3` remains provisional pending T2's A producer agreement and live capture validation.
 - [V] Acceptance target: [approved step 1](../GOAL.md#approved-step-1--reproducible-reference-of-the-original).
 - [V] Executable checker: [tools/verify/reference.py](../tools/verify/reference.py); synthetic fixture: [reference_factory.py](reference_factory.py).
 - [H] A `PASS` under this draft reports only the requested integrity/comparison operation; synthetic captures establish neither an original reference nor original repeatability.
@@ -65,7 +65,7 @@
 - [H] `evidence` names a nonempty observation artifact; `evidence_sha256` hashes its exact bytes; the verifier checks presence/hash independently for each run.
 - [H] The evidence artifact must identify its run, source/dependency identity, synthesis thread and completion location, submitted pointer/length, initial/final ticks, observed final cursor, event ordering and both full-range acquisition/stability hashes; include capture loss/error observations and retain the producer's observation format/tool identity.
 - [H] Runtime evidence review must establish actual final cursor, full-range coverage, cross-thread ordering and later immutability; metadata consistency and a hash-bound artifact alone cannot authenticate producer claims.
-- [?] T1/T2 observed submission before synthesis completion but did not acquire complete PCM or the final cursor; the predicted cursor and stability requirements remain live validation work.
+- [V] Immutable B provides observed final-cursor/acquisition/stability diagnostics; independent assessment and remaining acceptance limitations: [B diagnostic assessment](#b-diagnostic-assessment).
 
 ## Frames and time
 
@@ -104,18 +104,31 @@
 - [H] Review G5 pixels with `verify_raw` and PCM declarations/artifact with `verify_pcm_completion` in the independent checker, then verify whole PCM size/hash and clock observations; this is acquisition validation, not the full-run CLI `PASS` criterion.
 - [H] `validate`/`compare` require full original extents and valid completion; diagnostic fragments must not rewrite source kind, scene/count/end fields or `finalized` to manufacture a pass.
 
+## B diagnostic assessment
+
+- [V] Immutable input: `$EIDOLON_ROOT/.worktrees/T2/artifacts/reference/proxy-b-g1-20261016.json`; [diagnostic_pcm.py](../tools/verify/diagnostic_pcm.py) pins its SHA-256, rehashes its three evidence files and six capture sources, and checks the original observation stream independently.
+- [V] `completion_from_events` projects only observed PCM fields into `verify_pcm_completion`; it creates no reference manifest, frame records, successful termination or accepted-reference identity.
+- [V] The source-pinned `core.c` reads `[EBP+8]` at `0x401765`, serializes event IDs under a critical section, waits for completion, writes the entire submitted range and separately hashes source memory twice; independent saved-file hashing agrees.
+- [V] `hook_context` logs the same digest twice after a context comparison; this limited observation does not establish complete ABI/FP/state-preservation gates.
+- [V] The manifest supplies run/source/dependency identity; `backend.jsonl` alone does not contain that envelope. A must publish self-identifying, hash-bound completion evidence under the existing draft-3 requirements.
+- [V] Real PCM content statistics are descriptive; finite/nonzero values and peaks outside ±1 neither establish musical correctness nor authorize clipping, normalization or tolerance.
+- [V] Diagnostic assessment returns `DIAGNOSTIC_ONLY`, `reference_accepted:false`, exit 0 for successfully checked diagnostics; changed/missing evidence returns `FAIL`, exit 1. Full-run `validate` rejects B.
+- [V] `--corruptions` modifies disposable PCM copies, checks first/tail bytes, missing/short/extra data, the complete visual-tail trim and a one-sample-frame shift; refreshed hashes cannot defeat direct byte comparison. Completion-field faults also fail.
+- [?] B contains zero real pre-present buffers and one frame-zero sample-cursor observation; final layout, raw pixels, scene anchors, advancing controlled clocks, visual completion, exact repeatability and outstanding G1–G4 evidence remain absent.
+
 ## Commands
 
 - [H] Single-run integrity: `bash tools/run python tools/verify/reference.py validate <manifest> --data-root <run-data>`.
 - [H] Independent run comparison: `bash tools/run python tools/verify/reference.py compare <reference-manifest> <repeat-manifest> --reference-data <reference-data> --candidate-data <repeat-data>`.
 - [H] JSON output contains `status: PASS|FAIL`, `draft:true`, `source_kinds`, operation and failure reasons; exit status is `0` for PASS, `1` for FAIL, `2` for CLI usage errors.
-- [V] Tool versions: `bash tools/run python --version` → 3.14.7; `bash tools/run python -m pytest --version` → 9.1.1; `bash tools/run python -c "import zstandard; print(zstandard.__version__)"` → 0.25.0.
-- [V] Temporary-parent prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T9').mkdir(parents=True, exist_ok=True)"`.
-- [V] Synthetic regression command: `bash tools/run python -m pytest tests/test_reference.py --basetemp /tmp/opencode/eidolon/T9/pytest -q`; result: [reports/03-tests.md](../reports/03-tests.md).
+- [V] Tool versions: Python 3.14.7, pytest 9.1.1, NumPy 2.5.4, Zstandard 0.25.0; check with `bash tools/run python -c 'import sys,pytest,numpy,zstandard; print(sys.version,pytest.__version__,numpy.__version__,zstandard.__version__)'`.
+- [V] Temporary-parent prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T10').mkdir(parents=True, exist_ok=True)"`; pytest requires the parent before `--basetemp` initialization.
+- [V] Regression command: `bash tools/run python -m pytest tests/test_reference.py tests/test_diagnostic_pcm.py --basetemp /tmp/opencode/eidolon/T10/pytest -q`; B tests require immutable external assets and skip if its manifest is absent; result: [reports/03-tests.md](../reports/03-tests.md).
+- [V] B acquisition/corruption command: `bash tools/run python tools/verify/diagnostic_pcm.py /home/rovshan/Work/asm/Eidolon/.worktrees/T2/artifacts/reference/proxy-b-g1-20261016.json --corruptions`; data root defaults to `$EIDOLON_DATA`, source root to the manifest's checkout.
 
 ## Agreement required
 
-- [?] T4 must return agreement through the named handoff; the coordinator/user's capture-method decision gates implementation.
+- [?] T2 must acknowledge draft-3 fields for A through the named handoff and satisfy its runtime gates independently of B diagnostics.
 - [?] T2 must confirm native final-buffer layout, actual read-buffer/samples/sRGB, pre-present ordering, scene boundaries and controlled frame zero/endpoint; packed four-byte pixels remain provisional.
-- [?] T2 must supply observed PCM final-cursor/full-range stability evidence and exact-repeat controlled captures; native clock integer mapping is `735*n` at 44100 Hz, preserving the original float conversion path.
+- [?] T2 must supply A's own observed PCM final-cursor/full-range stability evidence and exact-repeat controlled captures; native clock integer mapping is `735*n` at 44100 Hz, preserving the original float conversion path.
 - [?] A small real capture must establish acquisition semantics before full-reference comparison; unsupported native pixel formats require a contract revision rather than a lossy conversion.
