@@ -2,7 +2,8 @@
 """Read-only T14 native/table/saved-observation reconciliation; never runs target/GL.
 
 Default inputs are T11's two staged manifests. --timeline prints the independently
-derived row ranges/retention set. A PASS here is technical confirmation only.
+derived row/beat/token/frame map and retention set. --static-only needs only the
+pinned Reverse dumps. Neither mode grants live-probe or reference acceptance.
 """
 import argparse
 from collections import defaultdict
@@ -71,7 +72,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('manifests', nargs='*', type=Path)
     parser.add_argument('--timeline', action='store_true')
+    parser.add_argument('--static-only', action='store_true',
+                        help='derive the native map without reading capture bundles')
     args = parser.parse_args()
+    if args.static_only and args.manifests:
+        parser.error('--static-only cannot reconcile supplied manifests')
     root, data = Path(os.environ['EIDOLON_ROOT']), Path(os.environ['EIDOLON_DATA'])
     provenance = json.loads(Path('reports/evidence/reverse/manifest.json').read_text())
     identity = provenance['runtime_diagnostic']['files']['postfix']
@@ -87,12 +92,14 @@ def main():
         0x407c0f: 'f30f5c2cc550fc4200',
         0x407c20: '0f84f1090000',
         0x4082c4: '8b38897dd4',  # pre-present -0x2c is a pass index
+        0x4082d0: '83ee01',  # framebuffer selectors are one-based
         0x408617: '57ff1530904000',
         0x401041: '660f38280530b8160b',
         0x401115: '0f290510b8160b',
         0x405437: '0f298690010000',
         0x405650: '0f290510b8160b0f298e90010000',
         0x405730: '0f290510b8160b0f298e90010000',
+        0x401665: '0fae542414',  # synth interior MXCSR observation follows at 0x40166a
         0x407a2b: '68f0bf170b68061400006808190000',
     }
     for address, encoding in pins.items():
@@ -101,10 +108,12 @@ def main():
     tokens = words(0x42fde0, 50)
     assert rows[0][0] == 0 and rows[-1][1] == 600
     assert all(a[1] == b[0] for a, b in zip(rows, rows[1:]))
-    rate = f32(scalar(0x437040) / scalar(0x436428))
+    bpm, seconds_per_minute, sample_rate = [scalar(a) for a in (0x437040, 0x436428, 0x43642c)]
+    assert (bpm, seconds_per_minute, sample_rate) == (80, 60, 44100)
+    rate = f32(bpm / seconds_per_minute)
 
     def frame(n):
-        seconds = f32(f32(float(735 * n)) / scalar(0x43642c))
+        seconds = f32(f32(float(735 * n)) / sample_rate)
         beat = f32(seconds * rate)
         row = next((i for i, (_, end) in enumerate(rows) if end > beat), -1)
         local = f32(beat - rows[row][0]) if row >= 0 else None
@@ -119,17 +128,39 @@ def main():
             previous = row
     assert len(starts) == 51 and starts[1] == 1440 and starts[-1] == 27000
     assert frame(26999)[2] == 49 and frame(27000)[2] == -1
+    ranges = [[a, b - 1] for a, b in zip(starts, starts[1:])]
+    retain = sorted(set(range(0, starts[-1], 60)) | set(starts[:-1]) |
+                    {n - 1 for n in starts[1:]})
+    assert len(retain) == 510 and retain[0] == 0 and retain[-1] == 26999
+    assert sum(b - a + 1 for a, b in ranges) == 27000
+
+    def sample(n):
+        seconds, beat, row, local = frame(n)
+        return {'n': n, 'cursor_samples': 735 * n, 'seconds_f32_bits': bits(seconds),
+                'beat_f32_bits': bits(beat), 'row': row,
+                'local_beat_f32_bits': bits(local) if local is not None else None,
+                'scene_token': tokens[row] if row >= 0 else None}
+
     arrays = shader_arrays(path, words)
     cloud_programs = [i for i, pointers in enumerate(arrays)
                       if any(b'#define CLOUDS\n' in string(a) for a in pointers)]
     assert cloud_programs == [20, 21]
     assert b'texture(uClouds,data.intersection' in string(0x41d710)
     consumers = []
+    cloud_routes = []
     for row, token in enumerate(tokens):
         passes = words(0x435e30 + token * 4, words(0x435e2c + token * 4, 1)[0])
-        if any(words(0x4359d0 + p * 8, 1)[0] in cloud_programs for p in passes):
+        routes = []
+        for p in passes:
+            program, framebuffer = words(0x4359d0 + p * 8, 2)
+            if program in cloud_programs:
+                routes.append({'pass': p, 'program_index': program,
+                               'framebuffer_descriptor': framebuffer - 1})
+        cloud_routes.append(routes)
+        if routes:
             consumers.append(row)
     assert consumers[0] == 6 and starts[6] == 5760
+    assert cloud_routes[6] == [{'pass': 20, 'program_index': 20, 'framebuffer_descriptor': 9}]
     rng_calls = [pc for pc, op, arg in disassemble(path, 0x401000, 0x408647)
                  if op == 'call' and arg == '0x401038']
     assert rng_calls == [0x4027d4, 0x402946, 0x402bac, 0x402d27, 0x402de8,
@@ -145,6 +176,8 @@ def main():
     manifests = args.manifests or [root / '.worktrees/T11/artifacts/reference' /
                                  f'proxy-b-d11-{name}-20261016.json'
                                  for name in ('boundary3', 'boundary-repeat')]
+    if args.static_only:
+        manifests = []
     summaries = []
     for manifest_path in manifests:
         raw = manifest_path.read_bytes()
@@ -228,18 +261,36 @@ def main():
         summaries.append({'manifest': str(manifest_path), 'sha256': sha(raw),
                           'frames_reconciled': len(scenes), 'draws_without_cloud_sampler': len(passes),
                           'atlas_source_upload_equal': True, 'fp_fcw_mxcsr': fp})
-    result = {'status': 'TECHNICAL_CONFIRMATION_ONLY', 'runs': summaries,
+    endpoint = sample(27000)
+    assert endpoint['seconds_f32_bits'] == bits(450) and endpoint['beat_f32_bits'] == bits(600)
+    endpoint.update({'selection_pc': '0x407c1d', 'eax_u32': 0xffffffff,
+                     'branch_pc': '0x407c20', 'branch_target': '0x408617',
+                     'exit_call_pc': '0x408618', 'exit_code': 0, 'presents': False})
+    result = {'status': 'TECHNICAL_CONFIRMATION_ONLY',
+              'scope': 'static_only' if args.static_only else 'static_and_saved_evidence',
+              'native_inputs': {'postfix': identity, 'synth_init': old}, 'runs': summaries,
               'boundary_frame': 1440, 'cloud_candidate_frame': starts[consumers[0]],
               'cloud_program_indices': cloud_programs,
               'rng_direct_call_sites': [hex(a) for a in rng_calls],
               'rng_seed': seed, 'last_rendered_frame_static': 26999,
               'endpoint_query_static': 27000, 'reference_accepted': False,
-              'limitations': ['T11 has no explicit runtime RNG-state snapshot',
+              'endpoint_static': endpoint,
+              'sampling_range_count': len(ranges), 'retention_count': len(retain),
+              'state_and_probe_specification': 'tools/reverse/capture-gate.md',
+              'pending_live_probes': {'acquisition_owner': 'T11', 'validation_owner': 'T15',
+                                      'ids': ['S1_initial_state', 'S2_node_stream',
+                                              'V1_active_consumer', 'E1_natural_endpoint']},
+              'limitations': ['Static candidates do not establish executed consumer draws',
+                              'T11 staged bundles lack explicit runtime RNG-state snapshots',
                               'Active volume consumption and controlled endpoint remain unobserved']}
     if args.timeline:
-        result['row_frame_ranges_inclusive'] = [[a, b - 1] for a, b in zip(starts, starts[1:])]
-        result['retain_frames'] = sorted(set(range(0, 27000, 60)) | set(starts[:-1]) |
-                                         {n - 1 for n in starts[1:]})
+        result['row_frame_ranges_inclusive'] = ranges
+        result['sampling_ranges'] = [
+            {'row': i, 'beat_range_half_open': list(rows[i]), 'scene_token': tokens[i],
+             'frame_range_inclusive': bounds, 'first': sample(bounds[0]),
+             'last': sample(bounds[1]), 'cloud_capable_routes_static': cloud_routes[i]}
+            for i, bounds in enumerate(ranges)]
+        result['retain_frames'] = retain
     print(json.dumps(result, indent=2))
 
 
