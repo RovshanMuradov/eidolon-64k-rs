@@ -14,7 +14,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[2]/"verify/rust"))
 from conformance import CHECKOUT, ROOT, DATA, Native, checked, sha, load, need
 
 
-def run(name,frames,control=False,fault=False,entry_fault=None,full=False):
+def run(name,frames,control=False,fault=False,entry_fault=None,full=False,physical_control=None):
     need((full and frames==27000 and not control and not fault and not entry_fault) or (not full and 1<=frames<=3),"invalid capture extent/mode")
     native=Native();pointer=load(CHECKOUT/"artifacts/rust/engine/candidate.json")
     bundle=Path(pointer["directory"])
@@ -42,6 +42,8 @@ def run(name,frames,control=False,fault=False,entry_fault=None,full=False):
     for previous in (DATA/"verification/rust").glob("live-*/state.json"):
         prior=load(previous)
         need(prior["phase"]=="closed","another live job still holds the GPU/prefix")
+    for previous in (DATA/"verification/rust").glob("playback-*/state.json"):
+        need(load(previous)["phase"]=="closed","uninstrumented playback still holds GPU/prefix")
     if prefix.exists():shutil.rmtree(prefix)
     subprocess.run(["cp","-a","--reflink=auto",str(ROOT/".tools/capture/T11-prefix-baseline"),str(prefix)],check=True)
     link=scratch/"prefix"
@@ -55,6 +57,10 @@ def run(name,frames,control=False,fault=False,entry_fault=None,full=False):
     if fault:env["EIDOLON_RUST_FAULT"]=fault if isinstance(fault,str) else "mxcsr"
     if entry_fault:env["EIDOLON_ENTRY_FAULT"]=entry_fault
     if full:env.update(EIDOLON_RUST_FULL="1",EIDOLON_RUST_KEEP=win(job/"retention.bin"))
+    if physical_control:
+        need(not full and not control,"physical controls are bounded diagnostics")
+        env["EIDOLON_RUST_DIAGNOSTIC"]="1"
+        env["EIDOLON_RUST_GL_FAULT" if physical_control=="gl" else "EIDOLON_RUST_POSITION_FAULT"]="1"
     command=["bash","tools/run","tools/wine-headless"]
     command += [str(exe),"--play"] if control else [str(job/"launch.exe"),win(exe),win(job/"live.dll"),win(out)]
     manifest=dict(schema="eidolon-rust-live-job-1",decision="D26",name=name,phase="running",pid=os.getpid(),sid=os.getsid(0),
@@ -64,7 +70,7 @@ def run(name,frames,control=False,fault=False,entry_fault=None,full=False):
                   wine_launcher_sha256=sha(CHECKOUT/"tools/wine-headless"),command=command,
                   environment={k:env[k] for k in ("AGENT","WINE_TIMEOUT","WINEDEBUG","PULSE_SINK","EIDOLON_RUST_FRAMES","WINEDLLOVERRIDES")},
                   prefix_policy="fresh reflink copy of stopped T11 baseline before this invocation",
-                  control=control,fault=fault,entry_fault=entry_fault,full=full,frames_requested=frames,reference_manifest_sha256=sha(native.path),
+                  control=control,fault=fault,entry_fault=entry_fault,full=full,physical_control=physical_control,frames_requested=frames,reference_manifest_sha256=sha(native.path),
                   production_accepted=False)
     (job/"state.json").write_text(json.dumps(manifest,indent=2)+"\n")
     if full:
@@ -91,4 +97,5 @@ if __name__=="__main__":
     p.add_argument("--control",action="store_true");p.add_argument("--fault",nargs="?",const="mxcsr",choices=["mxcsr","gpr"])
     p.add_argument("--entry-fault",choices=["mxcsr","gpr"])
     p.add_argument("--full",action="store_true")
-    a=p.parse_args();raise SystemExit(run(a.name,27000 if a.full else a.frames,a.control,a.fault,a.entry_fault,a.full))
+    p.add_argument("--physical-control",choices=["gl","position"])
+    a=p.parse_args();raise SystemExit(run(a.name,27000 if a.full else a.frames,a.control,a.fault,a.entry_fault,a.full,a.physical_control))

@@ -18,6 +18,28 @@
   "audio_samples_observed": 446,
   "mapped_file_count": 157,
   "cleanup_verified": true,
+  "environment": {
+    "wine": "wine-11.17",
+    "command": [
+      "bash",
+      "tools/run",
+      "tools/wine-headless",
+      "/home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe",
+      "--play"
+    ],
+    "launcher": {
+      "AGENT": "T24",
+      "WINE_TIMEOUT": "1200",
+      "WINEDEBUG": "-all",
+      "PULSE_SINK": "eidolon_T24_playback",
+      "WINEDLLOVERRIDES": "winemenubuilder.exe,mscoree,mshtml=d"
+    },
+    "context_log_lines": [
+      "[gamescope] [\u001b[0;34mInfo\u001b[0m]  \u001b[0;37mconsole:\u001b[0m gamescope version 3.16.25 (gcc 16.1.1)",
+      "GL renderer: NVIDIA GeForce RTX 3070 Ti",
+      "GL version: 4.6.0 NVIDIA 610.57.04"
+    ]
+  },
   "limitations": [
     "External approximately one-second sampling; first audio stream is not an internal synth-completion timestamp",
     "Private null sink verifies actual live-clock device submission, not physical-speaker output",

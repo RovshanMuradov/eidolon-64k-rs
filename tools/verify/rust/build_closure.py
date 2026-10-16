@@ -8,6 +8,7 @@ from conformance import CHECKOUT,DATA,load,checked,sha,need,pe_identity
 def audit():
     p=load(CHECKOUT/"artifacts/verification/rust/rebuild.json");m=load(checked(DATA/p["result"],p["sha256"]))
     candidate=load(CHECKOUT/"artifacts/rust/engine/candidate.json");bundle=Path(candidate["directory"])
+    manifest=load(checked(bundle/"candidate.json",candidate["manifest_sha256"]))
     inventory=load(checked(bundle/"source-inventory.json",m["inventory_sha256"]))
     source=Path(m["cwd"])
     primary=m["dependency_files"]["i686-pc-windows-gnu/release/eidolon-runtime.d"]
@@ -19,7 +20,7 @@ def audit():
         inputs[relative]=inventory[relative]["sha256"]
     need(len([p for p in inputs if p.startswith("src/audio/") and p.endswith(".rs")])==15,"audio compiler-module closure")
     identity=pe_identity(m["executable"])
-    expected=load(checked(bundle/"build.json",load(bundle/"candidate.json")["files"]["build.json"]["sha256"]))["runtime_candidate"]["imports"]
+    expected=load(checked(bundle/"build.json",manifest["files"]["build.json"]["sha256"]))["runtime_candidate"]["imports"]
     need(identity["imports"]==expected,"published/rebuilt PE import closure")
     result=dict(status="INDEPENDENT_COMPILER_INPUT_CLOSURE",rebuild_result_sha256=p["sha256"],inputs=inputs,
                 production_identity=identity,scope="Compiler inputs and PE imports; dynamic file-open trace is separate",production_accepted=False)

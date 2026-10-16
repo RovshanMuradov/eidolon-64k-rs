@@ -10,14 +10,28 @@ DWORD __cdecl capture_init(const char*,const unsigned char*);
 DWORD __cdecl capture_event(DWORD,const unsigned char*,DWORD);
 DWORD __cdecl capture_cursor(void);
 void marker_hook(void);void *marker_trampoline;
+void position_gate(void);
 static MMRESULT (WINAPI *real_position)(HWAVEOUT,LPMMTIME,UINT);
 static DWORD stop_frames=3,calls;static char output[2048];static int fault,full_mode;static BYTE first_fp[512],expected_gpr[36];
 static ULONGLONG started;
+static int position_fault;static unsigned position_calls;
+static BYTE position_expected[36];
 static void save(const char *name,const void *data,size_t n){char path[2304];snprintf(path,sizeof(path),"%s/%s",output,name);FILE*f=fopen(path,"wb");if(!f||fwrite(data,1,n,f)!=n)ExitProcess(125);fclose(f);}
-static MMRESULT WINAPI position(HWAVEOUT h,LPMMTIME t,UINT n){
- BYTE fp[512] __attribute__((aligned(16)));__asm__ __volatile__("fxsave %0":"=m"(fp));
+MMRESULT WINAPI position_body(HWAVEOUT h,LPMMTIME t,UINT n){
+ BYTE fp[512] __attribute__((aligned(16)))={0},after[512] __attribute__((aligned(16)))={0};__asm__ __volatile__("fxsave %0":"=m"(fp));
  MMRESULT rc=real_position(h,t,n);if(rc||n!=12||t->wType!=TIME_SAMPLES)ExitProcess(125);t->u.sample=capture_cursor();
- __asm__ __volatile__("fxrstor %0"::"m"(fp));return rc;
+ __asm__ __volatile__("fxrstor %0"::"m"(fp));
+ if(position_fault&&!position_calls){DWORD changed=*(DWORD*)(fp+24)^0x40;__asm__ __volatile__("ldmxcsr %0"::"m"(changed));}
+ __asm__ __volatile__("fxsave %0":"=m"(after));
+ if(!position_calls){save("position-before-fx.bin",fp,512);save("position-after-fx.bin",after,512);}
+ if(memcmp(fp,after,512)){printf("POSITION_FP_MISMATCH\n");fflush(stdout);ExitProcess(125);}
+ position_calls++;__asm__ __volatile__("fxrstor %0"::"m"(fp));return rc;
+}
+void position_begin(BYTE *registers){memcpy(position_expected,registers,36);}
+void position_check_gpr(BYTE *after){
+ /* EAX is the documented MMRESULT return value; all other registers/flags are preserved by the gate. */
+ if(memcmp(position_expected,after,28)||memcmp(position_expected+32,after+32,4)){printf("POSITION_GPR_MISMATCH\n");fflush(stdout);ExitProcess(125);}
+ if(position_calls==1){save("position-before-gpr.bin",position_expected,36);save("position-after-gpr.bin",after,36);}
 }
 void marker_observe(DWORD *stack,BYTE *fp){
  DWORD *args=(DWORD*)(uintptr_t)(stack[3]+4); /* PUSHAD saved ESP points at saved EFLAGS. */
@@ -44,6 +58,7 @@ __declspec(dllexport) DWORD __cdecl capture_start(void *proof){
  if(!GetEnvironmentVariableA("EIDOLON_RUST_OUTPUT",output,sizeof(output)))ExitProcess(125);
  char text[32];if(GetEnvironmentVariableA("EIDOLON_RUST_FRAMES",text,sizeof(text)))stop_frames=strtoul(text,NULL,10);
  full_mode=GetEnvironmentVariableA("EIDOLON_RUST_FULL",text,sizeof(text))!=0;
+ position_fault=GetEnvironmentVariableA("EIDOLON_RUST_POSITION_FAULT",text,sizeof(text))!=0;
  if(GetEnvironmentVariableA("EIDOLON_RUST_FAULT",text,sizeof(text)))fault=!strcmp(text,"gpr")?2:1;
  unsigned char keep[27000]={0};
  if(full_mode){char path[2304];if(stop_frames!=27000||!GetEnvironmentVariableA("EIDOLON_RUST_KEEP",path,sizeof(path)))ExitProcess(125);FILE*f=fopen(path,"rb");if(!f||fread(keep,1,sizeof(keep),f)!=sizeof(keep)||fgetc(f)!=EOF)ExitProcess(125);fclose(f);unsigned count=0;for(unsigned i=0;i<27000;i++)count+=keep[i]!=0;if(count!=510)ExitProcess(125);}
@@ -52,7 +67,7 @@ __declspec(dllexport) DWORD __cdecl capture_start(void *proof){
  marker_trampoline=VirtualAlloc(NULL,32,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);if(!marker_trampoline)ExitProcess(125);
  BYTE *tramp=marker_trampoline;memcpy(tramp,expected,7);tramp[7]=0xe9;*(DWORD*)(tramp+8)=(DWORD)(uintptr_t)(marker+7)-(DWORD)(uintptr_t)(tramp+12);
  DWORD old;VirtualProtect(marker,7,PAGE_EXECUTE_READWRITE,&old);marker[0]=0xe9;*(DWORD*)(marker+1)=(DWORD)(uintptr_t)marker_hook-(DWORD)(uintptr_t)(marker+5);marker[5]=marker[6]=0x90;VirtualProtect(marker,7,old,&old);
- void **slot=find_iat(base,"waveOutGetPosition");if(!slot)ExitProcess(125);real_position=(void*)*slot;VirtualProtect(slot,4,PAGE_READWRITE,&old);*slot=position;VirtualProtect(slot,4,old,&old);
+ void **slot=find_iat(base,"waveOutGetPosition");if(!slot)ExitProcess(125);real_position=(void*)*slot;VirtualProtect(slot,4,PAGE_READWRITE,&old);*slot=position_gate;VirtualProtect(slot,4,old,&old);
  FlushInstructionCache(GetCurrentProcess(),NULL,0);
  printf("NATIVE_ADAPTER_ARMED base=%p marker=%p iat=%p frames=%lu\n",base,marker,slot,stop_frames);fflush(stdout);return 0;
 }

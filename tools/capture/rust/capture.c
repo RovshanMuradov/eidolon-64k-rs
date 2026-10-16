@@ -14,6 +14,7 @@ static unsigned char retention[27000], *pixels, pcm_hash[32];
 static const unsigned char *pcm_pointer;
 static char directory[2048];
 static DWORD sequence, frame, phase, pcm_phase, thread_id, failed, ended;
+static int fault_gl,diagnostic;
 static unsigned char current[284];
 static int write_all(HANDLE f,const void *data,DWORD bytes) {
     DWORD done=0; return WriteFile(f,data,bytes,&done,NULL) && done==bytes;
@@ -38,6 +39,8 @@ static int save(const char *name,const void *data,DWORD bytes) {
 __declspec(dllexport) DWORD __cdecl capture_init(const char *output,const unsigned char *keep) {
     if(log_file!=INVALID_HANDLE_VALUE || strlen(output)>=sizeof(directory)) return 1;
     strcpy(directory,output); memcpy(retention,keep,sizeof(retention));
+    char control[32];diagnostic=GetEnvironmentVariableA("EIDOLON_RUST_DIAGNOSTIC",control,sizeof(control))!=0;
+    fault_gl=GetEnvironmentVariableA("EIDOLON_RUST_GL_FAULT",control,sizeof(control))!=0;
     char path[2304]; snprintf(path,sizeof(path),"%s/events.bin",directory);
     log_file=CreateFileA(path,GENERIC_WRITE,FILE_SHARE_READ,NULL,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,NULL);
     pixels=VirtualAlloc(NULL,PIXELS,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);
@@ -60,8 +63,9 @@ static int read_pixels(void) {
     glReadBuffer(GL_BACK); glReadPixels(0,0,1920,1080,GL_RGBA,GL_UNSIGNED_BYTE,pixels);
     GLenum error=glGetError();
     glReadBuffer(read); for(unsigned i=0;i<8;i++) glPixelStorei(keys[i],old[i]);
+    if(fault_gl && !frame)glPixelStorei(GL_PACK_ALIGNMENT,old[5]==1?4:1);
     if(error!=GL_NO_ERROR || glGetError()!=GL_NO_ERROR) return 0;
-    for(unsigned i=0;i<8;i++) { GLint value; glGetIntegerv(keys[i],&value); if(value!=old[i]) return 0; }
+    for(unsigned i=0;i<8;i++) { GLint value; glGetIntegerv(keys[i],&value); if(value!=old[i]) {GLint rejected[3]={keys[i],old[i],value};save("gl-rejected.bin",rejected,sizeof(rejected));printf("CAPTURE_GL_RESTORE_MISMATCH key=%x before=%d after=%d\n",keys[i],old[i],value);fflush(stdout);return 0;} }
     GLint restored; glGetIntegerv(GL_READ_BUFFER,&restored); if(restored!=read) return 0;
     GLint witness[18];memcpy(witness,old,32);witness[8]=read;
     for(unsigned i=0;i<8;i++)glGetIntegerv(keys[i],&witness[9+i]);
@@ -82,7 +86,7 @@ static DWORD capture(DWORD kind,const unsigned char *data,DWORD bytes) {
     if(kind==6 || kind==7) {
         unsigned char hash[32];
         if(bytes!=PCM_BYTES || kind!=6+pcm_phase || phase || !digest(data,bytes,hash)) return 12;
-        if(kind==6) { memcpy(pcm_hash,hash,32); pcm_pointer=data; if(!save("pcm.f32le",data,bytes)) return 13; }
+        if(kind==6) { memcpy(pcm_hash,hash,32); pcm_pointer=data; if(!diagnostic && !save("pcm.f32le",data,bytes)) return 13; }
         else if(data!=pcm_pointer || memcmp(hash,pcm_hash,32)) return 14;
         pcm_phase++; return event(kind,hash,32)?0:15;
     }

@@ -46,3 +46,43 @@ _marker_hook:
  popal
  popfl
  jmp *_marker_trampoline
+
+.globl _position_gate
+_position_gate:
+ pushfl
+ pushal
+ movl %esp,%ebp
+ andl $-16,%esp
+ subl $512,%esp
+ fxsave (%esp)
+ subl $12,%esp
+ pushl %ebp
+ call _position_begin
+ addl $16,%esp
+ fxrstor (%esp)
+ subl $4,%esp
+ pushl 48(%ebp)
+ pushl 44(%ebp)
+ pushl 40(%ebp)
+ call _position_body@12
+ addl $4,%esp
+ movl %eax,28(%ebp)
+ fxrstor (%esp)
+ movl %ebp,%esp
+ popal
+ popfl
+ pushfl
+ pushal
+ movl %esp,%ebp
+ andl $-16,%esp
+ subl $512,%esp
+ fxsave (%esp)
+ subl $12,%esp
+ pushl %ebp
+ call _position_check_gpr
+ addl $16,%esp
+ fxrstor (%esp)
+ movl %ebp,%esp
+ popal
+ popfl
+ ret $12
