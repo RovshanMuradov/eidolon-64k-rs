@@ -9,8 +9,6 @@ struct RustGraphContext {
     SynthFunction* inits;
     void* (*alloc)(size_t);
     void (*free)(void*);
-    void (*arp)(SynthNode*, int);
-    void (*delay_fraction)(const sample_t*, sample_t*);
     unsigned long long created, destroyed, global_hits, voice_hits;
 };
 extern "C" {
@@ -21,14 +19,15 @@ void eidolon_destroy_voice(RustGraphContext*, SynthNode*);
 void eidolon_node_tick(SynthNode*, SynthGlobalStateStruct*, unsigned);
 void eidolon_voice_tick(SynthNode*, RustGraphContext*);
 void eidolon_note(RustGraphContext*, unsigned, unsigned, unsigned, unsigned);
+void eidolon_fraction(SynthGlobalStateStruct*, const sample_t*, sample_t*);
+void eidolon_arp_step(SynthNode*, SynthGlobalStateStruct*, unsigned);
 }
 void ArpeggiatorStep(SynthNode*, int);
 inline sample_t GetDelayTimeFraction(const sample_t&);
 static void* rust_alloc(size_t n) { return SynthMalloc((int)n); }
 static void rust_free(void* p) { SynthFree(p); }
-static void rust_fraction(const sample_t* in, sample_t* out) { *out = GetDelayTimeFraction(*in); }
 static RustGraphContext rust_graph = {&SynthGlobalState, NodeTickFunctions, NodeInitFunctions,
-    rust_alloc, rust_free, ArpeggiatorStep, rust_fraction, 0, 0, 0, 0};
+    rust_alloc, rust_free, 0, 0, 0, 0};
 static void rust_check_layout() {
     static bool checked = false;
     if (checked) return;

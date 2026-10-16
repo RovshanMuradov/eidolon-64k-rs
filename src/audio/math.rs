@@ -49,6 +49,14 @@ impl Stereo {
     #[inline]
     pub unsafe fn clamp(self, high: Self, low: Self) -> Self { low.max(high.min(self)) }
     #[inline]
+    pub unsafe fn floor(self) -> Self { Self(_mm_floor_pd(self.0)) }
+    #[inline]
+    pub unsafe fn ints(self) -> [i32; 4] {
+        let mut out=[0;4]; _mm_storeu_si128(out.as_mut_ptr().cast(),_mm_cvtpd_epi32(self.0)); out
+    }
+    #[inline]
+    pub unsafe fn lanes(self) -> [f64; 2] { let mut out=[0.0;2]; self.store(out.as_mut_ptr()); out }
+    #[inline]
     pub unsafe fn load(p: *const f64) -> Self { Self(_mm_loadu_pd(p)) }
     #[inline]
     pub unsafe fn store(self, p: *mut f64) { _mm_storeu_pd(p, self.0) }
@@ -71,6 +79,10 @@ arithmetic!(BitOr, bitor, _mm_or_pd);
 impl core::ops::Neg for Stereo {
     type Output = Self;
     #[inline] fn neg(self) -> Self { unsafe { Self(_mm_xor_pd(self.0, _mm_set1_pd(-0.0))) } }
+}
+impl core::ops::Not for Stereo {
+    type Output = Self;
+    #[inline] fn not(self) -> Self { unsafe { Self(_mm_xor_pd(self.0, _mm_castsi128_pd(_mm_set1_epi32(-1)))) } }
 }
 #[inline]
 pub fn lerp(a: Stereo, b: Stereo, f: Stereo) -> Stereo { (b - a) * f + a }

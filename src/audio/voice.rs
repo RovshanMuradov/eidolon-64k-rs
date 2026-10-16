@@ -1,4 +1,4 @@
-//! VOICEMANAGER lifecycle from SynthNode.cpp, with the unported arpeggiator callback explicit.
+//! VOICEMANAGER lifecycle from SynthNode.cpp, including Rust arpeggiator integration.
 use super::graph::{Context, Node, Voice, VoiceWork, cached, call_input, input, mode,
     eidolon_create_nodes, eidolon_destroy_voice};
 use super::math::{Stereo as S, exp2, lerp};
@@ -6,9 +6,7 @@ use core::ptr;
 fn v(x: f64) -> S { S::splat(x) }
 unsafe fn word(n: *mut Node, i: usize) -> *mut u32 { ptr::addr_of_mut!((*n).work).cast::<u32>().add(i) }
 unsafe fn fraction(c: *mut Context, x: S) -> S {
-    let mut out = S::zero();
-    ((*c).delay_fraction)(&x,&mut out);
-    out
+    super::arp::fraction((*c).state,x)
 }
 unsafe fn set_glide(voice: *mut Voice, note: i32) {
     (*voice).note_value = note;
@@ -44,7 +42,7 @@ pub unsafe extern "C" fn eidolon_voice_tick(n: *mut Node, c: *mut Context) {
         }
         (*w).rescan = 0;
     }
-    ((*c).arp)(n,mode as i32);
+    super::arp::eidolon_arp_step(n,state,mode);
     if (*n).last_tick & 15 == 1 {
         let gi=input(n,2);
         (*n).work[31] = if gi.is_zero() { z } else { gi.ge(v(1.0)).select(v(1.0),fraction(c,gi)) };

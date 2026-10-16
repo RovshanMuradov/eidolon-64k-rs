@@ -67,6 +67,10 @@ def main():
                             f'    source_seen[n->valueOffset] = 1; eidolon_node_tick(n,&SynthGlobalState,{opcode});')
     text = replace_body(text, 'void SYNTHCALL VOICEMANAGER_tick(',
                         '    source_seen[n->valueOffset] = 1; eidolon_voice_tick(n,&rust_graph);')
+    text = replace_body(text, 'inline sample_t GetDelayTimeFraction(',
+                        '    sample_t out; eidolon_fraction(&SynthGlobalState,&value,&out); return out;')
+    text = replace_body(text, 'void ArpeggiatorStep(',
+                        '    eidolon_arp_step(n,&SynthGlobalState,mode);')
     text = replace_body(text, 'inline sample_t Sampler_Sample(',
                         '    sample_t out; eidolon_sample((void*)n->v[11].l[0], n->v[10].d, index.d, out.d); return out;')
     files['SynthNode.cpp'] = 'extern "C" void eidolon_sample(const void*, const double*, const double*, double*);\n' + text
@@ -145,8 +149,8 @@ extern "C" void eidolon_score_free(void*);
               'rust_graph': ['creation', 'global-cache', 'creation-tick-cycle-cache', 'recursive-voice-destruction'],
               'rust_node_ticks': node_ports,
               'diagnostic_stdout': completed.stdout,
-              'rust_voice': ['note-routing', 'key-rescan', 'polyphony-slot-selection', 'stealing', 'glide', 'voice-create-render-destroy'],
-              'remaining_source': 'arpeggiator/delay-fraction helpers and unlisted node/effect ticks; allocator callbacks',
+              'rust_voice': ['note-routing', 'key-rescan', 'polyphony-slot-selection', 'stealing', 'glide', 'voice-create-render-destroy', 'arpeggiator', 'bpm-delay-fraction'],
+              'remaining_source': 'unlisted node/effect tick/init functions; allocator callbacks',
               'rustc': subprocess.check_output(['rustc', '--version'], text=True).strip(),
               'compiler': subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
               'rust_command': list(map(str, rust_command)), 'compile_command': list(map(str, command)),

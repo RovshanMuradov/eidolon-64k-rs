@@ -1,6 +1,7 @@
 //! Recovered fixed-score audio slices. Whole graph rendering is not yet ported.
 //! Source pin and verification scope: artifacts/rust/audio/slices.json.
 pub mod data;
+pub mod arp;
 pub mod graph;
 pub mod nodes;
 pub mod math;

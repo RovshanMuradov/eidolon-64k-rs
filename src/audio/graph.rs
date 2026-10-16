@@ -85,8 +85,6 @@ pub struct Context {
     pub inits: *const Option<Tick>,
     pub alloc: unsafe extern "C" fn(usize) -> *mut u8,
     pub free: unsafe extern "C" fn(*mut u8),
-    pub arp: unsafe extern "C" fn(*mut Node, i32),
-    pub delay_fraction: unsafe extern "C" fn(*const Stereo, *mut Stereo),
     pub created: u64,
     pub destroyed: u64,
     pub global_hits: u64,
