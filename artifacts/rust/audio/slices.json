@@ -41,7 +41,13 @@
     "MIN": 47,
     "MAX": 48,
     "CONSTANT": 64,
-    "VOICEPARAM": 65
+    "VOICEPARAM": 65,
+    "COMPARE": 25,
+    "EVENTSIGNAL": 27,
+    "PROCESS": 28,
+    "MIDISIGNAL": 29,
+    "DISTORTION": 30,
+    "TRIGGER": 39
   },
   "rust_effect_ticks": {
     "BQFILTER": 9,
@@ -49,9 +55,17 @@
     "FBDELAY": 33,
     "REVERB": 36,
     "COMPEXP": 38,
+    "SVFILTER": 43,
     "COMBDELAY": 51
   },
-  "diagnostic_stdout": "RUST_GRAPH created=25692 destroyed=25158 global_hits=70765 voice_hits=44243 ABI=14/14\nSOURCE_RENDERED frames=8388608 tick=8388609\n",
+  "rust_source_ticks": [
+    "NOISEGEN",
+    "OSRAND",
+    "GMDLS",
+    "SAMPLER"
+  ],
+  "rust_formant": "all 375 coefficients embedded; initialization and 5-filter tick ported",
+  "diagnostic_stdout": "RUST_GRAPH created=1581 destroyed=851 global_hits=3678 voice_hits=1946 ABI=14/14\nSOURCE_RENDERED frames=3145728 tick=3145729\n",
   "rust_voice": [
     "note-routing",
     "key-rescan",
@@ -107,12 +121,12 @@
     "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/score-encoded.bin",
     "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/patch-and-trailer.bin",
     "/unused-embedded-bank",
-    "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-8388608.f32le",
-    "8388608",
+    "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-3145728.f32le",
+    "3145728",
     "/home/rovshan/Work/asm/Eidolon/data/builds/T23/coverage.bin"
   ],
-  "frames": 8388608,
-  "elapsed_seconds": 40.893016481015366,
+  "frames": 3145728,
+  "elapsed_seconds": 5.50353022897616,
   "mxcsr": "0xffc0",
   "environment": {
     "resolution": null,
@@ -123,32 +137,34 @@
   "reference_manifest": "/home/rovshan/Work/asm/Eidolon/.worktrees/T16/artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
   "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
   "reference_pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
-  "output": "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-8388608.f32le",
-  "output_sha256": "6aaafd520ad7c5f6e4eab91e720a0126291fa8542f08ec2832b9cf7281c1a7d2",
+  "output": "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-3145728.f32le",
+  "output_sha256": "abd4c39176de0fe2318a7357f10a76e837d06b776d4d5ce46d35b4c468863d06",
   "equal": true,
   "first_mismatch_byte": null,
   "adapted_files": {
     "Synth.cpp": "d117a02a7bd3fdc157aed87260e1c5681e208cb51b8be6386304ed78db40a70f",
     "Synth.h": "813ca95332d3dc853a9509a14400b91d60ba488afcbbe3d1f004f2f120325877",
-    "SynthNode.cpp": "9d5474e7706dc287c8b7a8794c9add8acabf5e9bcc087c8d11abb394ce0cf36b",
+    "SynthNode.cpp": "04a732a7e948b3a86f342af0dcf9c9628bcc3ae68c652a9cbe1e615bb55bf134",
     "SynthNode.h": "faab4adcec2e7f9f31660aec1e7eddc0f997f5f8d1e8d6987c94564b59b06941",
     "SynthAllocator.h": "514ab289626772be0ad2a92734ca8c25117bc9c937133ddc5f6642f24a1168a8",
     "sample_t.cpp": "d1deebeb583ec3057bd86df731b057465a7eef60d10db18117a5f8e76704c8e3",
     "sample_t.h": "818c7e609561d9a682b425c26a552ed3519dcabce706a20c1c73442b93803e19",
     "windows.h": "ff55a33246262f211fdc096a70bf02e88c07039494f9e632f5e4a5f325f3e7d5",
     "64k2Patch.h": "fb9f983b01c8cc70c57850a59772e832b92db81db1182b7fbe5d37721d70ebb2",
-    "graph_bridge.h": "9c338901849c3428f39a3599940073042a584f1f783d61a929979470e1bd78b0"
+    "graph_bridge.h": "01e984a664c71e27b8593d692866870bb84fb1ba554762377c66897287401967"
   },
   "rust_files": {
-    "src/audio/mod.rs": "d26e8874d474ce05bb10b9f641d54242f6964083c9a027155c7dde0b0987ce24",
+    "src/audio/mod.rs": "d86ce49ebcfff7efcd12dcaa60ac6fb18130e2dc8199271f96120fefec6d4ebe",
     "src/audio/math.rs": "82d5ed7629ebee4cb6efdf1e87c6bded73c067dcc54e6befad9f3e1392bd3285",
     "src/audio/score.rs": "95f983c4126d6e8a52f673cf0735add23abde08997bbcfd291dda20463673f09",
     "src/audio/data.rs": "7fea7c8b68aefedf36735aa405fafc3cc886c662a8414daac56ebf3da82663de",
     "src/audio/graph.rs": "b1c5d3929065d699a08cda34a80f72292a0a85155cb8717b176365b8233b543d",
-    "src/audio/nodes.rs": "9079e87d7062db786ef1fd75db971ca5c40e910801620a0f3972522cdb9f6ed3",
+    "src/audio/nodes.rs": "76ce95f50e75043d90e6ab0570a17dd241ea63d48c9864a0640d2b6c02a53efa",
     "src/audio/voice.rs": "3835d93451648315f55140f08f16e04dae1126c6b181f4f55b80bd04c8673b1e",
     "src/audio/arp.rs": "e09bd5cc56d30061efbbb9030a658a3937d2dd834ef646c6795522d84a99d86a",
-    "src/audio/effects.rs": "684cf12b43f0204d7d9fb61c2c63b01e3e119805aeea1b6a0b3c15f4875ede06"
+    "src/audio/effects.rs": "be1e83d0d9dbabdb23537cb36c098b8c6ded97f5ae30fd79450095082199f3df",
+    "src/audio/sources.rs": "84b6b2fd1b383846938c74d52fcbb01cf7e8fc3656ea337b69deddc6eaec8eae",
+    "src/audio/formants.rs": "0e488d62c42d3320fa3707adf884b5eb1da0340aa618ea8f6c17fd4555cd3ca7"
   },
-  "binary_sha256": "5dacf91da8ab7f84120a8e3fa1d26c5f307eb3c70fb8a11ec2ce491f1ccedf87"
+  "binary_sha256": "5fc23fb349622fa90f145342d1a9123eac8dd1eefae86a53009828fcbebd1961"
 }

@@ -23,6 +23,10 @@ void eidolon_fraction(SynthGlobalStateStruct*, const sample_t*, sample_t*);
 void eidolon_arp_step(SynthNode*, SynthGlobalStateStruct*, unsigned);
 void eidolon_effect_tick(SynthNode*, SynthGlobalStateStruct*, unsigned);
 void eidolon_effect_init(SynthNode*, RustGraphContext*, unsigned);
+void eidolon_random_tick(SynthNode*, SynthGlobalStateStruct*, void*, unsigned);
+void eidolon_bank_tick(SynthNode*, SynthGlobalStateStruct*, const unsigned*, void*);
+void eidolon_sampler_tick(SynthNode*, SynthGlobalStateStruct*);
+void eidolon_formant_tick(SynthNode*, RustGraphContext*);
 }
 void ArpeggiatorStep(SynthNode*, int);
 inline sample_t GetDelayTimeFraction(const sample_t&);

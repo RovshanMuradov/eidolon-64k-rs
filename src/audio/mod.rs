@@ -4,10 +4,12 @@ pub mod data;
 pub mod arp;
 pub mod graph;
 pub mod effects;
+pub mod formants;
 pub mod nodes;
 pub mod math;
 pub mod score;
 pub mod voice;
+pub mod sources;
 
 pub const SAMPLE_RATE: u32 = 44_100;
 pub const CHANNELS: usize = 2;

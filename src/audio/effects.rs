@@ -166,12 +166,69 @@ unsafe fn biquad(n:*mut Node,state:*mut State) {
     (*n).out=x;
 }
 
+unsafe fn state_variable(n:*mut Node,state:*mut State) {
+    let mode=mode(n);
+    if (*n).last_tick&15==1 {
+        (*n).work[0]=frequency_map(input(n,1),state,mode);
+        if mode&0x80!=0 { (*n).work[0]=(*n).work[0]*v(1.5707963267923333); }
+        (*n).work[1]=(v(1.0)-input(n,2)).clamp(v(0.997650146484375),S::zero());
+    }
+    let mut x=input(n,0);
+    for stage in 0..((mode&0xf00)>>7).max(1) as usize {
+        let at=4+3*stage;
+        for _ in 0..2 {
+            (*n).work[at]=(*n).work[at]+(*n).work[0]*(*n).work[at+2];
+            (*n).work[at+1]=x-(*n).work[at]-(*n).work[1]*(*n).work[at+2];
+            (*n).work[at+2]=(*n).work[at+2]+(*n).work[0]*(*n).work[at+1];
+        }
+        x=S::zero();
+        if mode&1!=0 { x=x+(*n).work[at]; }
+        if mode&2!=0 { x=x+(*n).work[at+1]; }
+        if mode&4!=0 { x=x+(*n).work[at+2]; }
+        if mode&8!=0 { x=x-(*n).work[at+1]; }
+    }
+    (*n).out=x;
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eidolon_formant_tick(n:*mut Node,c:*mut Context) {
+    if cached(n,(*c).state) { return; }
+    call_input(n,0); call_input(n,1);
+    if (*n).event.is_zero() {
+        (*n).event=v(1.0);
+        (*n).custom=((*c).alloc)(125*5*core::mem::size_of::<S>());
+        let buffer=(*n).custom.cast::<S>();
+        for vowel in 0..25 {
+            for filter in 0..5 {
+                let at=vowel*15+filter;
+                let amp=v(super::formants::COEFFICIENTS[at] as f64);
+                let bw=v(super::formants::COEFFICIENTS[at+5] as f64);
+                let frequency=v(super::formants::COEFFICIENTS[at+10] as f64);
+                let r=exp2((-(bw*v(3.1415926535846666)/v(44100.0)))*v(1.4426950408815173));
+                let coeff_c=-(r*r);
+                let coeff_b=r*v(2.0)*sin(frequency*v(6.2831853071693331)/v(44100.0)+v(1.5707963267923333));
+                let p=buffer.add((vowel*5+filter)*5);
+                *p=(v(1.0)-coeff_b-coeff_c)*exp2(-amp/v(6.0));
+                *p.add(1)=coeff_b; *p.add(2)=coeff_c;
+            }
+        }
+    }
+    (*n).out=S::zero();
+    let buffer=(*n).custom.cast::<S>().add((mode(n)&65535) as usize*25);
+    for filter in 0..5 {
+        let p=buffer.add(filter*5);
+        let y=input(n,0)*(*p)+(*p.add(3))*(*p.add(1))+(*p.add(4))*(*p.add(2));
+        *p.add(4)=*p.add(3); *p.add(3)=y;
+        (*n).out=(*n).out+y*input(n,1);
+    }
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn eidolon_effect_tick(n:*mut Node,state:*mut State,opcode:u32) {
     if cached(n,state) { return; }
-    let count=match opcode { 9=>4,32|51=>2,33=>5,36|38=>6,_=>std::process::abort() };
+    let count=match opcode { 9=>4,32|51=>2,33=>5,36|38=>6,43=>3,_=>std::process::abort() };
     for i in 0..count { call_input(n,i); }
-    match opcode { 9=>biquad(n,state),32|33|51=>delay(n,state,opcode),36=>reverb(n),38=>compressor(n),_=>unreachable!() }
+    match opcode { 9=>biquad(n,state),32|33|51=>delay(n,state,opcode),36=>reverb(n),38=>compressor(n),43=>state_variable(n,state),_=>unreachable!() }
 }
 #[no_mangle]
 pub unsafe extern "C" fn eidolon_effect_init(n:*mut Node,c:*mut Context,opcode:u32) {

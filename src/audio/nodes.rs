@@ -1,7 +1,7 @@
 //! Complete recovered tick bodies for the incrementally ported node types.
 //! Input calls, cache timing, coefficient cadence and arithmetic order are preserved.
 use super::graph::{self, Node, State, call_input, input, cached, mode};
-use super::math::{Stereo as S, exp2, lerp};
+use super::math::{Stereo as S, exp2, sin, lerp};
 fn v(x: f64) -> S { S::splat(x) }
 
 unsafe fn adsr_map(x: S) -> S {
@@ -64,6 +64,7 @@ pub unsafe extern "C" fn eidolon_node_tick(n: *mut Node, state: *mut State, opco
     let z = S::zero();
     // Constants and voice parameters are deliberately stateless in the source.
     if opcode == 64 { return; }
+    if opcode == 29 { (*n).out=(*state).midi[(mode(n)&65535) as usize]*input(n,0); return; }
     if opcode == 65 {
         let params = (*state).voice.cast::<S>();
         (*n).out = input(n,0) * *params.add((*n).id as usize - 64 + 2);
@@ -80,6 +81,11 @@ pub unsafe extern "C" fn eidolon_node_tick(n: *mut Node, state: *mut State, opco
         return;
     }
     if cached(n,state) { return; }
+    if opcode == 28 {
+        call_input(n,1);
+        (*n).out=if !input(n,1).ge(v(0.5)).is_zero() { call_input(n,0); input(n,0) } else { z };
+        return;
+    }
     if opcode == 5 { adsr(n,state); return; }
     if opcode == 2 {
         for i in (0..(*n).num_inputs as usize).rev() { call_input(n,i); }
@@ -87,7 +93,7 @@ pub unsafe extern "C" fn eidolon_node_tick(n: *mut Node, state: *mut State, opco
         for i in (0..(*n).num_inputs as usize).rev() { (*n).out = (*n).out + input(n,i); }
         return;
     }
-    let count = match opcode { 4|20|23 => 3, 22|45 => 1, _ => 2 };
+    let count = match opcode { 4|20|23|30 => 3, 22|27|39|45 => 1, _ => 2 };
     for i in 0..count { call_input(n,i); }
     let a = input(n,0);
     let b = if count > 1 { input(n,1) } else { z };
@@ -123,7 +129,45 @@ pub unsafe extern "C" fn eidolon_node_tick(n: *mut Node, state: *mut State, opco
             let a=a.abs();
             a.gt((*n).out).select((*n).work[0],(*n).work[1])*((*n).out-a)+a
         },
+        25 => {
+            let mask=match mode(n)&65535 { 0=>a.gt(b),1=>a.ge(b),2=>a.eq(b),3=>a.ne(b),_=>std::process::abort() };
+            mask.select(v(1.0),z)
+        },
+        27 => (*(*n).inputs[0]).event.ne(z)&v(1.0),
+        30 => {
+            let kind=mode(n)&65535;
+            if update {
+                let threshold=exp2((input(n,2)-v(0.75))*v(128.0)/v(6.0));
+                (*n).work[2]=v(1.0)/threshold; (*n).work[3]=threshold;
+                let mut t=b.max(z);
+                match kind {
+                    0|1=>{ t=if kind==0 { t.min(v(0.997650146484375)).sqrt() } else { -t.min(v(0.997650146484375)) }; (*n).work[0]=(t+t)/(v(1.0)-t); },
+                    2=>{ (*n).work[0]=t*t+v(1.0000003385357559e-5); },
+                    3=>{ (*n).work[0]=exp2(-(t*t*v(8.0))); },
+                    4=>{ t=t*t; (*n).work[0]=t*v(32.0)+v(1.0000003385357559e-5); (*n).work[1]=v(1.0)/(*n).work[0].lt(v(1.0)).select(sin((*n).work[0])+v(0.10000002384185791),v(1.0)+v(0.10000002384185791)); },
+                    5=>{ (*n).work[0]=t*v(32.0)*v(3.1415926535846666); },
+                    _=>std::process::abort(),
+                }
+            }
+            let d=a*(*n).work[2];
+            let out=match kind {
+                0=>(v(1.0)+(*n).work[0])*d/(v(1.0)+(*n).work[0]*d.abs()),
+                1=>(v(1.0)+(*n).work[0])*d/(v(1.0)+(*n).work[0]*d.abs().min(v(1.0))),
+                2=>(d/(*n).work[0]+v(0.5)).floor()*(*n).work[0],
+                3=>d.abs().gt((*n).work[0]).select(d.gt(z).select(v(1.0),v(-1.0)),d/(*n).work[0]),
+                4=>sin(d*(v(0.10000002384185791)+(*n).work[0]-(*n).work[0]*d))*(*n).work[1],
+                5=>d*sin(d*(*n).work[0]+v(1.5707963267923333)),
+                _=>std::process::abort(),
+            };
+            out*(*n).work[3]
+        },
         34 => { let out=a-(*n).work[0]+b.min(v(0.99994754791259766))*(*n).out; (*n).work[0]=a; out },
+        39 => {
+            let mask=a.ge(v(0.5))&(*n).work[0].eq(z);
+            (*n).work[0]=mask.select(v(1.0),(*n).work[0]);
+            (*n).work[0]=a.lt(v(0.5)).select(z,(*n).work[0]);
+            mask.select(v(1.0),z)
+        },
         45 => -a,
         47 => a.min(b),
         48 => a.max(b),
