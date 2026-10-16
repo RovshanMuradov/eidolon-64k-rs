@@ -27,7 +27,15 @@ PINS = {"proxy-b-d13-detached-20261016-1": {
     "native-return": "ef0280963c5604af28688ec550f25c514fe9c29609d8daf133d681a361205801",
     "request": "3760ae0c29403a79b23260216fd5d99aad78da9ff085cd94f4501a86d24a798c",
     "state": "d68e773a988b7b21d3ea1583dc0548a36275d3d254cb703b43ebcfb9780b4fc6",
+}, "proxy-b-d13-detached-20261016-2": {
+    "reference": "fcdf6027ae38999b64fc25035b084315caa93dc14004e8cc8a7d6143db79aeb9",
+    "preflight": "4fe5b1363d79eacf70b3a9a641643684182325274249f0a0b40c0fb9b113f74f",
+    "native-return": "4e397359a7f34c8ca00dedbb89f7276e88f8a2c561ff64659f654769bf7df025",
+    "request": "68df05da7a0776693e2c3d288bd4ad003b00ae5c0899a66677e4d669e65ee035",
+    "state": "13c842a231f265a7e5a162f52657074a8eb50645e2cab9a09022d46b44fd9932",
 }}
+REFERENCE_ID = "proxy-b-d13-detached-20261016-1"
+REFERENCE_REVIEW_COMMIT = "14c82b1"
 
 
 def decoded_lines(path):
@@ -224,15 +232,74 @@ def review_run(run_id, roots):
                  "atlas": atlas, "runner_terminal": terminal, "durable_original_provenance": True}
 
 
-def assess(roots):
-    reviewed = [review_run(run_id, roots) for run_id in PINS]
+def reuse_reference(roots):
+    """Reuse T17's completed semantic review only for its unchanged evidence.
+
+    Revalidate files and all original observation bindings, but do not decode the
+    already reviewed 1.66GB stream or repeat its semantic/physical-state checks.
+    """
+    run_id, pins = REFERENCE_ID, PINS[REFERENCE_ID]
+    artifacts, directory = roots["checkout"]/"artifacts/reference", roots["data"]/"reference"/run_id
+    path = checked(artifacts/f"{run_id}-reference.json", pins["reference"])
+    run = ref.load_run(path, directory, roots)
+    sidecar = load(compat.bound_file(run.manifest["provenance"]["eligibility"], roots))
+    producer = load(compat.bound_file(sidecar["run_manifest"], roots))
+    for name, digest in producer["evidence"].items():
+        checked(ref.payload_path(roots["data"], name), digest)
+    for key in ("preflight", "native-return", "request", "state"):
+        parent = directory if key in ("preflight", "native-return") else directory.parent/"jobs"/run_id
+        checked(parent/f"{key}.json", pins[key])
+    return run, {"run_id": run_id, "status": "CLOSED_RUN_VALID", "review_reused_from_commit": REFERENCE_REVIEW_COMMIT,
+                 "manifest_sha256": pins["reference"], "evidence_bindings_rehashed": len(producer["evidence"]),
+                 "frames": N, "raw_frames": 510, "pcm_bytes": 159716352, "tail_bytes": 956352}
+
+
+def check_pair(reference, candidate, roots):
+    reasons = ref.compare_runs(reference, candidate)
+    require(not reasons, "closed runs differ exactly: "+"; ".join(reasons))
+    # Distinct source runs must be actual fresh, sequential invocations, not just
+    # differently named manifests. Their original durable records are pinned.
+    first, second = [roots["data"]/"reference"/r.manifest["run_id"] for r in (reference, candidate)]
+    returned, preflight = load(first/"native-return.json"), load(second/"preflight.json")
+    check_preflight_pair(load(first/"preflight.json"), preflight)
+    require(returned["finished_utc"] < preflight["started_utc"], "repeat launch precedes prior native return")
+    jobs = [load(d.parent/"jobs"/d.name/"state.json") for d in (first, second)]
+    require((jobs[0]["pid"], jobs[0]["proc_start_ticks"]) != (jobs[1]["pid"], jobs[1]["proc_start_ticks"]), "same acquisition job")
+    require(reference.manifest["video"]["storage"] == "reference"
+            and candidate.manifest["video"]["storage"] == "hashes", "reference/repeat storage policy")
+    return {"reference": reference.manifest["run_id"], "candidate": candidate.manifest["run_id"],
+            "status": "EXACT_PAIR_PASS", "frame_hashes_equal": N, "pcm_bytes_equal": 159716352,
+            "tail_bytes_equal": 956352, "source_conditions_tool_scenes_termination_equal": True,
+            "original_preflight_behavior_equal": True, "separate_sequential_invocations": True}
+
+
+def check_preflight_pair(first, second):
+    """Only run/output/cache/storage selection may differ in original launches."""
+    require(ref.exact_equal(ref.without(first, "run_id", "started_utc", "command", "arguments", "environment"),
+                            ref.without(second, "run_id", "started_utc", "command", "arguments", "environment")),
+            "original preflight build/host/input/state mismatch")
+    require(first["command"][:-1] == second["command"][:-1], "original launcher command mismatch")
+    require(ref.exact_equal(ref.without(first["arguments"], "run_id", "storage", "build_from"),
+                            ref.without(second["arguments"], "run_id", "storage", "build_from")), "original behavioral arguments mismatch")
+    a, b = first["environment"], second["environment"]
+    require(ref.exact_equal(ref.without(a, "settings"), ref.without(b, "settings")), "original host environment mismatch")
+    locations = ("EIDOLON_B_LOG", "EIDOLON_B_OUTPUT", "EIDOLON_B_RETENTION", "XDG_CACHE_HOME", "__GL_SHADER_DISK_CACHE_PATH")
+    require(ref.exact_equal(ref.without(a["settings"], *locations), ref.without(b["settings"], *locations)),
+            "original behavioral environment mismatch")
+
+
+def assess(roots, reuse_reference_review=False):
+    reviewed = [(reuse_reference(roots) if reuse_reference_review and run_id == REFERENCE_ID else review_run(run_id, roots))
+                for run_id in PINS]
+    pairs = []
     for other, _ in reviewed[1:]:
-        require(not ref.compare_runs(reviewed[0][0], other), "closed runs differ exactly")
-    # Pins currently contain only the reference. Future repeats require their own
-    # independent closure/source review and corruption checks before final G6.
+        pairs.append(check_pair(reviewed[0][0], other, roots))
+    # Only the reference and repeat2 are published/reviewed. Never discover or
+    # consume active repeat3 output, and never infer final G6 from this pair.
     return {"status": "PARTIAL", "reference_accepted": False, "g6": "open",
             "closed_runs_verified": len(reviewed), "required_runs": 3, "runs": [r[1] for r in reviewed],
-            "pending": ["repeat2 closed independent review", "repeat3 acquisition and closed independent review", "three-run exact comparison"],
+            "exact_pairs": pairs,
+            "pending": ["repeat3 acquisition and closed independent review", "three-run exact comparison"],
             "limitations": ["Pinned D9-restored-native candidate only; historical compiler/bank fidelity unestablished.",
                             "ABI raw snapshots cover first calls, three consumer anchors and terminal query; counters cover remaining returns.",
                             "Gamescope exited139 after native Wine exit0; original cleanup records confirm release."]}
@@ -241,10 +308,11 @@ def assess(roots):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--capture-root", type=Path, default=Path(__file__).resolve().parents[2])
+    parser.add_argument("--reuse-reference-review", action="store_true", help="reuse T17 14c82b1 after rehashing its pinned evidence")
     args = parser.parse_args(argv)
     roots = {"checkout": args.capture_root.resolve(), "shared": Path(os.environ["EIDOLON_ROOT"]), "data": Path(os.environ["EIDOLON_DATA"])}
     try:
-        result = assess(roots)
+        result = assess(roots, args.reuse_reference_review)
     except (OSError, ValueError, KeyError, TypeError, IndexError, zstandard.ZstdError) as error:
         print(json.dumps({"status": "FAIL", "reference_accepted": False, "reason": str(error)}))
         return 1

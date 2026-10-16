@@ -165,7 +165,6 @@ def test_durable_original_provenance(saved, fault):
 
 
 def test_no_repeat_inferred_from_reference(saved):
-    assert len(full.PINS) == 1
     # Copying the reference to another path does not create a distinct run.
     run = ref.Run(Path("reference.json"), saved[0], saved[4], saved[2]/"pcm.f32le")
     assert ref.compare_runs(run, run)
