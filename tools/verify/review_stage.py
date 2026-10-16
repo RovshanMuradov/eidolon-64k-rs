@@ -360,7 +360,7 @@ def assess(roots):
             "limitations": ["Canary raw snapshots cover 16 first returns; 626647 total returns are source-enforced counters.",
                             "Exception CONTEXT equality does not observe physical post-resume epilogue/return; lookup ID 10 uninvoked.",
                             "Runtime RNG/physics snapshots, interior synth FP and active cloud sampling remain absent; native interpretation is in T14's handoff.",
-                            "Modified-source full-reference schema/authorization and full-duration endpoint/repeat remain open."]}
+                            "D12's explicit restoration contract does not accept these incomplete runs; live G5/G6 and full endpoint/repeat await T15."]}
 
 
 def main(argv=None):
