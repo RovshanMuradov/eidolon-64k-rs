@@ -1,0 +1,16 @@
+{
+  "schema": "eidolon-capture-preflight-failure-1",
+  "run_id": "proxy-b-d11-boundary2-20261016",
+  "status": "failed",
+  "reference_eligible": false,
+  "native_started": false,
+  "reason": "Exact-shim throughput guard rejected a relink after packaging-only source changes; MinGW auto image bases depend on output path.",
+  "measured_build": "20e0d80ff59749de94aaffd229cb139768f61e07775ced72cecf5104c74e5c10",
+  "relinked_build": "94f6ae2a8b7e50b1de096512afa75170d0953ffc06b6e942483a5ee4ada32faf",
+  "measured_opengl32_sha256": "3e309ec2e38d32639439393548590af8ca98bde00eaeeeac018c9516098288f0",
+  "relinked_opengl32_sha256": "1fdcccda7ede9f68e58d647165d76431010ba5af0cba8513bc6b60e663ece7ba",
+  "measured_opengl32_imagebase": "0x70880000",
+  "relinked_opengl32_imagebase": "0x6e800000",
+  "resolution": "Boundary and repeat invocations now load and rehash every artifact from the immutable measured build; independently snapshot the executing host runner.",
+  "preserved_directory": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d11-boundary2-20261016"
+}

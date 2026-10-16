@@ -45,13 +45,27 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(old / name, target)
     wrappers = ['.text']
-    for api, argbytes in {'shader': 12, 'use': 4, 'rect': 16, 'teximage': 20}.items():
-        wrappers += [f'.globl _compat_{api}', f'_compat_{api}:',
-                     'pushfl', 'pushal', 'movl %esp,%ebp', 'subl $528,%esp',
-                     'andl $-16,%esp', 'fxsave (%esp)', 'subl $16,%esp',
-                     'leal 36(%ebp),%eax', 'movl %eax,(%esp)', f'call _compat_core_{api}',
-                     'movl %eax,28(%ebp)', 'addl $16,%esp', 'fxrstor (%esp)',
-                     'movl %ebp,%esp', 'popal', 'popfl', f'ret ${argbytes}']
+    apis = [('eidolon', api, size) for api, size in {
+        'gettick':0,'timegettime':0,'qpc':4,'qpf':4,'position':12,'swap':4,
+        'create_thread':24,'wave_open':24,'wave_prepare':12,'wave_write':12,
+        'lookup':8,'wgl_lookup':4}.items()]
+    apis += [('compat', api, size) for api, size in
+             {'shader':12,'use':4,'rect':16,'teximage':20,'volume':40}.items()]
+    save = ['pushfl','pushal','movl %esp,%ebp','subl $528,%esp','andl $-16,%esp',
+            'movl %esp,%edi','xorl %eax,%eax','movl $128,%ecx','cld','rep stosl',
+            'fxsave (%esp)','subl $32,%esp']
+    restore = ['addl $32,%esp','fxrstor (%esp)','movl %ebp,%esp','popal','popfl']
+    for number, (prefix, api, argbytes) in enumerate(apis):
+        core = 'core_' if prefix == 'eidolon' else 'compat_core_'
+        wrappers += [f'.globl _{prefix}_{api}',f'_{prefix}_{api}:',*save,
+                     'movl %ebp,(%esp)','leal 32(%esp),%eax','movl %eax,4(%esp)',
+                     f'movl ${number},8(%esp)',f'movl ${argbytes},12(%esp)',
+                     'call _stage_canary_begin','leal 36(%ebp),%eax','movl %eax,(%esp)',
+                     f'call _{core}{api}','movl %eax,(%esp)','call _stage_canary_arm',
+                     'movl %eax,28(%ebp)','movl $_stage_return,36(%ebp)',*restore,f'ret ${argbytes}']
+    wrappers += ['_stage_return:','pushl $0',*save,'movl %ebp,(%esp)',
+                 'leal 32(%esp),%eax','movl %eax,4(%esp)','call _stage_canary_return',
+                 'movl %eax,36(%ebp)',*restore,'ret']
     (out / 'compat.S').write_text('\n'.join(wrappers) + '\n')
     commands = []
     exports = runpy.run_path('tools/capture/proxy-b/build.py')['exports']
@@ -60,6 +74,7 @@ def main():
         if 'tools/capture/proxy-b/core.c' in command:
             command[command.index('tools/capture/proxy-b/core.c')] = 'tools/capture/proxy-b-compat/core.c'
             command.insert(1, str(out / 'compat.S'))
+            command.remove(str(out / 'opengl32/wrappers.S'))
         subprocess.run(command, check=True)
         commands.append(command)
     for name, backend in original['backends'].items():

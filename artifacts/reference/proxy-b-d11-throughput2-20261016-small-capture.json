@@ -1,0 +1,126 @@
+{
+  "schema": "eidolon-small-real-capture-diagnostic-2",
+  "kind": "compatibility-modified-diagnostic",
+  "run_id": "proxy-b-d11-throughput2-20261016",
+  "reference_eligible": false,
+  "finalized": false,
+  "run_manifest": {
+    "root": "checkout",
+    "path": "artifacts/reference/proxy-b-d11-throughput2-20261016.json",
+    "sha256": "eb43926b252263156db2ffd6c6a8789da57df868325793548fc4dd8de4b993ce"
+  },
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "row_stride": 7680,
+    "pixel_format": "rgba8",
+    "row_order": "bottom-up",
+    "color_space": "native attachment encoding GL_2601; sRGB enable 0",
+    "frame_count": 61,
+    "index": "proxy-b-d11-throughput2-20261016-frames.jsonl",
+    "index_sha256": "c167d56839b95a03dc920d0f2925bf77075708b76a32be678b6e2f0abc3d41f0",
+    "storage": "reference"
+  },
+  "audio": {
+    "path": "pcm.f32le",
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "sample_format": "f32le",
+    "sample_rate": 44100,
+    "channels": [
+      "L",
+      "R"
+    ],
+    "layout": "interleaved",
+    "sample_frames": 19964544,
+    "start_sample": 0
+  },
+  "completion": {
+    "finalized": false,
+    "frames_observed": 61,
+    "frames_hashed": 61,
+    "audio_sample_frames": 19964544,
+    "pcm": {
+      "submitted_bytes": 159716352,
+      "initial_tick": 1,
+      "final_tick": 19964545,
+      "final_cursor_offset": 159716352,
+      "events": {
+        "synth_complete": 7223,
+        "readback_begin": 7225,
+        "readback_end": 7227,
+        "stability_check": 7228
+      },
+      "stable_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "evidence": "proxy-b-d11-throughput2-20261016-pcm-observations.json",
+      "evidence_sha256": "4a8feda5054ac7fe714aa7ba73153826079af05e002272b25ce0187f01680ffb"
+    },
+    "dropped_frames": 0,
+    "dropped_audio_sample_frames": 0,
+    "errors": []
+  },
+  "actual_stop": {
+    "seq": 33608,
+    "event": "planned_partial_stop",
+    "pid": 244,
+    "tid": 248,
+    "frames": 61,
+    "exit_code": 0,
+    "finalized": false,
+    "dropped_frames": 0,
+    "dropped_audio_sample_frames": 0,
+    "errors": []
+  },
+  "scene_boundaries_observed": false,
+  "limits": [
+    "Staged diagnostic; T13 review and Reverse reconciliation required before full capture.",
+    "Live scene locals are observations, not an independently established scene boundary.",
+    "Exception-context comparison does not independently execute the resumed synthesis epilogue.",
+    "Historical compiler/bank/scene fidelity remains unknown."
+  ],
+  "package_tool": {
+    "root": "shared",
+    "path": ".tools/capture/package-tools/4e1da0e521c846661ee30ee4697c79d5ad09904eedc16d80a53393ea98825100/package_stage.py",
+    "sha256": "4e1da0e521c846661ee30ee4697c79d5ad09904eedc16d80a53393ea98825100"
+  },
+  "status": "partial",
+  "state_observations": {
+    "root": "data",
+    "path": "reference/proxy-b-d11-throughput2-20261016/backend.jsonl",
+    "sha256": "7b5a51244fe84471a915f8e264aaf259c24e6c04b69c8c82128d416501997234"
+  },
+  "pack_state_query_order": [
+    "draw_fbo",
+    "read_fbo",
+    "read_buffer",
+    "pack_alignment",
+    "pack_row_length",
+    "pack_skip_rows",
+    "pack_skip_pixels",
+    "pack_swap_bytes",
+    "pack_lsb_first",
+    "pack_image_height",
+    "pack_skip_images",
+    "pixel_pack_buffer",
+    "red_bits",
+    "green_bits",
+    "blue_bits",
+    "alpha_bits",
+    "samples",
+    "framebuffer_srgb"
+  ],
+  "publication": {
+    "payloads_closed": true,
+    "index_closed": true
+  },
+  "raw_local_interpretation": {
+    "seconds_f32_bits": "[EBP-0x34], original sample-to-seconds float path",
+    "scene_local_beat_f32_bits": "[EBP-0x14], original scene-local beat",
+    "scene_token": "[EBP-0x18], original selected scene token",
+    "delta_f32_bits": "Legacy field name: raw [EBP-0x2c] is the LAST PASS TOKEN at pre-present, overwritten at 0x4082c6; NOT frame delta"
+  },
+  "original_package_tool": {
+    "root": "shared",
+    "path": ".tools/capture/package-tools/4e1da0e521c846661ee30ee4697c79d5ad09904eedc16d80a53393ea98825100/package.py",
+    "sha256": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e"
+  }
+}

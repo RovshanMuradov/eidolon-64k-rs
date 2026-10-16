@@ -1,19 +1,45 @@
 /* D9: the only source edit is the hash/caller-bound GLSL profile directive.
  * All source buffers belong to this proxy; original memory remains untouched.
  * The original G1 readback/error guard and clock/PCM implementation are retained. */
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+static BOOL stage_flush(HANDLE file);
+static VOID WINAPI stage_exit(UINT code) __attribute__((noreturn));
+/* Keep each ordered WriteFile/close, but flush the observation file at frame
+ * barriers. Payload files still flush individually. No user-space log queue. */
+#define FlushFileBuffers stage_flush
+#define ExitProcess stage_exit
 #define core_wgl_lookup original_core_wgl_lookup
 #define eidolon_core_initialize original_core_initialize
 #define core_swap original_core_swap
+#define core_position original_core_position
+#define eidolon_completion original_completion
 #include "../proxy-b/core.c"
+#undef FlushFileBuffers
+#undef ExitProcess
 #undef core_wgl_lookup
 #undef eidolon_core_initialize
 #undef core_swap
+#undef core_position
+#undef eidolon_completion
 
 extern void compat_shader(void), compat_use(void), compat_rect(void), compat_teximage(void);
 static FARPROC real_shader, real_use, real_rect, real_teximage;
 static DWORD creations, substitutions, target_program, draws;
 static BOOL compatibility, context_seen;
 static BOOL boundary_probe;
+static HDC owning_dc;
+static HGLRC owning_context;
+static void stage_initialize(CONTEXT *context);
+static void stage_capture(HDC dc);
+static void stage_scene(DWORD *s);
+static void stage_summary(void);
+static void stage_flush_log(void);
+static void stage_draw(DWORD *s);
+static void stage_route(const char *name, DWORD *s);
+static BOOL inject(const char *name);
+extern void compat_volume(void);
+static FARPROC real_volume;
 static const char expected_sha[] = "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182";
 
 static void check(const char *where) {
@@ -49,13 +75,16 @@ static void context_info(void) {
            profile,flags,get_dc(),get_context());
     check("compat_context_query_error");
     if (profile != 2 || flags != 0 || !get_context() || GetCurrentThreadId()!=main_tid) fail("unexpected_compat_context");
+    owning_dc=get_dc(); owning_context=get_context();
     context_seen=TRUE;
 }
 
 DWORD compat_core_shader(DWORD *s) {
+    stage_route("shader",s);
     context_info();
     check("shader_preexisting_error");
     GLenum type=s[1]; GLsizei count=(GLsizei)s[2];
+    if(inject("shader-count")) count=0;
     const char *const *sources=(void *)(uintptr_t)s[3];
     if (count<=0 || count>256) fail("shader_source_array_extent");
     DWORD creation=++creations;
@@ -124,6 +153,7 @@ DWORD compat_core_shader(DWORD *s) {
 }
 
 DWORD compat_core_use(DWORD *s) {
+    stage_route("use",s);
     check("use_preexisting_error");
     GLint before=-1, after=-1;
     get_integer(0x8b8d,&before); check("use_current_before_query");
@@ -137,7 +167,9 @@ DWORD compat_core_use(DWORD *s) {
 }
 
 DWORD compat_core_rect(DWORD *s) {
+    stage_route("rect",s);
     check("draw_preexisting_error");
+    if(timeline) stage_draw(s);
     if (s[0]==0x407967 && draws++==0) {
         GLint fbo=0, viewport[4]={0}, program=0, mask[4]={0}, buffers[8]={0};
         get_integer(0x8ca6,&fbo); get_integer(GL_VIEWPORT,viewport);
@@ -163,6 +195,7 @@ DWORD compat_core_rect(DWORD *s) {
 }
 
 DWORD compat_core_teximage(DWORD *s) {
+    stage_route("atlas",s);
     check("atlas_preexisting_error");
     ((void (APIENTRY *)(GLenum,GLint,GLenum,GLenum,void *))(uintptr_t)real_teximage)(s[1],s[2],s[3],s[4],(void *)(uintptr_t)s[5]);
     check("original_glGetTexImage_error");
@@ -189,6 +222,7 @@ DWORD core_wgl_lookup(DWORD *s) {
     FARPROC result=(FARPROC)(uintptr_t)original_core_wgl_lookup(s);
     if (!strcmp(name,"glCreateShaderProgramv")) { real_shader=result; return (DWORD)(uintptr_t)compat_shader; }
     if (!strcmp(name,"glUseProgram")) { real_use=result; return (DWORD)(uintptr_t)compat_use; }
+    if (!strcmp(name,"glTexImage3D")) { real_volume=result; return (DWORD)(uintptr_t)compat_volume; }
     return (DWORD)(uintptr_t)result;
 }
 
@@ -198,7 +232,7 @@ DWORD core_swap(DWORD *s) {
     if (is_timeline) {
         char raw_sha[65]; hash((void *)0x409918,1310,raw_sha);
         if (strcmp(raw_sha,expected_sha) || substitutions!=(compatibility ? 1u:0u)) fail("later_shader_memory_or_substitution_count");
-        if (n<3 || n==1439 || n==1440) {
+        if (n<3 || n>=1438) {
             /* wrappers.S PUSHAD stores the application's EBP 28 bytes before s.
              * These original locals were written by the unchanged timeline path. */
             DWORD ebp=s[-7];
@@ -207,20 +241,26 @@ DWORD core_swap(DWORD *s) {
                    n,ebp,*(DWORD *)(uintptr_t)(ebp-0x34),*(DWORD *)(uintptr_t)(ebp-0x18),
                    *(DWORD *)0x42fde0,*(DWORD *)0x42fde4,raw_sha);
         }
+        stage_scene(s);
     }
-    DWORD result=original_core_swap(s);
-    /* Every buffer has already been synchronously acquired/hashed and presented.
-     * Bound the partial experiment's storage to frame-zero, 1-Hz and boundary
-     * anchors. Unretained pixels are intentionally hash-only, never lost frames. */
-    if (is_timeline && boundary_probe && n>=3 && n%60 && n!=1439 && n!=1440) {
-        char path[32768];
-        if(snprintf(path,sizeof(path),"%s/frame-%05lu.rgba",folder,n)>=(int)sizeof(path)) fail("sparse_frame_path");
-        if(!DeleteFileA(path)) fail("sparse_frame_release");
+    stage_route("swap",s);
+    if (s[0]!=0x406374 && !is_timeline) fail("unknown_present_route");
+    if (is_timeline) {
+        if (!timeline || !acquired) fail("present_before_clock_or_pcm");
+        stage_capture((HDC)(uintptr_t)s[1]);
+    }
+    DWORD result=((BOOL (WINAPI *)(HDC))(uintptr_t)real_swap)((HDC)(uintptr_t)s[1]);
+    if (!result) fail("SwapBuffers_failed");
+    if (is_timeline) {
+        record("post_present",",\"n\":%lu,\"result\":true",frame);
+        stage_flush_log();
+        frame++;
     }
     return result;
 }
 
 void eidolon_core_initialize(CONTEXT *context) {
+    CONTEXT before=*context;
     original_core_initialize(context);
     char mode[32]={0};
     GetEnvironmentVariableA("EIDOLON_B_COMPAT",mode,sizeof(mode));
@@ -228,12 +268,18 @@ void eidolon_core_initialize(CONTEXT *context) {
     if (!compatibility && strcmp(mode,"unchanged")) fail("compat_mode");
     char small[32]={0};
     if (GetEnvironmentVariableA("EIDOLON_B_BOUNDARY_PROBE",small,sizeof(small))) {
-        if (strcmp(small,"1441") || !compatibility) fail("small_boundary_scope");
+        if (strcmp(small,"1443") || !compatibility) fail("small_boundary_scope");
         boundary_probe=TRUE;
-        stop_frames=1441;
-        record("boundary_probe",",\"sequential_frames\":1441,\"predicted_boundary\":1440,\"full_reference\":false");
+        stop_frames=1443;
+        record("boundary_probe",",\"sequential_frames\":1443,\"predicted_boundary\":1440,\"full_reference\":false");
     }
     record("compatibility_experiment",",\"transformation\":\"%s\",\"expected_raw_sha256\":\"%s\",\"reference_eligible\":false",mode,expected_sha);
     slot(0x40905c,(FARPROC)compat_rect,&real_rect);
     slot(0x409044,(FARPROC)compat_teximage,&real_teximage);
+    stage_initialize(context);
+    save("bootstrap-context-before.bin",&before,sizeof(before));
+    save("bootstrap-context-after.bin",context,sizeof(*context));
+    if(memcmp(&before,context,sizeof(before))) fail("bootstrap_context_canary");
 }
+
+#include "stage.c"
