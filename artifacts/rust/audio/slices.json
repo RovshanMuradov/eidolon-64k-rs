@@ -65,7 +65,7 @@
     "SAMPLER"
   ],
   "rust_formant": "all 375 coefficients embedded; initialization and 5-filter tick ported",
-  "diagnostic_stdout": "RUST_GRAPH created=1581 destroyed=851 global_hits=3678 voice_hits=1946 ABI=14/14\nSOURCE_RENDERED frames=3145728 tick=3145729\n",
+  "diagnostic_stdout": "RUST_GRAPH created=70778 destroyed=70365 global_hits=189455 voice_hits=116282 ABI=14/14\nSOURCE_RENDERED frames=19964544 tick=19964545\n",
   "rust_voice": [
     "note-routing",
     "key-rescan",
@@ -121,12 +121,12 @@
     "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/score-encoded.bin",
     "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/patch-and-trailer.bin",
     "/unused-embedded-bank",
-    "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-3145728.f32le",
-    "3145728",
+    "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-19964544.f32le",
+    "19964544",
     "/home/rovshan/Work/asm/Eidolon/data/builds/T23/coverage.bin"
   ],
-  "frames": 3145728,
-  "elapsed_seconds": 5.50353022897616,
+  "frames": 19964544,
+  "elapsed_seconds": 142.11007686104858,
   "mxcsr": "0xffc0",
   "environment": {
     "resolution": null,
@@ -137,8 +137,8 @@
   "reference_manifest": "/home/rovshan/Work/asm/Eidolon/.worktrees/T16/artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
   "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
   "reference_pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
-  "output": "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-3145728.f32le",
-  "output_sha256": "abd4c39176de0fe2318a7357f10a76e837d06b776d4d5ce46d35b4c468863d06",
+  "output": "/home/rovshan/Work/asm/Eidolon/data/builds/T23/hybrid-19964544.f32le",
+  "output_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
   "equal": true,
   "first_mismatch_byte": null,
   "adapted_files": {
