@@ -1,0 +1,1 @@
+vec4 Shade(vec2 uv){vec2 s0=ManhattanVoronoi(uv);vec3 color;float x=Greeble4(uv+vec2(1.0/2048.0,0.0),color);float y=Greeble4(uv+vec2(0.0,1.0/2048.0),color);float p=Greeble4(uv,color);return vec4(color,0.0);}

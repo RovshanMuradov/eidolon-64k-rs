@@ -1,0 +1,32 @@
+#version 420
+#define _A dist=min(min(dist,max(max( abs(0.5-abs(inPos.x-0.4)-0.5*inPos.y)-t,-inPos.y),inPos.y-1.0)),max(abs(inPos.y-0.35)-t,-0.3+abs(0.4-inPos.x)));inPos.x-=1.2;
+#define _B dist=min(min(dist,abs(inPos.x)-t),min(max( abs(length(vec2(inPos.x-0.47,abs(0.5-inPos.y)-0.23))-0.23)-t,0.5-inPos.x),max(abs(mod(inPos.y-0.25,0.46)-0.25)-t,-0.27+abs(0.23-inPos.x)) ));inPos.x-=0.9;
+#define _C dist=min(dist,max(abs(length(vec2(inPos.x-0.4,inPos.y-0.5))-0.46)-t,-0.3+atan(inPos.x-0.5,abs(inPos.y-0.5))/3.1415));inPos.x-=1.1;
+#define _D dist=min(min(dist,abs(inPos.x)-t),min(max(abs(length(vec2(inPos.x-0.35,inPos.y-0.5))-0.46)-t,-inPos.x+0.35),max(abs(mod(inPos.y+0.21,0.92)-0.25)-t,-0.17+abs(0.20-inPos.x)) ));inPos.x-=1.1;
+#define _FF dist=min(min(dist,abs(inPos.x)-t),max(max(abs(mod(inPos.y-0.25,0.46)-0.25)-t,-0.35+abs(0.31-inPos.x)),-0.5+abs(inPos.y-0.8) ));
+#define _F _FF inPos.x-=0.9;
+#define _E _FF inPos.y=1.0-inPos.y;_FF inPos.y=1.0-inPos.y;inPos.x-=0.9;
+#define _G _C inPos.x+=1.19;dist=max(min(dist,min(max(dist,-0.33+atan(inPos.x-0.5,abs(inPos.y-0.5))/3.1415),max(max(abs( max(inPos.x-0.9,inPos.y-0.4))-t,-0.25+abs(0.25-inPos.y)),0.55-inPos.x) )),-0.94+inPos.x);inPos.x-=1.2;
+#define _H dist=min(min(dist,abs( abs(inPos.x-0.4)-0.4)-t),max(abs(inPos.y-0.5)-t,-0.4+abs(0.4-inPos.x)));inPos.x-=1.1;
+#define _I dist=min(dist,abs(inPos.x)-t);inPos.x-=0.3;
+#define _U dist=min(dist,min(max(abs( abs(inPos.x-0.43)-0.43)-t,0.5-inPos.y),max(abs(length(vec2(1.05*inPos.x-0.45,inPos.y-0.5))-0.45)-t,inPos.y-0.5)));inPos.x-=1.2;
+#define _J inPos.x+=0.1;_U dist=max(dist,0.15-abs(inPos.x+1.2));
+#define _K dist=min(min(min(dist,abs(inPos.x)-t),max(abs(inPos.x-inPos.y+0.3)-t*1.2,-inPos.x)),max(abs(inPos.x+inPos.y-0.8)-t*1.2,-inPos.x+inPos.y-0.3));inPos.x-=1.1;
+#define _L dist=min(min(dist,abs(inPos.x)-t),max(abs(inPos.y-t)-t,-0.35+abs(0.35-inPos.x)));inPos.x-=1.0;
+#define _M dist=min(min(dist,abs( abs(inPos.x-0.5)-0.5)-t),abs(abs(inPos.x-0.5)+0.14-0.6*inPos.y)-t*1.2);inPos.x-=1.3;
+#define _N dist=min(dist,max(min(abs( abs(inPos.x-0.45)-0.45)-t,abs(inPos.x+0.84*inPos.y-0.87)-t*1.2),abs(inPos.x-0.45)-0.45-t ));inPos.x-=1.2;
+#define _OO dist=min(dist,abs(length(vec2(inPos.x-0.45,inPos.y-0.5))-0.46)-t);
+#define _O _OO inPos.x-=1.2;
+#define _PP dist=min(min(dist,abs(inPos.x)-t),min(max( abs(length(vec2(inPos.x-0.47,0.69-inPos.y))-0.27)-t,0.5-inPos.x),max( abs(abs(inPos.y-0.69)-0.27)-t,-0.27+abs(0.23-inPos.x)) ));
+#define _P _PP inPos.x-=1.0;
+#define _Q _OO dist=min(dist,max(abs(inPos.x+inPos.y-0.94)-t*1.2,inPos.y-0.3));inPos.x-=1.3;
+#define _R _PP dist=min(dist,max(abs(inPos.x+0.7*inPos.y-0.74)-t*1.2,inPos.y-0.4));inPos.x-=1.0;
+#define _S tmp=inPos;if (tmp.y>tmp.x+0.12) tmp-=vec2(0.1,0.45);tmp.x-=0.35;tmp.y-=0.28;d2=length(tmp*vec2(1.0,1.9));d2=abs(d2-0.43)*d2/(length(tmp*vec2(1.0,1.9*1.9)));dist=min(dist,abs(d2)-t);inPos.x-=1.1;
+#define _T dist=min(min(dist,abs(inPos.x-0.45)-t),max(abs(inPos.y-1.0+t)-t,-0.5+abs(0.45-inPos.x)));inPos.x-=1.2;
+#define _VV dist=min(dist,max(max( abs(-0.0-abs(inPos.x-0.48)+0.5*inPos.y)-t,-inPos.y),inPos.y-1.0));
+#define _V _VV inPos.x-=1.3;
+#define _W _VV inPos.x-=0.56;_VV inPos.x-=1.25;
+#define _X dist=min(min(dist,abs(inPos.x-0.9*(1.0-inPos.y))-t*1.2),abs(inPos.x-0.9*inPos.y)-t*1.2);inPos.x-=1.2;
+#define _SPC_ inPos.x-=1.0;
+#define _DONE(thickness) dist=max(dist,-0.5+abs(inPos.y-0.5) )-thickness;
+out vec4 outColor0;uniform vec3 uTimeResolution;void main(){vec2 tmp,inPos=gl_FragCoord.xy/uTimeResolution.yz;vec2 inPos0=inPos;inPos*=vec2(15.8,15.0);inPos-=0.2;int key=int(floor(inPos.y/1.5));inPos.y-=float(key)*1.5;inPos.y-=0.04;inPos.x-=0.10;float dist=10000.0,t=0.04,d2;switch(key){case 0:_A _N _D _R _O;break;case 1:_W _U _R _S _T _G _E _T _R _A _N _K;break;case 2:_T _R _O _P _I _C _A _L _SPC_ _T _R _E _V _O _R;break;case 3:_G _L _O _W;break;case 4:_V _I _R _G _I _L _L;break;case 5:_P _U _N _Q _T _U _R _E _D;break;case 6:_G _O _P _H _E _R;break;case 7:_M _A _I _K _E _L;break;case 9:_R _O _E _L _T _J _E;break;case 8:_B _E _F _T _E _X;break;}_DONE(0.0);vec4 res=vec4((smoothstep(-0.1,0.0,dist)+smoothstep(0.0,0.05,dist))*0.5);outColor0=res;}

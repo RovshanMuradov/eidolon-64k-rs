@@ -1,0 +1,11 @@
+{
+  "schema": "eidolon-candidate-pointer-v1",
+  "directory": "/home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "manifest_sha256": "8f199d1a7c06891bf723ff592b0e133a8d73c74ce01b234d8a7f371a25073337",
+  "source_commit": "248550ab154e5e4aeeaae12c137a7594e4dba322",
+  "executable_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "executable_bytes": 728576,
+  "relocated_source_rebuild_equal": true,
+  "target_executed": false,
+  "production_accepted": false
+}

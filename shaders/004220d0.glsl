@@ -1,0 +1,1 @@
+vec4 FogColor(vec3 direction){return vec4(mix(vec3(0.0,0.3,0.5)*0.5,vec3(0.6,0.3,0.4)*0.2,pow(abs(direction.y),0.7)),0.75);}

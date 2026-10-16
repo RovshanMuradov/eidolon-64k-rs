@@ -1,0 +1,2 @@
+float Bump(vec3 offset,Ray ray,Sample sampl){float o=0.0;vec3 point=sampl.intersection+offset;if(sampl.materialId.w==0.0){float a=texture(sTD2DInputs[0],point.xz*0.3).x;float b=texture(sTD2DInputs[0],point.xz*0.05).x;float land=a*0.15+b*2.0;float water=a*0.01+b*0.05;o=mix(land,water,sampl.materialId.w);}else if(sampl.materialId.w<=3.0 || sampl.materialId.w==8.0)
+{vec4 a=textureTri(sTD2DInputs[2],point*0.03+0.1,sampl.normal);return a.x*3.0+a.y*0.05;}o*=sqr(saturate(1.0-sampl.fog*8.0));return o;}

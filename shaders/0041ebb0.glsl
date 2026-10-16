@@ -1,0 +1,5 @@
+#define CLOUD_ANIM (uTime*0.004+uTimelapse*0.5)
+const vec3 clouds_day_light=vec3(0.94,0.91,1.0);const vec3 clouds_day_shadow=vec3(0.0,0.0,0.1);const vec3 clouds_night_light=vec3(0.0,0.1,0.0);const vec3 clouds_night_shadow=vec3(0.0,0.2,0.3);
+#define CLOUD_DAY_NIGHT saturate(sqr(saturate(uTimelapse*0.5)))
+#define CLOUD_COLORS mix(clouds_day_light,clouds_day_shadow,CLOUD_DAY_NIGHT),mix(clouds_night_light,clouds_night_shadow,CLOUD_DAY_NIGHT)
+vec4 FogColor(vec3 direction){vec3 night=mix(vec3(0.05,0.0,0.2),vec3(0.0,0.0,0.0),pow(max(0.0,(direction.y+0.2)*2.0),.8))+texture(sTD2DInputs[4],vec2(direction.x,direction.y+uTimelapse*0.05)).xyz*max(0.,-0.7+(uTimelapse*0.5));vec3 dusk=mix(vec3(1.0,.8,.8)*1.7,vec3(0.529411765,0.807843137,0.980392157)*0.8,pow(max(0.0,(direction.y-0.0)*5.0),.9));vec3 day=mix(vec3(0.99),vec3(161.0,200.0,231.0)/255.0,pow(max(0.0,direction.y*3.0),0.5));vec3 sun=CompositeSun(direction,vec3(0.065+uTimelapse*0.08,-0.22+uTimelapse*0.13,-0.639),mix(day,dusk,min(uTimelapse*1.0,1.0)));return vec4(mix(sun,night,max(0.0,saturate(uTimelapse*0.5)*1.96-1.0)),1.5-max(0.0,saturate(uTimelapse*0.5)*1.96-1.0));}

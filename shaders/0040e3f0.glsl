@@ -1,0 +1,1 @@
+vec4 sampleX(vec2 uv){vec4 cl=texture2D(sTD2DInputs[0],uv);vec4 cl2=texture2D(sTD2DInputs[0],fract(uv+vec2(0.5,0.0)));return mix(cl,cl2,smoothstep(0.1,0.4,abs(uv.x-0.5)));}vec4 Shade(vec2 uv){vec4 cl=sampleX(fract(uv));vec4 cl2=sampleX(fract(uv+vec2(0.0,0.5)));return mix(cl,cl2,smoothstep(0.1,0.4,abs(uv.y-0.5)));}
