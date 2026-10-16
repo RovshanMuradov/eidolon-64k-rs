@@ -57,7 +57,21 @@
 - [V] `tools/verify/rust/review_live.py DIRECTORY` checks closed short jobs and physical fault controls; live reviews are `artifacts/verification/rust/live-{01,02,fp-reject,entry-reject}.json`.
 - [V] Actual Windows captures0–2 and complete PCM match accepted native data; marker FP and entry GPR corruption controls exit125 with zero accepted pixels. Scope is this bounded prefix and these routes.
 - [V] `tools/capture/rust/launch_full.py NAME` gates on those reviews and starts exactly one `setsid nohup` job; `artifacts/verification/rust/full-job.json` pins PID/log/state and source identity. Full mode keeps510 native retention anchors, disables wrapper stops, requires native terminal marker5 and reserves less than30GB.
-- [V] Full runner records instrumented startup markers, child peak working set and wall duration; these await closure and are not an uninstrumented performance baseline.
+- [V] Full runner has closed; instrumented startup, controlled speed, child peak working set and wall duration are recorded in [full-progress.json](../artifacts/verification/rust/full-progress.json), with uninstrumented scope explicitly excluded.
+
+## Step3 completion audit
+
+- [V] `bash tools/run python tools/verify/rust/monitor_full.py` reconciles the pinned full-job request, immutable EXE/helper/source hashes, ledger and every closed output; growing ledgers admit only complete prefix records. Tests: `tests/rust/test_monitor.py`.
+- [V] `live-d26-full01` passes27000 native RGBA hashes,510 directly byte-compared native raw anchors, all159716352 PCM bytes including tail,27000 native time/row records, initial physics,27001-query endpoint and three stable PCM digests; [closed result](../artifacts/verification/rust/full-progress.json).
+- [V] Every present has a raw GL pack/read-buffer restoration witness; entry/marker GPR/EFLAGS/FP witnesses agree. Existing physical entry-GPR and marker-MXCSR fault controls remain bounded to their reviewed routes.
+- [V] Natural completion reports child/Wine/gamescope exit0; process/session/prefix/private-sink cleanup is independently checked. T24's GPU allocation remains exclusive across handoff despite completed acquisition.
+- [V] Actual mapped candidate/helper paths and Wine executable hash were observed while running; the20872-frame observation is preserved in Git commit1b9c140's `artifacts/verification/rust/full-progress.json`.
+- [V] The measured baseline is instrumented and controlled-clock: size728576 bytes, PCM-ready267636ms, timeline-ready268607ms, mean32.142742 FPS, peak working set782987264 bytes, child wall1108833ms; it includes capture/readback/I/O overhead.
+- [?] Complete seven native-layout initialization payloads and authenticated later physics/uniform vectors remain unavailable to this capture ABI; exact visual outputs cannot replace those state obligations.
+- [?] Remaining live fault coverage includes GL restoration perturbation and the position-hook route; previously prepared offline corruption tests do not establish those physical controls.
+- [?] T22 reports repeat-build equality in `artifacts/rust/engine/build.json`; independent production rebuild, actual process resource/dependency closure and complete runtime environment binding remain Step3 review obligations.
+- [?] Uninstrumented wall-clock playback and reproducible performance comparison remain separate from the controlled capture; the controlled735*n clock does not measure real-time audio/visual synchronization.
+- [V] The general candidate envelope and earlier unexecuted Frida template remain distinct contracts; missing observations are not backfilled with native files. Step3 and production acceptance remain pending.
 
 - [V] JSON rejects duplicate/unknown/missing fields and non-finite numbers; exact comparisons distinguish booleans, integers and floats; payload paths are relative POSIX paths with no traversal or symlink escape.
 - [V] Every file binding is exactly `{path,sha256}`, relative to the candidate manifest directory; the verifier rehashes every binding, including executable, input inventory, capture tool and observation files.

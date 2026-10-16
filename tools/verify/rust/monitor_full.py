@@ -13,11 +13,20 @@ from pathlib import Path
 import re
 import struct
 import subprocess
+import zstandard
 
 from conformance import CHECKOUT, DATA, N, PIN, PCM_BYTES, Native, checked, exact_files, load, need, sha, ref
 
 TIME_PIN = "363ca20b3e537f57da1d0dd937a3e1fc9f3c92e3377af9c7d8d12706186cf406"
 SIZES = {1:284,2:284,3:284,4:284,5:284,6:32,7:32,8:36,9:32,10:64}
+
+
+def exact_retained(native_path, actual_path, expected_hash):
+    decoder=zstandard.ZstdDecompressor().decompressobj()
+    raw=decoder.decompress(native_path.read_bytes())
+    need(decoder.eof and not decoder.unused_data,"native raw compression extent")
+    need(len(raw)==8294400 and hashlib.sha256(raw).hexdigest()==expected_hash,"native retained raw identity")
+    need(actual_path.read_bytes()==raw,"retained raw byte mismatch")
 
 
 def closure_status(exit_code, complete, natural, errors, differences, cleanup):
@@ -27,7 +36,7 @@ def closure_status(exit_code, complete, natural, errors, differences, cleanup):
         return "CLOSED_INCOMPLETE"
     if differences:
         return "CLOSED_WITH_DIFFERENCES"
-    if cleanup["wine_pids"] or cleanup["private_sink_present"] or cleanup["runner_alive"]:
+    if cleanup["wine_pids"] or cleanup["private_sink_present"] or cleanup["runner_alive"] or cleanup.get("session_pids"):
         return "CLOSED_EXACT_FILES_CLEANUP_PENDING"
     return "CLOSED_EXACT_FILES"
 
@@ -196,7 +205,7 @@ def observe(pointer_path):
     records, pending = bounded_records(raw,closed=not running)
     progress, hashes = prefix(records,native,times)
     complete = progress["post_presents"]
-    raws, raw_native_mismatches, gl_witnesses = 0, [], 0
+    raws, raw_native_mismatches, gl_witnesses, exact_raws = 0, [], 0, 0
     for n in range(complete):
         witness = output/f"gl-{n:05d}.bin"
         values = struct.unpack("<18i",witness.read_bytes())
@@ -208,6 +217,9 @@ def observe(pointer_path):
             raws += 1
             if digest != native.frames[n]["sha256"]:
                 raw_native_mismatches.append(n)
+            if not running:
+                exact_retained(ref.payload_path(native.directory,native.frames[n]["raw_zst"]),frame,native.frames[n]["sha256"])
+                exact_raws+=1
     pcm = "not-yet-complete"
     if progress["pcm_digest_observations"]:
         exact_files(native.pcm,output/"pcm.f32le",PCM_BYTES); pcm = "EXACT_NATIVE_PCM"
@@ -234,6 +246,7 @@ def observe(pointer_path):
                   live_mappings=live_images(state["candidate"],directory/"live.dll"),
                   ledger_snapshot_bytes=len(raw),ledger_snapshot_sha256=hashlib.sha256(raw).hexdigest(),pending_record_bytes=pending,
                   progress=progress,retained_raws_checked=raws,retained_native_mismatches=raw_native_mismatches,
+                  retained_raws_byte_compared=exact_raws,
                   gl_restoration_witnesses=gl_witnesses,pcm=pcm,physical_restoration=restoration,errors=errors,timing_lines=timings,
                   storage=dict(current_bytes=current_bytes,launch_reserved_total=state["storage"]["existing_bytes"]+state["storage"]["reserved_bytes"],limit_bytes=30000000000),
                   native_post_update_state_verified=False,production_accepted=False,gpu_reservation="T24 exclusive; preserve through closure/cleanup")
@@ -247,14 +260,15 @@ def observe(pointer_path):
         need(state["candidate_after_sha256"] == state["candidate_sha256"],"post-run EXE differs")
         result["complete_capture"] = complete == N and progress["endpoint"] and progress["terminal_stability"] and raws == 510
         prefix_path = b"WINEPREFIX=/tmp/opencode/eidolon/T24/prefix"
-        leftovers = []
+        leftovers,session_pids = [],[]
         for p in Path("/proc").iterdir():
             if not p.name.isdigit():continue
             try:
+                if os.getsid(int(p.name))==state["sid"]:session_pids.append(int(p.name))
                 if prefix_path in (p/"environ").read_bytes().split(b"\0") and "wine" in str((p/"exe").resolve()):leftovers.append(int(p.name))
             except (OSError,PermissionError):pass
         sinks = subprocess.check_output(["pactl","list","short","sinks"],text=True)
-        result["cleanup"] = dict(wine_pids=leftovers,private_sink_present="eidolon_T24_rust" in sinks,runner_alive=processes[1]["exists"])
+        result["cleanup"] = dict(wine_pids=leftovers,session_pids=session_pids,private_sink_present="eidolon_T24_rust" in sinks,runner_alive=processes[1]["exists"])
         terminal="EIDOLON_RUNTIME mode=playback reason=natural_exit queries=27001 frames=27000 terminal_cursor=19845000"
         result["natural_exit_log"] = terminal in log and "CHILD_EXIT 0 entry_proof=1" in log and "WINE_EXIT=0 " in log and "PLANNED_SHORT_STOP" not in log
         result["status"]=closure_status(state["exit_code"],result["complete_capture"],result["natural_exit_log"],errors,

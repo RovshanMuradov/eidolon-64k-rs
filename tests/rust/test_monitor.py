@@ -6,7 +6,7 @@ import pytest
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/"tools/verify/rust"))
 import conformance as c
-from monitor_full import bounded_records, native_times, prefix, closure_status
+from monitor_full import bounded_records, native_times, prefix, closure_status, exact_retained
 
 
 @pytest.fixture(scope="module")
@@ -83,3 +83,18 @@ def test_reordered_whole_records_fail(native,times,captured):
 def test_full_output_does_not_hide_exit_endpoint_or_cleanup_failure(exit_code,complete,natural,errors,differences,cleanup,expected):
     resources=dict(wine_pids=[],private_sink_present=cleanup,runner_alive=False)
     assert closure_status(exit_code,complete,natural,errors,differences,resources)==expected
+
+
+def test_retained_native_bytes_detect_mutation(native,tmp_path):
+    record=native.frames[0]
+    expected=c.ref.payload_path(native.directory,record["raw_zst"])
+    actual=c.DATA/"verification/rust/live-d26-02/output/frame-00000.raw"
+    exact_retained(expected,actual,record["sha256"])
+    damaged=bytearray(actual.read_bytes());damaged[-1]^=1
+    path=tmp_path/"damaged.raw";path.write_bytes(damaged)
+    with pytest.raises(ValueError,match="byte mismatch"):exact_retained(expected,path,record["sha256"])
+
+
+def test_session_survivor_prevents_cleanup_acceptance():
+    resources=dict(wine_pids=[],private_sink_present=False,runner_alive=False,session_pids=[123])
+    assert closure_status(0,True,True,[],0,resources)=="CLOSED_EXACT_FILES_CLEANUP_PENDING"
