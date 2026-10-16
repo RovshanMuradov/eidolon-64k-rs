@@ -139,6 +139,12 @@ def verify_raw(path, size, expected_hash):
     require(checksum.hexdigest() == expected_hash, f"raw frame SHA-256 mismatch: {path.name}")
 
 
+def verify_pcm_file(path, expected_bytes, expected_hash):
+    require(path.is_file(), "missing PCM payload")
+    require(path.stat().st_size == expected_bytes, "PCM byte length does not match sample count/layout")
+    require(hash_file(path) == expected_hash, "PCM SHA-256 mismatch")
+
+
 @dataclass
 class Run:
     manifest_path: Path
@@ -324,8 +330,7 @@ def load_run(manifest_path, data_root=None):
         require(anchors <= stored, f"missing required raw frames: {sorted(anchors - stored)}")
 
     audio_path = payload_path(root, audio["path"])
-    require(audio_path.stat().st_size == expected_bytes, "PCM byte length does not match sample count/layout")
-    require(hash_file(audio_path) == audio["sha256"], "PCM SHA-256 mismatch")
+    verify_pcm_file(audio_path, expected_bytes, audio["sha256"])
     return Run(manifest_path, m, frames, audio_path)
 
 
