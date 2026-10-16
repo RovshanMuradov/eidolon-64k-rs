@@ -44,9 +44,11 @@ impl Engine {
         let uniforms = row.tracks().map(|track| {
             let mut value = timeline::evaluate_track(track, local_beat);
             let name = track.name();
-            if apply_physics && let Some(index) = physics::POSITION_NAMES.iter().position(|n| *n == name) {
-                let lookahead = timeline::evaluate_track(track, local_beat + 0.01_f32);
-                self.records[index].update(dt, &mut value, lookahead);
+            if apply_physics {
+                if let Some(index) = physics::POSITION_NAMES.iter().position(|n| *n == name) {
+                    let lookahead = timeline::evaluate_track(track, local_beat + 0.01_f32);
+                    self.records[index].update(dt, &mut value, lookahead);
+                }
             }
             Uniform { name_index: track.name_index, name, components: track.components, value }
         }).collect();

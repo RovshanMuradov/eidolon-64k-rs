@@ -10,7 +10,20 @@ fn write_words(out: &mut impl Write, words: impl IntoIterator<Item = u32>) -> io
 fn main() -> io::Result<()> {
     let _fp = GraphicsFp::enter();
     let mode = std::env::args().nth(1).unwrap_or_default();
-    if mode == "--raw-stream" || mode == "--state-stream" {
+    if mode == "--shader-stream" {
+        let mut out = io::BufWriter::new(io::stdout().lock());
+        out.write_all(b"EIDGLS01")?;
+        // Preserve source-array boundaries and terminating NULs for glCreateShaderProgramv.
+        write_words(&mut out, [assets::PROGRAM_COUNT as u32 + 1])?;
+        for program in assets::PROGRAM_SOURCES.iter().copied().chain([&[assets::LOADING_SOURCE][..]]) {
+            write_words(&mut out, [program.len() as u32])?;
+            for source in program {
+                write_words(&mut out, [source.len() as u32])?;
+                out.write_all(source.as_bytes())?;
+            }
+        }
+        out.flush()?;
+    } else if mode == "--raw-stream" || mode == "--state-stream" {
         let mut out = io::BufWriter::new(io::stdout().lock());
         out.write_all(if mode == "--raw-stream" { b"EIDRAW01" } else { b"EIDSTA01" })?;
         let mut engine = Engine::default();
@@ -37,6 +50,7 @@ fn main() -> io::Result<()> {
         println!("rows={} programs={} source_array_bytes={} loading_bytes={} pcm_bytes={}",
             assets::ROW_COUNT, assets::PROGRAM_COUNT, shader_bytes, assets::LOADING_SOURCE.len() - 1, contract::PCM_BYTES);
         println!("--raw-stream / --state-stream: binary controlled-clock diagnostics");
+        println!("--shader-stream: exact effective NUL-terminated shader source arrays");
     }
     Ok(())
 }
