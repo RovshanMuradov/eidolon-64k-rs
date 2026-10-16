@@ -56,6 +56,11 @@ impl Stereo {
     }
     #[inline]
     pub unsafe fn lanes(self) -> [f64; 2] { let mut out=[0.0;2]; self.store(out.as_mut_ptr()); out }
+    /// Convert using the active MXCSR rounding mode, as the native output loop does.
+    #[inline]
+    pub unsafe fn pcm(self) -> [f32; 2] {
+        let mut out=[0.0f32;4]; _mm_storeu_ps(out.as_mut_ptr(),_mm_cvtpd_ps(self.0)); [out[0],out[1]]
+    }
     #[inline]
     pub unsafe fn load(p: *const f64) -> Self { Self(_mm_loadu_pd(p)) }
     #[inline]

@@ -132,7 +132,7 @@
     "/home/rovshan/Work/asm/Eidolon/data/builds/T23/coverage.bin"
   ],
   "frames": 8388608,
-  "elapsed_seconds": 42.96936081995955,
+  "elapsed_seconds": 41.211303449003026,
   "mxcsr": "0xffc0",
   "environment": {
     "resolution": null,
@@ -160,8 +160,8 @@
     "graph_bridge.h": "ef7404cf10d2f36eada849bc4c67c581b5eb2780375482aefbf0cfae03e3e6bc"
   },
   "rust_files": {
-    "src/audio/mod.rs": "f343e612686fc7bb3a1153fdbba7a74f495279276e41bbf0fcbf423cadce3d4e",
-    "src/audio/math.rs": "82d5ed7629ebee4cb6efdf1e87c6bded73c067dcc54e6befad9f3e1392bd3285",
+    "src/audio/mod.rs": "1c89f9481433e9bf4969c1f61ec64693aeed77142a11a827433e077dd59756d5",
+    "src/audio/math.rs": "ac4f838b776eb7e873ce98180960e980af9920331d346ca4c2a23913e40751f1",
     "src/audio/score.rs": "95f983c4126d6e8a52f673cf0735add23abde08997bbcfd291dda20463673f09",
     "src/audio/data.rs": "7fea7c8b68aefedf36735aa405fafc3cc886c662a8414daac56ebf3da82663de",
     "src/audio/graph.rs": "b1c5d3929065d699a08cda34a80f72292a0a85155cb8717b176365b8233b543d",
@@ -173,7 +173,8 @@
     "src/audio/formants.rs": "0e488d62c42d3320fa3707adf884b5eb1da0340aa618ea8f6c17fd4555cd3ca7",
     "src/audio/oscillator.rs": "b745465c9dadbda3d4598286742c3963a5303eea0f79e31d956bab962be5375b",
     "src/audio/sequencer.rs": "e666e0a006a0a57f6c807adc5d382e7497658b5b37c259dc1d0e840da7bff9d6",
-    "src/audio/glitch.rs": "02d42f2367e6b3a62f25432d6191c33c5f9ed80bb935043497156780e87a99b0"
+    "src/audio/glitch.rs": "02d42f2367e6b3a62f25432d6191c33c5f9ed80bb935043497156780e87a99b0",
+    "src/audio/runtime.rs": "a3ac804f6bb814b403a3b684f7583db39b96c3fb5e54ffe3728b6bd1a947298a"
   },
   "binary_sha256": "795dd3b77986d324c122d5d248decdd1f079f74462506a8a42987d703a92cdd4"
 }

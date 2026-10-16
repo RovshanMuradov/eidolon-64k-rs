@@ -33,6 +33,7 @@ def main():
     root, data = Path(os.environ['EIDOLON_ROOT']), Path(os.environ['EIDOLON_DATA'])
     build = data / 'builds/T23'
     build.mkdir(parents=True, exist_ok=True)
+    temporary=build/'tmp'; temporary.mkdir(exist_ok=True); os.environ['TMPDIR']=str(temporary)
     pin = json.loads(Path('analysis/audio/source-check.json').read_text())
     adapted = data / 'analysis/audio/T19/source-player'
     files = {}
