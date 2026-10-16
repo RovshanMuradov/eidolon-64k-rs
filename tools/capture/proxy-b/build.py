@@ -89,9 +89,24 @@ def main():
             f'#define DLL_NAME "{name}.dll"\n#define DLL_WNAME L"{name}.dll"\n'
             f'#define CANARY_SYMBOL "{symbol}"\n#define EXPORT_COUNT {len(entries)}\n'
             'static const unsigned short export_ordinals[] = {' + ','.join(map(str, ordinals)) + '};\n')
-        command = ["i686-w64-mingw32-gcc", *identity["flags"], "-shared", "-I", str(directory),
+        bootstrap = []
+        if name == "opengl32":
+            wrappers = [".text"]
+            for api, argbytes in {"gettick":0,"timegettime":0,"qpc":4,"qpf":4,
+                    "position":12,"swap":4,"create_thread":24,"wave_open":24,
+                    "wave_prepare":12,"wave_write":12,"lookup":8,"wgl_lookup":4}.items():
+                wrappers += [f".globl _eidolon_{api}", f"_eidolon_{api}:",
+                             "pushfl", "pushal", "movl %esp,%ebp", "subl $528,%esp",
+                             "andl $-16,%esp", "fxsave (%esp)", "subl $16,%esp",
+                             "leal 36(%ebp),%eax", "movl %eax,(%esp)", f"call _core_{api}",
+                             "movl %eax,28(%ebp)", "addl $16,%esp", "fxrstor (%esp)",
+                             "movl %ebp,%esp", "popal", "popfl", f"ret ${argbytes}"]
+            (directory / "wrappers.S").write_text("\n".join(wrappers) + "\n")
+            bootstrap = ["-DHAS_BOOTSTRAP", str(source / "bootstrap.c"),
+                         str(source / "core.c"), str(directory / "wrappers.S")]
+        command = ["i686-w64-mingw32-gcc", *identity["flags"], "-shared", *bootstrap, "-I", str(directory),
                    str(source / "proxy.c"), str(directory / "forward.S"),
-                   str(directory / "proxy.def"), "-o", str(out / f"{name}.dll")]
+                   str(directory / "proxy.def"), "-ladvapi32", "-o", str(out / f"{name}.dll")]
         subprocess.run(command, check=True)
         commands.append(command)
         actual = exports(out / f"{name}.dll")

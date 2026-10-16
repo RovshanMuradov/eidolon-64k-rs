@@ -7,9 +7,14 @@
 #include <stdint.h>
 #include "exports.h"
 
+#ifdef HAS_BOOTSTRAP
+BOOL eidolon_bootstrap_attach(void);
+#endif
+
 static HMODULE self_module, backend;
 static LONG resolving;
 static DWORD probe_error;
+static BOOL backend_validated;
 static const char *probe_result = "not_run";
 
 static void quoted(FILE *out, const char *text) {
@@ -54,6 +59,7 @@ DWORD WINAPI EidolonProbeBackend(void) {
     FARPROC symbol = NULL;
     HMODULE owner = NULL;
     DWORD saved_error = GetLastError();
+    if (backend_validated) return 0;
     if (InterlockedCompareExchange(&resolving, 1, 0)) {
         probe_result = "recursive_backend_resolution";
         probe_error = ERROR_INVALID_FUNCTION;
@@ -92,6 +98,7 @@ DWORD WINAPI EidolonProbeBackend(void) {
         probe_result = "backend_symbol_missing_or_self";
     } else {
         probe_result = "distinct_backend";
+        backend_validated = TRUE;
     }
 done:
     observe("backend_probe", path, symbol, owner);
@@ -124,6 +131,9 @@ BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID reserved) {
     if (reason == DLL_PROCESS_ATTACH) {
         self_module = module;
         DisableThreadLibraryCalls(module);
+#ifdef HAS_BOOTSTRAP
+        return eidolon_bootstrap_attach();
+#endif
     }
     return TRUE;
 }
