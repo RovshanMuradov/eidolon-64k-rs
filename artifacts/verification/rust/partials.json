@@ -1,0 +1,95 @@
+{
+  "audio_commit": "9d94fd96f91aae795154b282f03baf1d35750a5c",
+  "audio_manifest_sha256": "eee595326cc4cc5d02008c2bbb8fddc91a6bbaa93e08ca013b687ce011f6c5b6",
+  "checks": {
+    "hybrid_pcm": {
+      "bytes": 159716352,
+      "standalone_rust_synth": false,
+      "status": "EXACT_NATIVE_PCM"
+    },
+    "raw": {
+      "derived_only": [
+        "beat",
+        "dt"
+      ],
+      "native_state_frames": 0,
+      "native_time_frames": 27000,
+      "status": "MATCH_WITHIN_DECLARED_COVERAGE",
+      "unchecked": [
+        "uniform values",
+        "post-update physics after frame zero"
+      ]
+    },
+    "shader": {
+      "native_effective_shader_elements": 235,
+      "status": "MATCH_WITHIN_DECLARED_COVERAGE"
+    },
+    "state": {
+      "derived_only": [
+        "beat",
+        "dt"
+      ],
+      "native_state_frames": 1,
+      "native_time_frames": 27000,
+      "status": "MATCH_WITHIN_DECLARED_COVERAGE",
+      "unchecked": [
+        "uniform values",
+        "post-update physics after frame zero"
+      ]
+    }
+  },
+  "engine_commit": "7c643ad76f8f9f6e927d8f10be6ba3049231679e",
+  "engine_manifest_sha256": "70fb4c6663c5036cb435effc32dec9b5d97af5814e6c7cf7e8488b09b9c799e9",
+  "pe": {
+    "bytes": 533504,
+    "imports": [
+      "api-ms-win-core-synch-l1-2-0.dll",
+      "KERNEL32.dll",
+      "api-ms-win-crt-convert-l1-1-0.dll",
+      "api-ms-win-crt-environment-l1-1-0.dll",
+      "api-ms-win-crt-heap-l1-1-0.dll",
+      "api-ms-win-crt-locale-l1-1-0.dll",
+      "api-ms-win-crt-math-l1-1-0.dll",
+      "api-ms-win-crt-private-l1-1-0.dll",
+      "api-ms-win-crt-runtime-l1-1-0.dll",
+      "api-ms-win-crt-stdio-l1-1-0.dll",
+      "api-ms-win-crt-string-l1-1-0.dll",
+      "NTDLL.dll"
+    ],
+    "machine": 332,
+    "sha256": "f6bcfab3908abe25aed815ba760dc52e391895fee5bd70dbf123ca8123bcdbe7"
+  },
+  "probes": {
+    "raw": {
+      "path": "verification/rust/T24/T22-raw.bin",
+      "sha256": "46e9f363e338aac052114ce5f1d51a3fb21304002bdbf6ca26b4cf4b07f67ada"
+    },
+    "shader": {
+      "path": "verification/rust/T24/T22-shader.bin",
+      "sha256": "f2e4392781b11bd2aaa9e9e14715f6f4bc380492bcc827b1b07e5210a77bec5a"
+    },
+    "state": {
+      "path": "verification/rust/T24/T22-state.bin",
+      "sha256": "e5489327c4cdc7f94c5918de3a7ca3d6f6d9a5a73b698d090160125e6b275310"
+    }
+  },
+  "production_accepted": false,
+  "reference_accepted": false,
+  "reference_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+  "remaining": [
+    "final G6",
+    "production audiovisual EXE",
+    "native post-update physics/uniform vectors",
+    "standalone Rust PCM",
+    "production runtime evidence and performance baseline"
+  ],
+  "runtime": {
+    "driver": null,
+    "gpu": null,
+    "resolution": null,
+    "target_executed": false,
+    "wine": null
+  },
+  "schema": "eidolon-rust-independent-diagnostics-1",
+  "status": "PARTIAL"
+}
