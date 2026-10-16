@@ -52,7 +52,9 @@ def main():
     data = data_root / 'reference' / args.run_id
     destination = Path('artifacts/reference') / f'{args.run_id}.json'
     assert not destination.exists()
-    reserve = 600_000_000 if args.first_boundary else 250_000_000 + args.frames * 8_294_400
+    # Include retained raw plus worst-case Zstandard extent, PCM, atlas and
+    # the measured ~82 MB ordered observation stream before allocating a stage.
+    reserve = 1_000_000_000 if args.first_boundary else 250_000_000 + args.frames * 8_294_400
     assert sum(p.stat().st_size for p in data_root.rglob('*') if p.is_file()) + reserve < 30_000_000_000
     pinned_run = args.build_from or args.throughput_from
     if pinned_run:

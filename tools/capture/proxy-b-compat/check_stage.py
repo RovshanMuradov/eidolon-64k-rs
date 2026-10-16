@@ -122,11 +122,24 @@ def main():
         (a,ae),(b,be) = results
         assert a['run_id'] != b['run_id']
         assert a['prefix_baseline'] == b['prefix_baseline']
+        assert {k:v for k,v in a['input'].items() if k!='executed_copy'} == {k:v for k,v in b['input'].items() if k!='executed_copy'}
+        assert a['dependency'] == b['dependency']
+        for key in ('os','wine','packages','gpu','display'):
+            assert a['environment'][key] == b['environment'][key], key
         assert all(a['build']['outputs'][name] == b['build']['outputs'][name] for name in ('opengl32.dll','winmm.dll'))
+        for event in ('initial_resources','epoch','frame_state','scene_state','scene_pass','clock_routes_checked'):
+            left,right = [[{k:v for k,v in e.items() if k not in ('pid','tid','seq','hdc','hglrc')} for e in es if e['event']==event]
+                          for es in (ae,be)]
+            assert left == right,event
         af,bf = [[e for e in es if e['event']=='pre_present'] for es in (ae,be)]
         assert [(e['n'],e['sha256']) for e in af] == [(e['n'],e['sha256']) for e in bf]
         directories = [Path(os.environ['EIDOLON_DATA'])/'reference'/m['run_id'] for m in (a,b)]
         names = ['pcm.f32le','noise-atlas.rgba32f']+[p.name for p in directories[0].glob('frame-*.rgba')]
+        initial = [(d/'bootstrap-context-before.bin').read_bytes() for d in directories]
+        # Win32 x86 CONTEXT.ExtendedRegisters starts at 204; FXSAVE control
+        # word/status/tag and MXCSR are actual initial observations, not defaults.
+        assert initial[0][204:210] == initial[1][204:210]
+        assert initial[0][228:232] == initial[1][228:232]
         for name in names:
             with (directories[0]/name).open('rb') as left,(directories[1]/name).open('rb') as right:
                 while True:

@@ -16,6 +16,13 @@ def main():
     parser.add_argument('--build-from',type=Path,required=True)
     args = parser.parse_args()
     assert args.tag and all(c.isalnum() or c == '-' for c in args.tag)
+    source = Path(__file__)
+    snapshot = Path(os.environ['EIDOLON_ROOT'])/'.tools/capture/control-tools'/sha(source)/source.name
+    snapshot.parent.mkdir(parents=True,exist_ok=True)
+    if snapshot.exists():
+        assert snapshot.read_bytes() == source.read_bytes()
+    else:
+        snapshot.write_bytes(source.read_bytes())
     measured = json.loads(args.build_from.read_text())
     build = Path(measured['build']['build_directory'])
     identity = json.loads((build/'build.json').read_text())
@@ -70,6 +77,7 @@ def main():
                             supervisor_seconds=660,runner_seconds=60))
     path = Path('artifacts/reference')/f'proxy-b-d11-negative-controls-{args.tag}.json'
     path.write_text(json.dumps(dict(kind='bounded-live-negative-controls',reference_eligible=False,
+                                   host_tool=dict(path=str(snapshot),sha256=sha(snapshot)),
                                    build=identity,results=results,resources_released=True),indent=2)+'\n')
     print(json.dumps(dict(status='DIAGNOSTIC_ONLY',rejections=len(results),manifest=str(path))))
 
