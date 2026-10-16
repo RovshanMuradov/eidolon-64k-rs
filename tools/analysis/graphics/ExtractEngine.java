@@ -7,7 +7,10 @@ import java.io.PrintWriter;
 
 // Isolated raw-image analysis; never operates on the capture/Ghidra projects.
 public class ExtractEngine extends GhidraScript {
-    private final long[] entries = {0x406019, 0x4062d0, 0x406379};
+    private final long[] entries = {
+        0x405f98, 0x405fdd, 0x406019, 0x4062d0, 0x406379,
+        0x408620, 0x408634, 0x408640
+    };
     public void run() throws Exception {
         String[] args = getScriptArgs();
         if (args[0].equals("seed")) {
