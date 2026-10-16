@@ -1,0 +1,3 @@
+float Bump(vec3 offset,Ray ray,Sample sampl){vec3 point=sampl.intersection+offset;float a=texture(sTD2DInputs[0],point.xz*0.3).x;float b=texture(sTD2DInputs[0],point.xz*0.05).x;float o=0.0;if(sampl.materialId.w<=1.0){float land=a*0.15+b*2.0;float water=a*0.01+b*0.05;o=mix(land,water,sampl.materialId.w);}else if(sampl.materialId.w==5.0)
+{float n=sum(texture(sTD2DInputs[0],point.xz*0.15).xz*vec2(0.4,0.01));float x=abs(sampl.materialId.x+offset.z);float stripes=CalcStripes(sampl.materialId.xz+offset.xz);float n1=sum(texture(sTD2DInputs[0],sampl.intersection.xz*0.06).xy);float reflectivity=smoothstep(0.5,0.7,0.5*n1);o=mix(n,0.0,stripes*0.03)*(1.0-reflectivity*0.95);}else if(sampl.materialId.w>=10.0)
+{o=b*0.1;}o*=(1.0-sampl.fog);return o;}

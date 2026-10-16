@@ -1,0 +1,1 @@
+vec3 Lighting(LightData data){vec3 result=vec3(0.0);float lightSpeed0=2.;result+=PointLight(data,vec3(15.0*sin(uTime*lightSpeed0),0.5*sin(uTime*5.5)+10.,15.0*cos(uTime*lightSpeed0)),vec4(1.,1.,1.,1.),0.0,16.0);result+=PointLight(data,uMainCharacterPos+vec3(0.0,0.0,0.0),vec4(uMainBotMood,0.8),0.0,16.0);return result*4.0;}

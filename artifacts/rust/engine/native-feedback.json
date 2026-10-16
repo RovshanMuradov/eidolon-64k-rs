@@ -1,0 +1,58 @@
+{
+  "schema": "eidolon-t22-native-feedback-v1",
+  "host_probe_sha256": "2bc10408032fb2a436c051ab6410c8d1d65e2a37a3840b3690139399c6e06713",
+  "checker_sha256": "0e20bbe883067f65d27e9167455f8c9d5a35b70818ff7e9659a3b494163cf9b3",
+  "checker_path": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24/tools/verify/rust/conformance.py",
+  "results": {
+    "raw": {
+      "stream_sha256": "46e9f363e338aac052114ce5f1d51a3fb21304002bdbf6ca26b4cf4b07f67ada",
+      "result": {
+        "derived_only": [
+          "beat",
+          "dt"
+        ],
+        "native_state_frames": 0,
+        "native_time_frames": 27000,
+        "operation": "probe",
+        "production_accepted": false,
+        "reference_accepted": true,
+        "status": "OFFLINE_CONFORMANCE_ONLY",
+        "unchecked": [
+          "uniform values",
+          "post-update physics after frame zero"
+        ]
+      }
+    },
+    "state": {
+      "stream_sha256": "e5489327c4cdc7f94c5918de3a7ca3d6f6d9a5a73b698d090160125e6b275310",
+      "result": {
+        "derived_only": [
+          "beat",
+          "dt"
+        ],
+        "native_state_frames": 1,
+        "native_time_frames": 27000,
+        "operation": "probe",
+        "production_accepted": false,
+        "reference_accepted": true,
+        "status": "OFFLINE_CONFORMANCE_ONLY",
+        "unchecked": [
+          "uniform values",
+          "post-update physics after frame zero"
+        ]
+      }
+    },
+    "shader": {
+      "stream_sha256": "f2e4392781b11bd2aaa9e9e14715f6f4bc380492bcc827b1b07e5210a77bec5a",
+      "result": {
+        "native_effective_shader_elements": 235,
+        "operation": "shaders",
+        "production_accepted": false,
+        "reference_accepted": true,
+        "status": "OFFLINE_CONFORMANCE_ONLY"
+      }
+    }
+  },
+  "target_executed": false,
+  "production_accepted": false
+}

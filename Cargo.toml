@@ -1,0 +1,24 @@
+[package]
+name = "eidolon"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.97"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "eidolon-engine"
+path = "src/main.rs"
+
+[[bin]]
+name = "eidolon-runtime"
+path = "src/runtime_main.rs"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "symbols"

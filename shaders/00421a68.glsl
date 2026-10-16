@@ -1,0 +1,3 @@
+Material GetMaterial(Ray ray,Sample sampl){Material result=Material(vec3(0.4),0.0,0.0,0.0,vec3(0.0));if(sampl.materialId.w==0.0 || sampl.materialId.w==6.0){vec3 point=sampl.materialId.xyz;vec2 uv=point.xy;if(abs(sampl.normal.x)>abs(sampl.normal.z))uv.x=point.z;result.additive=texture(sTD2DInputs[3],uv*0.2).xyz*(1.0-abs(sampl.normal.y-0.4))*0.05;}else if(sampl.materialId.w==2.0)
+{result.albedo=vec3(1.0,0.15,0.2);result.additive=result.albedo*vec3(0.18,0.17,0.1);}else if(sampl.materialId.w==3.0)
+{result.albedo=vec3(1.45,1.55,1.55);}if(sampl.materialId.w==6.0){result.additive=smoothstep(0.0,0.02,sampl.materialId.x)*uHatchColor;}mtlMainBot(ray,sampl,result);mtlEvilBot(ray,sampl,result);return result;}

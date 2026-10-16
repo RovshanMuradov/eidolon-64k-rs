@@ -1,0 +1,1 @@
+vec4 FogColor(vec3 direction){vec2 uv=vec2(vmin(abs(direction.xz)),direction.y);vec3 a=texture(sTD2DInputs[5],uv*1.).xyz*vec3(4.0,2.0,0.5)*0.1;return vec4(mix(mix(a,vec3(0.0),saturate(1.0-direction.y*4.0)),vec3(0.0,0.0,0.0),saturate(-direction.y*5.0-0.7)),8.0);}

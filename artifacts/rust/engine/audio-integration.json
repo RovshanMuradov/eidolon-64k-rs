@@ -1,0 +1,27 @@
+{
+  "schema": "eidolon-integrated-audio-v1",
+  "kind": "standalone-rust-host-integration-diagnostic",
+  "build_manifest_sha256": "e1df0106324b527734b990e8e878dc796e66d4c53a89471f78f367b8fce9aab3",
+  "host_probe_sha256": "2bc10408032fb2a436c051ab6410c8d1d65e2a37a3840b3690139399c6e06713",
+  "production_pe_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "command": [
+    "/home/rovshan/Work/asm/Eidolon/data/builds/T22/host/x86_64-unknown-linux-gnu/release/eidolon-engine",
+    "--render-pcm",
+    "/home/rovshan/Work/asm/Eidolon/data/builds/T22/integrated-pcm.f32le"
+  ],
+  "elapsed_seconds": 155.75559770601103,
+  "pcm_path": "/home/rovshan/Work/asm/Eidolon/data/builds/T22/integrated-pcm.f32le",
+  "pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+  "bytes": 159716352,
+  "frames": 19964544,
+  "equal": true,
+  "first_mismatch_byte": null,
+  "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+  "reference_pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+  "worker": "src/synthesis.rs::spawn(audio::render), same allocation/thread seam as Windows playback",
+  "stdout": "INTEGRATED_RUST_PCM frames=19964544 bytes=159716352 standalone=true\n",
+  "stderr": "",
+  "target_executed": false,
+  "production_accepted": false,
+  "scope": "Cargo release host build, full PCM bytes; not Windows playback or graphics equivalence"
+}

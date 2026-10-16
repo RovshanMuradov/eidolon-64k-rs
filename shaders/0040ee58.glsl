@@ -1,0 +1,1 @@
+vec4 Shade(vec2 uv){vec3 c=vec3(0.0);for(int i=0;i<10000;++i){vec4 smp=hash41(float(i)*PI);float g=-min(0.0,length(uv-smp.xy)-smp.z*0.004);c+=(smp.wyz+smp.xwy)*pow(g/0.0034,12.0);}return vec4(c,1.0);}

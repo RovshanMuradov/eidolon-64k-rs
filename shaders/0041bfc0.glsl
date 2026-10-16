@@ -1,0 +1,5 @@
+Material GetMaterial(Ray ray,Sample sampl){Material result=Material(vec3(0.0),0.0,0.5,0.0,vec3(0.0));if(sampl.materialId.w==0.0){result.albedo=LandscapeAlbedo(sampl,0.2)*2.;}else if(sampl.materialId.w==3.0)
+{result.albedo=vec3(0.2);}else if(sampl.materialId.w==11.0)
+{result=Material(vec3(1.0,1.0,0.0),0.,0.,0.,vec3(3.0,3.0,1.0));}else if(sampl.materialId.w==6.0)
+{result.albedo=vec3(1.6,1.8,1.8)-textureTri(sTD2DInputs[0],sampl.intersection*vec3(0.1,0.01,0.1),sampl.normal).yyy*0.5;result.reflectivity=0.3;}else if(sampl.materialId.w==66.0)
+{float blink=clamp(sampl.materialId.y-1.8,0.0,1.0);blink=blink*step(0.996,0.5+sin(uTime*PI+sampl.materialId.z)*0.5);result=Material(vec3(1.0),0.,0.,0.,mix(vec3(.2),vec3(50.0,10.0,5.0),blink));}else{vec4 tex=textureTri(sTD2DInputs[0],sampl.intersection*0.1,sampl.normal);result.albedo=(vec3(0.3,0.3,0.3)*3.0);pMod1(sampl.materialId.x,4.5);float stripes=smoothstep(0.21,0.2,abs(abs(sampl.materialId.x)-0.25)+step(0.5,tex.z)*0.02);result.albedo=mix(result.albedo,vec3(2.0,0.7,0.4),(0.5+0.5*smoothstep(0.4,0.6,tex.y))*stripes);result.additive=result.albedo*0.05;}mtlMainBot(ray,sampl,result);return result;}

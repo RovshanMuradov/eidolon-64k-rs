@@ -1,0 +1,1 @@
+float Bump(vec3 point,Ray ray,Sample result){if(result.materialId.w==0.0 || result.materialId.w==2.0){return textureTri(sTD2DInputs[2],result.intersection*0.5+point,result.normal).z*0.03;}return 0.0;}

@@ -1,0 +1,1 @@
+vec3 Lighting(LightData data){vec3 result=vec3(0.0);result+=PointLight(data,uMainCharacterPos+vec3(0.0,0.2,0.0),vec4(uMainBotMood,0.4),0.0,16.0);float z=round(data.intersection.z/3.3333);float rad=hash11(z);z*=3.3333;result+=PointLightNoSpec(data,vec3(0.0,1.15,z),vec4(vec3(30.0),1.0),1.0,10.0);return result;}
