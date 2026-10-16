@@ -14,6 +14,8 @@ static LARGE_INTEGER first_present_wall, wall_frequency;
 static BOOL loaded_observed;
 static BY_HANDLE_FILE_INFORMATION observation_file;
 static BOOL observation_file_known;
+static BOOL retain_frames[27000];
+static void native_completion_arm(CONTEXT *context);
 extern DWORD WINAPI stage_tick(void) __asm__("_eidolon_gettick");
 extern DWORD WINAPI stage_time(void) __asm__("_eidolon_timegettime");
 extern BOOL WINAPI stage_qpc(LARGE_INTEGER *) __asm__("_eidolon_qpc");
@@ -78,17 +80,17 @@ DWORD stage_canary_return(DWORD *registers, BYTE *fp) {
     if(observed_esp!=c->entry+4+c->argbytes || registers[7]!=c->expected ||
        memcmp(c->fp,fp,512)) equal=FALSE;
     DWORD ordinal=++canary_counts[c->api];
-    if(ordinal==1 || !equal) {
+    if(ordinal==1 || !equal || (c->api==14 && frame>=5760 && frame<=5762)) {
         char name[128], before_hash[65], after_hash[65];
         snprintf(name,sizeof(name),"abi-%02lu-%lu-before-gpr.bin",c->api,ordinal); save(name,c->registers,36);
         snprintf(name,sizeof(name),"abi-%02lu-%lu-after-gpr.bin",c->api,ordinal); save(name,registers,36);
         snprintf(name,sizeof(name),"abi-%02lu-%lu-before-fx.bin",c->api,ordinal); save(name,c->fp,512);
         snprintf(name,sizeof(name),"abi-%02lu-%lu-after-fx.bin",c->api,ordinal); save(name,fp,512);
         hash(c->fp,512,before_hash); hash(fp,512,after_hash);
-        record("abi_canary",",\"api\":%lu,\"ordinal\":%lu,\"argbytes\":%lu,\"entry_esp\":%lu,"
+        record("abi_canary",",\"api\":%lu,\"ordinal\":%lu,\"n\":%lu,\"argbytes\":%lu,\"entry_esp\":%lu,"
                "\"return_esp\":%lu,\"return_pc\":%lu,\"expected_eax\":%lu,\"observed_eax\":%lu,"
                "\"before_fx_sha256\":\"%s\",\"after_fx_sha256\":\"%s\",\"equal\":%s",
-               c->api,ordinal,c->argbytes,c->entry,observed_esp,c->return_pc,c->expected,registers[7],
+                c->api,ordinal,frame,c->argbytes,c->entry,observed_esp,c->return_pc,c->expected,registers[7],
                before_hash,after_hash,equal?"true":"false");
     }
     if(!equal) fail("live_abi_canary");
@@ -118,7 +120,6 @@ static DWORD WINAPI wrong_thread_control(void *unused) {
 }
 
 static void stage_initialize(CONTEXT *context) {
-    (void)context;
     canary_tls=TlsAlloc();
     if(canary_tls==TLS_OUT_OF_INDEXES) fail("canary_tls_allocate");
     GetEnvironmentVariableA("EIDOLON_B_FAULT",fault,sizeof(fault));
@@ -137,6 +138,17 @@ static void stage_initialize(CONTEXT *context) {
         if(!thread || WaitForSingleObject(thread,10000)!=WAIT_OBJECT_0) fail("wrong_thread_control_timeout");
         fail("wrong_thread_control_unexpected_return");
     }
+    native_initialize(context);
+    char retention_path[32768];
+    if(!GetEnvironmentVariableA("EIDOLON_B_RETENTION",retention_path,sizeof(retention_path))) fail("retention_path");
+    FILE *retention=fopen(retention_path,"r");
+    if(!retention) fail("retention_open");
+    unsigned n;
+    while(fscanf(retention,"%u",&n)==1) {
+        if(n>=27000 || retain_frames[n]) fail("retention_index");
+        retain_frames[n]=TRUE;
+    }
+    if(!feof(retention) || fclose(retention)) fail("retention_read");
 }
 
 BOOL eidolon_completion(EXCEPTION_POINTERS *exception) {
@@ -150,7 +162,8 @@ BOOL eidolon_completion(EXCEPTION_POINTERS *exception) {
     if(memcmp(&expected,exception->ContextRecord,sizeof(expected))) fail("completion_context_canary");
     char a[65],b[65]; hash(&before,sizeof(before),a); hash(exception->ContextRecord,sizeof(before),b);
     record("completion_canary",",\"before_sha256\":\"%s\",\"after_sha256\":\"%s\","
-           "\"only_allowed_change\":\"EIP rewind to displaced instruction\",\"equal_except_eip\":true",a,b);
+            "\"only_allowed_change\":\"EIP rewind to displaced instruction\",\"equal_except_eip\":true",a,b);
+    native_completion_arm(exception->ContextRecord);
     return result;
 }
 
@@ -195,6 +208,17 @@ static void stage_loaded(void) {
 DWORD core_position(DWORD *s) {
     if(GetCurrentThreadId()!=main_tid || s[0]!=0x407b97) fail("position_route_or_thread");
     if(frame==stop_frames) { stage_summary(); ExitProcess(0); }
+    if(!frame) {
+        native_physics("first-query");
+        Canary *canary=TlsGetValue(canary_tls);
+        if(!canary || canary->api!=4) fail("first_query_canary");
+        save("native-first-query-main-fx.bin",canary->fp,512);
+        DWORD ebp=s[-7];
+        native_bytes("first-query","previous-seconds",ebp-0x38,4);
+        record("native_first_query",",\"caller\":%lu,\"previous_seconds_bits\":%lu,\"x87_cw\":%u,\"mxcsr\":%lu",
+               s[0],*(DWORD *)(uintptr_t)(ebp-0x38),*(WORD *)canary->fp,*(DWORD *)(canary->fp+24));
+    }
+    native_join();
     stage_loaded();
     DWORD result=original_core_position(s);
     /* Repeated calls to the actual routed wrappers, under their live ABI
@@ -223,6 +247,7 @@ DWORD compat_core_volume(DWORD *s) {
     for(unsigned i=0;i<9;++i) get_integer(names[i],&unpack[i]);
     GLint texture; get_integer(0x806a,&texture); volume_texture=texture;
     char digest[65]; hash((void *)(uintptr_t)s[10],33554432,digest);
+    memcpy(upload_digest,digest,sizeof(upload_digest));
     ((void (APIENTRY *)(GLenum,GLint,GLint,GLsizei,GLsizei,GLsizei,GLint,GLenum,GLenum,const void *))
        (uintptr_t)real_volume)(s[1],s[2],s[3],s[4],s[5],s[6],s[7],s[8],s[9],(void *)(uintptr_t)s[10]);
     check("volume_upload_error");
@@ -325,7 +350,8 @@ static void stage_capture(HDC dc) {
     if(read_error || get_error() || memcmp(before,after,sizeof(before)) || get_context()!=owning_context || get_dc()!=dc)
         fail("GL_readback_state_or_error");
     hash(pixels,pixel_bytes,digest);
-    if(frame<3 || frame%60==0 || frame>=1438) {
+    if(frame>=27000) fail("bounded_frame_extent");
+    if(retain_frames[frame]) {
         if(snprintf(path,sizeof(path),"%s/frame-%05lu.rgba",folder,frame)>=(int)sizeof(path)) fail("frame_path");
         file_write(path,pixels,pixel_bytes,FALSE);
     }

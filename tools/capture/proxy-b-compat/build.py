@@ -65,7 +65,22 @@ def main():
                      'movl %eax,28(%ebp)','movl $_stage_return,36(%ebp)',*restore,f'ret ${argbytes}']
     wrappers += ['_stage_return:','pushl $0',*save,'movl %ebp,(%esp)',
                  'leal 32(%esp),%eax','movl %eax,4(%esp)','call _stage_canary_return',
-                 'movl %eax,36(%ebp)',*restore,'ret']
+                  'movl %eax,36(%ebp)',*restore,'ret']
+    for number, name in enumerate(('bootstrap','interior','synth_return')):
+        wrappers += [f'.globl _native_{name}', f'_native_{name}:','pushl $0',*save,
+                     'movl %ebp,(%esp)','leal 32(%esp),%eax','movl %eax,4(%esp)',
+                     f'movl ${number},8(%esp)','call _native_resumed',
+                     'movl %eax,36(%ebp)',*restore,'ret']
+    for number, (name,displaced,next_pc) in enumerate((
+            ('initialize','0x0f,0x28,0x46,0x40,0x0f,0x29,0x46,0x50',0x405446),
+            ('before','0x0f,0x28,0x86,0x90,0x01,0x00,0x00',0x405645),
+            ('after','0x0f,0x28,0x07,0x66,0x0f,0x58,0x46,0x60',0x405746))):
+        wrappers += [f'.globl _node_site_{name}', f'_node_site_{name}:',*save,
+                     'movl %ebp,(%esp)','leal 32(%esp),%eax','movl %eax,4(%esp)',
+                     f'movl ${number},8(%esp)','call _node_probe',*restore,*save,
+                     'movl %ebp,(%esp)','leal 32(%esp),%eax','movl %eax,4(%esp)',
+                     f'movl ${number},8(%esp)','call _node_return',*restore,
+                     '.byte '+displaced,f'pushl ${next_pc}','ret']
     (out / 'compat.S').write_text('\n'.join(wrappers) + '\n')
     commands = []
     exports = runpy.run_path('tools/capture/proxy-b/build.py')['exports']

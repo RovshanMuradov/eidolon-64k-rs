@@ -14,6 +14,7 @@ static VOID WINAPI stage_exit(UINT code) __attribute__((noreturn));
 #define core_swap original_core_swap
 #define core_position original_core_position
 #define eidolon_completion original_completion
+#define core_create_thread original_core_create_thread
 #include "../proxy-b/core.c"
 #undef FlushFileBuffers
 #undef ExitProcess
@@ -22,6 +23,7 @@ static VOID WINAPI stage_exit(UINT code) __attribute__((noreturn));
 #undef core_swap
 #undef core_position
 #undef eidolon_completion
+#undef core_create_thread
 
 extern void compat_shader(void), compat_use(void), compat_rect(void), compat_teximage(void);
 static FARPROC real_shader, real_use, real_rect, real_teximage;
@@ -36,10 +38,20 @@ static void stage_scene(DWORD *s);
 static void stage_summary(void);
 static void stage_flush_log(void);
 static void stage_draw(DWORD *s);
+static void consumer_before(DWORD *s);
+static void consumer_after(DWORD *s);
+static void native_initialize(CONTEXT *context);
+static void native_bootstrap_arm(CONTEXT *context);
+static void native_physics(const char *phase);
+static void native_bytes(const char *phase,const char *role,DWORD base,DWORD bytes);
+static void native_join(void);
+static void node_initialize(void);
+static void node_summary(void);
 static void stage_route(const char *name, DWORD *s);
 static BOOL inject(const char *name);
 extern void compat_volume(void);
 static FARPROC real_volume;
+static char upload_digest[65];
 static const char expected_sha[] = "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182";
 
 static void check(const char *where) {
@@ -170,6 +182,7 @@ DWORD compat_core_rect(DWORD *s) {
     stage_route("rect",s);
     check("draw_preexisting_error");
     if(timeline) stage_draw(s);
+    if(timeline) consumer_before(s);
     if (s[0]==0x407967 && draws++==0) {
         GLint fbo=0, viewport[4]={0}, program=0, mask[4]={0}, buffers[8]={0};
         get_integer(0x8ca6,&fbo); get_integer(GL_VIEWPORT,viewport);
@@ -191,6 +204,7 @@ DWORD compat_core_rect(DWORD *s) {
     }
     ((void (APIENTRY *)(GLint,GLint,GLint,GLint))(uintptr_t)real_rect)(s[1],s[2],s[3],s[4]);
     check("original_glRecti_error");
+    if(timeline) consumer_after(s);
     return 0;
 }
 
@@ -232,7 +246,7 @@ DWORD core_swap(DWORD *s) {
     if (is_timeline) {
         char raw_sha[65]; hash((void *)0x409918,1310,raw_sha);
         if (strcmp(raw_sha,expected_sha) || substitutions!=(compatibility ? 1u:0u)) fail("later_shader_memory_or_substitution_count");
-        if (n<3 || n>=1438) {
+        if (n<3 || (n>=1438 && n<=1442) || n>=5758) {
             /* wrappers.S PUSHAD stores the application's EBP 28 bytes before s.
              * These original locals were written by the unchanged timeline path. */
             DWORD ebp=s[-7];
@@ -268,18 +282,23 @@ void eidolon_core_initialize(CONTEXT *context) {
     if (!compatibility && strcmp(mode,"unchanged")) fail("compat_mode");
     char small[32]={0};
     if (GetEnvironmentVariableA("EIDOLON_B_BOUNDARY_PROBE",small,sizeof(small))) {
-        if (strcmp(small,"1443") || !compatibility) fail("small_boundary_scope");
+        if ((strcmp(small,"1443") && strcmp(small,"5763")) || !compatibility) fail("small_boundary_scope");
         boundary_probe=TRUE;
-        stop_frames=1443;
-        record("boundary_probe",",\"sequential_frames\":1443,\"predicted_boundary\":1440,\"full_reference\":false");
+        stop_frames=strtoul(small,NULL,10);
+        record("boundary_probe",",\"sequential_frames\":%lu,\"predicted_boundary\":%lu,\"full_reference\":false",stop_frames,stop_frames-3);
     }
     record("compatibility_experiment",",\"transformation\":\"%s\",\"expected_raw_sha256\":\"%s\",\"reference_eligible\":false",mode,expected_sha);
     slot(0x40905c,(FARPROC)compat_rect,&real_rect);
     slot(0x409044,(FARPROC)compat_teximage,&real_teximage);
     stage_initialize(context);
     save("bootstrap-context-before.bin",&before,sizeof(before));
+    native_bootstrap_arm(context);
     save("bootstrap-context-after.bin",context,sizeof(*context));
+    before.Eip=context->Eip;
     if(memcmp(&before,context,sizeof(before))) fail("bootstrap_context_canary");
 }
 
 #include "stage.c"
+#include "native.c"
+#include "nodes.c"
+#include "consumer.c"

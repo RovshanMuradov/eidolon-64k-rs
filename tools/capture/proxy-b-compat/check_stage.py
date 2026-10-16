@@ -50,7 +50,8 @@ def inspect(path):
         assert state['before'][12:17] == [8,8,8,8,0]
         assert frame['component'] == 0x8c17
         raw = data / f"frame-{frame['n']:05d}.rgba"
-        required = frame['n'] < 3 or frame['n'] % 60 == 0 or frame['n'] >= 1438
+        required = (frame['n'] in m['staged_scope']['retained_indices'] if 'staged_scope' in m else
+                    frame['n'] < 3 or frame['n'] % 60 == 0 or frame['n'] >= 1438)
         assert raw.exists() == required
         if required:
             assert raw.stat().st_size == 8294400 and sha(raw) == frame['sha256']
@@ -75,7 +76,13 @@ def inspect(path):
         a,b = [data / f'{prefix}-{side}-fx.bin' for side in ('before','after')]
         assert a.read_bytes() == b.read_bytes() and a.stat().st_size == 512
         assert sha(a) == e['before_fx_sha256'] and sha(b) == e['after_fx_sha256']
-    assert (data/'bootstrap-context-before.bin').read_bytes() == (data/'bootstrap-context-after.bin').read_bytes()
+    before,after = [(data/f'bootstrap-context-{side}.bin').read_bytes() for side in ('before','after')]
+    if get('native_resume_arm'):
+        assert before[:184] == after[:184] and before[188:] == after[188:]
+        arm, = [e for e in get('native_resume_arm') if e['kind']==0]
+        assert struct.unpack_from('<I',after,184)[0] == arm['observer_pc']
+    else:
+        assert before == after
     before,after = [(data/f'completion-context-{side}.bin').read_bytes() for side in ('before','after')]
     assert len(before) == len(after) == 716
     assert before[:184] == after[:184] and before[188:] == after[188:]
