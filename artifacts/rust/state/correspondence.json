@@ -1,0 +1,190 @@
+{
+  "schema": "eidolon-state-correspondence-static-1",
+  "target_executed_by_this_audit": false,
+  "evidence_kind": "static source/binary mapping and existing payload audit; observation protocol is proposed",
+  "executable_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "source_archive_sha256": "b8fdfe5e0ff937b641106a3cac02a39c7b73c229ecd6ce0edb26067e5d636f5e",
+  "source_commit": "248550ab154e5e4aeeaae12c137a7594e4dba322",
+  "source_sha256": {
+    "src/audio/runtime.rs": "a3ac804f6bb814b403a3b684f7583db39b96c3fb5e54ffe3728b6bd1a947298a",
+    "src/audio/graph.rs": "b1c5d3929065d699a08cda34a80f72292a0a85155cb8717b176365b8233b543d",
+    "src/audio/math.rs": "ac4f838b776eb7e873ce98180960e980af9920331d346ca4c2a23913e40751f1",
+    "src/audio/glitch.rs": "02d42f2367e6b3a62f25432d6191c33c5f9ed80bb935043497156780e87a99b0",
+    "src/engine.rs": "65a8067f4e0c718c20a8dd23f700b51f5a951dc83c015790590b079b7bde64a3",
+    "src/physics.rs": "072deb31c88a12095dfe8610481188519f05442cd514609f2e654b3b7f24b83a",
+    "src/runtime.rs": "7b118b15a874ea0239fe9e187295f7aae405a63d08a1e3b4e9930f5b3c9df6bb",
+    "src/observe.rs": "4aed08be1ff6657fc417e94e0b55fa83571ef1df928f18440dfc9bf47146bfaf",
+    "src/graphics.rs": "50edc69a97fd6637ffd40e0341c02d2fc49e89db53fe6cf97fc6f110894d2d37"
+  },
+  "native_image": {
+    "path": "/home/rovshan/Work/asm/Eidolon/data/reverse/confirmed-debug/postfix-00400000.bin",
+    "sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504"
+  },
+  "native_reference": {
+    "path": "artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
+    "sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64"
+  },
+  "scope_input": {
+    "path": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24/artifacts/verification/rust/state-scope.json",
+    "sha256": "5fe9a6aa348dbebf70269660e98b72c73ce2f7d9a367baba8b172f9c163f64b3"
+  },
+  "environment": "host-only Python; no new target/GPU/Wine observations; runtime environment remains bound by T24",
+  "initial_native_payloads": {
+    "entry/physics": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-entry-physics.bin",
+      "sha256": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+      "bytes": 256
+    },
+    "entry/rng": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-entry-rng.bin",
+      "sha256": "2c7663e809c9827df482ce260d079467d02f9f181a6d1fcc5a942b2a7e1bd3e6",
+      "bytes": 1312
+    },
+    "entry/tick": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-entry-tick.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "bytes": 4
+    },
+    "prethread/rng": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-prethread-rng.bin",
+      "sha256": "835cc289b591fb1388096ede81303f048fcb392bf57bb4ae1c6d4762fdcfc98b",
+      "bytes": 1312
+    },
+    "prethread/tick": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-prethread-tick.bin",
+      "sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+      "bytes": 4
+    },
+    "first-query/physics": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-first-query-physics.bin",
+      "sha256": "c7ebf37460898c920fb4e884f7846f9b0114ad759b8363584b17f8e78410cbb1",
+      "bytes": 256
+    },
+    "first-query/previous-seconds": {
+      "path": "/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-d13-detached-20261016-1/native-first-query-previous-seconds.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "bytes": 4
+    }
+  },
+  "native_rng_block": {
+    "block_bytes": 1312,
+    "mutable_seed_bytes": 16,
+    "immutable_bytes": 1296,
+    "exp2_offset": {
+      "offset": 0,
+      "bytes": 16,
+      "u32": [
+        1023,
+        1023,
+        0,
+        0
+      ]
+    },
+    "seed": {
+      "offset": 16,
+      "bytes": 16,
+      "i64": [
+        1,
+        31337
+      ]
+    },
+    "allbits": {
+      "offset": 32,
+      "bytes": 16,
+      "hex": "ffffffffffffffffffffffffffffffff"
+    },
+    "duplicated_f64": {
+      "offset": 48,
+      "count": 79,
+      "stride": 16,
+      "native_literal_va": "0x4090b8",
+      "source_literal_stride": 8,
+      "matched_saved_native_bytes": true
+    }
+  },
+  "candidate_observation_points": [
+    {
+      "name": "audio_initialized_pregraph",
+      "rva": "0xa3b5",
+      "preferred_va": "0x40a3b5",
+      "instruction_bytes": "8b5c241831ff8930be000d0000",
+      "fields": "before instruction: ESI=Runtime; seed=ESI+0x1400 (16 bytes); state=*(ESI+0x168c); tick=*state (4 bytes)",
+      "phase": "initial seed/tick before any graph node creation; synthesis thread, NOT native prethread storage phase"
+    },
+    {
+      "name": "engine_evaluate_entry",
+      "rva": "0x9767",
+      "preferred_va": "0x409767",
+      "instruction_bytes": "5589e553575681ec14010000",
+      "fields": "before prologue: EDX=Engine; physics=EDX+8 (256 bytes); previous_seconds=EDX+0x108 (4 bytes); cursor=*(ESP+4)",
+      "phase": "gate return address base+0x12a9c for timeline calls; base+0x12991 is initialization evaluation"
+    },
+    {
+      "name": "previous_seconds_consumption",
+      "rva": "0x983e",
+      "preferred_va": "0x40983e",
+      "instruction_bytes": "f30f5ca108010000",
+      "fields": "ECX=Engine; read ECX+0x108 before SUBSS; not XMM4 after subtraction",
+      "phase": "dt calculation before previous_seconds is overwritten"
+    },
+    {
+      "name": "previous_seconds_write",
+      "rva": "0x9e8c",
+      "preferred_va": "0x409e8c",
+      "instruction_bytes": "f30f11a908010000",
+      "fields": "ECX=Engine; XMM5.low=current seconds",
+      "phase": "end of successful evaluate; post-update previous_seconds now means current seconds"
+    },
+    {
+      "name": "marker_entry",
+      "rva": "0x1155d",
+      "preferred_va": "0x41155d",
+      "instruction_bytes": "5589e55683ec0c",
+      "fields": "cdecl kind=*(ESP+4),data=*(ESP+8),bytes=*(ESP+12); original EBP is runtime caller frame",
+      "phase": "kind1 return address base+0x12a09; read original_EBP-0x570 (4 bytes), physics original_EBP-0x670 (256 bytes)"
+    },
+    {
+      "name": "marker1_call",
+      "rva": "0x12a04",
+      "preferred_va": "0x412a04",
+      "instruction_bytes": "e854ebffff",
+      "fields": "kind1 after evaluate(0), before first waveOutGetPosition",
+      "phase": "native first-query/previous-seconds corresponds here; existing snapshot does not serialize that field"
+    },
+    {
+      "name": "draw_import_thunk",
+      "rva": "0x4532c",
+      "preferred_va": "0x44532c",
+      "instruction_bytes": "ff25b8264b00",
+      "fields": "jmp [image_base+0xb26b8] (glRecti IAT); use import-name resolution and rebased pointer fingerprint",
+      "phase": "timeline draw return address base+0x143d5; loading return base+0x13a25"
+    },
+    {
+      "name": "timeline_draw_call",
+      "rva": "0x143d0",
+      "preferred_va": "0x4143d0",
+      "instruction_bytes": "e8570f0300",
+      "fields": "glRecti immediately after all pass uniform uploads",
+      "phase": "record only between marker2 and marker3; initialization uses the same draw routine"
+    }
+  ],
+  "private_layout_store_fingerprints": {
+    "0x40a17f": "c7870014000001000000",
+    "0x40a1a0": "c78708140000697a0000",
+    "0x40a280": "89878c160000",
+    "0x40a35b": "c70001000000",
+    "0x412982": "8d9588f9ffff",
+    "0x4129bd": "8d8590f9ffff"
+  },
+  "candidate_saved_physics": {
+    "path": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d26-full01/output/events.bin",
+    "sha256": "261759675ab4f770b000734b75e8f7e3e683ad1eb6446a76f969e267da486988",
+    "frames": 27000,
+    "kind2_kind3_kind4_identical": true,
+    "snapshot_reused_not_three_independent_engine_reads": true,
+    "frames_different_from_initial": 26999,
+    "trajectory_sha256": "f299a24c9115867da0cdaed5d45923d94a680761361a4a667739417fd9f47fbe",
+    "native_later_oracle_available": false
+  },
+  "production_accepted": false
+}
