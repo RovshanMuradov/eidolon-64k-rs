@@ -19,6 +19,7 @@ PIN = "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64"
 N, PCM_BYTES = 27000, 159716352
 ROOT = Path(os.environ.get("EIDOLON_ROOT", Path(__file__).resolve().parents[3]))
 DATA = Path(os.environ.get("EIDOLON_DATA", ROOT / "data"))
+CHECKOUT = Path(__file__).resolve().parents[3]
 
 
 class Failure(ValueError):
@@ -83,7 +84,7 @@ def read_index(path):
 
 
 class Native:
-    def __init__(self, capture=ROOT / ".worktrees/T16", data=DATA):
+    def __init__(self, capture=CHECKOUT, data=DATA):
         self.capture, self.data = Path(capture), Path(data)
         self.directory = self.data / "reference" / RUN
         self.path = self.capture / "artifacts/reference" / f"{RUN}-reference.json"
@@ -315,7 +316,7 @@ def full_run(native, path):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--capture-root", type=Path, default=ROOT / ".worktrees/T16")
+    parser.add_argument("--capture-root", type=Path, default=CHECKOUT)
     parser.add_argument("--data-root", type=Path, default=DATA)
     sub = parser.add_subparsers(dest="operation", required=True)
     sub.add_parser("native")
@@ -326,7 +327,7 @@ def main(argv=None):
     frames = sub.add_parser("frames"); frames.add_argument("path", type=Path)
     frames.add_argument("--payload-root", type=Path, required=True)
     args = parser.parse_args(argv)
-    result = dict(operation=args.operation, reference_accepted=False, production_accepted=False)
+    result = dict(operation=args.operation, reference_accepted=True, production_accepted=False)
     try:
         if args.operation == "identity":
             detail = pe_identity(args.path)

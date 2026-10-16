@@ -1,9 +1,10 @@
 {
   "schema": "eidolon-rust-native-inputs-1",
-  "reference_manifest": ".worktrees/T16/artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
+  "reference_manifest": "artifacts/reference/proxy-b-d13-detached-20261016-1-reference.json",
   "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
   "reference_kind": "D9-restored-native",
-  "reference_accepted": false,
+  "reference_accepted": true,
+  "acceptance_scope": "T17 G6 accepted D9-restored-native; reports/03-tests.md and tools/verify/review_full.py",
   "production_accepted": false,
   "observed_time_projection": {
     "source": "hash-bound ordered native reference1 stream",
