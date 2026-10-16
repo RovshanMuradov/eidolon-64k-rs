@@ -1,6 +1,6 @@
 # Draft reference contract
 
-- [V] Owner: Verification/T15; assignment: [briefs/T15.md](../briefs/T15.md).
+- [V] Owner: Verification/T17; assignment: [briefs/T17.md](../briefs/T17.md).
 - [V] D12 adds full/partial draft-4 schemas for the explicit restored-native variant in [D12 restoration contract](#d12-restored-native-fullpartial-contract); draft-3 retains its unchanged-source/synthetic scope.
 - [V] Acceptance target: [approved step 1](../GOAL.md#approved-step-1--reproducible-reference-of-the-original).
 - [V] Executable checker: [tools/verify/reference.py](../tools/verify/reference.py); synthetic fixture: [reference_factory.py](reference_factory.py).
@@ -193,7 +193,7 @@
 - [V] T14 establishes seed `[1,0,31337,0]`, global RNG `0x0b16b810`, node-local state `ESI+0x190`, native zero-initialized allocations, internal synth MXCSR `0xffc0`, persistent physics and successive audio-derived dt. T11's initial resource digest excludes mutable RNG/node/physics allocations and RNG constants `0x4090b8..0x4090c7`; matching PCM and completion FP do not independently attest those initial/interior states.
 - [V] The D11 pair lacks physical exception/epilogue, resolver ID10, explicit initial/interior state and active-cloud observations; the completed D12 pair supplies them as independently checked in [T15 D12 acceptance](#t15-d12-acceptance-and-full-acquisition-readiness). ID17 remains unused counter capacity.
 - [V] D12's modified-source full/partial contract is implemented below; `STAGED_G5_PARTIAL` remains the result for the earlier D11 pair only.
-- [H] Full G6 requires two fresh identical-state executions of frames 0…26999, evidenced exclusive endpoint 27000, all frame hashes, sparse raws every 60th plus every scene's first/last frame, complete PCM/tail, run-specific completion proof, exact comparison and deliberate-fault rejection. Later-scene timing/logging/storage must be budgeted under 30 GB; a partial exit is never the endpoint.
+- [H] Full G6 requires three fresh identical-state executions under T17's brief: one reference and two repeats of frames0…26999, evidenced exclusive endpoint27000, all frame hashes, reference raws every60th plus every scene's first/last frame, complete PCM/tail, run-specific completion proof, exact comparisons and deliberate-fault rejection. Later-scene timing/logging/storage must remain under30GB; a partial exit is never the endpoint.
 
 ## T15 D12 acceptance and full-acquisition readiness
 
@@ -234,6 +234,19 @@
 - [H] Full paired runs must match schema, entire stable `source` including raw/effective/shim identities, conditions, scenes, termination, capture-tool hash, every frame hash and complete PCM bytes. Per-run provenance locations/hashes and observation IDs may differ; each independently rehashes and reconciles before comparison. Exact pixels/alpha, timing and PCM/tail rules remain unchanged.
 - [V] `validate`/`compare` reject partial schemas even when both partials match; `review-partial` returns only `PARTIAL_ONLY`, never `PASS`. All CLI results include `reference_accepted:false`; a full `PASS` reports file integrity/exact comparison, not live G5/G6 acceptance. Consistently fabricated runtime envelopes remain beyond file-only authentication.
 - [H] Provenance roots default to the verifier checkout, `$EIDOLON_ROOT` and `$EIDOLON_DATA`; override with `--checkout-root`, `--shared-root`, `--provenance-data-root`. These are separate from `--data-root`/`--reference-data`/`--candidate-data`, which locate PCM/raw payloads; index and PCM evidence still resolve beside their manifest.
+
+## T17 closed full-reference assessment
+
+- [V] [review_full.py](../tools/verify/review_full.py) independently pins the closed `proxy-b-d13-detached-20261016-1` reference and original preflight/native-return/job request/final state. Command: `bash tools/run python tools/verify/review_full.py --capture-root "$EIDOLON_ROOT/.worktrees/T16"`; one `CLOSED_RUN_VALID`, overall `PARTIAL`, `reference_accepted:false`, G6 open.
+- [V] Every12778092 ordered event and two out-of-band backend probes reconcile with the1665422322 decoded bytes; strict single-frame Zstandard/JSONL checking rejects incomplete, concatenated, trailing, duplicate-key and reordered streams. Producer checkers are neither imported nor executed.
+- [V] All27000 frame hashes agree with pre-present observations; all510 required raw/Zstandard samples independently rehash, including every60th and all50 native row edges. All native scene seconds/local-beat/token values,27001 routed clocks,27000 GL state restorations and recorded program-use/error/context observations reconcile.
+- [V] Complete159716352-byte PCM matches the independent full-range completion/stability observations at0x401765, ticks1→19964545 and actual cursor offset; the956352-byte/119544-frame tail remains nonzero and untrimmed.
+- [V] Native last present26999 precedes query27000/cursor19845000, seconds450/beat600, EAX=-1/EDI=0 and the original0x408618 exit0. Raw exit locals/GPR/FXSAVE pairs and terminal query's physical returned-wrapper canary substantiate operands/restoration; no terminal present or wrapper stop occurs.
+- [V] Source review of the bound `full.c`, `stage.c`, `core.c`, generated `compat.S`, and `objdump -d --disassemble=_full_exit <bound-build>/opengl32.dll` establishes the unchanged native branch, fingerprinted exit-slot observation, physical restore/resnapshot and tail-jump to the original exit slot. D12 `native.c`, `nodes.c` and `consumer.c` remain byte-identical; publication/host snapshots retain original preflight before execution and native-return after cleanup.
+- [V] The reference independently passes all31 source-creation roles/235 strings/one authorized directive edit,1380 evidence bindings,1875 baseline entries,75 raw ABI pairs/12650457 counted returns, three physical resume witnesses, initial/node state, atlas/upload and three bounded consumer readbacks. ABI counts are not raw witnesses for every call; consumer readbacks cover5760…5762.
+- [V] Original runner terminal is `WINE_EXIT=0 GAMESCOPE_EXIT=139 SECONDS=4243`; durable native-return confirms prefix/sink release. Current prefix/lock/sink state belongs to the active repeat and is not evidence for the closed reference.
+- [V] [test_review_full.py](test_review_full.py) mutates copies of real endpoint/GL-frame/PCM/raw/provenance data and compressed stream fragments; refreshed payload hashes cannot defeat direct byte comparison. Results: [reports/03-tests.md](../reports/03-tests.md).
+- [?] Repeat2 and repeat3 require immutable publication, independent closure/source review and exact comparison before G6; the full checker admits only explicitly pinned closed inputs. Historical compiler/bank fidelity remains unestablished.
 
 ## Commands
 
