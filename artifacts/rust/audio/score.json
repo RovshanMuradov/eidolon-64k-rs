@@ -1,0 +1,26 @@
+{
+  "schema": "eidolon-rust-score-v1",
+  "event_count": 7275,
+  "equal": true,
+  "event_bytes_sha256": "3afcff4292e3af76adef32b50b646bba3f844a029e705b186698899e98c7e641",
+  "recovered_events_sha256": "b6474811f49a54fc330b04d3bcb006bd78c20ce23a92c0dd227575af36d542f3",
+  "compile_command": [
+    "rustc",
+    "--edition=2021",
+    "-A",
+    "dead_code",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "target-feature=+sse4.1",
+    "tools/rust-audio/check_data.rs",
+    "-o",
+    "/home/rovshan/Work/asm/Eidolon/data/builds/T23/check-data"
+  ],
+  "negative_controls": [
+    "truncated score",
+    "damaged terminal sentinel"
+  ],
+  "scheduler": "all 64-frame quanta; stable event ordering equals recovered native streams",
+  "cross_compile": "rustc --edition=2021 --crate-type=rlib --crate-name=eidolon_audio --target i686-pc-windows-gnu -C opt-level=2 -C target-feature=+sse4.1 src/audio/mod.rs"
+}

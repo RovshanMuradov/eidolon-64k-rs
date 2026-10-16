@@ -1,0 +1,94 @@
+{
+  "schema": "eidolon-rust-audio-assets-v1",
+  "input_image_sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504",
+  "bank_sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+  "samples": [
+    9,
+    101,
+    106,
+    107,
+    127,
+    176,
+    194,
+    230,
+    242,
+    262,
+    263,
+    264,
+    409,
+    425,
+    455
+  ],
+  "sample_pcm16_bytes": 85548,
+  "assets": {
+    "SCORE": {
+      "bytes": 32143,
+      "sha256": "1e90d01a49c8fd5eeded293dcc04c04f31c7982dfbbbf5c208ab545d605d8fe2"
+    },
+    "PATCH": {
+      "bytes": 7744,
+      "sha256": "ed17b8a5a0e4fafbc20f0c6fa82a85da4308ba2e874dee2efadfd89c93b74e9e"
+    },
+    "WAVE_9": {
+      "bytes": 2192,
+      "sha256": "c70bf52d5e9885b473c11621f4714f95a2c7bef4bc8d56274ce85ccaea63f433"
+    },
+    "WAVE_101": {
+      "bytes": 5834,
+      "sha256": "797e4ee56e530958daf54cf72ffbd15ed2eaac0938f8a281015484d6f295d813"
+    },
+    "WAVE_106": {
+      "bytes": 16584,
+      "sha256": "9f93b7da975cd520e51f6f65fea520c919784263bdc3ac9e7c703bd0e1806d29"
+    },
+    "WAVE_107": {
+      "bytes": 11968,
+      "sha256": "d9bce0848fab5bba045913555d4cd1fea39b6b337c5ce45a145ebb8f24f94549"
+    },
+    "WAVE_127": {
+      "bytes": 2252,
+      "sha256": "bd61722423100a4d6f97d4f3f47c78d03ddb19c78a771b669933ce9721c3aa8b"
+    },
+    "WAVE_176": {
+      "bytes": 12038,
+      "sha256": "20160c0f235975953f6be8d0acd00cd38c57c8d82e19cef52b416cbe71326bf0"
+    },
+    "WAVE_194": {
+      "bytes": 2896,
+      "sha256": "8cd3fa19806e77bd17608473f7633dd0d28427d15e1d75d717f191c82c1fcde9"
+    },
+    "WAVE_230": {
+      "bytes": 2334,
+      "sha256": "e4f6fff713a1da7b48ed65e6ad88294ecf5c3d5e0d77c2d926607fbf07f0b8cb"
+    },
+    "WAVE_242": {
+      "bytes": 4010,
+      "sha256": "934bb6aa868faaa6c6ace170b9ded4c7deaa17e37e2a5bb1206d22ab7eb91930"
+    },
+    "WAVE_262": {
+      "bytes": 4492,
+      "sha256": "ae7ce4bf1c9e6e95e61ac37b2162972445b5d8f0a89a26be984f7935dfdada31"
+    },
+    "WAVE_263": {
+      "bytes": 3262,
+      "sha256": "51cad5b6b682e155073faa6f08c2bea3cf9e833fab5c13bfa4a935ff6fdea491"
+    },
+    "WAVE_264": {
+      "bytes": 3224,
+      "sha256": "24392e82512fa580825ed2d98b6f83ddddeb4a4e642c8b8cb35d81049c789512"
+    },
+    "WAVE_409": {
+      "bytes": 9784,
+      "sha256": "29e8f021160d8aea96954eac7e7dbe7b8debc90b8e22e4f70e05a374f9b04c85"
+    },
+    "WAVE_425": {
+      "bytes": 1872,
+      "sha256": "63d3bdcf217ecf0597efc184a0686e6ab7c826aa7dc0c2128f0d13d2312c91f4"
+    },
+    "WAVE_455": {
+      "bytes": 2806,
+      "sha256": "5b547b20efea5f3eb596380d780185a942800ca91805c49672f910eecada6448"
+    }
+  },
+  "generated_sha256": "7fea7c8b68aefedf36735aa405fafc3cc886c662a8414daac56ebf3da82663de"
+}
