@@ -50,6 +50,10 @@ def main():
         command = ['tools/capture/proxy-b-diagnostic/core.c' if arg == 'tools/capture/proxy-b/core.c' else arg for arg in command]
         subprocess.run(command, check=True)
         commands.append(command)
+    command = ['i686-w64-mingw32-gcc', *original['flags'],
+               'tools/capture/proxy-b-diagnostic/debugger.c', '-o', str(out / 'debugger.exe')]
+    subprocess.run(command, check=True)
+    commands.append(command)
     for path in dict(original['sources'], **sources):
         target = out / 'source-snapshot' / path
         target.parent.mkdir(parents=True, exist_ok=True)

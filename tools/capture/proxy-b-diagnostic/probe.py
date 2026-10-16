@@ -18,6 +18,7 @@ def sha(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-id', required=True)
+    parser.add_argument('--driver-debug', action='store_true')
     args = parser.parse_args()
     assert args.run_id and all(c.isalnum() or c in '-_' for c in args.run_id)
     data_root = Path(os.environ['EIDOLON_DATA'])
@@ -55,6 +56,9 @@ def main():
     env.pop('DISPLAY', None)
     env.pop('WAYLAND_DISPLAY', None)
     command = ['bash', 'tools/run', 'tools/wine-headless', str(stage / native.name)]
+    if args.driver_debug:
+        env['EIDOLON_B_DRIVER_DEBUG'] = '1'
+        command.insert(3, str(build / 'debugger.exe'))
     started = datetime.now(timezone.utc).isoformat()
     sink = subprocess.check_output(['pactl', 'load-module', 'module-null-sink',
                                     'sink_name=eidolon_T2_diagnostic', 'rate=44100', 'channels=2'], text=True).strip()
@@ -76,7 +80,7 @@ def main():
                                      display=original['environment']['display'], lc_all='C', tz='UTC',
                                      settings={k: v for k, v in env.items() if k.startswith(('WINE', 'EIDOLON_B_')) or k in
                                                ('AGENT', 'PULSE_SINK', 'XDG_CACHE_HOME', '__GL_SHADER_DISK_CACHE_PATH')}),
-                    reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-diagnostic/probe.py', '--run-id', '<fresh-id>'],
+                    reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-diagnostic/probe.py', '--run-id', '<fresh-id>'] + (['--driver-debug'] if args.driver_debug else []),
                     command=command, started_utc=started, finished_utc=datetime.now(timezone.utc).isoformat(),
                     launcher_exit=result.returncode, first_failed_check=failure,
                     runner_terminal=[line for line in (data / 'runner.log').read_text(errors='replace').splitlines() if line.startswith(('WINE_EXIT=', 'TIMEOUT'))],

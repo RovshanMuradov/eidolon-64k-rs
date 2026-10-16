@@ -14,8 +14,8 @@
 - [V] `bash tools/run python tools/capture/proxy-b/probe.py --run-id <fresh-id> --capture-probe` builds PE32 proxy DLLs under `$EIDOLON_ROOT/.tools/capture/B/`, stages them beside a byte-identical demo, and uses the unattended runner with native/builtin overrides and a 300-second bound.
 - [V] `tools/capture/proxy-b/build.py` preserves all installed backend export names/ordinals; forwarding trampolines save integer/EFLAGS/FXSAVE state, while a page-guard rendezvous installs application-IAT clocks and completion hooks at post-fixup entry.
 - [V] The diagnostic gates cursor zero on synthesis completion, writes complete PCM directly, separately hashes its source memory again, and plans to stop after three successful timeline swaps; private audio routing is created and removed automatically.
-- [V] The recorded first G1 failure precedes frame-zero readback: `GL_initial_error`, zero saved frames, native exit 125; no further B runtime was attempted after this failure.
-- [?] The GL guard does not retain its numeric GL error or distinguish a preexisting error from state-query errors; the saved Win32 last-error value cannot resolve this ambiguity.
+- [V] The original G1 failure precedes frame-zero readback: `GL_initial_error`, zero saved frames, native exit 125; D7's separate diagnosis resolves its cause below.
+- [V] The original guard retained only Win32 last-error 183; the exact GL enum/call attribution is bound in `artifacts/reference/proxy-b-gl-diagnosis-review.json`.
 - [V] `bash tools/run python tools/capture/audit-proxy-b.py` rechecks the failure artifact, complete PCM hash/extent, ordered completion events, source/build hashes and released resources; it does not certify instrumentation fidelity or produce a reference PASS.
 - [V] `artifacts/reference/proxy-b-g1-failure-review.json` lists unpassed gates and compressed error evidence; D3 requires the coordinator to record fallback A before further capture work.
 
@@ -30,3 +30,13 @@
 - [V] Earlier A manifests retain the sibling-attach permission failure and pending-debug-event injection-not-responding failure; their exact errors are preserved rather than reclassified as GL errors or reference successes.
 - [V] `bash tools/run python tools/capture/audit-frida-a.py` verifies immutable B evidence, A failures, native exports, source/build hashes, JavaScript/Python syntax and resource release; it does not run Wine or grant a reference PASS.
 - [V] A supplies zero frames/PCM and no G5 bundle; T10's full B PCM remains at `$EIDOLON_DATA/reference/proxy-b-g1-20261016/pcm.f32le` with its original evidence bindings.
+
+## D7/D8 exact GL-error diagnosis
+
+- [V] `bash tools/run python tools/capture/proxy-b-diagnostic/probe.py --run-id <fresh-id>` isolates the original preexisting-error check from every attempted state query; the fresh failure is `GL_INVALID_OPERATION` before any query/readback.
+- [V] `bash tools/run python tools/capture/proxy-b-diagnostic/probe.py --run-id <fresh-id> --driver-debug` enables synchronous driver error messages and runs a native debugger through `tools/wine-headless`; hardware breakpoints at `0x406dcc/0x406dce` capture original shader input/program creation, and `0x4076a8/0x4076aa` bracket the producing `glUseProgram(2)` call.
+- [V] The driver callback breaks while the producing call is on-stack; the next resolver boundary records enum `0x0502`, program existence, failed link status and the complete compiler log, then exits 125.
+- [V] `tools/capture/proxy-b-diagnostic/` includes unchanged B sources and builds separately under `.tools/capture/B-diagnostic/`; original B/A builds, binaries and evidence stay immutable, and each run has fresh staging/output directories.
+- [V] `bash tools/run python tools/capture/proxy-b-diagnostic/audit.py` verifies original-source byte equality, native stack/argument evidence, before/after enum attribution, export maps, failed-method hashes and runtime release; outputs `artifacts/reference/proxy-b-gl-diagnosis-review.json`.
+- [V] Diagnostic `glGetError` consumption always leads to failure; synchronous debug-output state changes and debugger timing are excluded from G1 fidelity claims, and these commands never produce reference PASS.
+- [H] An explicitly approved proxy-only GLSL compatibility-profile experiment could address the original `#version 450`/`gl_FragColor` compiler rejection; modified shader input requires separate labeling and does not establish an original reference.
