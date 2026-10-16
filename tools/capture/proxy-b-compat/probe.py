@@ -35,14 +35,17 @@ def main():
     parser.add_argument('--run-id', required=True)
     parser.add_argument('--mode', choices=['unchanged', '450-compatibility'], required=True)
     parser.add_argument('--frames', type=int, default=3)
+    parser.add_argument('--first-boundary', action='store_true')
     args = parser.parse_args()
     assert args.run_id and all(c.isalnum() or c in '-_' for c in args.run_id)
     assert 1 <= args.frames <= 600
+    assert not args.first_boundary or (args.mode == '450-compatibility' and args.frames == 3)
     data_root = Path(os.environ['EIDOLON_DATA'])
     data = data_root / 'reference' / args.run_id
     destination = Path('artifacts/reference') / f'{args.run_id}.json'
     assert not destination.exists()
-    assert sum(p.stat().st_size for p in data_root.rglob('*') if p.is_file()) + 250_000_000 + args.frames * 8_294_400 < 30_000_000_000
+    reserve = 600_000_000 if args.first_boundary else 250_000_000 + args.frames * 8_294_400
+    assert sum(p.stat().st_size for p in data_root.rglob('*') if p.is_file()) + reserve < 30_000_000_000
     build = Path(subprocess.check_output(['python', 'tools/capture/proxy-b-compat/build.py'], text=True).strip())
     build_manifest = json.loads((build / 'build.json').read_text())
     original_path = Path('artifacts/reference/proxy-b-g1-20261016.json')
@@ -89,6 +92,8 @@ def main():
                XDG_CACHE_HOME=str(stage / 'cache'), __GL_SHADER_DISK_CACHE_PATH=str(stage / 'cache/nvidia'))
     env.pop('DISPLAY', None)
     env.pop('WAYLAND_DISPLAY', None)
+    if args.first_boundary:
+        env['EIDOLON_B_BOUNDARY_PROBE'] = '1441'
     command = ['bash', 'tools/run', 'tools/wine-headless', str(native)]
     started = datetime.now(timezone.utc).isoformat()
     sink = subprocess.check_output(['pactl', 'load-module', 'module-null-sink',
@@ -119,12 +124,12 @@ def main():
                                      display=original['environment']['display'],
                                      settings={k: v for k, v in env.items() if k.startswith(('WINE', 'EIDOLON_B_')) or k in
                                                ('AGENT', 'PULSE_SINK', 'XDG_CACHE_HOME', '__GL_SHADER_DISK_CACHE_PATH', 'LC_ALL', 'TZ')}),
-                    reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-compat/probe.py', '--run-id', '<fresh-id>', '--mode', args.mode, '--frames', str(args.frames)],
+                    reproduce=['bash', 'tools/run', 'python', 'tools/capture/proxy-b-compat/probe.py', '--run-id', '<fresh-id>', '--mode', args.mode, '--frames', str(args.frames)] + (['--first-boundary'] if args.first_boundary else []),
                     command=command, started_utc=started, finished_utc=datetime.now(timezone.utc).isoformat(),
                     launcher_exit=result.returncode, first_failed_check=failure,
                     runner_terminal=[line for line in (data / 'runner.log').read_text(errors='replace').splitlines() if line.startswith(('WINE_EXIT=', 'TIMEOUT'))],
-                    observations=[e for e in events if e['event'] not in ('lookup', 'clock', 'shader_source')
-                                  and not (e['event'] == 'program_use' and e['program'] == 1 and not e['post_error'])],
+                    observations=[e for e in events if e['event'] not in ('lookup', 'clock', 'shader_source', 'pre_present', 'post_present')
+                                  and not (e['event'] == 'program_use' and e['program'] != 2 and not e['post_error'])],
                     evidence={str(p.relative_to(data_root)): sha(p) for p in sorted(data.iterdir()) if p.is_file()},
                     D2=original['D2'], resources=dict(prefix_processes_released=True, private_sink_unloaded=True),
                     gates='Diagnostic observations only; G1 ABI/canaries, G2-G4 and T10 eligibility require independent review.')

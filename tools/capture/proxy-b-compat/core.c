@@ -3,14 +3,17 @@
  * The original G1 readback/error guard and clock/PCM implementation are retained. */
 #define core_wgl_lookup original_core_wgl_lookup
 #define eidolon_core_initialize original_core_initialize
+#define core_swap original_core_swap
 #include "../proxy-b/core.c"
 #undef core_wgl_lookup
 #undef eidolon_core_initialize
+#undef core_swap
 
 extern void compat_shader(void), compat_use(void), compat_rect(void), compat_teximage(void);
 static FARPROC real_shader, real_use, real_rect, real_teximage;
 static DWORD creations, substitutions, target_program, draws;
 static BOOL compatibility, context_seen;
+static BOOL boundary_probe;
 static const char expected_sha[] = "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182";
 
 static void check(const char *where) {
@@ -89,6 +92,8 @@ DWORD compat_core_shader(DWORD *s) {
                creation,i,count,type,s[0],sources[i],(DWORD)length,raw_sha,(DWORD)effective_length,effective_sha,
                target&&compatibility ? "true":"false");
     }
+    DWORD forward_calls=0;
+    forward_calls++;
     GLuint program=((GLuint (APIENTRY *)(GLenum,GLsizei,const char *const *))(uintptr_t)real_shader)(type,count,effective);
     GLenum call_error=get_error();
     void (APIENTRY *program_iv)(GLuint,GLenum,GLint *)=(void *)extension("glGetProgramiv");
@@ -105,7 +110,7 @@ DWORD compat_core_shader(DWORD *s) {
     snprintf(name,sizeof(name),"shader-%03lu-program-%u-link.log",creation,program);
     save(name,text,(DWORD)length); hash(text,(DWORD)length,digest);
     record("shader_program",",\"creation\":%lu,\"program\":%u,\"link_status\":%d,\"api_error\":%u,"
-           "\"log_bytes\":%d,\"log_sha256\":\"%s\",\"substitutions\":%lu",creation,program,linked,call_error,length,digest,substitutions);
+           "\"log_bytes\":%d,\"log_sha256\":\"%s\",\"substitutions\":%lu,\"forward_calls\":%lu",creation,program,linked,call_error,length,digest,substitutions,forward_calls);
     if (target) {
         target_program=program;
         hash(sources[0],1310,digest);
@@ -187,12 +192,47 @@ DWORD core_wgl_lookup(DWORD *s) {
     return (DWORD)(uintptr_t)result;
 }
 
+DWORD core_swap(DWORD *s) {
+    DWORD n=frame;
+    BOOL is_timeline=s[0]==0x408603;
+    if (is_timeline) {
+        char raw_sha[65]; hash((void *)0x409918,1310,raw_sha);
+        if (strcmp(raw_sha,expected_sha) || substitutions!=(compatibility ? 1u:0u)) fail("later_shader_memory_or_substitution_count");
+        if (n<3 || n==1439 || n==1440) {
+            /* wrappers.S PUSHAD stores the application's EBP 28 bytes before s.
+             * These original locals were written by the unchanged timeline path. */
+            DWORD ebp=s[-7];
+            record("scene_anchor_locals",",\"n\":%lu,\"app_ebp\":\"0x%08lx\",\"seconds_f32_bits\":%lu,"
+                   "\"selected_scene_token\":%lu,\"row0_token\":%lu,\"row1_token\":%lu,\"original_source_sha256\":\"%s\"",
+                   n,ebp,*(DWORD *)(uintptr_t)(ebp-0x34),*(DWORD *)(uintptr_t)(ebp-0x18),
+                   *(DWORD *)0x42fde0,*(DWORD *)0x42fde4,raw_sha);
+        }
+    }
+    DWORD result=original_core_swap(s);
+    /* Every buffer has already been synchronously acquired/hashed and presented.
+     * Bound the partial experiment's storage to frame-zero, 1-Hz and boundary
+     * anchors. Unretained pixels are intentionally hash-only, never lost frames. */
+    if (is_timeline && boundary_probe && n>=3 && n%60 && n!=1439 && n!=1440) {
+        char path[32768];
+        if(snprintf(path,sizeof(path),"%s/frame-%05lu.rgba",folder,n)>=(int)sizeof(path)) fail("sparse_frame_path");
+        if(!DeleteFileA(path)) fail("sparse_frame_release");
+    }
+    return result;
+}
+
 void eidolon_core_initialize(CONTEXT *context) {
     original_core_initialize(context);
     char mode[32]={0};
     GetEnvironmentVariableA("EIDOLON_B_COMPAT",mode,sizeof(mode));
     compatibility=!strcmp(mode,"450-compatibility");
     if (!compatibility && strcmp(mode,"unchanged")) fail("compat_mode");
+    char small[32]={0};
+    if (GetEnvironmentVariableA("EIDOLON_B_BOUNDARY_PROBE",small,sizeof(small))) {
+        if (strcmp(small,"1441") || !compatibility) fail("small_boundary_scope");
+        boundary_probe=TRUE;
+        stop_frames=1441;
+        record("boundary_probe",",\"sequential_frames\":1441,\"predicted_boundary\":1440,\"full_reference\":false");
+    }
     record("compatibility_experiment",",\"transformation\":\"%s\",\"expected_raw_sha256\":\"%s\",\"reference_eligible\":false",mode,expected_sha);
     slot(0x40905c,(FARPROC)compat_rect,&real_rect);
     slot(0x409044,(FARPROC)compat_teximage,&real_teximage);
