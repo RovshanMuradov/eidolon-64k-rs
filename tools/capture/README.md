@@ -18,3 +18,15 @@
 - [?] The GL guard does not retain its numeric GL error or distinguish a preexisting error from state-query errors; the saved Win32 last-error value cannot resolve this ambiguity.
 - [V] `bash tools/run python tools/capture/audit-proxy-b.py` rechecks the failure artifact, complete PCM hash/extent, ordered completion events, source/build hashes and released resources; it does not certify instrumentation fidelity or produce a reference PASS.
 - [V] `artifacts/reference/proxy-b-g1-failure-review.json` lists unpassed gates and compressed error evidence; D3 requires the coordinator to record fallback A before further capture work.
+
+## Activated Frida-A fallback
+
+- [V] D5 activates A; `bash tools/run python tools/capture/frida-a/probe.py --run-id <fresh-id> --frames 3` builds an isolated PE32 helper/launcher, stages only the unchanged demo, and selects installed builtin OpenGL/winmm through `tools/wine-headless` with a 300-second bound.
+- [V] `tools/capture/frida-a/build.py` writes content-addressed builds under `.tools/capture/A/` and compiler temporaries under `/tmp/opencode/eidolon/T2/build-tmp/`; source/build/environment hashes accompany each diagnostic manifest.
+- [V] The launcher stops at post-fixup `0x406379`, detaches the Wine debugger into a register/flags-preserving pre-synth wait loop, and publishes its low-memory arena; an ancestor-process Frida attachment writes the guarded IA32 LoadLibrary/helper trampoline, using messages only for control.
+- [V] `helper.c` reuses frozen B clock/PCM code without B proxy loading; its separate readback implementation attributes exact GL enums to preexisting versus individual acquisition/restoration calls and HDC/HGLRC, and uses attachment component queries instead of legacy core-profile bit queries.
+- [?] Helper initialization/readback and full G1 ABI/state/canary/negative controls are unvalidated: all saved A runs fail before the Frida script or helper executes.
+- [V] `artifacts/reference/frida-a-g1-runnable-20261016.json` records the remaining G1a error: `NotSupportedError: unable to perform ptrace pokedata: Input/output error`; ancestor `/proc/PID/mem` access succeeds while the target is runnable and untraced. The internal ptrace address/cause remains unknown.
+- [V] Earlier A manifests retain the sibling-attach permission failure and pending-debug-event injection-not-responding failure; their exact errors are preserved rather than reclassified as GL errors or reference successes.
+- [V] `bash tools/run python tools/capture/audit-frida-a.py` verifies immutable B evidence, A failures, native exports, source/build hashes, JavaScript/Python syntax and resource release; it does not run Wine or grant a reference PASS.
+- [V] A supplies zero frames/PCM and no G5 bundle; T10's full B PCM remains at `$EIDOLON_DATA/reference/proxy-b-g1-20261016/pcm.f32le` with its original evidence bindings.

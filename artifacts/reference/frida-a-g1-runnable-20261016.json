@@ -1,0 +1,165 @@
+{
+  "kind": "frida-A-G1-diagnostic",
+  "run_id": "frida-a-g1-runnable-20261016",
+  "reference_eligible": false,
+  "diagnostic_incomplete": true,
+  "status": "G1_failed",
+  "first_failed_check": {
+    "frida": "17.23.3",
+    "status": "failed",
+    "exception_type": "NotSupportedError",
+    "error": "unable to perform ptrace pokedata: Input/output error"
+  },
+  "unpassed_gates": [
+    "G1a full ABI",
+    "G1b full state",
+    "G1c two fresh diagnostics",
+    "G1d canary",
+    "G1e state and negative controls",
+    "G2 independent review",
+    "G3 fidelity",
+    "G4",
+    "G5",
+    "G6"
+  ],
+  "input": {
+    "archive": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+    "archive_sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008",
+    "exe": "Eidolon - Poo-Brain (native).exe",
+    "exe_bytes": 60928,
+    "exe_sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+    "executed_copy": "/tmp/opencode/eidolon/T2/input/Eidolon - Poo-Brain (native).exe"
+  },
+  "dependency_manifest_sha256": "f7410867a167fb6fd2f0b1158c4a3db45ebc4bcff6ddc53b98cb974f11fa1db2",
+  "build": {
+    "compiler": "i686-w64-mingw32-gcc (GCC) 16.2.0",
+    "sources": {
+      "tools/capture/frida-a/bootstrap.js": "78b337d913bb5511838531ecb5586e4f18e059155032a6d2a501e13b186a1073",
+      "tools/capture/frida-a/build.py": "d1dd679f51a9e295d697da8c459140041eb68aa58176dee9522dcef8f88b24b5",
+      "tools/capture/frida-a/helper.c": "c3634ab3253c8f849547994cd1ac21e995abcd65c244d225d8c29bf540486352",
+      "tools/capture/frida-a/inject.py": "46f2ab97b25f56f20d26a837b38efda86a2cf50ec69cbba20e675102b9db6958",
+      "tools/capture/frida-a/launcher.c": "316aace78ddc231ceeb1423f0a8ef04f25a2801a66f93fdb966fc71cc16be6a9",
+      "tools/capture/frida-a/probe.py": "97babb3bb8e103f58cbdb8a0e7860ddf5fc83df15ce94df333e326fc0711cf97",
+      "tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6"
+    },
+    "flags": [
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wl,--no-insert-timestamp"
+    ],
+    "build_id": "5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d",
+    "commands": [
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "-shared",
+        "tools/capture/frida-a/helper.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/wrappers.S",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/helper.def",
+        "-ladvapi32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/eidolon-a.dll"
+      ],
+      [
+        "i686-w64-mingw32-gcc",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wl,--no-insert-timestamp",
+        "tools/capture/frida-a/launcher.c",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/launcher.exe"
+      ]
+    ],
+    "outputs": {
+      "eidolon-a.dll": "cc314d8b17d79fefbcb02d5c29f3bcbab6031ec91c9b3019cf2648b8aaa9145d",
+      "helper.def": "a22b69c202c31f4f00532275cfc4b2a5eb04f7b782d30e3d77e9db5481e437c4",
+      "launcher.exe": "064f1199afc4e06982f74f32f367d96ebedb74a05d9d7f47f1f98a0211a5c9a3",
+      "wrappers.S": "1c2a4e3d417336b73d3b751aa0262c80954fc4d315e5d85ee726098f7af45e59"
+    }
+  },
+  "stage": "/tmp/opencode/eidolon/T2/a-demo/frida-a-g1-runnable-20261016",
+  "prefix_baseline": {
+    "system.reg": "d31bc7b7a9234896da3cf9b775a84f44e7e0b01f0b0bb4c17ab0f78ba0fa3902",
+    "user.reg": "012f60707f0f70e0d57aa80a12b3f6ff8f0888f4d93916e2c9db1894cf351674",
+    "userdef.reg": "e2d3ddb64535fd64880a4b46f1fb53d1a97daf10e6ee466fd943f18ae8d4dbcb",
+    "drive_c/windows/system32/drivers/gm.dls": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+    "drive_c/windows/syswow64/drivers/gm.dls": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0"
+  },
+  "environment": {
+    "os": "Linux-7.1.8-arch1-3-x86_64-with-glibc2.44",
+    "arch": "x86_64",
+    "frida": "17.23.3",
+    "wine": "wine-11.17",
+    "packages": [
+      "wine 11.17-1",
+      "gamescope 3.16.25-1",
+      "nvidia-utils 610.57.04-1",
+      "lib32-nvidia-utils 610.57.04-1"
+    ],
+    "gpu": "NVIDIA GeForce RTX 3070 Ti, 610.57.04",
+    "display": {
+      "kind": "gamescope-headless",
+      "width": 1920,
+      "height": 1080,
+      "launcher": "tools/wine-headless",
+      "wine_virtual_desktop": false
+    },
+    "settings": {
+      "AGENT": "T2",
+      "WINEPREFIX": "/tmp/opencode/eidolon/tools/prefix",
+      "XDG_CACHE_HOME": "/tmp/opencode/eidolon/T2/cache",
+      "WINE_TIMEOUT": "300",
+      "WINE_W": "1920",
+      "WINE_H": "1080",
+      "WINEDLLOVERRIDES": "opengl32,winmm=b;winemenubuilder.exe,mscoree,mshtml=d",
+      "WINEDEBUG": "-all,+loaddll",
+      "EIDOLON_A_LOG": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/frida-a-g1-runnable-20261016/events.jsonl",
+      "EIDOLON_A_OUTPUT": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/frida-a-g1-runnable-20261016",
+      "EIDOLON_A_FRAMES": "3",
+      "__GL_SHADER_DISK_CACHE_PATH": "/tmp/opencode/eidolon/T2/cache/nvidia",
+      "PULSE_SINK": "eidolon_T2_A"
+    }
+  },
+  "bundle": {
+    "tools/run": "957c9840fa552e115da5a411b1eca71e156e432e88efb390d394849bd114f741",
+    "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
+    "tools/capture/prepare-native.py": "a7b1061ae147ef84066921ff9e8089291eaa123c65173106e875f99149b2adb5"
+  },
+  "command": [
+    "bash",
+    "tools/run",
+    "tools/wine-headless",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/launcher.exe",
+    "/tmp/opencode/eidolon/T2/a-demo/frida-a-g1-runnable-20261016/Eidolon - Poo-Brain (native).exe",
+    "Z:/home/rovshan/Work/asm/Eidolon/data/reference/frida-a-g1-runnable-20261016/rendezvous.json"
+  ],
+  "started_utc": "2026-10-16T00:13:57.170729+00:00",
+  "finished_utc": "2026-10-16T00:15:07.530198+00:00",
+  "launcher_exit": 125,
+  "injection_exit": 1,
+  "negative_control": false,
+  "runner_terminal": [
+    "WINE_EXIT=125 GAMESCOPE_EXIT=139 SECONDS=64"
+  ],
+  "observations": [],
+  "evidence": {
+    "reference/frida-a-g1-runnable-20261016/attach-access.json": "cd9cded934ab1c1e02f77ce4d8bec3b9b640306e93c480f0c4629794d8fde48d",
+    "reference/frida-a-g1-runnable-20261016/inject-config.json": "367c51b250d0f43def431dc01d50947af8e0ce64e186438dad85891ab62e96d0",
+    "reference/frida-a-g1-runnable-20261016/injection.json": "e436caab386dd9c491f7df358ce9cd7c0c442c5899257814b27ca37bfddf29fb",
+    "reference/frida-a-g1-runnable-20261016/rendezvous.json": "0a7ddd7d0a2fb90215b5f77db3846950c3311358e07304643ced621b7be93cad",
+    "reference/frida-a-g1-runnable-20261016/runner.log": "7a42153fa063402f00915eb27cc79682719315483ede5efe22aef1db534a6922"
+  },
+  "B_immutable_evidence": {
+    "reference/proxy-b-g1-20261016/backend.jsonl": "1606f13ad4d2afbf0887934531d8993b17f934edb75098270690d710425820e2",
+    "reference/proxy-b-g1-20261016/pcm.f32le": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "reference/proxy-b-g1-20261016/runner.log": "fcce0df548e0e5546cd00e8cf0977eb43ed0f3fd6c86432a59c5bd83511748d2"
+  }
+}
