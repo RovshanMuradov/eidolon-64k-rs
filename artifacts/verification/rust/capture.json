@@ -1,0 +1,16 @@
+{
+  "path": "verification/rust/integrated-9bdfb7e/request.json",
+  "sha256": "f7aaf2345fa85365c74063ddc645577815f285fe04d32f09548ca31943fa2f03",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "candidate_commit": "9bdfb7e1f89de2d0d948d937398b317d74b379d4",
+  "marker_rva": 71005,
+  "helper_sha256": "7a96a81498f988ef4744d4d2549fee694b13405eff9bdbd07ed65236d97d0750",
+  "status": "PREPARED_NOT_EXECUTED",
+  "target_executed": false,
+  "production_accepted": false,
+  "storage": {
+    "existing_bytes": 24185901834,
+    "reserved_bytes": 4429860352,
+    "limit_bytes": 30000000000
+  }
+}
