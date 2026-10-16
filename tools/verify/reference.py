@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
 import sys
@@ -14,6 +15,9 @@ import zstandard
 
 
 SCHEMA = "eidolon-reference-draft-3"
+RESTORED_SCHEMA = "eidolon-reference-draft-4"
+PARTIAL_SCHEMA = "eidolon-partial-reference-draft-4"
+RESTORED_KIND = "D9-restored-native"
 ORIGINAL_SHA256 = "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
 # T1's saved-code/trace reconciliation, linked in tests/reference-format.md.
 # The 450-second visual endpoint is independent of the complete WAVEHDR extent.
@@ -153,29 +157,49 @@ class Run:
     audio_path: Path
 
 
-def load_run(manifest_path, data_root=None):
+def load_run(manifest_path, data_root=None, provenance_roots=None):
+    return _load_run(manifest_path, data_root, provenance_roots, partial=False)
+
+
+def load_partial(manifest_path, data_root=None, provenance_roots=None):
+    return _load_run(manifest_path, data_root, provenance_roots, partial=True)
+
+
+def _load_run(manifest_path, data_root, provenance_roots, partial):
     manifest_path = Path(manifest_path).resolve()
     root = Path(data_root).resolve() if data_root is not None else manifest_path.parent
     m = load_json(manifest_path.read_text(encoding="utf-8"))
+    restored = isinstance(m, dict) and m.get("schema") in (RESTORED_SCHEMA, PARTIAL_SCHEMA)
     fields(m, ("schema", "run_id", "source", "capture", "conditions", "video", "audio",
-               "scenes", "termination", "completion"))
-    require(m["schema"] == SCHEMA, "unsupported reference schema")
+               "scenes", "termination", "completion") + (("provenance",) if restored else ()))
+    require(m["schema"] in ((PARTIAL_SCHEMA,) if partial else (SCHEMA, RESTORED_SCHEMA)),
+            "unsupported reference schema (partial diagnostics cannot pass full validation)")
     text(m["run_id"], "run_id")
 
     source = m["source"]
-    fields(source, ("kind", "exe_sha256", "inputs"))
-    require(source["kind"] in ("original", "synthetic"), "invalid source kind")
+    fields(source, ("kind", "exe_sha256", "inputs") + (("restoration",) if restored else ()))
+    require(source["kind"] in ((RESTORED_KIND,) if restored else ("original", "synthetic")),
+            "invalid source kind: draft-4 requires explicit D9-restored-native identity")
     digest(source["exe_sha256"], "exe_sha256")
-    if source["kind"] == "original":
+    native = source["kind"] in ("original", RESTORED_KIND)
+    if native:
         require(source["exe_sha256"] == ORIGINAL_SHA256, "original executable SHA-256 is not approved native EXE")
     require(isinstance(source["inputs"], dict), "source.inputs: expected name/hash object")
     for name, checksum in source["inputs"].items():
         text(name, "input name")
         digest(checksum, f"input {name}")
+    if restored:
+        if __package__:
+            from . import restoration
+        else:
+            import restoration
+        restoration.check_identity(source)
 
     capture = m["capture"]
     fields(capture, ("kind", "tool_sha256", "command"))
-    expected_kind = "controlled-reference" if source["kind"] == "original" else "synthetic-reference"
+    expected_kind = "controlled-reference" if native else "synthetic-reference"
+    if partial:
+        expected_kind = "controlled-partial"
     require(capture["kind"] == expected_kind, "capture kind is not a controlled/synthetic reference")
     digest(capture["tool_sha256"], "capture.tool_sha256")
     require(isinstance(capture["command"], list) and bool(capture["command"]), "missing capture command")
@@ -239,18 +263,22 @@ def load_run(manifest_path, data_root=None):
     integer(audio["start_sample"], "start_sample")
     require(audio["start_sample"] == 0, "PCM start sample must be zero")
     expected_bytes = samples * len(channels) * SAMPLE_BYTES[audio["sample_format"]]
-    if source["kind"] == "original":
+    if native:
         require((audio["sample_format"], rate, channels) == ("f32le", 44100, ["L", "R"]),
                 "original PCM must retain native float32le stereo at 44100 Hz")
         require(samples == ORIGINAL_AUDIO_FRAMES,
                 "original PCM must contain exactly 19964544 submitted sample frames")
-        require(count == ORIGINAL_VISUAL_END_TICK,
-                "original visual endpoint must be tick 27000 (450 seconds)")
+        if not partial:
+            require(count == ORIGINAL_VISUAL_END_TICK,
+                    "original visual endpoint must be tick 27000 (450 seconds)")
+        else:
+            require(count <= ORIGINAL_VISUAL_END_TICK, "partial capture exceeds native endpoint")
 
     term = m["termination"]
     fields(term, ("reason", "end_tick", "audio_position", "audio_position_num", "audio_position_den",
                   "exit_code", "timeline_end_tick", "evidence"))
-    require(term["reason"] in ("natural_exit", "timeline_end"), "termination is not a successful end")
+    require(term["reason"] in (("partial_stop",) if partial else ("natural_exit", "timeline_end")),
+            "termination is not a successful end" if not partial else "partial capture requires partial_stop")
     integer(term["end_tick"], "termination end_tick", 1)
     require(term["end_tick"] == count, "end_tick must equal frame_count")
     integer(term["audio_position"], "termination audio_position")
@@ -261,7 +289,7 @@ def load_run(manifest_path, data_root=None):
             "termination rational audio position is shifted")
     require(samples >= term["audio_position"], "PCM does not cover the controlled timeline")
     text(term["evidence"], "termination evidence")
-    if term["reason"] == "natural_exit":
+    if term["reason"] in ("natural_exit", "partial_stop"):
         integer(term["exit_code"], "exit_code")
         require(term["exit_code"] == 0 and term["timeline_end_tick"] is None,
                 "natural exit requires exit_code=0 and no timeline cutoff")
@@ -273,7 +301,8 @@ def load_run(manifest_path, data_root=None):
     completion = m["completion"]
     fields(completion, ("finalized", "frames_observed", "frames_hashed", "audio_sample_frames",
                         "dropped_frames", "dropped_audio_sample_frames", "errors", "pcm"))
-    require(completion["finalized"] is True, "capture not finalized")
+    require(completion["finalized"] is (not partial),
+            "partial capture must remain unfinalized" if partial else "capture not finalized")
     for key, expected in (("frames_observed", count), ("frames_hashed", count),
                           ("audio_sample_frames", samples), ("dropped_frames", 0),
                           ("dropped_audio_sample_frames", 0)):
@@ -281,7 +310,14 @@ def load_run(manifest_path, data_root=None):
         require(completion[key] == expected, f"completion {key} does not match required count {expected}")
     require(completion["errors"] == [], "capture reports errors")
     verify_pcm_completion(completion["pcm"], audio, expected_bytes, manifest_path.parent,
-                          source["kind"] == "original")
+                          native)
+    if restored:
+        roots = provenance_roots or {
+            "checkout": Path(__file__).resolve().parents[2],
+            "shared": Path(os.environ.get("EIDOLON_ROOT", ".")),
+            "data": Path(os.environ.get("EIDOLON_DATA", "data")),
+        }
+        restoration.verify(m, roots)
 
     scenes = m["scenes"]
     require(isinstance(scenes, list) and bool(scenes), "missing scene partition")
@@ -361,6 +397,10 @@ def exact_equal(left, right):
 def compare_runs(reference, candidate):
     a, b = reference.manifest, candidate.manifest
     reasons = []
+    if any(m["schema"] == PARTIAL_SCHEMA or m["completion"]["finalized"] is not True for m in (a, b)):
+        reasons.append("partial diagnostics cannot pass full comparison")
+    if a["schema"] != b["schema"]:
+        reasons.append("schema mismatch")
     if reference.manifest_path == candidate.manifest_path or a["run_id"] == b["run_id"]:
         reasons.append("comparison requires distinct run IDs and manifests")
     if a["video"]["storage"] != "reference":
@@ -390,28 +430,38 @@ def main(argv=None):
     validate = subparsers.add_parser("validate", help="check one capture's integrity/completeness")
     validate.add_argument("manifest", type=Path)
     validate.add_argument("--data-root", type=Path)
+    partial = subparsers.add_parser("review-partial", help="check a closed partial prefix; never reference acceptance")
+    partial.add_argument("manifest", type=Path)
+    partial.add_argument("--data-root", type=Path)
     compare = subparsers.add_parser("compare", help="compare two separately captured runs exactly")
     compare.add_argument("reference", type=Path)
     compare.add_argument("candidate", type=Path)
     compare.add_argument("--reference-data", type=Path)
     compare.add_argument("--candidate-data", type=Path)
+    for command in (validate, partial, compare):
+        command.add_argument("--checkout-root", type=Path, default=Path(__file__).resolve().parents[2])
+        command.add_argument("--shared-root", type=Path, default=Path(os.environ.get("EIDOLON_ROOT", ".")))
+        command.add_argument("--provenance-data-root", type=Path, default=Path(os.environ.get("EIDOLON_DATA", "data")))
     args = parser.parse_args(argv)
-    targets = [("capture", args.manifest, args.data_root)] if args.operation == "validate" else [
+    targets = [("capture", args.manifest, args.data_root)] if args.operation != "compare" else [
         ("reference", args.reference, args.reference_data),
         ("candidate", args.candidate, args.candidate_data),
     ]
     runs, reasons = [], []
+    loader = load_partial if args.operation == "review-partial" else load_run
+    roots = {"checkout": args.checkout_root, "shared": args.shared_root, "data": args.provenance_data_root}
     for label, path, root in targets:
         try:
-            runs.append(load_run(path, root))
+            runs.append(loader(path, root, roots))
         except (OSError, ValueError, UnicodeError, zstandard.ZstdError) as error:
             reasons.append(f"{label}: {error}")
     if not reasons and args.operation == "compare":
         reasons.extend(compare_runs(*runs))
     kinds = sorted({run.manifest["source"]["kind"] for run in runs})
-    result = {"status": "FAIL" if reasons else "PASS", "schema": SCHEMA,
+    status = "PARTIAL_ONLY" if args.operation == "review-partial" else "PASS"
+    result = {"status": "FAIL" if reasons else status, "schema": runs[0].manifest["schema"] if runs else SCHEMA,
               "operation": args.operation, "source_kinds": kinds, "draft": True,
-              "reasons": reasons}
+              "reference_accepted": False, "reasons": reasons}
     print(json.dumps(result, sort_keys=True))
     return 1 if reasons else 0
 
