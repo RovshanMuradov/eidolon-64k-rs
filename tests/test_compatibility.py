@@ -105,7 +105,7 @@ def test_pinned_source_edits_never_accept_missing_runtime_evidence(experiment, m
 
 @pytest.mark.parametrize("fault,reason", [
     ("wrong-stage", "fingerprint changed"), ("wrong-return", "fingerprint changed"),
-    ("wrong-address", "fingerprint changed"), ("wrong-caller", "unrelated shader"),
+    ("wrong-address", "unrelated shader"), ("wrong-caller", "unrelated shader"),
     ("zero-forward", "forwarded exactly once"), ("double-forward", "forwarded exactly once"),
     ("bool-count", "expected integer"), ("multiple-strings", "fingerprint changed"),
     ("array-length", "array length mismatch"), ("no-calls", "missing shader creation"),
@@ -225,6 +225,31 @@ def test_unrelated_multistring_program_is_preserved_and_real_handle_is_not_assum
     extra["program"] = 0  # Failed link/use is for runtime review, not a byte-edit check.
     m["calls"].append(extra)
     assert assess(experiment)["shader_calls_checked"] == 2
+
+
+@pytest.mark.parametrize("fault", [None, "edit", "reorder", "hidden-target", "missing-target"])
+def test_shared_creation_site_does_not_authorize_sibling_edits(experiment, fault):
+    m, roots, _ = experiment
+    sibling = deepcopy(m["calls"][0])
+    sibling.update(sequence=2, count=2, source_addresses=["0x0040ae60", "0x0040b1a8"])
+    sibling["input"] = [save(roots, "header.glsl", b"#version 450\n"),
+                        save(roots, "body.glsl", b"void main(){}")]
+    sibling["forwarded"] = deepcopy(sibling["input"])
+    m["calls"].append(sibling)
+    if fault is None:
+        assert assess(experiment)["shader_calls_checked"] == 2
+        return
+    if fault == "edit":
+        sibling["forwarded"][0] = save(roots, "edited.glsl", b"#version 450 compatibility\n")
+    elif fault == "reorder":
+        sibling["forwarded"].reverse()
+    elif fault == "hidden-target":
+        sibling["source_addresses"][1] = compat.SOURCE_ADDRESS
+    else:
+        m["calls"] = [sibling]
+        sibling["sequence"] = 1
+    with pytest.raises(ref.InvalidCapture):
+        assess(experiment)
 
 
 def test_cli_provenance_success_and_failure_never_report_reference_pass(experiment, capsys):

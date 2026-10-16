@@ -76,7 +76,10 @@ def verify_calls(calls, mode, roots):
         after = [bound_file(item, roots).read_bytes() for item in call["forwarded"]]
         ref.require(all(b"\0" not in source for source in before + after),
                     "saved shader strings must exclude NUL terminators")
-        if call["caller"] == CALLER:
+        # The original 30-record creation loop shares this PC. Only its
+        # source-address role identifies D7; siblings must remain byte-identical.
+        # Membership (not just element zero) keeps malformed target arrays closed.
+        if call["caller"] == CALLER and SOURCE_ADDRESS in call["source_addresses"]:
             ref.require(call["return"] == RETURN and call["stage"] == 0x8b30
                         and call["count"] == 1 and call["source_addresses"] == [SOURCE_ADDRESS],
                         "expected shader call fingerprint changed")

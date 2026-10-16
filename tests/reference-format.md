@@ -1,6 +1,6 @@
 # Draft reference contract
 
-- [V] Owner: Verification/T10; assignment: [briefs/T10.md](../briefs/T10.md).
+- [V] Owner: Verification/T12; assignment: [briefs/T12.md](../briefs/T12.md).
 - [H] Schema `eidolon-reference-draft-3` remains provisional pending producer agreement and live capture validation; D9 experiment provenance is specified separately below.
 - [V] Acceptance target: [approved step 1](../GOAL.md#approved-step-1--reproducible-reference-of-the-original).
 - [V] Executable checker: [tools/verify/reference.py](../tools/verify/reference.py); synthetic fixture: [reference_factory.py](reference_factory.py).
@@ -137,7 +137,8 @@
 - [H] `calls` is a nonempty complete ledger of `glCreateShaderProgramv` calls; each record is exactly `{sequence,stage,count,caller,return,source_addresses,input,forwarded,forward_calls,program}`.
 - [H] `sequence` enumerates creations from 1 without gaps/duplicates/reordering; `stage`, `count`, `forward_calls` and returned `program` are integers, never booleans; `forward_calls` must be 1 and the actual returned handle is retained, not assumed to equal 2.
 - [H] `caller`/`return` and every `source_addresses` entry use lowercase `0x` plus eight hex digits; source-address/input/forwarded arrays have exactly `count>0` entries; input/forwarded entries bind full source-string bytes excluding NUL in their original order.
-- [H] Exactly one call may use creation PC `0x00406dcc`: require return `0x00406dce`, fragment stage `0x8b30`, count 1, source address `0x00409918`, and the D7-pinned 1310-byte source; zero/duplicate target calls or any fingerprint mismatch fail closed.
+- [V] Original creation PC `0x00406dcc` belongs to a 30-record loop over `0x4357e0..0x4358cf`; it is not a unique invocation. T12 checks original instruction/table bytes and all 235 raw strings against the unchanged unpacked image.
+- [H] Select the target by creation PC `0x00406dcc` plus source address `0x00409918` anywhere in its array; require return `0x00406dce`, fragment stage `0x8b30`, count 1, exactly that source address, and the D7-pinned 1310-byte source. Zero/duplicate targets or fingerprint mismatches fail; every sibling array remains byte-identical even at the shared PC.
 - [H] Primary replaces only `#version 450\n` with `#version 450 compatibility\n`, retaining all 1297 body bytes; fallback inserts `layout(location=0) out vec4 eidolon_FragColor;\n` after the original version line and replaces the sole `gl_FragColor` identifier; all unrelated arrays must remain byte-identical.
 - [V] Candidate byte lengths/hashes independently agree with T1's [static review](../tools/reverse/review_glsl.py): 1324 bytes for primary, 1362 for fallback; test pins and malformed/edit/provenance faults are in [test_compatibility.py](test_compatibility.py).
 - [H] Runtime review must establish ledger completeness, exact one-time forwarding and byte lifetime; a complete-looking declared ledger can omit runtime calls, and a refreshed hash cannot authorize an otherwise forbidden edit.
