@@ -33,6 +33,12 @@ PINS = {"proxy-b-d13-detached-20261016-1": {
     "native-return": "4e397359a7f34c8ca00dedbb89f7276e88f8a2c561ff64659f654769bf7df025",
     "request": "68df05da7a0776693e2c3d288bd4ad003b00ae5c0899a66677e4d669e65ee035",
     "state": "13c842a231f265a7e5a162f52657074a8eb50645e2cab9a09022d46b44fd9932",
+}, "proxy-b-d13-detached-20261016-3": {
+    "reference": "34ef82fc87e8e54e16ccdc6494e7eb0d1288e9e4b748ce45aa0fa30a88438beb",
+    "preflight": "2c9eb6f0c9b1ddfe056644c33e9a31a9345bb677f43e649ce8b159466da785e4",
+    "native-return": "df564338ac8c2926ded0e8bd5e818aead0937db39d89307ad4e36e709059583e",
+    "request": "5bd2805872a40ea8e6c0467af08b88fb7f4114c28d0d7d5d2bc4e178b365c0fd",
+    "state": "bb272014be48e13683cd91d545d1dd3e9a0268b8c4124cce0e2e3b12ad12c5c7",
 }}
 REFERENCE_ID = "proxy-b-d13-detached-20261016-1"
 REFERENCE_REVIEW_COMMIT = "14c82b1"
@@ -166,6 +172,22 @@ def check_retention(bundle, frames, directory):
     return retained
 
 
+def launch_input(name, request, roots):
+    """Relocate checkout-relative launch inputs, never their expected digest.
+
+    Immutable requests preserve the original removed worktree's absolute argv.
+    Its exact relative file now lives in the merged checkout; all other absolute
+    paths still refer to original shared assets. The caller always rehashes it.
+    """
+    path = Path(name)
+    if path.is_absolute():
+        try:
+            path = path.relative_to(request["cwd"])
+        except ValueError:
+            return path
+    return ref.payload_path(roots["checkout"], path.as_posix())
+
+
 def review_run(run_id, roots):
     pins = PINS[run_id]  # An unpublished run is not an input.
     artifacts, directory = roots["checkout"]/"artifacts/reference", roots["data"]/"reference"/run_id
@@ -179,8 +201,7 @@ def review_run(run_id, roots):
     state, request = [load(checked(job/f"{k}.json", pins[k])) for k in ("state", "request")]
     check_durable(pre, returned, state, request, m, bundle)
     for name, digest in request["inputs"].items():
-        p = Path(name)
-        checked(p if p.is_absolute() else roots["checkout"]/p, digest)
+        checked(launch_input(name, request, roots), digest)
     stage.check_build(m, roots)
     for name, digest in m["evidence"].items():
         checked(ref.payload_path(roots["data"], name), digest)
@@ -288,18 +309,32 @@ def check_preflight_pair(first, second):
             "original behavioral environment mismatch")
 
 
+def complete_g6(run_ids, pairs, retained_bytes):
+    required = [f"proxy-b-d13-detached-20261016-{i}" for i in (1, 2, 3)]
+    require(run_ids == required, "G6 requires all three independently reviewed closed runs")
+    require([(p["reference"], p["candidate"], p["status"]) for p in pairs]
+            == [(required[0], run_id, "EXACT_PAIR_PASS") for run_id in required[1:]], "G6 requires both exact pairs")
+    require(retained_bytes < 30_000_000_000, "30GB retained-data budget exceeded")
+    return {"status": "PASS", "g6": "accepted", "reference_accepted": True,
+            "accepted_variant": "D9-restored-native", "historical_original_equivalence": False}
+
+
 def assess(roots, reuse_reference_review=False):
     reviewed = [(reuse_reference(roots) if reuse_reference_review and run_id == REFERENCE_ID else review_run(run_id, roots))
                 for run_id in PINS]
     pairs = []
     for other, _ in reviewed[1:]:
         pairs.append(check_pair(reviewed[0][0], other, roots))
-    # Only the reference and repeat2 are published/reviewed. Never discover or
-    # consume active repeat3 output, and never infer final G6 from this pair.
-    return {"status": "PARTIAL", "reference_accepted": False, "g6": "open",
+    # Also prove the two repeats did not overlap; pair byte equality to the same
+    # reference establishes their mutual exact equality without another reread.
+    second, third = [roots["data"]/"reference"/r[0].manifest["run_id"] for r in reviewed[1:]]
+    require(load(second/"native-return.json")["finished_utc"] < load(third/"preflight.json")["started_utc"],
+            "repeat3 overlaps repeat2")
+    used = sum(p.stat().st_size for p in roots["data"].rglob("*") if p.is_file())
+    verdict = complete_g6([r[0].manifest["run_id"] for r in reviewed], pairs, used)
+    return {**verdict,
             "closed_runs_verified": len(reviewed), "required_runs": 3, "runs": [r[1] for r in reviewed],
-            "exact_pairs": pairs,
-            "pending": ["repeat3 acquisition and closed independent review", "three-run exact comparison"],
+            "exact_pairs": pairs, "retained_data_bytes": used, "pending": [],
             "limitations": ["Pinned D9-restored-native candidate only; historical compiler/bank fidelity unestablished.",
                             "ABI raw snapshots cover first calls, three consumer anchors and terminal query; counters cover remaining returns.",
                             "Gamescope exited139 after native Wine exit0; original cleanup records confirm release."]}

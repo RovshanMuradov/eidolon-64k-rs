@@ -11,10 +11,18 @@ from tools.verify import review_full as full
 ref = full.ref
 
 
+@pytest.fixture(autouse=True)
+def discard_mutation_copies(tmp_path):
+    # Each PCM fault needs one full copy, not a retained copy per test case.
+    # Keep the immutable source and discard only this test's private scratch.
+    yield
+    shutil.rmtree(tmp_path)
+
+
 @pytest.fixture(scope="module")
 def saved():
     shared = Path(os.environ["EIDOLON_ROOT"])
-    checkout = Path(os.environ.get("EIDOLON_CLOSED_CAPTURE_ROOT", str(shared/".worktrees/T16")))
+    checkout = Path(os.environ.get("EIDOLON_CLOSED_CAPTURE_ROOT", str(Path(__file__).resolve().parents[1])))
     roots = {"checkout": checkout, "shared": shared, "data": Path(os.environ["EIDOLON_DATA"])}
     run_id = next(iter(full.PINS))
     artifacts = checkout/"artifacts/reference"
