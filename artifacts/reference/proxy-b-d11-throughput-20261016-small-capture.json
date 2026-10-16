@@ -1,0 +1,115 @@
+{
+  "schema": "eidolon-small-real-capture-diagnostic-2",
+  "kind": "compatibility-modified-diagnostic",
+  "run_id": "proxy-b-d11-throughput-20261016",
+  "reference_eligible": false,
+  "finalized": false,
+  "run_manifest": {
+    "root": "checkout",
+    "path": "artifacts/reference/proxy-b-d11-throughput-20261016.json",
+    "sha256": "8983aaddb82a1d3ddcbef58c4b3d873deadab73137adffee866a982acd5d8d75"
+  },
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "row_stride": 7680,
+    "pixel_format": "rgba8",
+    "row_order": "bottom-up",
+    "color_space": "native attachment encoding GL_2601; sRGB enable 0",
+    "frame_count": 61,
+    "index": "proxy-b-d11-throughput-20261016-frames.jsonl",
+    "index_sha256": "c167d56839b95a03dc920d0f2925bf77075708b76a32be678b6e2f0abc3d41f0",
+    "storage": "reference"
+  },
+  "audio": {
+    "path": "pcm.f32le",
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "sample_format": "f32le",
+    "sample_rate": 44100,
+    "channels": [
+      "L",
+      "R"
+    ],
+    "layout": "interleaved",
+    "sample_frames": 19964544,
+    "start_sample": 0
+  },
+  "completion": {
+    "finalized": false,
+    "frames_observed": 61,
+    "frames_hashed": 61,
+    "audio_sample_frames": 19964544,
+    "pcm": {
+      "submitted_bytes": 159716352,
+      "initial_tick": 1,
+      "final_tick": 19964545,
+      "final_cursor_offset": 159716352,
+      "events": {
+        "synth_complete": 7223,
+        "readback_begin": 7225,
+        "readback_end": 7227,
+        "stability_check": 7228
+      },
+      "stable_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "evidence": "proxy-b-d11-throughput-20261016-pcm-observations.json",
+      "evidence_sha256": "13c73b674d68a23e47b47faf524380f96a4c4a8f50ddbc6669bc99c29135d8c4"
+    },
+    "dropped_frames": 0,
+    "dropped_audio_sample_frames": 0,
+    "errors": []
+  },
+  "actual_stop": {
+    "seq": 33608,
+    "event": "planned_partial_stop",
+    "pid": 240,
+    "tid": 244,
+    "frames": 61,
+    "exit_code": 0,
+    "finalized": false,
+    "dropped_frames": 0,
+    "dropped_audio_sample_frames": 0,
+    "errors": []
+  },
+  "scene_boundaries_observed": false,
+  "limits": [
+    "Staged diagnostic; T13 review and Reverse reconciliation required before full capture.",
+    "Live scene locals are observations, not an independently established scene boundary.",
+    "Exception-context comparison does not independently execute the resumed synthesis epilogue.",
+    "Historical compiler/bank/scene fidelity remains unknown."
+  ],
+  "package_tool": {
+    "root": "shared",
+    "path": ".tools/capture/B-compat/9d4ab7d782e36572289d6cb2eedff31c5bdb6e60ac3320efad271e5aaf6b4429/source-snapshot/tools/capture/proxy-b-compat/package_stage.py",
+    "sha256": "e281eb7ccc76430c0cd61fdfb7be2af0fd2b1dab38e65f5747c59db0c7f46835"
+  },
+  "status": "partial",
+  "state_observations": {
+    "root": "data",
+    "path": "reference/proxy-b-d11-throughput-20261016/backend.jsonl",
+    "sha256": "08eaacf8e4c22aa0b4985e5050e90291ae033862fa65623908ecfef1528d0325"
+  },
+  "pack_state_query_order": [
+    "draw_fbo",
+    "read_fbo",
+    "read_buffer",
+    "pack_alignment",
+    "pack_row_length",
+    "pack_skip_rows",
+    "pack_skip_pixels",
+    "pack_swap_bytes",
+    "pack_lsb_first",
+    "pack_image_height",
+    "pack_skip_images",
+    "pixel_pack_buffer",
+    "red_bits",
+    "green_bits",
+    "blue_bits",
+    "alpha_bits",
+    "samples",
+    "framebuffer_srgb"
+  ],
+  "publication": {
+    "payloads_closed": true,
+    "index_closed": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "eidolon-diagnostic-metadata-correction-1",
+  "reference_eligible": false,
+  "immutable_manifests": {
+    "proxy-b-d9-primary-20261016.json": "bb467b21f1fc6e3af9b88a95bc79dd85e2314c6cd8b6f0e2558dbe876c419c23",
+    "proxy-b-d9-repeat-20261016.json": "2b773c817d5895a4f85f32b60f349114b843ebafee93a1e1656f0b35f3396760"
+  },
+  "correction": {
+    "environment.settings.WINEPREFIX": "parent setting only; tools/wine-headless overrides before launching",
+    "effective_WINEPREFIX": "/tmp/opencode/eidolon/T11/prefix",
+    "effective_WINEARCH": "win64",
+    "basis": "launcher lines 12-13; original probe's verified baseline restoration to T11/prefix"
+  },
+  "launcher": {
+    "root": "checkout",
+    "path": "tools/wine-headless",
+    "sha256": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a"
+  },
+  "persisted_baseline_inventory": {
+    "root": "shared",
+    "path": ".tools/capture/T11-prefix-baseline.json",
+    "sha256": "6099ea696a5fe088be478eb4a4c96eb7679445e978c5833e2f036c59d3db5a48"
+  },
+  "baseline_directory": ".tools/capture/T11-prefix-baseline",
+  "baseline_recipe": "Byte-identical persistent copy of the stopped T11 baseline inherited from T2; fresh cp -a --reflink=auto per invocation; compare every file hash and symlink target before the pinned launcher applies its registry settings.",
+  "limits": [
+    "This correction distinguishes inherited and effective settings without rewriting old observations.",
+    "New stage packages use eidolon-small-real-capture-diagnostic-2; old version-1 partial and failed variants remain immutable and require T12's pinned adapter."
+  ]
+}
