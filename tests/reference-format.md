@@ -120,6 +120,8 @@
 
 - [V] Authority: D9 in [STATE.md](../STATE.md); semantic basis: `$EIDOLON_ROOT/handoff/reverse-to-capture-glsl-compatibility.md`; independent file-only checker: [compatibility.py](../tools/verify/compatibility.py).
 - [H] D9 authorizes a proxy-only experiment, not acceptance of a restored original; preserve native EXE/source memory, original failure artifacts and all exact PCM/frame/timing criteria.
+- [V] D11 in [STATE.md](../STATE.md) permits D9's independently reviewed source-bound directive-only layer as a candidate reference environment, conditional on all remaining gates; it grants neither reference acceptance nor changed tolerances.
+- [H] Contradictory semantic evidence rejects candidate eligibility and returns D9 fallback evaluation to the coordinator under its existing prerequisites before new comparisons; the authorized edits remain unchanged.
 - [H] Keep candidates labeled `compatibility-modified-diagnostic`, `reference_eligible:false`; draft-3's `original` kind cannot describe runtime shader modifications, and the full-reference checker rejects modified kinds/diagnostic sidecars.
 - [H] Successful provenance/edit checking returns `PROVENANCE_ONLY`, `runtime_semantics_verified:false`, `reference_accepted:false`; it establishes neither capture G5/G6 nor scene identity, even if a producer reports successful compilation.
 
@@ -153,7 +155,7 @@
 - [H] Fallback requires a distinct failed-primary compile/link/use experiment and only output location 0 enabled at every actual use; static single-attachment tables or one sampled draw cannot establish all-use routing equivalence. A pixel mismatch is not permission to switch remedies.
 - [H] Two fresh identical-state candidate runs must compare atlas, controlled pre-present pixels including alpha and complete PCM byte-for-byte; if both remedies execute, their atlas/final pixels must also agree exactly or the difference must be resolved before reference selection.
 - [H] Real G5 acquisition review still requires actual final-buffer layout/read/draw bindings/components/samples/sRGB, sequential frame zero/advancing clocks, scene anchors, lossless raw buffers, run-specific PCM completion/stability evidence and actual stop state.
-- [H] T12 independently reviews G5/G6 when real capture exists; the coordinator resolves restoration acceptance before any modified-source full-reference schema is admitted. Missing observations remain missing and cannot be inferred from static tables or a shader fix.
+- [H] T13 performs staged G5 and full G6 acceptance after T11 supplies the remaining evidence; D11's conditional candidate permission does not admit a modified-source full-reference schema. Missing observations remain missing and cannot be inferred from static tables or a shader fix.
 - [?] Historical driver/compiler output and author bank identity remain unknown; exact candidate agreement proves pinned compatibility-run agreement only.
 
 ## T12 saved short-capture assessment
@@ -168,7 +170,7 @@
 - [V] Pinned `proxy-b/core.c` guards default read/draw FBOs, 8-bit normalized RGBA components, zero samples, owning context, `GL_BACK` readback and state restoration before present. Events observe bottom-up 1920×1080, linear encoding, sRGB disabled and cursors 0/735/1470; they retain state digests rather than raw queried arrays.
 - [V] Pinned compatibility wrapper forwards once with a separate NUL-terminated replacement alive until return and rehashes original target memory afterward. Primary/repeat sidecar `forward_calls=1` is source-derived; copied context/state digests do not establish independent complete ABI/FP canaries.
 - [V] Boundary recovery preserves 67 successful presents, 67 hashes, raw frames 0/1/2/60, its own complete PCM and the actual supervisor timeout/native-exit-unknown state. Frame 60 has 16956 distinct RGBA tuples; the build differs from primary/repeat. This failed attempt establishes no scene boundary or endpoint.
-- [H] Verdict: partial G5 acquisition review only; G1/G4, downstream volume/scene identity, full G5 and G6 remain open. Precise runtime prerequisites and producer metadata corrections are in `$EIDOLON_ROOT/handoff/verification-to-capture-format.md`.
+- [V] T12's bounded diagnostic review/checker-correction task is complete under [briefs/T12.md](../briefs/T12.md), with verdict `DIAGNOSTIC_ONLY` and partial G5 acquisition findings; G1/G4, downstream volume/scene identity, full G5 and G6 remain open for T11/T13. Precise runtime prerequisites and producer metadata corrections are in `$EIDOLON_ROOT/handoff/verification-to-capture-format.md`.
 - [V] [test_review_short.py](test_review_short.py) exercises the real shared-site ledger, missing/reordered/shifted frame records, changed alpha, invalid Zstandard extents, and first/tail/shifted PCM bytes including refreshed hashes; originals remain untouched.
 - [H] The pinned review adapter understands both saved diagnostic envelope shapes; it does not ratify their inconsistent `eidolon-small-real-capture-diagnostic-1` fields as a new reference schema. Both partial and failed packages remain rejected by the full-reference checker.
 
