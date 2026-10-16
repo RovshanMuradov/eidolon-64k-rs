@@ -1,0 +1,274 @@
+{
+  "audio": {
+    "channels": [
+      "L",
+      "R"
+    ],
+    "layout": "interleaved",
+    "path": "pcm.f32le",
+    "sample_format": "f32le",
+    "sample_frames": 19964544,
+    "sample_rate": 44100,
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "start_sample": 0
+  },
+  "capture": {
+    "command": [
+      "bash",
+      "tools/run",
+      "python",
+      "tools/capture/proxy-b-compat/probe.py",
+      "--run-id",
+      "proxy-b-d12-volume-repeat-20261016",
+      "--mode",
+      "450-compatibility",
+      "--frames",
+      "3",
+      "--active-volume",
+      "--throughput-from",
+      "artifacts/reference/proxy-b-d12-volume-20261016-acquisition.json",
+      "--reference-variant",
+      "D9-restored-native"
+    ],
+    "kind": "controlled-partial",
+    "tool_sha256": "c7a8c812be78796c34860ce3e3b4032703516d960d7e98108ada398bd8311932"
+  },
+  "completion": {
+    "audio_sample_frames": 19964544,
+    "dropped_audio_sample_frames": 0,
+    "dropped_frames": 0,
+    "errors": [],
+    "finalized": false,
+    "frames_hashed": 5763,
+    "frames_observed": 5763,
+    "pcm": {
+      "events": {
+        "readback_begin": 7324,
+        "readback_end": 7325,
+        "stability_check": 7326,
+        "synth_complete": 7302
+      },
+      "evidence": "proxy-b-d12-volume-repeat-20261016-pcm-observations.json",
+      "evidence_sha256": "01f01ecfc91ecba527a506c03476bcb2b57fe605109b7f65c7c966719b9506df",
+      "final_cursor_offset": 159716352,
+      "final_tick": 19964545,
+      "initial_tick": 1,
+      "stable_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "submitted_bytes": 159716352
+    }
+  },
+  "conditions": {
+    "clock": {
+      "denominator": 60,
+      "method": "native waveOutGetPosition cursor735*n; exact shared millisecond/QPC epoch; all original frames rendered",
+      "numerator": 1
+    },
+    "environment": {
+      "arch": "PE32 i386; fresh Wine win64 WoW64 prefix",
+      "display": {
+        "height": 1080,
+        "kind": "gamescope-headless",
+        "launcher": "tools/wine-headless",
+        "width": 1920,
+        "wine_virtual_desktop": false
+      },
+      "driver": "610.57.04",
+      "gamescope": "gamescope 3.16.25-1",
+      "gpu": "NVIDIA GeForce RTX 3070 Ti",
+      "graphics_api": "4.6.0 NVIDIA 610.57.04; GLSL 4.60 NVIDIA",
+      "os": "Linux-7.1.8-arch1-3-x86_64-with-glibc2.44",
+      "wine": "wine-11.17"
+    },
+    "initial_state_sha256": "dac5c63d3aec8801349645a7e4e4ddfeba59fb3e027b4fd75c6b0bb11d5148d8",
+    "rng": {
+      "initial_state_sha256": "835cc289b591fb1388096ede81303f048fcb392bf57bb4ae1c6d4762fdcfc98b",
+      "method": "native initialization and node-local RNG without resets; prethread0x520 bytes plus tick and per-activation input/global/node observations"
+    },
+    "settings": {
+      "build_id": "a68589a49331c31a6c4eecc00895c9a79e437656245d91db2fd05ed318c2ec12",
+      "cache_policy": "fresh per-run cache directories",
+      "capture_resolution": [
+        1920,
+        1080
+      ],
+      "clock_epoch_ms": 1001,
+      "initial_observations": {
+        "build_id": "a68589a49331c31a6c4eecc00895c9a79e437656245d91db2fd05ed318c2ec12",
+        "entry-physics": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "entry-rng": "2c7663e809c9827df482ce260d079467d02f9f181a6d1fcc5a942b2a7e1bd3e6",
+        "entry-tick": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+        "first-query-physics": "c7ebf37460898c920fb4e884f7846f9b0114ad759b8363584b17f8e78410cbb1",
+        "first-query-previous-seconds": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+        "fp_controls": {
+          "entry-main": {
+            "mxcsr": 8064,
+            "x87_cw": 639
+          },
+          "first-query-main": {
+            "mxcsr": 8098,
+            "x87_cw": 639
+          },
+          "physical-resume-0": {
+            "mxcsr": 8064,
+            "x87_cw": 639
+          },
+          "physical-resume-1": {
+            "mxcsr": 65472,
+            "x87_cw": 639
+          },
+          "physical-resume-2": {
+            "mxcsr": 8064,
+            "x87_cw": 639
+          },
+          "prethread-main": {
+            "mxcsr": 8066,
+            "x87_cw": 639
+          }
+        },
+        "native_resources": "0cbe16c09ff3602c426997b1f8ee05ab024e4b148175404a53c29f8b3b9ed6cf",
+        "prefix_baseline": "6099ea696a5fe088be478eb4a4c96eb7679445e978c5833e2f036c59d3db5a48",
+        "prethread-rng": "835cc289b591fb1388096ede81303f048fcb392bf57bb4ae1c6d4762fdcfc98b",
+        "prethread-tick": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+      },
+      "instrumentation": "one-shot bootstrap rendezvous; interior/completion acquisition INT3; physical resume/RET witnesses; three fingerprint-bound S2 instruction trampolines; no hardware breakpoints or driver callbacks",
+      "native_state_reset": false,
+      "prefix_inventory_sha256": "6099ea696a5fe088be478eb4a4c96eb7679445e978c5833e2f036c59d3db5a48",
+      "prefix_recipe": "persistent copy of stopped T11/T2 baseline; cp -a --reflink=auto; verify full tree before each invocation; launcher applies pinned registry defaults",
+      "runtime": {
+        "AGENT": "T11",
+        "EIDOLON_B_BOOTSTRAP": "capture-probe",
+        "EIDOLON_B_BOUNDARY_PROBE": "5763",
+        "EIDOLON_B_COMPAT": "450-compatibility",
+        "EIDOLON_B_FRAMES": "3",
+        "LC_ALL": "C",
+        "PULSE_SINK": "eidolon_T11_compat",
+        "TZ": "UTC",
+        "WINEARCH": "win64",
+        "WINEDEBUG": "-all,+loaddll",
+        "WINEDLLOVERRIDES": "opengl32,winmm=n,b;winemenubuilder.exe,mscoree,mshtml=d",
+        "WINEPREFIX": "/tmp/opencode/eidolon/T11/prefix",
+        "WINE_H": "1080",
+        "WINE_W": "1920"
+      }
+    }
+  },
+  "provenance": {
+    "eligibility": {
+      "path": "artifacts/reference/proxy-b-d12-volume-repeat-20261016-eligibility.json",
+      "root": "checkout",
+      "sha256": "9ff3dbea3c550c6451ad6eaa20b3347c3a261fcdf171f469e2137d051b2c595b"
+    },
+    "native_image": {
+      "path": "reverse/confirmed-debug/postfix-00400000.bin",
+      "root": "data",
+      "sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504"
+    }
+  },
+  "run_id": "proxy-b-d12-volume-repeat-20261016",
+  "scenes": [
+    {
+      "first": 0,
+      "id": "row-00",
+      "last": 1439
+    },
+    {
+      "first": 1440,
+      "id": "row-01",
+      "last": 2159
+    },
+    {
+      "first": 2160,
+      "id": "row-02",
+      "last": 2879
+    },
+    {
+      "first": 2880,
+      "id": "row-03",
+      "last": 3599
+    },
+    {
+      "first": 3600,
+      "id": "row-04",
+      "last": 4319
+    },
+    {
+      "first": 4320,
+      "id": "row-05",
+      "last": 5759
+    },
+    {
+      "first": 5760,
+      "id": "row-06",
+      "last": 5762
+    }
+  ],
+  "schema": "eidolon-partial-reference-draft-4",
+  "source": {
+    "exe_sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+    "inputs": {
+      "archive": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008",
+      "bank": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "host_runner": "a0238e6bbb6a68d9141a8af368663cccebc4ac182022eaa23e7325ba8e61e2d1",
+      "launcher": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
+      "package": "3f0cacb90815ef36d9ef2c7de4279edcd0a880e8629911d5f6867c50649a5961",
+      "tools/capture/proxy-b-compat/README.md": "5174c978d6d9149da5c2f939f245c25a22fcf096dd3182201f9d764bdfb91861",
+      "tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+      "tools/capture/proxy-b-compat/build.py": "5f43a4b57260357906a8327cbcfd5ff7996a3223477a46c262e55a1a1ec1910d",
+      "tools/capture/proxy-b-compat/check_controls.py": "e6a489e71363446203ff42d9b4a8fdcc7e794d6bc7053973765c57c834d8a294",
+      "tools/capture/proxy-b-compat/check_stage.py": "57c4896bc256237d0c663023c4fcf859c36a0132e2a3174aad56d664babe81a9",
+      "tools/capture/proxy-b-compat/check_stage_faults.py": "ec6a0ad92f9521a5bcfff979e733020151383421895c26a0a7122234b97f3a98",
+      "tools/capture/proxy-b-compat/consumer.c": "e2361131b44c5fc383e78bb9a70dd23d9532a7ef0c78293fc9b52b6e9929f0bc",
+      "tools/capture/proxy-b-compat/core.c": "d5a5b85feb4d0258a8bb4881132a927f3a3d82a70fea87f54731a494a940e753",
+      "tools/capture/proxy-b-compat/native.c": "9ab503aded7ca6d169b691d2bd0b969449a160c90955d296b67922be1af15761",
+      "tools/capture/proxy-b-compat/negative_stage.py": "e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a",
+      "tools/capture/proxy-b-compat/nodes.c": "c69e98d531059c5e3d76d0b9d63b0247b651606cb022d2aaeae3bb641416e9c5",
+      "tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+      "tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+      "tools/capture/proxy-b-compat/package_stage.py": "3b64c74c2b630f0152e55e130df2a0d43fcd3cf1aa4e961a9589269a2d3ee8f5",
+      "tools/capture/proxy-b-compat/probe.py": "174343e16fb106d608402523a7b4780411dc136e06d991c4d33abc4448492663",
+      "tools/capture/proxy-b-compat/reconcile_scene.py": "97ce79e33819d398e37fcd390bf51b508e221cef2094ae6f7f589c58215e4b81",
+      "tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+      "tools/capture/proxy-b-compat/stage.c": "f601688d4c998ea1c34e5e34d3c4d45d74162eaaef9cfb653ea9a32a02ad9de7",
+      "tools/capture/proxy-b-compat/timeline.py": "42f93731050be9295fcd77306751e3a44cf9556547ae2897c07871308da3cfe8",
+      "tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+      "tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+      "tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+      "tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+      "tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+      "tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62"
+    },
+    "kind": "D9-restored-native",
+    "restoration": {
+      "decision": "D12",
+      "effective_shader_sha256": "cb62ed7fd0878836b763b892f64cb9e4a789f49f304d32d0a2fc334aecb433ea",
+      "raw_shader_sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182",
+      "shim_sha256": {
+        "opengl32.dll": "8ecca27586005e12d42a4f78885f8d6ba97129b078e6545913ff46081dada341",
+        "winmm.dll": "e397d907327aa21903fcf21cc6c3daa0d48db14bd1cc9cb3ad2e6c36514f7382"
+      },
+      "transformation": "450-compatibility"
+    }
+  },
+  "termination": {
+    "audio_position": 4235805,
+    "audio_position_den": 60,
+    "audio_position_num": 254148300,
+    "end_tick": 5763,
+    "evidence": "planned_partial_stop_at_next_waveOutGetPosition_after_5763_successful_presents;native_exit0",
+    "exit_code": 0,
+    "reason": "partial_stop",
+    "timeline_end_tick": null
+  },
+  "video": {
+    "color_space": "native attachment GL_2601; framebuffer sRGB 0",
+    "frame_count": 5763,
+    "height": 1080,
+    "index": "proxy-b-d12-volume-repeat-20261016-frames.jsonl",
+    "index_sha256": "77780ed44998e3cd8a9ddfc0dca31b2edeac4e3b400a31f653e5dd35a6677c21",
+    "pixel_format": "rgba8",
+    "row_order": "bottom-up",
+    "row_stride": 7680,
+    "storage": "reference",
+    "width": 1920
+  }
+}

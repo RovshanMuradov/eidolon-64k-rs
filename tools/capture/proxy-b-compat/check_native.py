@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import struct
@@ -78,9 +79,28 @@ def inspect(path,control=False):
     for e in coverage:
         phases=paired[e['activation']]
         assert 0 in phases
+        # Native405402..405437: duplicate the high input double, multiply
+        # by32768, CVTPD2DQ under observed MXCSR truncation, shuffleD8,
+        # PADDd with the actual immutable initialization constants.
+        initial=phases[0]
+        if initial[8:16]==b'\0'*8:
+            expected_seed=initial[16:32]
+        else:
+            value=struct.unpack('<d',initial[8:16])[0]*32768
+            integer=math.trunc(value)
+            assert -(1<<31)<=integer<(1<<31)
+            bias=struct.unpack_from('<4I',rng)
+            expected_seed=struct.pack('<4I',*[(a+b)&0xffffffff for a,b in zip((integer,0,integer,0),bias)])
+        assert initial[32:]==expected_seed
         assert e['first_swap_before']==e['first_swap_after']==int(1 in phases)
         if 1 in phases:
             assert 2 in phases and phases[1][16:32]==phases[2][16:32]
+            # Two original401038 signed PMULDQ advances occur in this cycle.
+            state=phases[1][32:]
+            for _ in range(2):
+                words=struct.unpack('<4i',state)
+                state=struct.pack('<2q',words[0]*16007,words[2]*16007)
+            assert phases[2][32:]==state
     consumers=get('consumer_volume')
     if m['staged_scope']['sequential_frames']==5763:
         assert [e['n'] for e in consumers]==[5760,5761,5762]
