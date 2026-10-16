@@ -1,0 +1,10 @@
+{
+  "schema": "eidolon-rust-detached-job-1",
+  "request": "verification/rust/jobs/live-d28-scalars-full01/request.json",
+  "request_sha256": "28f015e37aa6fbe9bf7cb3be062ed83225d75680bc93fe02ba8b5b39fb58fce8",
+  "pid": 2493456,
+  "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d28-scalars-full01/state.json",
+  "log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/jobs/live-d28-scalars-full01/detached.log",
+  "expected_seconds": 4500,
+  "production_accepted": false
+}

@@ -14,7 +14,7 @@ static unsigned char retention[27000], *pixels, pcm_hash[32];
 static const unsigned char *pcm_pointer;
 static char directory[2048];
 static DWORD sequence, frame, phase, pcm_phase, thread_id, failed, ended;
-static int fault_gl,diagnostic;
+static int fault_gl,diagnostic,scalar_only;
 static unsigned char current[284];
 static int write_all(HANDLE f,const void *data,DWORD bytes) {
     DWORD done=0; return WriteFile(f,data,bytes,&done,NULL) && done==bytes;
@@ -41,6 +41,7 @@ __declspec(dllexport) DWORD __cdecl capture_init(const char *output,const unsign
     strcpy(directory,output); memcpy(retention,keep,sizeof(retention));
     char control[32];diagnostic=GetEnvironmentVariableA("EIDOLON_RUST_DIAGNOSTIC",control,sizeof(control))!=0;
     fault_gl=GetEnvironmentVariableA("EIDOLON_RUST_GL_FAULT",control,sizeof(control))!=0;
+    scalar_only=GetEnvironmentVariableA("EIDOLON_RUST_SEMANTIC",control,sizeof(control))!=0;
     char path[2304]; snprintf(path,sizeof(path),"%s/events.bin",directory);
     log_file=CreateFileA(path,GENERIC_WRITE,FILE_SHARE_READ,NULL,CREATE_NEW,FILE_ATTRIBUTE_NORMAL,NULL);
     pixels=VirtualAlloc(NULL,PIXELS,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);
@@ -108,7 +109,7 @@ static DWORD capture(DWORD kind,const unsigned char *data,DWORD bytes) {
         if(phase!=1 || frame!=27000 || words[0]!=27000 || words[1]!=19845000 || words[4]!=0xffffffff) return 21;
     }
     if(!event(kind,data,bytes)) return 22;
-    if(kind==3 && !read_pixels()) return 23;
+    if(kind==3 && !scalar_only && !read_pixels()) return 23;
     if(kind==4) frame++;
     if(kind==5) {
         unsigned char hash[32];

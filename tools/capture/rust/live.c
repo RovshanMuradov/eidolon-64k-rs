@@ -11,6 +11,7 @@ DWORD __cdecl capture_event(DWORD,const unsigned char*,DWORD);
 DWORD __cdecl capture_cursor(void);
 void marker_hook(void);void *marker_trampoline;
 void position_gate(void);
+void semantic_arm(BYTE*,const char*);void semantic_marker(DWORD,const BYTE*,DWORD*);
 static MMRESULT (WINAPI *real_position)(HWAVEOUT,LPMMTIME,UINT);
 static DWORD stop_frames=3,calls;static char output[2048];static int fault,full_mode;static BYTE first_fp[512],expected_gpr[36];
 static ULONGLONG started;
@@ -39,6 +40,7 @@ void marker_observe(DWORD *stack,BYTE *fp){
  if(kind==6||kind==1||kind==5){printf("RUNTIME_TIMING kind=%lu elapsed_ms=%llu\n",kind,GetTickCount64()-started);fflush(stdout);}
  memcpy(expected_gpr,stack,36);
  if(calls==0){memcpy(first_fp,fp,512);save("marker-before-gpr.bin",stack,36);save("marker-before-fx.bin",fp,512);}
+ semantic_marker(kind,payload,stack);
  DWORD rc=capture_event(kind,payload,count);
  printf("CAPTURE_EVENT kind=%lu bytes=%lu cursor=%lu rc=%lu\n",kind,count,capture_cursor(),rc);fflush(stdout);
  if(rc)ExitProcess(125);
@@ -61,9 +63,10 @@ __declspec(dllexport) DWORD __cdecl capture_start(void *proof){
  position_fault=GetEnvironmentVariableA("EIDOLON_RUST_POSITION_FAULT",text,sizeof(text))!=0;
  if(GetEnvironmentVariableA("EIDOLON_RUST_FAULT",text,sizeof(text)))fault=!strcmp(text,"gpr")?2:1;
  unsigned char keep[27000]={0};
- if(full_mode){char path[2304];if(stop_frames!=27000||!GetEnvironmentVariableA("EIDOLON_RUST_KEEP",path,sizeof(path)))ExitProcess(125);FILE*f=fopen(path,"rb");if(!f||fread(keep,1,sizeof(keep),f)!=sizeof(keep)||fgetc(f)!=EOF)ExitProcess(125);fclose(f);unsigned count=0;for(unsigned i=0;i<27000;i++)count+=keep[i]!=0;if(count!=510)ExitProcess(125);}
+ if(full_mode&&!GetEnvironmentVariableA("EIDOLON_RUST_SEMANTIC",text,sizeof(text))){char path[2304];if(stop_frames!=27000||!GetEnvironmentVariableA("EIDOLON_RUST_KEEP",path,sizeof(path)))ExitProcess(125);FILE*f=fopen(path,"rb");if(!f||fread(keep,1,sizeof(keep),f)!=sizeof(keep)||fgetc(f)!=EOF)ExitProcess(125);fclose(f);unsigned count=0;for(unsigned i=0;i<27000;i++)count+=keep[i]!=0;if(count!=510)ExitProcess(125);}
  else for(unsigned i=0;i<stop_frames&&i<27000;i++)keep[i]=1;
  if(capture_init(output,keep))ExitProcess(125);
+ semantic_arm(base,output);
  marker_trampoline=VirtualAlloc(NULL,32,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);if(!marker_trampoline)ExitProcess(125);
  BYTE *tramp=marker_trampoline;memcpy(tramp,expected,7);tramp[7]=0xe9;*(DWORD*)(tramp+8)=(DWORD)(uintptr_t)(marker+7)-(DWORD)(uintptr_t)(tramp+12);
  DWORD old;VirtualProtect(marker,7,PAGE_EXECUTE_READWRITE,&old);marker[0]=0xe9;*(DWORD*)(marker+1)=(DWORD)(uintptr_t)marker_hook-(DWORD)(uintptr_t)(marker+5);marker[5]=marker[6]=0x90;VirtualProtect(marker,7,old,&old);
