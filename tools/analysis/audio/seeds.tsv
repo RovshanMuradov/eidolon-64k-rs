@@ -1,0 +1,8 @@
+0x401038	function	s_rand
+0x4010e3	function	klang_init
+0x4012eb	function	AddToNoteController
+0x40141a	function	ProcessStream
+0x401636	function	klang_render
+0x405b12	function	GMDLS_tick
+0x405de9	function	CreateNode
+0x405e78	function	CreateNodes
