@@ -46,7 +46,9 @@ def records(lines):
         need(call is not None,f"unparsed syscall line {line_number}: {body[:160]}")
         name,args,result=call.groups()
         value=RESULT.match(result)
-        yield dict(pid=pid,time=timestamp,name=name,args=args,result=result,value=int(value[1],0) if value else None,line=start)
+        token=value[1] if value else None
+        base=16 if token and "0x" in token else (8 if token and len(token)>1 and token.startswith("0") else 10)
+        yield dict(pid=pid,time=timestamp,name=name,args=args,result=result,value=int(token,base) if token else None,line=start)
     need(not pending,"unterminated live trace records")
 
 

@@ -5,6 +5,7 @@ import pytest
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/"tools/verify/rust"))
 from resources import records,summarize,category
 from conformance import DATA
+from resource_closure import role
 
 
 def test_interleaved_fd_transfer_and_mapping_are_resources():
@@ -44,3 +45,16 @@ def test_successful_open_without_resolved_origin_stays_unresolved():
 def test_payload_bytes_cannot_invent_file_descriptor_paths():
     result=summarize(['10 1.000001 sendto(4<UNIX-STREAM:[1]>, "123</invented/audio.pcm>", 24, 0, NULL, 0) = 24\n','10 1.000002 +++ exited with 0 +++\n'],'/candidate.exe')
     assert '/invented/audio.pcm' not in result['inventory']
+
+
+def test_octal_umask_result_is_parsed_without_losing_record():
+    result=list(records(['10 1.000001 umask(077) = 022\n','10 1.000002 +++ exited with 0 +++\n']))
+    assert result[0]['value']==0o22
+
+
+def test_system_directory_does_not_allow_external_sound_bank():
+    with pytest.raises(ValueError,match='external media'):role('/usr/share/gm.dls',{},'/candidate.exe',DATA/'job')
+
+
+def test_unknown_user_asset_is_not_runtime_configuration():
+    with pytest.raises(ValueError,match='unclassified'):role('/home/rovshan/music-bank.bin',{},'/candidate.exe',DATA/'job')
