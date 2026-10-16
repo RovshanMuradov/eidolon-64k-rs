@@ -1,0 +1,100 @@
+{
+  "schema": "eidolon-rust-full-observation-1",
+  "observed_utc": "2026-10-16T12:01:44.194212+00:00",
+  "status": "ACTIVE_PREFIX_CHECKED",
+  "phase": "running",
+  "pointer_sha256": "b6d1ecb37e66930167220520dc480542e2731e972dabf14b0f3cb5946be3e4b2",
+  "request_sha256": "af087db7f6bcc1966ac2a00ddc5add0b91fa5f560d461e43d4b8d3ab493bbea6",
+  "state_snapshot_sha256": "93cf069d0030fa0fc790ad9af78233b59e96cf5fa71b24b39b97c59163c5c4f5",
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "identities_rehashed": true,
+  "processes": [
+    {
+      "pid": 2440688,
+      "exists": true,
+      "state": "S",
+      "ppid": 1311,
+      "sid": 2440688,
+      "start_ticks": 72683663,
+      "command": "python -u tools/capture/rust/live.py live-d26-full01 --full",
+      "cwd": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24",
+      "environment": {
+        "AGENT": "1"
+      }
+    },
+    {
+      "pid": 2440725,
+      "exists": true,
+      "state": "S",
+      "ppid": 2440688,
+      "sid": 2440688,
+      "start_ticks": 72683763,
+      "command": "bash /home/rovshan/Work/asm/Eidolon/.worktrees/T24/tools/wine-headless /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d26-full01/launch.exe Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\builds\\T22\\candidates\\48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa\\eidolon-runtime.exe Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\verification\\rust\\live-d26-full01\\live.dll Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\verification\\rust\\live-d26-full01\\output",
+      "cwd": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24",
+      "environment": {
+        "AGENT": "T24",
+        "EIDOLON_RUST_FRAMES": "27000",
+        "PULSE_SINK": "eidolon_T24_rust",
+        "EIDOLON_RUST_KEEP": "Z:\\home\\rovshan\\Work\\asm\\Eidolon\\data\\verification\\rust\\live-d26-full01\\retention.bin",
+        "EIDOLON_RUST_FULL": "1"
+      }
+    }
+  ],
+  "live_mappings": [
+    {
+      "pid": 2440932,
+      "candidate_mapped": true,
+      "helper_mapped": true,
+      "mappings": [
+        "00400000-00401000 r--p 00000000 00:1d 10459925                           /home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe",
+        "00454000-004a7000 r--p 00052000 00:1d 10459925                           /home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe",
+        "79450000-79451000 r--p 00000000 00:1d 10471319                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d26-full01/live.dll",
+        "79456000-79457000 r--p 00004000 00:1d 10471319                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d26-full01/live.dll",
+        "79473000-79475000 r--p 00012000 00:1d 10471319                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/live-d26-full01/live.dll"
+      ],
+      "wine_executable": "/usr/lib/wine/x86_64-unix/wine-preloader",
+      "wine_executable_sha256": "c877731fa29324bb8a9bfba575e9ca47ddfe9d97ea07587d71afda3bd6208e96"
+    }
+  ],
+  "ledger_snapshot_bytes": 21540908,
+  "ledger_snapshot_sha256": "e5f640e132790f59f206f1b1a3f27fe694146ab4572f9ecd1cd8b40c67655be6",
+  "pending_record_bytes": 0,
+  "progress": {
+    "records": 104365,
+    "queries": 20873,
+    "post_presents": 20872,
+    "frame_hashes": 20872,
+    "matching_frame_hashes": 20872,
+    "frame_mismatches": 0,
+    "first_frame_mismatch": null,
+    "time_mismatches": 0,
+    "first_time_mismatch": null,
+    "initial_physics": true,
+    "pcm_digest_observations": 2,
+    "endpoint": false,
+    "terminal_stability": false
+  },
+  "retained_raws_checked": 395,
+  "retained_native_mismatches": [],
+  "gl_restoration_witnesses": 20872,
+  "pcm": "EXACT_NATIVE_PCM",
+  "physical_restoration": {
+    "entry_gpr": true,
+    "entry_fp": true,
+    "marker_gpr": true,
+    "marker_fp": true
+  },
+  "errors": [],
+  "timing_lines": [
+    "RUNTIME_TIMING kind=6 elapsed_ms=267636",
+    "RUNTIME_TIMING kind=1 elapsed_ms=268607"
+  ],
+  "storage": {
+    "current_bytes": 28586414194,
+    "launch_reserved_total": 29584706177,
+    "limit_bytes": 30000000000
+  },
+  "native_post_update_state_verified": false,
+  "production_accepted": false,
+  "gpu_reservation": "T24 exclusive; preserve through closure/cleanup"
+}
