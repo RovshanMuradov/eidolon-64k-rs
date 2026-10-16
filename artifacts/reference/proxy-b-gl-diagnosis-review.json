@@ -1,0 +1,161 @@
+{
+  "kind": "D7-exact-GL-callsite-diagnosis",
+  "reference_eligible": false,
+  "diagnosis": "verified",
+  "first_gl_error": "GL_INVALID_OPERATION (0x0502), preexisting at acquisition entry",
+  "producing_call": {
+    "api": "glUseProgram",
+    "arguments": {
+      "program": 2
+    },
+    "app_call": "0x004076a8",
+    "app_return": "0x004076aa",
+    "target": "0x795d9cb0",
+    "pid": 252,
+    "tid": 256,
+    "hdc": "02010054",
+    "hglrc": "00010001",
+    "before_error": "0x0000",
+    "after_error": "0x0502",
+    "stage": "initialization/pre-render before PCM acquisition"
+  },
+  "driver_message": "GL_INVALID_OPERATION error generated. <program> has not been linked, or is not a program object.",
+  "program_is_program": true,
+  "program_link_status": false,
+  "shader": {
+    "creation_call": "0x00406dcc",
+    "creation_return": "0x00406dce",
+    "type": "GL_FRAGMENT_SHADER (0x8b30)",
+    "count": 1,
+    "source_pointer": "0x00409918",
+    "bytes": 1310,
+    "sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182",
+    "unchanged_original_dump_sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504",
+    "source_matches_original_dump": true,
+    "version": "#version 450",
+    "incompatible_symbol": "gl_FragColor",
+    "compiler_log": "0(2) : error C7616: global variable gl_FragColor is removed after version 420\n"
+  },
+  "attribution": "Original application shader fails compilation/link; application glUseProgram(2) raises the sticky error. No acquisition query/readback produced this first error.",
+  "context": {
+    "os": "Linux-7.1.8-arch1-3-x86_64-with-glibc2.44",
+    "wine": "wine-11.17",
+    "packages": [
+      "wine 11.17-1",
+      "gamescope 3.16.25-1",
+      "nvidia-utils 610.57.04-1",
+      "lib32-nvidia-utils 610.57.04-1"
+    ],
+    "gpu": "NVIDIA GeForce RTX 3070 Ti, 610.57.04",
+    "display": {
+      "kind": "gamescope-headless",
+      "width": 1920,
+      "height": 1080,
+      "launcher": "tools/wine-headless",
+      "wine_virtual_desktop": false
+    },
+    "lc_all": "C",
+    "tz": "UTC",
+    "settings": {
+      "AGENT": "T2",
+      "WINEPREFIX": "/tmp/opencode/eidolon/tools/prefix",
+      "XDG_CACHE_HOME": "/tmp/opencode/eidolon/T2/cache",
+      "WINE_TIMEOUT": "300",
+      "WINE_W": "1920",
+      "WINE_H": "1080",
+      "WINEDLLOVERRIDES": "opengl32,winmm=n,b;winemenubuilder.exe,mscoree,mshtml=d",
+      "WINEDEBUG": "-all,+loaddll",
+      "EIDOLON_B_LOG": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-gl-attribution-20261016/backend.jsonl",
+      "EIDOLON_B_BOOTSTRAP": "capture-probe",
+      "EIDOLON_B_OUTPUT": "Z:/home/rovshan/Work/asm/Eidolon/data/reference/proxy-b-gl-attribution-20261016",
+      "EIDOLON_B_FRAMES": "3",
+      "PULSE_SINK": "eidolon_T2_diagnostic",
+      "__GL_SHADER_DISK_CACHE_PATH": "/tmp/opencode/eidolon/T2/cache/nvidia"
+    }
+  },
+  "original_failures_preserved": {
+    "artifacts/reference/proxy-b-g1-20261016.json": {
+      "sha256": "21fdd559b26651474bee6c3b0820630dd71f2d0e85b452b85b97f3fa992fdf13",
+      "build_id": "cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71",
+      "evidence_files": 3,
+      "outputs": 12
+    },
+    "artifacts/reference/frida-a-g1-20261016.json": {
+      "sha256": "3f47b9913b054ff6673b77c887882a83dad95989990c03bfcf41be579f089f87",
+      "build_id": "bd6cf47e4ee3a3720fb6e0afdd7e17ec44f9dbf3851f8049ce0ca43c5bc2d588",
+      "evidence_files": 5,
+      "outputs": 4
+    },
+    "artifacts/reference/frida-a-g1-ancestor-20261016.json": {
+      "sha256": "94ecaaadb79f0ac17f11dec2957531b1b581d031ef18d8eebaf0e92c91c56e93",
+      "build_id": "30621cf03acbaf5c39d75542ce97a2060dd3bced38d75b27c4545d7b424ce706",
+      "evidence_files": 5,
+      "outputs": 4
+    },
+    "artifacts/reference/frida-a-g1-runnable-20261016.json": {
+      "sha256": "1258ceaa0df0d02b06f1982a3e7c92e59827926fbe4593872fd31d6ef9c2f3c4",
+      "build_id": "5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d",
+      "evidence_files": 5,
+      "outputs": 4
+    },
+    "artifacts/reference/proxy-b-g1-failure-review.json": {
+      "sha256": "8b999726d3ecff2abe9a8a77d8a6b1461822ae869cede8790ad4adc616bc228d",
+      "compressed_evidence": "unchanged"
+    },
+    "artifacts/reference/frida-a-failure-review.json": {
+      "sha256": "171b49cb3e600f8415b2953602197a41228f1baa59528f79417df7b9d8bd6ea3",
+      "compressed_evidence": "unchanged"
+    }
+  },
+  "runs": {
+    "proxy-b-gl-attribution-20261016": {
+      "manifest": "artifacts/reference/proxy-b-gl-attribution-20261016.json",
+      "sha256": "6a7f339331d49c77da3754e01ca505743dba68642bc9d5e3e8e13c4745f02a91"
+    },
+    "proxy-b-gl-debugger-20261016": {
+      "manifest": "artifacts/reference/proxy-b-gl-debugger-20261016.json",
+      "sha256": "39a463420b70659cdba90a9147dc23d02fd656ddc41563bac098857b0ad61d11"
+    },
+    "proxy-b-gl-callsite-20261016": {
+      "manifest": "artifacts/reference/proxy-b-gl-callsite-20261016.json",
+      "sha256": "b8958718cfcd9d1af6988357d7b65a2008354166ce2a10b106c155a7e1a78796"
+    },
+    "proxy-b-gl-shader-20261016": {
+      "manifest": "artifacts/reference/proxy-b-gl-shader-20261016.json",
+      "sha256": "a394d642921169c6c2e652a1ac175bc38d3139e20aa9cedb66a71ea22aa88db2"
+    }
+  },
+  "compressed_evidence": {
+    "reports/evidence/capture/proxy-b-gl-attribution-20261016-backend.jsonl.zst": {
+      "sha256": "92d102154337238cf59adfbb17178b4bec5266966d41a83c7d61fda7bea1a73f",
+      "source_sha256": "f596983e3b8b022840f949e0cc6220e335517505b1db9d9d4c2491205c4182a0",
+      "source_bytes": 747332
+    },
+    "reports/evidence/capture/proxy-b-gl-attribution-20261016-runner.log.zst": {
+      "sha256": "1fb9cd7abc29ce18273919136af5097e469e72aebf38d0eba4fc0a677bece3cd",
+      "source_sha256": "df7820bc39952d8820a46e8c09a7376795a311860d441feeb4b4841f3d670889",
+      "source_bytes": 31958
+    },
+    "reports/evidence/capture/proxy-b-gl-shader-20261016-backend.jsonl.zst": {
+      "sha256": "f1dcb38ddef678bb31f8a5c67580027c29c85e88b64503e6ec713ec4f1de19dd",
+      "source_sha256": "a5331c2fa9cc8a7baa71497b54b93d396126f3b8cf3a14ffdfb11d0c670e205a",
+      "source_bytes": 749636
+    },
+    "reports/evidence/capture/proxy-b-gl-shader-20261016-runner.log.zst": {
+      "sha256": "97ec6c8ae67e0d5d70517e9abe06fc7f0a6907aa017bc06f7e161539709eaed2",
+      "source_sha256": "c9ecb19deafe59df6663dd77c18ce37a64c30f9ed69086b4b621d86f97f254c7",
+      "source_bytes": 31403
+    }
+  },
+  "limitations": [
+    "First attributed reproduction consumed the pending error only to fail; no state query/readback or reference continuation followed.",
+    "Native fallback enabled synchronous driver debug output; that state change and native breakpoints are diagnosis-only, not G1 state-fidelity proof.",
+    "Historical driver behavior and any proposed GLSL-profile remediation remain untested; G1 and later reference gates remain unpassed."
+  ],
+  "recommendation": "Keep capture blocked. Seek explicit authorization for an isolated proxy-only GLSL compatibility-profile experiment; preserve and label changed shader inputs. Do not clear errors to pass G1 or accept changed inputs as the original reference.",
+  "runtime_release": {
+    "checked_utc": "2026-10-16T00:37:29.803386+00:00",
+    "processes": [],
+    "private_audio_sink_present": false
+  }
+}
