@@ -69,7 +69,7 @@ def audit(path):
                      status=manifest['status'], first_failed_check=manifest['first_failed_check'],
                      substitutions=transformed, shader_sources=len(source_events), programs=len(programs),
                      failed_links=[e['program'] for e in programs if not e['link_status']], compiler_logs=logs,
-                     program_uses=[e for e in events if e['event'] == 'program_use' and (e['program'] != 1 or e['post_error'])],
+                     target_program_uses=[e for e in events if e['event'] == 'program_use' and e['program'] == 2],
                      context=[e for e in events if e['event'] == 'compat_context'],
                      reference_accepted=False)
     atlases = [e for e in events if e['event'] == 'noise_atlas']
@@ -113,9 +113,31 @@ def main():
     args = parser.parse_args()
     summaries = [audit(path) for path in args.manifests]
     if len(summaries) == 2 and all('atlas' in s and 'pcm' in s for s in summaries):
-        print(json.dumps(dict(pair_atlas_equal=summaries[0]['atlas']['sha256'] == summaries[1]['atlas']['sha256'],
-                              pair_pcm_equal=summaries[0]['pcm']['sha256'] == summaries[1]['pcm']['sha256'],
-                              reference_accepted=False)))
+        manifests = [json.loads(path.read_text()) for path in args.manifests]
+        assert manifests[0]['run_id'] != manifests[1]['run_id']
+        assert manifests[0]['prefix_baseline'] == manifests[1]['prefix_baseline']
+        for name in ('opengl32.dll', 'winmm.dll'):
+            assert manifests[0]['build']['outputs'][name] == manifests[1]['build']['outputs'][name], name
+        directories = [Path(os.environ['EIDOLON_DATA']) / 'reference' / m['run_id'] for m in manifests]
+        observations = [[json.loads(line) for line in (d / 'backend.jsonl').read_bytes().splitlines()] for d in directories]
+        frames = [[e for e in events if e['event'] == 'pre_present'] for events in observations]
+        assert len(frames[0]) == len(frames[1])
+        files = ['noise-atlas.rgba32f', 'pcm.f32le']
+        for a, b in zip(*frames):
+            assert {k: v for k, v in a.items() if k not in ('seq', 'pid', 'tid')} == {k: v for k, v in b.items() if k not in ('seq', 'pid', 'tid')}
+            name = f"frame-{a['n']:05d}.rgba"
+            if (directories[0] / name).exists() and (directories[1] / name).exists():
+                files.append(name)
+        for name in files:
+            with (directories[0] / name).open('rb') as left, (directories[1] / name).open('rb') as right:
+                while True:
+                    a, b = left.read(1048576), right.read(1048576)
+                    assert a == b, name
+                    if not a:
+                        break
+        print(json.dumps(dict(pair_atlas_equal=True, pair_pcm_equal=True,
+                              frame_records_equal=len(frames[0]), complete_files_compared_bytewise=len(files),
+                              same_shim_and_prefix_baseline=True, reference_accepted=False)))
 
 
 if __name__ == '__main__':
