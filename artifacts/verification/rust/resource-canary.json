@@ -1,0 +1,28 @@
+{
+  "status": "FD_TRANSFER_READ_MMAP_CANARY_PASS",
+  "trace": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-canary-02/trace.log",
+  "trace_sha256": "a831d9170e1b5302f53c76ba6b719651b73725a5a979f92b9db4252ce28feafb",
+  "result_sha256": "ead31bd3feef31fb7f225fa4d61ce11a0239140a9b001064bff8dbd9fc32848c",
+  "source_sha256": "1ceddb2bcf347163797f262dd2108661221030a06229ad41b5641ab7aac43cd2",
+  "external_resource": {
+    "category": "project_data_REVIEW",
+    "calls": {
+      "openat": 2,
+      "fstat": 2,
+      "lseek": 1,
+      "close": 6,
+      "sendmsg": 1,
+      "recvmsg": 1,
+      "fcntl": 4,
+      "mmap": 1
+    },
+    "pids": [
+      2473163,
+      2473164
+    ],
+    "open_flags": [
+      "AT_FDCWD</home/rovshan/Work/asm/Eidolon/.worktrees/T24>, \"/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-canary-02/deliberate external.pcm\", O_RDONLY|O_CLOEXEC",
+      "AT_FDCWD</home/rovshan/Work/asm/Eidolon/.worktrees/T24>, \"/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-canary-02/deliberate external.pcm\", O_WRONLY|O_CREAT|O_TRUNC|O_CLOEXEC, 0666"
+    ]
+  }
+}

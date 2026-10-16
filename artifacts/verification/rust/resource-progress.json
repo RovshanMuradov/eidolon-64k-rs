@@ -1,0 +1,24 @@
+{
+  "phase": "running",
+  "observed_utc": "2026-10-16T13:01:44.829265+00:00",
+  "processes": [
+    {
+      "pid": 2477233,
+      "sid": 2477233,
+      "command": "python -u tools/capture/rust/resources.py resource-d26-all02 --target-only"
+    },
+    {
+      "pid": 2477252,
+      "sid": 2477233,
+      "command": "bash /home/rovshan/Work/asm/Eidolon/.worktrees/T24/tools/wine-headless /home/rovshan/Work/asm/Eidolon/data/builds/T22/candidates/48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa/eidolon-runtime.exe --play"
+    }
+  ],
+  "trace_bytes": 29918954,
+  "data_bytes": 29845786095,
+  "reserved_total": 29957479481,
+  "candidate_sha256": "48e356fed928d1712ffb35b660d2865d915d9c7ea90cd6e0df2bd891d6ba91aa",
+  "all_syscalls": true,
+  "state": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-d26-all02/state.json",
+  "runner_log": "/home/rovshan/Work/asm/Eidolon/data/verification/rust/resource-d26-all02/runner.log",
+  "production_accepted": false
+}
