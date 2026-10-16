@@ -5,6 +5,7 @@ pub mod graph;
 pub mod nodes;
 pub mod math;
 pub mod score;
+pub mod voice;
 
 pub const SAMPLE_RATE: u32 = 44_100;
 pub const CHANNELS: usize = 2;

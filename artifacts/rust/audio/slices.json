@@ -44,7 +44,15 @@
     "VOICEPARAM": 65
   },
   "diagnostic_stdout": "RUST_GRAPH created=1581 destroyed=851 global_hits=3678 voice_hits=1946 ABI=14/14\nSOURCE_RENDERED frames=3145728 tick=3145729\n",
-  "remaining_source": "voice-manager/arpeggiator and unlisted node/effect ticks; allocator callbacks",
+  "rust_voice": [
+    "note-routing",
+    "key-rescan",
+    "polyphony-slot-selection",
+    "stealing",
+    "glide",
+    "voice-create-render-destroy"
+  ],
+  "remaining_source": "arpeggiator/delay-fraction helpers and unlisted node/effect ticks; allocator callbacks",
   "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
   "compiler": "g++ (GCC) 16.2.1 20260810",
   "rust_command": [
@@ -94,7 +102,7 @@
     "/home/rovshan/Work/asm/Eidolon/data/builds/T23/coverage.bin"
   ],
   "frames": 3145728,
-  "elapsed_seconds": 5.129673678020481,
+  "elapsed_seconds": 5.255096077977214,
   "mxcsr": "0xffc0",
   "environment": {
     "resolution": null,
@@ -110,24 +118,25 @@
   "equal": true,
   "first_mismatch_byte": null,
   "adapted_files": {
-    "Synth.cpp": "bceb25a1dec26a5b35e39550f57a90c01b858cfd03b2a4a057a80f81b10427e1",
+    "Synth.cpp": "d117a02a7bd3fdc157aed87260e1c5681e208cb51b8be6386304ed78db40a70f",
     "Synth.h": "813ca95332d3dc853a9509a14400b91d60ba488afcbbe3d1f004f2f120325877",
-    "SynthNode.cpp": "de12530e9dcf87b60c80f9fb28b31ee5a5ae29f1a246f50ffca35d5fd34dd243",
+    "SynthNode.cpp": "f056306052e528d912abf51cba5a11d9e294ae4b5b005a90edbbb8c91abd8ab6",
     "SynthNode.h": "faab4adcec2e7f9f31660aec1e7eddc0f997f5f8d1e8d6987c94564b59b06941",
     "SynthAllocator.h": "514ab289626772be0ad2a92734ca8c25117bc9c937133ddc5f6642f24a1168a8",
     "sample_t.cpp": "d1deebeb583ec3057bd86df731b057465a7eef60d10db18117a5f8e76704c8e3",
     "sample_t.h": "818c7e609561d9a682b425c26a552ed3519dcabce706a20c1c73442b93803e19",
     "windows.h": "ff55a33246262f211fdc096a70bf02e88c07039494f9e632f5e4a5f325f3e7d5",
     "64k2Patch.h": "fb9f983b01c8cc70c57850a59772e832b92db81db1182b7fbe5d37721d70ebb2",
-    "graph_bridge.h": "a8e7016810e97322dabeecf9d8b1f724249a43ca3ed7b567fd5d20162f78ede0"
+    "graph_bridge.h": "d6e183007beed5e382eb4bda7d587024f6c18ab5b2911146e3348908071a1f6f"
   },
   "rust_files": {
-    "src/audio/mod.rs": "3853b820b68a2f2ef8b50e60fa90f766067287de8f8eaf49443a0a079ae1bf6e",
+    "src/audio/mod.rs": "1b335791375013f539c2d48b907f292c60b4da2dba8c77b4d0e8abf924d82cd4",
     "src/audio/math.rs": "f8f704d67ca253cdaa3529cfb2421b4f19494322eb73e01ab9caa8d6517f8cfa",
     "src/audio/score.rs": "95f983c4126d6e8a52f673cf0735add23abde08997bbcfd291dda20463673f09",
     "src/audio/data.rs": "7fea7c8b68aefedf36735aa405fafc3cc886c662a8414daac56ebf3da82663de",
     "src/audio/graph.rs": "3981a216495454a431758d1645357c19d3aedba71bd16eac4862101304a91475",
-    "src/audio/nodes.rs": "9079e87d7062db786ef1fd75db971ca5c40e910801620a0f3972522cdb9f6ed3"
+    "src/audio/nodes.rs": "9079e87d7062db786ef1fd75db971ca5c40e910801620a0f3972522cdb9f6ed3",
+    "src/audio/voice.rs": "3cb03c15d3ea7317b327a9eb4c4738587b9d3e2e5e09fbae6b8f5cc6ff8f8c0f"
   },
-  "binary_sha256": "9004c31d37944f364123ca426af8981cbd9abf8070aa37dc399f09f1389d9f9e"
+  "binary_sha256": "651e48a4998c11a6206e3cb3556c84905e34f758e71594cd5ccc9910a3a43d7b"
 }

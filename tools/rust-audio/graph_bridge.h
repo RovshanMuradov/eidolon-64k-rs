@@ -20,6 +20,7 @@ SynthNode* eidolon_create_nodes(RustGraphContext*, unsigned, unsigned);
 void eidolon_destroy_voice(RustGraphContext*, SynthNode*);
 void eidolon_node_tick(SynthNode*, SynthGlobalStateStruct*, unsigned);
 void eidolon_voice_tick(SynthNode*, RustGraphContext*);
+void eidolon_note(RustGraphContext*, unsigned, unsigned, unsigned, unsigned);
 }
 void ArpeggiatorStep(SynthNode*, int);
 inline sample_t GetDelayTimeFraction(const sample_t&);
@@ -46,4 +47,7 @@ static void rust_check_layout() {
 void eidolon_graph_report() {
     std::printf("RUST_GRAPH created=%llu destroyed=%llu global_hits=%llu voice_hits=%llu ABI=14/14\n",
         rust_graph.created,rust_graph.destroyed,rust_graph.global_hits,rust_graph.voice_hits);
+}
+void rust_note_event(unsigned channel, unsigned note, unsigned velocity, bool on) {
+    eidolon_note(&rust_graph,channel,note,velocity,on);
 }

@@ -65,11 +65,14 @@ def main():
     for name, opcode in node_ports.items():
         text = replace_body(text, f'void SYNTHCALL {name}_tick(',
                             f'    source_seen[n->valueOffset] = 1; eidolon_node_tick(n,&SynthGlobalState,{opcode});')
+    text = replace_body(text, 'void SYNTHCALL VOICEMANAGER_tick(',
+                        '    source_seen[n->valueOffset] = 1; eidolon_voice_tick(n,&rust_graph);')
     text = replace_body(text, 'inline sample_t Sampler_Sample(',
                         '    sample_t out; eidolon_sample((void*)n->v[11].l[0], n->v[10].d, index.d, out.d); return out;')
     files['SynthNode.cpp'] = 'extern "C" void eidolon_sample(const void*, const double*, const double*, double*);\n' + text
     files['graph_bridge.h'] = Path('tools/rust-audio/graph_bridge.h').read_text()
     text = files['Synth.cpp']
+    text = replace_body(text, 'void AddToNoteController(', '    rust_note_event(channel,note,velocity,on);')
     start = text.index('\tchar lpGMDLSName[1024];')
     end = text.index('\t// write out gmdls wave names', start)
     text = text[:start] + '''    for (unsigned index = 0; index < 512; ++index) {
@@ -95,6 +98,7 @@ def main():
 void _64klang_Render(float* dstbuffer)''')
     files['Synth.cpp'] = '''#include <cstddef>
 extern void eidolon_graph_report();
+extern void rust_note_event(unsigned, unsigned, unsigned, bool);
 extern "C" size_t eidolon_wave(unsigned, double*, size_t);
 extern "C" void* eidolon_score_new();
 extern "C" void eidolon_score_dispatch(void*, unsigned, void(*)(unsigned,unsigned,unsigned,unsigned,unsigned));
@@ -141,7 +145,8 @@ extern "C" void eidolon_score_free(void*);
               'rust_graph': ['creation', 'global-cache', 'creation-tick-cycle-cache', 'recursive-voice-destruction'],
               'rust_node_ticks': node_ports,
               'diagnostic_stdout': completed.stdout,
-              'remaining_source': 'voice-manager/arpeggiator and unlisted node/effect ticks; allocator callbacks',
+              'rust_voice': ['note-routing', 'key-rescan', 'polyphony-slot-selection', 'stealing', 'glide', 'voice-create-render-destroy'],
+              'remaining_source': 'arpeggiator/delay-fraction helpers and unlisted node/effect ticks; allocator callbacks',
               'rustc': subprocess.check_output(['rustc', '--version'], text=True).strip(),
               'compiler': subprocess.check_output(['g++', '--version'], text=True).splitlines()[0],
               'rust_command': list(map(str, rust_command)), 'compile_command': list(map(str, command)),
