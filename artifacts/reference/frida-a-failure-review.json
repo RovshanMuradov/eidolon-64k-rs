@@ -1,0 +1,155 @@
+{
+  "kind": "A-failure-audit",
+  "reference_eligible": false,
+  "runs": [
+    {
+      "manifest": "artifacts/reference/frida-a-g1-20261016.json",
+      "sha256": "3f47b9913b054ff6673b77c887882a83dad95989990c03bfcf41be579f089f87",
+      "failure": {
+        "frida": "17.23.3",
+        "status": "failed",
+        "exception_type": "PermissionDeniedError",
+        "error": "unable to access /proc/2095319/mem: Permission denied"
+      },
+      "stop": "launcher rejected missing injection acknowledgment before synth; native 125",
+      "frames": 0,
+      "helper_loaded": false,
+      "B_proxies_inactive": true
+    },
+    {
+      "manifest": "artifacts/reference/frida-a-g1-ancestor-20261016.json",
+      "sha256": "94ecaaadb79f0ac17f11dec2957531b1b581d031ef18d8eebaf0e92c91c56e93",
+      "failure": {
+        "frida": "17.23.3",
+        "status": "failed",
+        "exception_type": "ProcessNotRespondingError",
+        "error": "process with pid 2098465 either refused to load frida-agent, or terminated during injection"
+      },
+      "stop": "launcher rejected missing injection acknowledgment before synth; native 125",
+      "frames": 0,
+      "helper_loaded": false,
+      "B_proxies_inactive": true
+    },
+    {
+      "manifest": "artifacts/reference/frida-a-g1-runnable-20261016.json",
+      "sha256": "1258ceaa0df0d02b06f1982a3e7c92e59827926fbe4593872fd31d6ef9c2f3c4",
+      "failure": {
+        "frida": "17.23.3",
+        "status": "failed",
+        "exception_type": "NotSupportedError",
+        "error": "unable to perform ptrace pokedata: Input/output error"
+      },
+      "stop": "launcher rejected missing injection acknowledgment before synth; native 125",
+      "frames": 0,
+      "helper_loaded": false,
+      "B_proxies_inactive": true
+    }
+  ],
+  "final_failure_gate": "G1a actual Frida attach/injection; no script/helper execution",
+  "prior_attempts": "Sibling injector denied proc mem; ancestor plus pending Wine debug event did not respond. Final runnable detached target is readable but Frida ptrace pokedata returns EIO.",
+  "causal_limit": "The exact Frida error is preserved. Its internal failing address and WoW64 compatibility cause remain unknown.",
+  "gates": {
+    "G1": "failed at actual injection; ABI/clock/state and negative controls unrun",
+    "G2": "A unrun; immutable B full PCM remains for T10",
+    "G3": "unrun; native GL enum/call/context diagnostics implemented but unreachable",
+    "G4": "unrun; no controlled frame zero, boundaries or endpoint",
+    "G5": "no real pixel bundle",
+    "G6": "unrun"
+  },
+  "static_checks": {
+    "helper_architecture": "PE32 i386",
+    "helper_exports": {
+      "1": [
+        "EidolonInitialize"
+      ],
+      "2": [
+        "EidolonInitialize@4"
+      ]
+    },
+    "python_ast": "pass",
+    "bootstrap_javascript_syntax": "pass"
+  },
+  "B_immutable_manifest_sha256": "21fdd559b26651474bee6c3b0820630dd71f2d0e85b452b85b97f3fa992fdf13",
+  "B_immutable_evidence": {
+    "reference/proxy-b-g1-20261016/backend.jsonl": "1606f13ad4d2afbf0887934531d8993b17f934edb75098270690d710425820e2",
+    "reference/proxy-b-g1-20261016/pcm.f32le": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "reference/proxy-b-g1-20261016/runner.log": "fcce0df548e0e5546cd00e8cf0977eb43ed0f3fd6c86432a59c5bd83511748d2"
+  },
+  "source_snapshots": {
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/frida-a/bootstrap.js": "78b337d913bb5511838531ecb5586e4f18e059155032a6d2a501e13b186a1073",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/frida-a/build.py": "d1dd679f51a9e295d697da8c459140041eb68aa58176dee9522dcef8f88b24b5",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/frida-a/helper.c": "c3634ab3253c8f849547994cd1ac21e995abcd65c244d225d8c29bf540486352",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/frida-a/inject.py": "46f2ab97b25f56f20d26a837b38efda86a2cf50ec69cbba20e675102b9db6958",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/frida-a/launcher.c": "316aace78ddc231ceeb1423f0a8ef04f25a2801a66f93fdb966fc71cc16be6a9",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/frida-a/probe.py": "97babb3bb8e103f58cbdb8a0e7860ddf5fc83df15ce94df333e326fc0711cf97",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/A/5c047eb970d2e90275144bc70aa33869cd44f6dc0711b54d05eeab9954a8b70d/source-snapshot/tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6"
+  },
+  "compressed_evidence": {
+    "reports/evidence/capture/frida-a-g1-20261016-runner.log.zst": {
+      "sha256": "903ed7e53945bffa005ab3d03787bb25f877865e93dd533374371d595acb212b",
+      "original_sha256": "6b5be6ff12db48a3a4077386e89985243249c6a2aa27373e4b33a02601afc89a",
+      "bytes": 23834
+    },
+    "reports/evidence/capture/frida-a-g1-20261016-rendezvous.json.zst": {
+      "sha256": "f6dc4755a8da1ed90942e4927f32c5287fdc67d2dea394f8345fe69426fb5765",
+      "original_sha256": "0a7ddd7d0a2fb90215b5f77db3846950c3311358e07304643ced621b7be93cad",
+      "bytes": 73
+    },
+    "reports/evidence/capture/frida-a-g1-20261016-inject.log.zst": {
+      "sha256": "62cf7149a6a27ce8c92a233863331b3f46c2dbbbb77dd2ab578d64d06aa5b2d1",
+      "original_sha256": "94f3d1b02ed4b85078377cf5825af3d9f7d212bfa29317c7d6947c54354f9660",
+      "bytes": 1047
+    },
+    "reports/evidence/capture/frida-a-g1-20261016-injection.json.zst": {
+      "sha256": "4690198ccdca2ac20e67061f569dbcbfe97b14b69e5adecf8f017c1837d46ea2",
+      "original_sha256": "a98d26ef8c56cbc0a816ee70cb4aafa2ba03e347d97bc95353ce3bc196a53f0b",
+      "bytes": 160
+    },
+    "reports/evidence/capture/frida-a-g1-ancestor-20261016-runner.log.zst": {
+      "sha256": "ac852964649ef6bf6043d6ff62c13b28b748b7d809ba04543de1626bef638d5f",
+      "original_sha256": "40ff3f5da982ed639e6745493aea72a09ad63052c52fd5051e0f9b03b2ffd977",
+      "bytes": 23898
+    },
+    "reports/evidence/capture/frida-a-g1-ancestor-20261016-rendezvous.json.zst": {
+      "sha256": "f6dc4755a8da1ed90942e4927f32c5287fdc67d2dea394f8345fe69426fb5765",
+      "original_sha256": "0a7ddd7d0a2fb90215b5f77db3846950c3311358e07304643ced621b7be93cad",
+      "bytes": 73
+    },
+    "reports/evidence/capture/frida-a-g1-ancestor-20261016-attach-access.json.zst": {
+      "sha256": "973e2add992e65f76edc5156f8cf729b8f019c31194a022bf4ff826a72b69982",
+      "original_sha256": "dc8f33c9379ae0282240bace147bee1fcd4f4441f8628a6a611e3e1c95687ef5",
+      "bytes": 1824
+    },
+    "reports/evidence/capture/frida-a-g1-ancestor-20261016-injection.json.zst": {
+      "sha256": "d763af389cc3e4a6bdcdfebb83bf827858826c4eda351ba5d5ab94771b8b1f5b",
+      "original_sha256": "e188095ee6e24a71af4fa423b3bca52b2c58863826dc2c19fb040daf777a301b",
+      "bytes": 202
+    },
+    "reports/evidence/capture/frida-a-g1-runnable-20261016-runner.log.zst": {
+      "sha256": "656cde383c23df972866b7b69b277fabbe9dd838fb1f943fc81db477b0de5788",
+      "original_sha256": "7a42153fa063402f00915eb27cc79682719315483ede5efe22aef1db534a6922",
+      "bytes": 23894
+    },
+    "reports/evidence/capture/frida-a-g1-runnable-20261016-rendezvous.json.zst": {
+      "sha256": "f6dc4755a8da1ed90942e4927f32c5287fdc67d2dea394f8345fe69426fb5765",
+      "original_sha256": "0a7ddd7d0a2fb90215b5f77db3846950c3311358e07304643ced621b7be93cad",
+      "bytes": 73
+    },
+    "reports/evidence/capture/frida-a-g1-runnable-20261016-attach-access.json.zst": {
+      "sha256": "f666ac6f47756c0197b090852ea517c14a1fcd8389ee0c1e88721f919a822435",
+      "original_sha256": "cd9cded934ab1c1e02f77ce4d8bec3b9b640306e93c480f0c4629794d8fde48d",
+      "bytes": 1823
+    },
+    "reports/evidence/capture/frida-a-g1-runnable-20261016-injection.json.zst": {
+      "sha256": "0a1881dfff8581685d872cb7ef7467f5769b0276a4f8908fdf3b2706f48861cb",
+      "original_sha256": "e436caab386dd9c491f7df358ce9cd7c0c442c5899257814b27ca37bfddf29fb",
+      "bytes": 156
+    }
+  },
+  "runtime_release": {
+    "checked_utc": "2026-10-16T00:16:48.494356+00:00",
+    "T2_runtime_processes": [],
+    "private_audio_sink_present": false
+  },
+  "next": "Coordinator evaluates both failed mechanisms; T10 reviews preserved B PCM."
+}

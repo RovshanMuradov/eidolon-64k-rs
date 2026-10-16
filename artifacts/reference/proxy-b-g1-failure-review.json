@@ -1,0 +1,93 @@
+{
+  "kind": "proxy-B-first-G1-failure-review",
+  "reference_eligible": false,
+  "manifest": "artifacts/reference/proxy-b-g1-20261016.json",
+  "manifest_sha256": "21fdd559b26651474bee6c3b0820630dd71f2d0e85b452b85b97f3fa992fdf13",
+  "first_failure": {
+    "seq": 6274,
+    "event": "failure",
+    "pid": 244,
+    "tid": 248,
+    "reason": "GL_initial_error",
+    "error": 183
+  },
+  "gate": "G1e; G1c three-present requirement consequently unmet",
+  "interpretation": "The readback precheck rejects a prior GL error OR an error from initial state queries. The numeric GL enum and which side failed were not recorded. Win32 error 183 is not a GL error enum. No causal attribution is established.",
+  "clock_observed": {
+    "startup_values": "0..1000",
+    "epoch": 1001,
+    "positions": [
+      {
+        "seq": 5884,
+        "event": "clock",
+        "pid": 244,
+        "tid": 248,
+        "api": "waveOutGetPosition",
+        "caller": "0x00407b97",
+        "n": 0,
+        "value": 0,
+        "wType": 2
+      }
+    ]
+  },
+  "pcm_observed": {
+    "submitted_bytes": 159716352,
+    "sample_frames": 19964544,
+    "initial_tick": 1,
+    "final_tick": 19964545,
+    "final_cursor_offset": 159716352,
+    "events": {
+      "synth_complete": 5878,
+      "readback_begin": 5880,
+      "readback_end": 5881,
+      "stability_check": 5882
+    },
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "tail_sample_frames": 119544
+  },
+  "pixels_observed": 0,
+  "timeline_presents_observed": 0,
+  "gates": {
+    "G1": "failed",
+    "G2": "PCM observations audited; independent runtime review pending",
+    "G3": "not passed; no raw pixels",
+    "G4": "not passed; only first zero cursor",
+    "G5": "no small capture to review",
+    "G6": "not run"
+  },
+  "missing_G1_items": [
+    "second fresh-process three-present diagnostic",
+    "full runtime export/ABI canary",
+    "all repeated clock/QPC/QPF paths",
+    "live register/FP restoration checks beyond saved CONTEXT equality",
+    "GL state restoration",
+    "corrupted-fingerprint control",
+    "invalid-backend-path control"
+  ],
+  "next": "Coordinator records D3 fallback A; no further B runtime attempted after first G1 failure.",
+  "compressed_evidence": {
+    "reports/evidence/capture/proxy-b-g1-events.jsonl.zst": {
+      "sha256": "e8294bf07cc0b882be8d28cec428037fee8dfd78f6ae6f423a342327990ecfc2",
+      "uncompressed_sha256": "1606f13ad4d2afbf0887934531d8993b17f934edb75098270690d710425820e2",
+      "uncompressed_bytes": 744604
+    },
+    "reports/evidence/capture/proxy-b-g1-runner.log.zst": {
+      "sha256": "0feedb133b91827ef30d776aa433913ed64833e1ca19680f68ac81252b2e7c55",
+      "uncompressed_sha256": "fcce0df548e0e5546cd00e8cf0977eb43ed0f3fd6c86432a59c5bd83511748d2",
+      "uncompressed_bytes": 31894
+    }
+  },
+  "source_snapshots": {
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/B/cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71/source-snapshot/tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/B/cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71/source-snapshot/tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/B/cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71/source-snapshot/tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/B/cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71/source-snapshot/tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/B/cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71/source-snapshot/tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+    "/home/rovshan/Work/asm/Eidolon/.tools/capture/B/cb15b141887f7031c43793dcfb156225adba6d696cef26d397dfa1d5ec29ab71/source-snapshot/tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62"
+  },
+  "runtime_release": {
+    "checked_utc": "2026-10-15T23:59:14.616398+00:00",
+    "T2_runtime_processes": [],
+    "private_audio_sink_present": false
+  }
+}

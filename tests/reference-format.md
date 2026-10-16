@@ -1,7 +1,7 @@
 # Draft reference contract
 
-- [V] Owner: Verification/T5; assignment: [briefs/T5.md](../briefs/T5.md).
-- [H] Schema `eidolon-reference-draft-2` remains provisional pending T2 agreement and T1-confirmed capture points.
+- [V] Owner: Verification/T9; assignment: [briefs/T9.md](../briefs/T9.md).
+- [H] Schema `eidolon-reference-draft-3` remains provisional pending T4 agreement and live capture validation.
 - [V] Acceptance target: [approved step 1](../GOAL.md#approved-step-1--reproducible-reference-of-the-original).
 - [V] Executable checker: [tools/verify/reference.py](../tools/verify/reference.py); synthetic fixture: [reference_factory.py](reference_factory.py).
 - [H] A `PASS` under this draft reports only the requested integrity/comparison operation; synthetic captures establish neither an original reference nor original repeatability.
@@ -9,7 +9,7 @@
 ## Files and types
 
 - [H] Each run has a UTF-8 JSON manifest and a UTF-8 JSONL frame index; manifests/indexes are small Git artifacts, while PCM and `.raw.zst` files live under `$EIDOLON_DATA/reference/<run>/`.
-- [H] Index paths resolve relative to the manifest; PCM/raw paths resolve relative to the CLI data root, defaulting to the manifest directory.
+- [H] Index and PCM-completion evidence paths resolve relative to the manifest; PCM/raw paths resolve relative to the CLI data root, defaulting to the manifest directory.
 - [H] Payload paths use relative POSIX components; absolute paths, `.`/`..`, backslashes, missing files, and symlink escapes fail.
 - [H] Objects accept exactly the fields below; duplicate keys, non-finite numbers, missing fields, and unknown fields fail.
 - [H] Counts/ticks are JSON integers, never booleans or floats; hashes are lowercase 64-character SHA-256; descriptive strings are nonempty.
@@ -17,7 +17,7 @@
 
 ## Manifest
 
-- [H] `schema`: exactly `eidolon-reference-draft-2`; draft-1 manifests fail validation and require an explicit producer update with established display metadata.
+- [H] `schema`: exactly `eidolon-reference-draft-3`; earlier drafts fail validation and require an explicit producer update with observed PCM-completion evidence, never fabricated defaults.
 - [H] `run_id`: a unique identifier for a separate invocation; comparing the same ID or manifest is a failure.
 - [H] `source`: `{kind, exe_sha256, inputs}`; `kind` is `original` or `synthetic`; `inputs` maps every other input's stable name to its hash, including the source archive and hook/shim build inputs.
 - [H] `source.exe_sha256` for `original` must equal the approved native EXE hash in `GOAL.md`; synthetic inputs must be labeled `synthetic`.
@@ -35,16 +35,37 @@
 - [H] `video.pixel_format` is `rgba8` or `bgra8`; `row_order` is `top-down` or `bottom-up`; `color_space` names the actual interpretation without applying a conversion.
 - [H] `video.frame_count = N > 0`; `index_sha256` hashes the exact index file bytes, including newlines; `storage` is `reference` or `hashes`.
 - [H] `audio`: `{path, sha256, sample_format, sample_rate, channels, layout, sample_frames, start_sample}`.
-- [H] `audio.sample_format` is `s16le`, `s24le`, `s32le`, `f32le`, or `f64le`; `sample_rate > 0` is in Hz; `channels` is a nonempty ordered array of unique channel labels; `layout` is `interleaved`.
+- [H] Synthetic `audio.sample_format` is `s16le`, `s24le`, `s32le`, `f32le`, or `f64le`; `sample_rate > 0` is in Hz; `channels` is a nonempty ordered array of unique channel labels; `layout` is `interleaved`.
 - [H] `audio.start_sample = 0`; `sample_frames = A > 0` counts multichannel instants, not scalar samples; file length is exactly `A * len(channels) * bytes_per_sample`.
-- [H] `audio.sha256` hashes the entire headerless PCM file; retain any generated tail beyond the final playback cursor, rather than trimming, resampling, normalizing, or adding silence.
+- [H] `audio.sha256` hashes the entire headerless, complete submitted PCM file, including the tail beyond the final visual cursor; trimming, resampling, normalizing or adding silence fails.
 - [H] `scenes`: ordered nonempty array of `{id, first, last}` with unique IDs and inclusive frame bounds partitioning `0..N-1` exactly; boundaries come from T1's timeline.
-- [H] `termination`: `{reason, end_tick, audio_position, audio_position_num, audio_position_den, exit_code, timeline_end_tick, evidence}` with `end_tick=N` and `audio_position=floor(N*sample_rate/60) <= A`.
+- [H] `termination`: `{reason, end_tick, audio_position, audio_position_num, audio_position_den, exit_code, timeline_end_tick, evidence}` with visual `end_tick=N` and `audio_position=floor(N*sample_rate/60) <= A`; this cursor does not define complete audio length.
 - [H] The terminal ideal sample position is the exact rational `audio_position_num=N*sample_rate`, `audio_position_den=60`; retain the fractional phase even when the native integer cursor is rounded down.
 - [H] Natural termination requires `reason=natural_exit`, `exit_code=0`, `timeline_end_tick=null`, and evidence identifying the observed process-exit event.
 - [H] Timeline termination requires `reason=timeline_end`, `timeline_end_tick=N`, `exit_code=null`, and evidence identifying T1's established exclusive timeline endpoint.
-- [H] `completion`: `{finalized:true, frames_observed:N, frames_hashed:N, audio_sample_frames:A, dropped_frames:0, dropped_audio_sample_frames:0, errors:[]}`.
+- [H] `termination.evidence` is a stable semantic event label shared by equal runs; retain PID/TID, wall times and observation-file locations in separate runtime evidence; exact termination-object comparison remains required.
+- [H] `completion`: `{finalized:true, frames_observed:N, frames_hashed:N, audio_sample_frames:A, dropped_frames:0, dropped_audio_sample_frames:0, errors:[], pcm}`; `pcm` follows the final-data requirements below.
 - [H] Timeout, crash, manual abort, capture errors, partial manifests, loss counters, zero-length runs, or inconsistent end/count fields fail even when both inputs share the defect.
+
+## Native extent and final-data evidence
+
+- [V] Source: `$EIDOLON_ROOT/handoff/reverse-to-capture-hooks.md`, sections PCM extent and completion / Clock and termination; T1's saved-code/trace reconciliation distinguishes observed values from predicted live cursor state.
+- [V] Original PCM layout is `f32le`, 44100 Hz, channels `["L","R"]`, interleaved; WAVEHDR submits exactly 19964544 sample frames / 159716352 bytes / 452.7107482993 seconds.
+- [V] The synthesis tick starts at 1 and ends at 19964545; the delta, not the final raw tick, equals the submitted sample-frame count.
+- [V] The visual timeline ends at beat 600 / 450 seconds / sample position 19845000; submitted PCM retains a tail of 119544 sample frames / 956352 bytes.
+- [H] Full original manifests must independently satisfy those native PCM constants and `video.frame_count=termination.end_tick=27000`, derived from the verified visual endpoint and approved 60 Hz clock; controlled frames `0..26999` and end check `27000` still require live confirmation.
+- [H] A short real capture is an integration diagnostic, not a passing full reference; differing live results require investigation, not adapting these criteria to the capture.
+- [H] `completion.pcm`: exactly `{submitted_bytes, initial_tick, final_tick, final_cursor_offset, events, stable_sha256, evidence, evidence_sha256}`.
+- [H] `submitted_bytes` equals the complete PCM byte length; `final_tick-initial_tick=A`; original `initial_tick=1`; each field is a nonnegative integer.
+- [H] `final_cursor_offset` is the observed synthesis write cursor minus the submitted buffer base, in bytes, and must equal `submitted_bytes`; record the original's `[EBP+8]` at completion, not epilogue EDI or thread-return EAX.
+- [H] `events`: exactly `{synth_complete, readback_begin, readback_end, stability_check}`, with strictly increasing positive integer sequence numbers in one per-run, cross-thread ordered observation stream; event IDs are not visual ticks or wall-clock timings.
+- [H] `synth_complete` identifies execution after the final stores, deferred frees and FP restoration, established at original VA `0x401765`; successful submission, WAVEHDR playback completion and thread-return status do not substitute for this event.
+- [H] `readback_begin`/`readback_end` bracket acquisition of the entire submitted range after synthesis completion; `stability_check` marks a later, separate full-range memory hash while the source buffer remains valid.
+- [H] `stable_sha256` equals `audio.sha256`; neither a second hash of the saved file nor a copy of its declared hash establishes source-buffer stability.
+- [H] `evidence` names a nonempty observation artifact; `evidence_sha256` hashes its exact bytes; the verifier checks presence/hash independently for each run.
+- [H] The evidence artifact must identify its run, source/dependency identity, synthesis thread and completion location, submitted pointer/length, initial/final ticks, observed final cursor, event ordering and both full-range acquisition/stability hashes; include capture loss/error observations and retain the producer's observation format/tool identity.
+- [H] Runtime evidence review must establish actual final cursor, full-range coverage, cross-thread ordering and later immutability; metadata consistency and a hash-bound artifact alone cannot authenticate producer claims.
+- [?] T1/T2 observed submission before synthesis completion but did not acquire complete PCM or the final cursor; the predicted cursor and stability requirements remain live validation work.
 
 ## Frames and time
 
@@ -52,7 +73,7 @@
 - [H] `tick=n` means frame presentation at exactly `n/60` seconds; `clock_tick=n` records the controlled clock supplied for that render; `audio_position=floor(n*sample_rate/60)` is the supplied PCM cursor in sample frames.
 - [H] Record the ideal cursor as unreduced `audio_position_num=n*sample_rate`, `audio_position_den=60`; this preserves fractional-sample timing independently of the native integer cursor.
 - [H] Frame `n` is the final buffer immediately before its present, after rendering with clock `n/60` and the corresponding controlled audio position; readback must complete before the buffer is reused.
-- [H] The exclusive playback endpoint is `N/60` seconds; use integer arithmetic for audio positions, including sample rates not divisible by 60.
+- [H] The exclusive visual endpoint is `N/60` seconds; complete PCM duration is `A/sample_rate` seconds; use integer arithmetic for audio positions, including sample rates not divisible by 60.
 - [H] `sha256` covers exactly `row_stride * height` final pixel-buffer bytes, including alpha; preserve channel order, row order and numeric values without gamma correction, flipping, quantization or perceptual metrics.
 - [H] `raw_zst` names one complete Zstandard frame containing those same bytes; decompression must reach end-of-frame with no trailing/concatenated data, match the exact byte length, and reproduce the frame hash.
 - [H] The `reference` run must store frame `0`, every frame divisible by `60`, and the first/last frame of every scene; extra explicitly listed recapture frames are checked identically.
@@ -66,16 +87,22 @@
 - [H] Compare the full PCM files byte-for-byte after each file independently passes its declared hash and size; report the first differing byte offset.
 - [H] Frame comparison uses SHA-256 for all final buffers and rehashes every stored raw frame; unsaved pixel buffers require re-capture from the original to inspect a mismatch.
 - [H] Run IDs, capture-command arguments, file locations, storage mode and index-file hashes need not agree across runs; commands may differ in output paths, while behavioral settings must agree in `conditions`.
+- [H] PCM evidence paths/hashes and event sequence numbers are run-specific and need not agree; each run independently passes all final-data invariants and matches its entire PCM to its stability hash.
 - [H] No tolerance, time alignment, dropped prefix/suffix, frame deduplication, image conversion or audio normalization is permitted.
-- [H] Source/tool/state hashes, display metadata and end-event evidence are declarations checked for shape/equality, not proof of runtime behavior; headless execution, capture-point correctness and a full natural end require T1/T2 evidence.
-- [H] A consistently forged/truncated pair with rewritten termination declarations cannot be disproved from these payloads alone; a T1-established endpoint or independently verified exit event is necessary.
+- [H] Source/tool/state hashes, display metadata, end-event evidence and PCM observation artifacts do not by themselves prove runtime behavior; headless execution, capture-point correctness and a full natural end require T1/T2 validation.
+- [V] Native PCM extent/layout and the derived visual endpoint are checked independently of pair equality; identically trimmed native pairs with rewritten hashes/counts/termination cannot pass ([test_reference.py](test_reference.py)).
+- [H] Consistently forged full-length bytes, event histories or synthetic endpoints cannot be disproved from self-declarations alone; independent runtime evidence remains necessary.
 
 ## Capture feedback reconciliation
 
 - [V] Proposal: `$EIDOLON_ROOT/handoff/capture-to-verification-format.md`; response: `$EIDOLON_ROOT/handoff/verification-to-capture-format.md`.
+- [V] T4's completion-gated full submitted extent, one-based synthesis tick, exact integer/rational cursors, pre-present ordering and retained tail agree with this contract; draft-3 adds mandatory machine-checked final-data proof beyond draft-2's counters.
 - [H] Native pixel/PCM layout is constant per run and lives once in `video`/`audio`; `pixel_format` specifies byte channel order and unsigned 8-bit components, while `sample_format` specifies scalar type and byte order.
 - [H] Sparse compression is defined by `raw_zst`; raw length and hash are derived from video layout and the frame record, while mandatory selection reasons follow frame numbers and scene bounds without duplicate fields.
-- [H] PCM byte length is derived from sample frames, channel count and sample format; rational cursor phase, completion counters and pre-present ordering follow the definitions above.
+- [H] PCM byte length, rational cursor phase, completion proof and pre-present ordering follow the definitions above; native constants come from T1 evidence, independently of either compared payload.
+- [H] G5 small-capture review uses a clearly labeled partial diagnostic bundle: observed native layout, sequential frame records including frame zero and scene-boundary samples, lossless raw buffers, complete PCM and completion evidence, and the actual stop event; preserve failure/partial state.
+- [H] Review G5 pixels with `verify_raw` and PCM declarations/artifact with `verify_pcm_completion` in the independent checker, then verify whole PCM size/hash and clock observations; this is acquisition validation, not the full-run CLI `PASS` criterion.
+- [H] `validate`/`compare` require full original extents and valid completion; diagnostic fragments must not rewrite source kind, scene/count/end fields or `finalized` to manufacture a pass.
 
 ## Commands
 
@@ -83,12 +110,12 @@
 - [H] Independent run comparison: `bash tools/run python tools/verify/reference.py compare <reference-manifest> <repeat-manifest> --reference-data <reference-data> --candidate-data <repeat-data>`.
 - [H] JSON output contains `status: PASS|FAIL`, `draft:true`, `source_kinds`, operation and failure reasons; exit status is `0` for PASS, `1` for FAIL, `2` for CLI usage errors.
 - [V] Tool versions: `bash tools/run python --version` → 3.14.7; `bash tools/run python -m pytest --version` → 9.1.1; `bash tools/run python -c "import zstandard; print(zstandard.__version__)"` → 0.25.0.
-- [V] Temporary-parent prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T5').mkdir(parents=True, exist_ok=True)"`.
-- [V] Synthetic regression command: `bash tools/run python -m pytest tests/test_reference.py --basetemp /tmp/opencode/eidolon/T5/pytest -q`; result: [reports/03-tests.md](../reports/03-tests.md).
+- [V] Temporary-parent prerequisite: `bash tools/run python -c "from pathlib import Path; Path('/tmp/opencode/eidolon/T9').mkdir(parents=True, exist_ok=True)"`.
+- [V] Synthetic regression command: `bash tools/run python -m pytest tests/test_reference.py --basetemp /tmp/opencode/eidolon/T9/pytest -q`; result: [reports/03-tests.md](../reports/03-tests.md).
 
 ## Agreement required
 
-- [?] T2 must confirm the native final-buffer format, row layout, actual API/capture point and clock/audio-cursor semantics before this schema becomes agreed; packed four-byte pixels and the listed PCM formats are draft constraints, not runtime findings.
-- [?] T1/T2 must identify scene boundaries, the exclusive endpoint and whether complete generated PCM includes a tail; this draft preserves that tail and requires coverage through the endpoint.
-- [?] T2's independent updated-runtime check must establish the actual headless environment and compatibility outcome; the incoming proposal's earlier failure is not a current-runtime finding.
-- [?] T2 must agree integer-cursor rounding and supply a small real capture; unsupported native pixel/PCM formats require a new draft revision rather than a lossy conversion.
+- [?] T4 must return agreement through the named handoff; the coordinator/user's capture-method decision gates implementation.
+- [?] T2 must confirm native final-buffer layout, actual read-buffer/samples/sRGB, pre-present ordering, scene boundaries and controlled frame zero/endpoint; packed four-byte pixels remain provisional.
+- [?] T2 must supply observed PCM final-cursor/full-range stability evidence and exact-repeat controlled captures; native clock integer mapping is `735*n` at 44100 Hz, preserving the original float conversion path.
+- [?] A small real capture must establish acquisition semantics before full-reference comparison; unsupported native pixel formats require a contract revision rather than a lossy conversion.
