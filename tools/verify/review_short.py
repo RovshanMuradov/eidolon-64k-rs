@@ -189,7 +189,12 @@ def check_pcm(bundle, events, directory, artifact_root, manifest, roots):
     ref.require(envelope["run_id"] == manifest["run_id"] and envelope["reference_eligible"] is False
                 and envelope["input"] == manifest["input"] and envelope["dependency"] == manifest["dependency"]
                 and envelope["build_id"] == manifest["build"]["build_id"], "PCM evidence identity mismatch")
-    if isinstance(envelope["run_manifest"], dict):
+    if "acquisition" in envelope:
+        acquisition = load(compat.bound_file(envelope["acquisition"], roots))
+        ref.require(acquisition["run_id"] == manifest["run_id"] and acquisition["build"] == manifest["build"],
+                    "PCM acquisition identity mismatch")
+        ref.require(compat.bound_file(envelope["backend"], roots) == directory / "backend.jsonl", "PCM backend path mismatch")
+    elif isinstance(envelope["run_manifest"], dict):
         compat.bound_file(envelope["run_manifest"], roots)
         ref.require(compat.bound_file(envelope["backend"], roots) == directory / "backend.jsonl", "PCM backend path mismatch")
     else:

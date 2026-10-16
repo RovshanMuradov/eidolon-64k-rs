@@ -44,7 +44,7 @@ checked, load, one = short.checked, short.load, short.one
 require = ref.require
 
 
-def stream(path):
+def stream(path, retain_lookups=("glCreateShaderProgramv",)):
     """Check every line; retain only relevant lookups to bound memory."""
     events, counts, pids, sequence = [], Counter(), set(), 0
     with path.open() as source:
@@ -60,7 +60,7 @@ def stream(path):
             if e["event"] == "lookup":
                 counts[e["api"]] += 1
                 require(e.get("resolved", True) is True, "unresolved lookup")
-                if e.get("name") != "glCreateShaderProgramv":
+                if e.get("name") not in retain_lookups and e["api"] not in retain_lookups:
                     continue
             events.append(e)
     require(len(pids) == 1, "mixed run identity")
@@ -104,19 +104,19 @@ def check_baseline(baseline):
     return len(actual)
 
 
-def check_clock(events):
+def check_clock(events, nframes=N):
     clocks = [e for e in events if e["event"] == "clock"]
     startup = [e for e in clocks if e.get("timeline") is False]
     require([e["value"] for e in startup] == list(range(1001)), "startup schedule")
     clocks = [e for e in clocks if e.get("timeline") is not False]
-    require(len(clocks) == N*9, "clock route coverage")
+    require(len(clocks) == nframes*9, "clock route coverage")
     epoch = one(events, "epoch")
     require(epoch["E"] == 1001 and epoch["seq"] < clocks[0]["seq"], "clock epoch")
     expected_apis = ["waveOutGetPosition"] + ["GetTickCount", "timeGetTime",
                     "QueryPerformanceCounter", "QueryPerformanceFrequency"]*2
     g = group(events)
-    require(len(g["clock_routes_checked"]) == N, "clock canary coverage")
-    for n in range(N):
+    require(len(g["clock_routes_checked"]) == nframes, "clock canary coverage")
+    for n in range(nframes):
         chunk = clocks[n*9:(n+1)*9]
         require([e["api"] for e in chunk] == expected_apis, "clock route order")
         values = [735*n] + [1001+n*1000//60, 1001+n*1000//60,
@@ -130,10 +130,10 @@ def check_clock(events):
         require(chunk[-1]["seq"] < canary["seq"] < g["pre_present"][n]["seq"], "clock/pre-present order")
 
 
-def check_state(events):
+def check_state(events, nframes=N):
     g = group(events)
     context = one(events, "compat_context")
-    require(len(g["frame_state"]) == len(g["pre_present"]) == N, "frame state coverage")
+    require(len(g["frame_state"]) == len(g["pre_present"]) == nframes, "frame state coverage")
     for n, (state, frame) in enumerate(zip(g["frame_state"], g["pre_present"])):
         require(state["n"] == n and state["seq"] < frame["seq"], "frame state order")
         require(state["before"] == state["after"] == STATE, "GL restoration/layout mismatch")
