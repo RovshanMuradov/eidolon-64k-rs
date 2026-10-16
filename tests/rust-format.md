@@ -48,10 +48,16 @@
 - [V] Required order is6,7,1; then27000 repetitions of2,3,10,8,4; then5,9; sequences and one capture thread must be continuous. Native cursor/seconds/row/local-beat/pixels, frame-zero physics, endpoint and all PCM digests compare exactly.
 - [V] `runtime_events.py LEDGER` validates that protocol; `runtime_events.py ENVELOPE --request-sha256 PIN` additionally rehashes the pinned request inventory, full PCM,510 raws, process evidence, actual command/environment/EXE identities, exit0/no timeout/zero losses.
 - [V] Runtime envelope fields are exactly `schema:"eidolon-rust-runtime-envelope-1",status:"CLOSED",request,events,pcm,process`; file fields are `{path,sha256}`. Process fields are `command,environment,exe_before_sha256,exe_after_sha256,exit_code,timeout,dropped_frames,dropped_audio_sample_frames,evidence`.
-- [?] The suspended-before-main runner/injection route, live ABI/FP preservation and observed GL-state restoration require authorized Windows/GPU validation; prepared helpers and synthetic ledger tests are not runtime evidence.
+- [V] D26 validates the separate native `launch.c`/`live.c`/`hook.S` route through `tools/wine-headless`: suspended creation, pinned PE-entry stub, dynamic marker/IAT routing, physical GPR/EFLAGS/FP restoration, and short exact native comparisons. Prepared Frida JavaScript is not the executed attachment route.
 - [?] Marker ABI exposes initial physics but not seven native-layout initialization payloads required by the separate general file-envelope below; those must not be fabricated from native copies.
 
 ## Candidate file envelope
+
+- [V] D26 live jobs use `tools/capture/rust/live.py NAME`, each with fresh stopped-prefix copy, private audio sink, pre/post EXE hashes, immutable source/build snapshots and durable `state.json`/`runner.log` under `$EIDOLON_DATA/verification/rust/NAME`.
+- [V] `tools/verify/rust/review_live.py DIRECTORY` checks closed short jobs and physical fault controls; live reviews are `artifacts/verification/rust/live-{01,02,fp-reject,entry-reject}.json`.
+- [V] Actual Windows captures0–2 and complete PCM match accepted native data; marker FP and entry GPR corruption controls exit125 with zero accepted pixels. Scope is this bounded prefix and these routes.
+- [V] `tools/capture/rust/launch_full.py NAME` gates on those reviews and starts exactly one `setsid nohup` job; `artifacts/verification/rust/full-job.json` pins PID/log/state and source identity. Full mode keeps510 native retention anchors, disables wrapper stops, requires native terminal marker5 and reserves less than30GB.
+- [V] Full runner records instrumented startup markers, child peak working set and wall duration; these await closure and are not an uninstrumented performance baseline.
 
 - [V] JSON rejects duplicate/unknown/missing fields and non-finite numbers; exact comparisons distinguish booleans, integers and floats; payload paths are relative POSIX paths with no traversal or symlink escape.
 - [V] Every file binding is exactly `{path,sha256}`, relative to the candidate manifest directory; the verifier rehashes every binding, including executable, input inventory, capture tool and observation files.
