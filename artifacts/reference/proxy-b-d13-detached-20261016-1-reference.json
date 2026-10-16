@@ -1,0 +1,501 @@
+{
+  "audio": {
+    "channels": [
+      "L",
+      "R"
+    ],
+    "layout": "interleaved",
+    "path": "pcm.f32le",
+    "sample_format": "f32le",
+    "sample_frames": 19964544,
+    "sample_rate": 44100,
+    "sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "start_sample": 0
+  },
+  "capture": {
+    "command": [
+      "bash",
+      "tools/run",
+      "python",
+      "tools/capture/proxy-b-compat/probe.py",
+      "--run-id",
+      "proxy-b-d13-detached-20261016-1",
+      "--mode",
+      "450-compatibility",
+      "--frames",
+      "3",
+      "--full",
+      "--throughput-from",
+      "artifacts/reference/proxy-b-d12-volume-20261016-acquisition.json",
+      "--storage",
+      "reference",
+      "--reference-variant",
+      "D9-restored-native",
+      "--build-from",
+      "artifacts/reference/proxy-b-d13-full-20261016-1-recovery-review.json"
+    ],
+    "kind": "controlled-reference",
+    "tool_sha256": "d243a7d0338a304efad88de94def10874b2acb0c3d1848b343a4ed6c8b092493"
+  },
+  "completion": {
+    "audio_sample_frames": 19964544,
+    "dropped_audio_sample_frames": 0,
+    "dropped_frames": 0,
+    "errors": [],
+    "finalized": true,
+    "frames_hashed": 27000,
+    "frames_observed": 27000,
+    "pcm": {
+      "events": {
+        "readback_begin": 7325,
+        "readback_end": 7326,
+        "stability_check": 7327,
+        "synth_complete": 7303
+      },
+      "evidence": "proxy-b-d13-detached-20261016-1-pcm-observations.json",
+      "evidence_sha256": "eddac916d6af04364eb1ef140f625560910bdbce1b46efd8b0f77bf19c59c5ab",
+      "final_cursor_offset": 159716352,
+      "final_tick": 19964545,
+      "initial_tick": 1,
+      "stable_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+      "submitted_bytes": 159716352
+    }
+  },
+  "conditions": {
+    "clock": {
+      "denominator": 60,
+      "method": "native waveOutGetPosition cursor735*n; exact shared millisecond/QPC epoch; all original frames rendered",
+      "numerator": 1
+    },
+    "environment": {
+      "arch": "PE32 i386; fresh Wine win64 WoW64 prefix",
+      "display": {
+        "height": 1080,
+        "kind": "gamescope-headless",
+        "launcher": "tools/wine-headless",
+        "width": 1920,
+        "wine_virtual_desktop": false
+      },
+      "driver": "610.57.04",
+      "gamescope": "gamescope 3.16.25-1",
+      "gpu": "NVIDIA GeForce RTX 3070 Ti",
+      "graphics_api": "4.6.0 NVIDIA 610.57.04; GLSL 4.60 NVIDIA",
+      "os": "Linux-7.1.8-arch1-3-x86_64-with-glibc2.44",
+      "wine": "wine-11.17"
+    },
+    "initial_state_sha256": "f9af2eb7c0152de13dc1ab49983af8ab11257f752e158af6e7a189e91b340ed2",
+    "rng": {
+      "initial_state_sha256": "835cc289b591fb1388096ede81303f048fcb392bf57bb4ae1c6d4762fdcfc98b",
+      "method": "native initialization and node-local RNG without resets; prethread0x520 bytes plus tick and per-activation input/global/node observations"
+    },
+    "settings": {
+      "build_id": "3fdbcd12eb6cd75c3c7a6932398b1522b0a065e71ae083b93d970e4fa5e023f2",
+      "cache_policy": "fresh per-run cache directories",
+      "capture_resolution": [
+        1920,
+        1080
+      ],
+      "clock_epoch_ms": 1001,
+      "initial_observations": {
+        "build_id": "3fdbcd12eb6cd75c3c7a6932398b1522b0a065e71ae083b93d970e4fa5e023f2",
+        "entry-physics": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "entry-rng": "2c7663e809c9827df482ce260d079467d02f9f181a6d1fcc5a942b2a7e1bd3e6",
+        "entry-tick": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+        "first-query-physics": "c7ebf37460898c920fb4e884f7846f9b0114ad759b8363584b17f8e78410cbb1",
+        "first-query-previous-seconds": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+        "fp_controls": {
+          "entry-main": {
+            "mxcsr": 8064,
+            "x87_cw": 639
+          },
+          "first-query-main": {
+            "mxcsr": 8098,
+            "x87_cw": 639
+          },
+          "physical-resume-0": {
+            "mxcsr": 8064,
+            "x87_cw": 639
+          },
+          "physical-resume-1": {
+            "mxcsr": 65472,
+            "x87_cw": 639
+          },
+          "physical-resume-2": {
+            "mxcsr": 8064,
+            "x87_cw": 639
+          },
+          "prethread-main": {
+            "mxcsr": 8066,
+            "x87_cw": 639
+          }
+        },
+        "native_resources": "0cbe16c09ff3602c426997b1f8ee05ab024e4b148175404a53c29f8b3b9ed6cf",
+        "prefix_baseline": "6099ea696a5fe088be478eb4a4c96eb7679445e978c5833e2f036c59d3db5a48",
+        "prethread-rng": "835cc289b591fb1388096ede81303f048fcb392bf57bb4ae1c6d4762fdcfc98b",
+        "prethread-tick": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+      },
+      "instrumentation": "one-shot bootstrap rendezvous; interior/completion acquisition INT3; physical resume/RET witnesses; three fingerprint-bound S2 instruction trampolines; no hardware breakpoints or driver callbacks",
+      "native_state_reset": false,
+      "prefix_inventory_sha256": "6099ea696a5fe088be478eb4a4c96eb7679445e978c5833e2f036c59d3db5a48",
+      "prefix_recipe": "persistent copy of stopped T11/T2 baseline; cp -a --reflink=auto; verify full tree before each invocation; launcher applies pinned registry defaults",
+      "runtime": {
+        "AGENT": "T16",
+        "EIDOLON_B_BOOTSTRAP": "capture-probe",
+        "EIDOLON_B_COMPAT": "450-compatibility",
+        "EIDOLON_B_FRAMES": "3",
+        "EIDOLON_B_FULL": "27000",
+        "LC_ALL": "C",
+        "PULSE_SINK": "eidolon_T16_compat",
+        "TZ": "UTC",
+        "WINEARCH": "win64",
+        "WINEDEBUG": "-all,+loaddll",
+        "WINEDLLOVERRIDES": "opengl32,winmm=n,b;winemenubuilder.exe,mscoree,mshtml=d",
+        "WINEPREFIX": "/tmp/opencode/eidolon/T16/prefix",
+        "WINE_H": "1080",
+        "WINE_W": "1920"
+      }
+    }
+  },
+  "provenance": {
+    "eligibility": {
+      "path": "artifacts/reference/proxy-b-d13-detached-20261016-1-eligibility.json",
+      "root": "checkout",
+      "sha256": "4565cba3ab4326b481c849ee0ddbe59cea20c2988f032f05445f86e21121668c"
+    },
+    "native_image": {
+      "path": "reverse/confirmed-debug/postfix-00400000.bin",
+      "root": "data",
+      "sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504"
+    }
+  },
+  "run_id": "proxy-b-d13-detached-20261016-1",
+  "scenes": [
+    {
+      "first": 0,
+      "id": "row-00",
+      "last": 1439
+    },
+    {
+      "first": 1440,
+      "id": "row-01",
+      "last": 2159
+    },
+    {
+      "first": 2160,
+      "id": "row-02",
+      "last": 2879
+    },
+    {
+      "first": 2880,
+      "id": "row-03",
+      "last": 3599
+    },
+    {
+      "first": 3600,
+      "id": "row-04",
+      "last": 4319
+    },
+    {
+      "first": 4320,
+      "id": "row-05",
+      "last": 5759
+    },
+    {
+      "first": 5760,
+      "id": "row-06",
+      "last": 6119
+    },
+    {
+      "first": 6120,
+      "id": "row-07",
+      "last": 6569
+    },
+    {
+      "first": 6570,
+      "id": "row-08",
+      "last": 7199
+    },
+    {
+      "first": 7200,
+      "id": "row-09",
+      "last": 7919
+    },
+    {
+      "first": 7920,
+      "id": "row-10",
+      "last": 8639
+    },
+    {
+      "first": 8640,
+      "id": "row-11",
+      "last": 10079
+    },
+    {
+      "first": 10080,
+      "id": "row-12",
+      "last": 10619
+    },
+    {
+      "first": 10620,
+      "id": "row-13",
+      "last": 11159
+    },
+    {
+      "first": 11160,
+      "id": "row-14",
+      "last": 11879
+    },
+    {
+      "first": 11880,
+      "id": "row-15",
+      "last": 12599
+    },
+    {
+      "first": 12600,
+      "id": "row-16",
+      "last": 12959
+    },
+    {
+      "first": 12960,
+      "id": "row-17",
+      "last": 13364
+    },
+    {
+      "first": 13365,
+      "id": "row-18",
+      "last": 13544
+    },
+    {
+      "first": 13545,
+      "id": "row-19",
+      "last": 13724
+    },
+    {
+      "first": 13725,
+      "id": "row-20",
+      "last": 13904
+    },
+    {
+      "first": 13905,
+      "id": "row-21",
+      "last": 14084
+    },
+    {
+      "first": 14085,
+      "id": "row-22",
+      "last": 14444
+    },
+    {
+      "first": 14445,
+      "id": "row-23",
+      "last": 14714
+    },
+    {
+      "first": 14715,
+      "id": "row-24",
+      "last": 15119
+    },
+    {
+      "first": 15120,
+      "id": "row-25",
+      "last": 15479
+    },
+    {
+      "first": 15480,
+      "id": "row-26",
+      "last": 15839
+    },
+    {
+      "first": 15840,
+      "id": "row-27",
+      "last": 16199
+    },
+    {
+      "first": 16200,
+      "id": "row-28",
+      "last": 16559
+    },
+    {
+      "first": 16560,
+      "id": "row-29",
+      "last": 16919
+    },
+    {
+      "first": 16920,
+      "id": "row-30",
+      "last": 17279
+    },
+    {
+      "first": 17280,
+      "id": "row-31",
+      "last": 17459
+    },
+    {
+      "first": 17460,
+      "id": "row-32",
+      "last": 17999
+    },
+    {
+      "first": 18000,
+      "id": "row-33",
+      "last": 18719
+    },
+    {
+      "first": 18720,
+      "id": "row-34",
+      "last": 19079
+    },
+    {
+      "first": 19080,
+      "id": "row-35",
+      "last": 19439
+    },
+    {
+      "first": 19440,
+      "id": "row-36",
+      "last": 19799
+    },
+    {
+      "first": 19800,
+      "id": "row-37",
+      "last": 20159
+    },
+    {
+      "first": 20160,
+      "id": "row-38",
+      "last": 20699
+    },
+    {
+      "first": 20700,
+      "id": "row-39",
+      "last": 21869
+    },
+    {
+      "first": 21870,
+      "id": "row-40",
+      "last": 22499
+    },
+    {
+      "first": 22500,
+      "id": "row-41",
+      "last": 22769
+    },
+    {
+      "first": 22770,
+      "id": "row-42",
+      "last": 23039
+    },
+    {
+      "first": 23040,
+      "id": "row-43",
+      "last": 23399
+    },
+    {
+      "first": 23400,
+      "id": "row-44",
+      "last": 23579
+    },
+    {
+      "first": 23580,
+      "id": "row-45",
+      "last": 23759
+    },
+    {
+      "first": 23760,
+      "id": "row-46",
+      "last": 25019
+    },
+    {
+      "first": 25020,
+      "id": "row-47",
+      "last": 25739
+    },
+    {
+      "first": 25740,
+      "id": "row-48",
+      "last": 26279
+    },
+    {
+      "first": 26280,
+      "id": "row-49",
+      "last": 26999
+    }
+  ],
+  "schema": "eidolon-reference-draft-4",
+  "source": {
+    "exe_sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+    "inputs": {
+      "archive": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008",
+      "bank": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "host_runner": "af25f13a4ef40b1af866118fd624b9fb2af2d75818c0d346653872845572a36e",
+      "launcher": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
+      "package": "97dfa6188ecda4239ec04d6d8fa76600d1e469781ae05b9b052da9eb24d0bd5b",
+      "tools/capture/proxy-b-compat/README.md": "08caa6eeee570f574b2d30d1e81140e149922f7a0628b69929888f25b6530276",
+      "tools/capture/proxy-b-compat/audit.py": "f3c48f4d3eb6f254aa4e01e886a3ac0b45118835232c41f651930279ce701413",
+      "tools/capture/proxy-b-compat/build.py": "1bff4663955f0a3183052be885961ee0868ad2047fa88df1d6a108c9262b9341",
+      "tools/capture/proxy-b-compat/check_controls.py": "e6a489e71363446203ff42d9b4a8fdcc7e794d6bc7053973765c57c834d8a294",
+      "tools/capture/proxy-b-compat/check_d12_faults.py": "7f43dac7c503450ef0db00f95f0063f6f76b03962e7ba0fc2cd4790cab17f7ea",
+      "tools/capture/proxy-b-compat/check_d12_pair.py": "1ea7d4ff06046a6a84500990ca8949e4cca713562d5bee00561fbf043f3bc63b",
+      "tools/capture/proxy-b-compat/check_native.py": "a6064ac53c165315f2aaea584b846549e52dfba4ac76feb70199d4b6d583aaa4",
+      "tools/capture/proxy-b-compat/check_stage.py": "abf8c7782dba09bd043f2f9b7d369b8d062641ab6825d2999251dad387aca48a",
+      "tools/capture/proxy-b-compat/check_stage_faults.py": "ec6a0ad92f9521a5bcfff979e733020151383421895c26a0a7122234b97f3a98",
+      "tools/capture/proxy-b-compat/consumer.c": "e2361131b44c5fc383e78bb9a70dd23d9532a7ef0c78293fc9b52b6e9929f0bc",
+      "tools/capture/proxy-b-compat/core.c": "ff0361d18df50a538a666b7cd42b77ee53d066f0e6764c7431a0efeee1df9f56",
+      "tools/capture/proxy-b-compat/exception_controls.py": "0fd06c1b0d9c40d9c8b9c293cd47cdf722f48eee58d313e3a701c0b104446ae0",
+      "tools/capture/proxy-b-compat/full.c": "62ff5dc8ad0a4dfa7746f03838ffcf62a5b97e09e01e88eeff2d118ca100842d",
+      "tools/capture/proxy-b-compat/full.py": "7a52558f3a5e21efb0c7e76245661019ee9444c9cc93b8ee2f57d1594b2396f7",
+      "tools/capture/proxy-b-compat/native.c": "9ab503aded7ca6d169b691d2bd0b969449a160c90955d296b67922be1af15761",
+      "tools/capture/proxy-b-compat/negative_stage.py": "e91d129d4100bcd0cddc439dc480c0bfae25eb237b6920334fca2ac7db41909a",
+      "tools/capture/proxy-b-compat/nodes.c": "c69e98d531059c5e3d76d0b9d63b0247b651606cb022d2aaeae3bb641416e9c5",
+      "tools/capture/proxy-b-compat/observations.py": "3fb1f4bce7fa2b268feaeede18d6b778d054e6e8fd33d8b1150fb740c06b9aa5",
+      "tools/capture/proxy-b-compat/package.py": "642942e7ffd5b68d163c2a7574e75931353b31adb44f44d4a46b3bb3c461734e",
+      "tools/capture/proxy-b-compat/package_d12.py": "8bb9542c8a525aed2ba3f9191f6daad7ff0d4e7e5cb6f4916fa533512b5f53ec",
+      "tools/capture/proxy-b-compat/package_interrupted.py": "a1675ced976b17f6eccb6c619ec4f60c5fe3ceb05a7a67bb9afa343a5f7b0089",
+      "tools/capture/proxy-b-compat/package_stage.py": "3b64c74c2b630f0152e55e130df2a0d43fcd3cf1aa4e961a9589269a2d3ee8f5",
+      "tools/capture/proxy-b-compat/probe.py": "e12eb7ef132760b665231dd064466ad98c128be72f09386d5fae6c29d5b120f6",
+      "tools/capture/proxy-b-compat/reconcile_scene.py": "97ce79e33819d398e37fcd390bf51b508e221cef2094ae6f7f589c58215e4b81",
+      "tools/capture/proxy-b-compat/recover.py": "1ffad293ca5d0dab1a463c009ace320c4fbf339f3888a0682b86010a98dcdf9e",
+      "tools/capture/proxy-b-compat/stage.c": "121bf6ed1985c5e8a8012f9efdc3f14a65c984100233fcf98ac4ee1e23ddc82e",
+      "tools/capture/proxy-b-compat/timeline.py": "07ef9e7b9b42cf11bc6ca7a4034085b0f840f2a0fc8b0fa3620df559b838e493",
+      "tools/capture/proxy-b/bootstrap.c": "e8b6eab99dc21e88eff660deb46abdb017d545638169efde319d8c0df8f8ed0e",
+      "tools/capture/proxy-b/build.py": "f34f973d72c30720b0639cb1ddf868c8c80d8d9fba16c1c51af1ac0144037d2e",
+      "tools/capture/proxy-b/canary.c": "21046c05a16861f92730ed326be5c0f87edd8d04a5dddca80144d33b6db6eb89",
+      "tools/capture/proxy-b/core.c": "1af73e0cd8664107a99be80fa9f51d03ad8a4b950051132ad82d45ba75ce3fa6",
+      "tools/capture/proxy-b/probe.py": "405dd1637112aa863ccd90afd8410ce261a80142a05b3dd48e634afe40fe70d2",
+      "tools/capture/proxy-b/proxy.c": "4dd23dfc4f98aac8dc08b6fb028a93afa57192f2657e3e8b8f771b9902592f62"
+    },
+    "kind": "D9-restored-native",
+    "restoration": {
+      "decision": "D12",
+      "effective_shader_sha256": "cb62ed7fd0878836b763b892f64cb9e4a789f49f304d32d0a2fc334aecb433ea",
+      "raw_shader_sha256": "57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182",
+      "shim_sha256": {
+        "opengl32.dll": "85c74c62d6934659f5b42aeb2729aeeb05aa982fa8b09df34ea25e7e8199a88e",
+        "winmm.dll": "60523cfef385966fc40a74be517466831efb6ee8673db5c379a52b7d0351a06f"
+      },
+      "transformation": "450-compatibility"
+    }
+  },
+  "termination": {
+    "audio_position": 19845000,
+    "audio_position_den": 60,
+    "audio_position_num": 1190700000,
+    "end_tick": 27000,
+    "evidence": "native_ExitProcess_call_0x408618_after_query27000_and_present26999;native_exit0",
+    "exit_code": 0,
+    "reason": "natural_exit",
+    "timeline_end_tick": null
+  },
+  "video": {
+    "color_space": "native attachment GL_2601; framebuffer sRGB 0",
+    "frame_count": 27000,
+    "height": 1080,
+    "index": "proxy-b-d13-detached-20261016-1-frames.jsonl",
+    "index_sha256": "bd063d93c996da12e27554e8a6120aaaaa57fa0c4d8d4aac7c302911a3b6eb62",
+    "pixel_format": "rgba8",
+    "row_order": "bottom-up",
+    "row_stride": 7680,
+    "storage": "reference",
+    "width": 1920
+  }
+}
