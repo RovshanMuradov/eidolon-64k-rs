@@ -217,19 +217,20 @@ def check_nodes(events, directory, image):
     return summary
 
 
-def check_abi(events, counts, directory):
+def check_abi(events, counts, directory, nframes=N, terminal_query=False):
     g = stage.group(events)
     require([e["api"] for e in g["abi_summary"]] == list(range(18)), "ABI summary coverage")
     totals = [e["returned_calls"] for e in g["abi_summary"]]
     require(all(totals[i] > 0 for i in range(17)) and totals[17] == 0, "ABI active routes")
     require(Counter((e["api"], e["ordinal"]) for e in g["abi_canary"] if e["ordinal"] == 1)
-            == Counter({(i, 1): 1 for i in range(17)}) and len(g["abi_canary"]) == 74, "ABI raw coverage")
+            == Counter({(i, 1): 1 for i in range(17)}) and len(g["abi_canary"]) == 74+int(terminal_query), "ABI raw coverage")
     for e in g["abi_canary"]:
         raw = [(directory/f"abi-{e['api']:02d}-{e['ordinal']}-{side}-{kind}.bin").read_bytes()
                for kind in ("gpr", "fx") for side in ("before", "after")]
         stage.check_canary(e, *raw)
         require(e["ordinal"] <= totals[e["api"]], "ABI ordinal")
-    expected = {0: 1001+2*N, 1: 2*N, 2: 2*N, 3: 2*N, 4: N, 6: 1, 7: 1, 8: 1, 9: 1,
+    queries = nframes+int(terminal_query)
+    expected = {0: 1001+2*queries, 1: 2*queries, 2: 2*queries, 3: 2*queries, 4: queries, 6: 1, 7: 1, 8: 1, 9: 1,
                 10: 5, 11: counts["wglGetProcAddress"], 12: 31, 13: counts["program_use"], 15: 1, 16: 1, 17: 0}
     require(all(totals[i] == v for i, v in expected.items()), "ABI counters")
     return totals
@@ -243,9 +244,9 @@ def bits(value):
     return u32(struct.pack("<f", value))
 
 
-def check_scenes(events, image):
+def check_scenes(events, image, nframes=N):
     g = stage.group(events)
-    require([e["n"] for e in g["scene_state"]] == list(range(N)), "native scene coverage")
+    require([e["n"] for e in g["scene_state"]] == list(range(nframes)), "native scene coverage")
     rows = [struct.unpack_from("<ff", image, 0x2fc50+8*i) for i in range(50)]
     tokens = struct.unpack_from("<50I", image, 0x2fde0)
     for e in g["scene_state"]:
@@ -254,7 +255,7 @@ def check_scenes(events, image):
         row = next(i for i, (_, end) in enumerate(rows) if beat < end)
         require((e["seconds_f32_bits"], e["scene_local_beat_f32_bits"], e["scene_token"])
                 == (bits(seconds), bits(f32(beat-rows[row][0])), tokens[row]), "native scene/time interpretation")
-    require(Counter(e["n"] for e in g["scene_pass"]) == Counter({n: 19 for n in range(N)}), "scene pass coverage")
+    require(Counter(e["n"] for e in g["scene_pass"]) == Counter({n: 19 for n in range(nframes)}), "scene pass coverage")
 
 
 def check_consumers(events, directory):
@@ -311,7 +312,7 @@ def check_consumers(events, directory):
     return files
 
 
-def check_provenance(bundle, producer, events, directory, roots):
+def check_provenance(bundle, producer, events, directory, roots, nframes=N):
     acquisition = load(compat.bound_file(producer["acquisition"], roots))
     require(all(producer[k] == v for k, v in acquisition.items()), "producer changed acquisition")
     package = compat.bound_file(producer["package_tool"], roots)
@@ -330,7 +331,7 @@ def check_provenance(bundle, producer, events, directory, roots):
     require(identity["before_sha256"] == identity["after_sha256"] == ref.ORIGINAL_SHA256
             and identity["path"] == producer["input"]["executed_copy"], "executed-file identity observations")
     anchors = stage.group(events)["scene_anchor_locals"]
-    require(anchors and anchors[-1]["n"] == N-1 and all(e["original_source_sha256"] == compat.SOURCE_HASH for e in anchors),
+    require(anchors and anchors[-1]["n"] == nframes-1 and all(e["original_source_sha256"] == compat.SOURCE_HASH for e in anchors),
             "original shader memory after forwarding")
     context = one(events, "compat_context")
     require(context["profile_mask"] == 2 and context["flags"] == 0 and context["driver_debug"] is False,

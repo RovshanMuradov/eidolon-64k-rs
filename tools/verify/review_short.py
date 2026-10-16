@@ -140,7 +140,7 @@ def check_sources(manifest, events, directory, image, roles):
     return calls
 
 
-def check_frames(index, events, video, directory):
+def check_frames(index, events, video, directory, inspect_pixels=True):
     frames = [e for e in events if e["event"] == "pre_present"]
     presents = [e for e in events if e["event"] == "post_present"]
     clocks = [e for e in events if e["event"] == "clock" and e["api"] == "waveOutGetPosition"]
@@ -172,9 +172,10 @@ def check_frames(index, events, video, directory):
             ref.verify_raw(ref.payload_path(directory, row["raw_zst"]), 1920*1080*4, row["sha256"])
             raw = checked(directory / f"frame-{n:05d}.rgba", row["sha256"])
             ref.require(raw.stat().st_size == 1920*1080*4, "raw frame extent mismatch")
-            pixels = np.fromfile(raw, dtype=np.uint8).reshape(-1, 4)
-            raw_frames.append({"n": n, "unique_rgba": int(len(np.unique(pixels.view("<u4")))),
-                               "alpha_min": int(pixels[:, 3].min()), "alpha_max": int(pixels[:, 3].max())})
+            if inspect_pixels:
+                pixels = np.fromfile(raw, dtype=np.uint8).reshape(-1, 4)
+                raw_frames.append({"n": n, "unique_rgba": int(len(np.unique(pixels.view("<u4")))),
+                                   "alpha_min": int(pixels[:, 3].min()), "alpha_max": int(pixels[:, 3].max())})
     return raw_frames
 
 
@@ -193,7 +194,8 @@ def check_pcm(bundle, events, directory, artifact_root, manifest, roots):
         acquisition = load(compat.bound_file(envelope["acquisition"], roots))
         ref.require(acquisition["run_id"] == manifest["run_id"] and acquisition["build"] == manifest["build"],
                     "PCM acquisition identity mismatch")
-        ref.require(compat.bound_file(envelope["backend"], roots) == directory / "backend.jsonl", "PCM backend path mismatch")
+        backend = manifest.get("ordered_stream", {}).get("path", "backend.jsonl")
+        ref.require(compat.bound_file(envelope["backend"], roots) == ref.payload_path(directory, backend), "PCM backend path mismatch")
     elif isinstance(envelope["run_manifest"], dict):
         compat.bound_file(envelope["run_manifest"], roots)
         ref.require(compat.bound_file(envelope["backend"], roots) == directory / "backend.jsonl", "PCM backend path mismatch")
