@@ -1,5 +1,6 @@
 {
   "schema": "eidolon-rust-detached-job-1",
+  "phase": "closed",
   "request": "verification/rust/jobs/live-d28-scalars-full01/request.json",
   "request_sha256": "28f015e37aa6fbe9bf7cb3be062ed83225d75680bc93fe02ba8b5b39fb58fce8",
   "pid": 2493456,

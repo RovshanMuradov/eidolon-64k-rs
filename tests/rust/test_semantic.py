@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import pytest
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'tools/verify/rust'))
-from semantic import compare_uniform
+from semantic import compare_uniform,review
 from conformance import Failure
 
 
@@ -33,3 +33,9 @@ def test_framebuffer_correspondence_cannot_change_mid_run():
 def test_inactive_values_do_not_claim_runtime_uniform_data():
     a,b=map(list,vectors());a[8]=b[8]=0xffffffff;a[9]=0xdeadbeef
     check(tuple(a),tuple(b))
+
+
+def test_observed_prefix_and_physical_seed_rejection():
+    positive=review('live-d28-prefix');negative=review('live-d28-seed-reject')
+    assert positive['status']=='SEMANTIC_PREFIX_EXACT' and positive['uniform_passes']==57
+    assert negative['status']=='SEED_PHYSICAL_FAULT_REJECTED'

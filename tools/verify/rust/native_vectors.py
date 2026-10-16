@@ -8,6 +8,7 @@ import struct
 import subprocess
 from conformance import CHECKOUT,DATA,Native,load,checked,sha,need
 from runtime_events import events
+from monitor_full import process,live_images
 
 
 def physics_records(raw,samples):
@@ -44,6 +45,17 @@ def review(name):
     log=checked(job/'runner.log',state['runner_log_sha256']).read_text(errors='replace');need('WINE_EXIT=0 GAMESCOPE_EXIT=0' in log,'native wrapper exit')
     observations=[json.loads(line) for line in (job/'output/backend.jsonl').read_text().splitlines()]
     need(not any(e['event']=='failure' for e in observations),'native observer failure')
+    for event,field in (('bootstrap_before_synth','mapping_sha256'),('initial_resources','sha256'),('volume_upload','source_sha256')):
+        actual=[e[field] for e in observations if e['event']==event]
+        expected=[e[field] for e in native.producer['observations'] if e['event']==event]
+        need(len(actual)==1 and actual==expected,'native loaded image/resource identity: '+event)
+    source_keys=('creation','index','count','stage','raw_sha256','effective_sha256','transformed')
+    actual_sources=[tuple(e[k] for k in source_keys) for e in observations if e['event']=='shader_source']
+    expected_sources=[tuple(e[k] for k in source_keys) for e in native.producer['source_provenance']]
+    need(actual_sources==expected_sources,'native shader source provenance')
+    for role,path in native.states.items():need((job/'output'/('native-'+role.replace('/','-')+'.bin')).read_bytes()==path.read_bytes(),'native initial state: '+role)
+    pcm=[e['sha256'] for e in observations if e['event'] in ('readback_end','stability_check')]
+    need(pcm==[native.manifest['audio']['sha256']]*2,'native PCM memory identity')
     endpoint=[e for e in observations if e['event']=='native_endpoint'];need(len(endpoint)==1 and endpoint[0]['frames']==27000 and endpoint[0]['queries']==27001,'native natural endpoint')
     need(any(e['event']=='native_exit_forward' and e['registers_fp_equal'] for e in observations),'native exit restoration')
     need(all(e['equal'] for e in observations if e['event'] in ('abi_canary','native_resumed')),'native physical restoration')
@@ -54,6 +66,9 @@ def review(name):
     snapshots=[p for kind,p in events(path) if kind==2];need(len(snapshots)==27000,'candidate physics coverage')
     differences=[n for n,a in zip(build['samples'],physical) if a!=snapshots[n][28:]]
     curves=list(curve_records((job/'output/curves.bin').read_bytes(),build['samples']))
+    summaries=[e for e in observations if e['event']=='vector_summary']
+    need(len(summaries)==1 and summaries[0]['physics_frames']==27000 and summaries[0]['sampled_draws']==len(curves),'native vector phase coverage')
+    need(summaries[0]['float_words']==sum(len(v['words']) for _,values in curves for v in values.values()),'native scalar word coverage')
     leftovers=[]
     for p in Path('/proc').iterdir():
         if not p.name.isdigit():continue
@@ -66,5 +81,30 @@ def review(name):
     (CHECKOUT/f'artifacts/verification/rust/{name}.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
 
 
+def reconcile():
+    pointer=load(CHECKOUT/'artifacts/verification/rust/native-vector-job.json')
+    request=load(checked(pointer['request'],pointer['request_sha256']));job=Path(pointer['state']).parent;state=load(job/'state.json')
+    need(pointer['pid']==request['pid']==state['pid']==state['sid'],'native detached identity')
+    need(request['build_sha256']==state['build_sha256'],'native build request');build=load(checked(job/'build.json',state['build_sha256']))
+    for path,digest in build['build_files'].items():checked(job/'build'/path,digest)
+    processes=[process(state[k]) for k in ('pid','runner_pid')]
+    if state['phase']=='running':
+        need(processes[0]['exists'] and processes[0]['sid']==state['sid'] and 'native_vectors.py' in processes[0]['command'],'lost native supervisor')
+        need(processes[1]['exists'] and processes[1]['sid']==state['sid'],'lost native runner')
+    data_bytes=sum(p.stat().st_size for p in DATA.rglob('*') if p.is_file());need(data_bytes<30_000_000_000,'native 30GB limit')
+    physics=job/'output/physics.bin';raw=physics.read_bytes() if physics.exists() else b'';complete=len(raw)//268
+    need(complete<=len(build['samples']),'extra native physics samples')
+    physical=list(physics_records(raw[:complete*268],build['samples'][:complete]))
+    candidate_job=DATA/'verification/rust/live-d26-full01';candidate=load(candidate_job/'state.json')
+    need(candidate['candidate_sha256']==build['candidate_sha256'],'candidate image identity')
+    path=checked(candidate_job/'output/events.bin',candidate['output']['output/events.bin']['sha256'])
+    snapshots=[p for kind,p in events(path) if kind==2]
+    differences=[n for n,a in zip(build['samples'],physical) if a!=snapshots[n][28:]]
+    result=dict(phase=state['phase'],state_sha256=sha(job/'state.json'),processes=processes,data_bytes=data_bytes,physics_samples=complete,
+                physics_mismatches=len(differences),first_physics_mismatch=next(iter(differences),None),
+                live_mappings=live_images(str(job/'build'/build['original']['exe']),job/'build/opengl32.dll'),production_accepted=False)
+    (CHECKOUT/'artifacts/verification/rust/native-vector-progress.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('name');review(p.parse_args().name)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('name',nargs='?');p.add_argument('--reconcile',action='store_true');a=p.parse_args();reconcile() if a.reconcile else review(a.name)

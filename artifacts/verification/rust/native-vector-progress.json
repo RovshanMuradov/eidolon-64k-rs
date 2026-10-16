@@ -1,0 +1,53 @@
+{
+  "phase": "running",
+  "state_sha256": "f7128d2a2cb157a8c366bac6580c70fddb9b996c8df5f65e211857b03ba22186",
+  "processes": [
+    {
+      "pid": 2500922,
+      "exists": true,
+      "state": "S",
+      "ppid": 1311,
+      "sid": 2500922,
+      "start_ticks": 73377653,
+      "command": "python -u tools/capture/rust/native_vectors.py native-d28-vectors01",
+      "cwd": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24",
+      "environment": {
+        "AGENT": "1"
+      }
+    },
+    {
+      "pid": 2500943,
+      "exists": true,
+      "state": "S",
+      "ppid": 2500922,
+      "sid": 2500922,
+      "start_ticks": 73377741,
+      "command": "bash /home/rovshan/Work/asm/Eidolon/.worktrees/T24/tools/wine-headless /home/rovshan/Work/asm/Eidolon/data/verification/rust/native-d28-vectors01/build/Eidolon - Poo-Brain (native).exe",
+      "cwd": "/home/rovshan/Work/asm/Eidolon/.worktrees/T24",
+      "environment": {
+        "AGENT": "T24",
+        "PULSE_SINK": "eidolon_T24_native_vectors"
+      }
+    }
+  ],
+  "data_bytes": 29992882001,
+  "physics_samples": 36,
+  "physics_mismatches": 0,
+  "first_physics_mismatch": null,
+  "live_mappings": [
+    {
+      "pid": 2501133,
+      "candidate_mapped": true,
+      "helper_mapped": true,
+      "mappings": [
+        "003e0000-003e1000 r-xp 00000000 00:1d 10522893                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/native-d28-vectors01/build/Eidolon - Poo-Brain (native).exe",
+        "003e1000-003ef000 rwxp 00001000 00:1d 10522893                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/native-d28-vectors01/build/Eidolon - Poo-Brain (native).exe",
+        "7a3c0000-7a3c1000 r-xp 00000000 00:1d 10522891                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/native-d28-vectors01/build/opengl32.dll",
+        "7a453000-7a454000 r-xp 00023000 00:1d 10522891                           /home/rovshan/Work/asm/Eidolon/data/verification/rust/native-d28-vectors01/build/opengl32.dll"
+      ],
+      "wine_executable": "/usr/lib/wine/x86_64-unix/wine-preloader",
+      "wine_executable_sha256": "c877731fa29324bb8a9bfba575e9ca47ddfe9d97ea07587d71afda3bd6208e96"
+    }
+  ],
+  "production_accepted": false
+}
