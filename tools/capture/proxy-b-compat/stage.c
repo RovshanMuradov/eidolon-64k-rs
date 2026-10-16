@@ -80,7 +80,8 @@ DWORD stage_canary_return(DWORD *registers, BYTE *fp) {
     if(observed_esp!=c->entry+4+c->argbytes || registers[7]!=c->expected ||
        memcmp(c->fp,fp,512)) equal=FALSE;
     DWORD ordinal=++canary_counts[c->api];
-    if(ordinal==1 || !equal || (c->api==14 && frame>=5760 && frame<=5762)) {
+    if(ordinal==1 || !equal || (c->api==14 && frame>=5760 && frame<=5762) ||
+       (full_run && c->api==4 && frame==27000)) {
         char name[128], before_hash[65], after_hash[65];
         snprintf(name,sizeof(name),"abi-%02lu-%lu-before-gpr.bin",c->api,ordinal); save(name,c->registers,36);
         snprintf(name,sizeof(name),"abi-%02lu-%lu-after-gpr.bin",c->api,ordinal); save(name,registers,36);
@@ -172,8 +173,8 @@ static void stage_summary(void) {
     LARGE_INTEGER wall; QueryPerformanceCounter(&wall);
     record("throughput",",\"frames\":%lu,\"wall_ticks\":%lld,\"frequency\":%lld",
            frame,wall.QuadPart-first_present_wall.QuadPart,wall_frequency.QuadPart);
-    record("planned_partial_stop",",\"frames\":%lu,\"exit_code\":0,\"finalized\":false,"
-           "\"dropped_frames\":0,\"dropped_audio_sample_frames\":0,\"errors\":[]",frame);
+    if(!full_run) record("planned_partial_stop",",\"frames\":%lu,\"exit_code\":0,\"finalized\":false,"
+                        "\"dropped_frames\":0,\"dropped_audio_sample_frames\":0,\"errors\":[]",frame);
     stage_flush_log();
 }
 
@@ -207,7 +208,9 @@ static void stage_loaded(void) {
 
 DWORD core_position(DWORD *s) {
     if(GetCurrentThreadId()!=main_tid || s[0]!=0x407b97) fail("position_route_or_thread");
-    if(frame==stop_frames) { stage_summary(); ExitProcess(0); }
+    if(!full_run && frame==stop_frames) { stage_summary(); ExitProcess(0); }
+    if(full_run && (frame>27000 || native_queries!=frame)) fail("native_query_sequence");
+    native_queries++;
     if(!frame) {
         native_physics("first-query");
         Canary *canary=TlsGetValue(canary_tls);

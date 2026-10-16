@@ -14,6 +14,7 @@ import struct
 import sys
 
 import zstandard
+from observations import events as read_events
 
 
 def sha(path):
@@ -48,7 +49,8 @@ def main():
     acquisition=args.acquisition.resolve()
     m=json.loads(acquisition.read_text())
     assert m['reference_variant']=='D9-restored-native' and acquisition.name.endswith('-acquisition.json')
-    assert m['status']=='partial' and m['launcher_exit']==0 and not m['supervisor_timeout']
+    full=m.get('full_run',False)
+    assert m['status']==('complete' if full else 'partial') and m['launcher_exit']==0 and not m['supervisor_timeout']
     assert not m['reference_eligible'] and not m['finalized'] and m['first_failed_check'] is None
     assert m['resources']['prefix_processes_released'] and m['resources']['private_sink_unloaded'] and not m['resources']['errors']
     roots=dict(checkout=Path.cwd(),shared=Path(os.environ['EIDOLON_ROOT']),data=Path(os.environ['EIDOLON_DATA']))
@@ -56,7 +58,24 @@ def main():
     artifacts=acquisition.parent
     for name,checksum in m['evidence'].items():
         assert sha(roots['data']/name)==checksum,name
-    events=[json.loads(line) for line in (data/'backend.jsonl').read_text().splitlines()]
+    backend=data/(m['ordered_stream']['path'] if full else 'backend.jsonl')
+    needed={'pre_present','post_present','failure','fault_injected','native_endpoint','native_exit_forward',
+            'planned_partial_stop','native_state','native_resumed','initial_resources','epoch','compat_context',
+            'shader_source','shader_program','loaded_module_bytes','scene_anchor_locals','synth_complete',
+            'readback_begin','readback_end','stability_check','synth_launch','synth_thread','native_thread_exit',
+            'wave_open','wave_prepare','wave_write','full_run'}
+    events=[]; positions=[]; expected_seq=1
+    for e in read_events(backend):
+        if 'seq' not in e:
+            assert e['event']=='backend_probe' and e['result']=='distinct_backend' and e['error']==0
+            continue
+        assert e['seq']==expected_seq
+        expected_seq+=1
+        if e['event'] in needed:
+            events.append(e)
+        if e['event']=='clock' and e['api']=='waveOutGetPosition':
+            assert e['value']==e['n']*735 and e['wType']==2
+            positions.append(e['n'])
     get=lambda name: [e for e in events if e['event']==name]
     def one(name):
         event,=get(name)
@@ -64,8 +83,19 @@ def main():
     def binding(path,root):
         path=Path(path).resolve()
         return dict(root=root,path=str(path.relative_to(roots[root])),sha256=sha(path))
-    stop=one('planned_partial_stop'); count=stop['frames']
-    assert count==5763==m['staged_scope']['sequential_frames'] and stop['exit_code']==0 and not stop['finalized']
+    stop=one('native_endpoint' if full else 'planned_partial_stop'); count=stop['frames']
+    assert count==(27000 if full else 5763)==m['staged_scope']['sequential_frames'] and stop['exit_code']==0
+    if full:
+        assert positions==list(range(27001)) and not get('planned_partial_stop')
+        assert stop['queries']==27001 and stop['sample_cursor']==19845000 and stop['last_present']==26999
+        assert stop['caller']==0x40861e and stop['eax']==0xffffffff and stop['edi']==0
+        assert stop['seconds_f32_bits']==0x43e10000 and stop['beat_f32_bits']==0x44160000
+        assert one('full_run')['wrapper_stop_enabled'] is False
+        assert one('native_exit_forward')['registers_fp_equal'] and one('native_exit_forward')['tail_jump_original_slot']
+        for kind in ('gpr','fx'):
+            assert (data/f'native-exit-before-{kind}.bin').read_bytes()==(data/f'native-exit-after-{kind}.bin').read_bytes()
+    else:
+        assert not stop['finalized']
     frames=get('pre_present')
     assert [e['n'] for e in frames]==[e['n'] for e in get('post_present')]==list(range(count))
     assert not get('failure') and not get('fault_injected') and all(e['state_equal'] for e in frames)
@@ -117,8 +147,9 @@ def main():
     envelope_path=artifacts/f"{m['run_id']}-pcm-observations.json"
     write(envelope_path,dict(kind='D9-restored-native-pcm-observations',run_id=m['run_id'],reference_eligible=False,
           acquisition=binding(acquisition,'checkout'),input=m['input'],dependency=m['dependency'],build_id=build['build_id'],
-          backend=binding(data/'backend.jsonl','data'),observations=[e for e in events if e['event'] in (*pcm_names,
-          'synth_launch','synth_thread','native_thread_exit','wave_open','wave_prepare','wave_write','epoch','planned_partial_stop')]))
+          backend=binding(backend,'data'),observations=[e for e in events if e['event'] in (*pcm_names,
+          'synth_launch','synth_thread','native_thread_exit','wave_open','wave_prepare','wave_write','epoch','planned_partial_stop',
+          'native_endpoint','native_exit_forward')]))
     complete=pcm_events['synth_complete']
     pcm=dict(submitted_bytes=pcm_events['readback_begin']['bytes'],initial_tick=complete['initial_tick'],final_tick=complete['final_tick'],
              final_cursor_offset=int(complete['final_cursor'],16)-int(pcm_events['readback_begin']['base'],16),
@@ -133,9 +164,10 @@ def main():
                 restoration=dict(decision='D12',transformation='450-compatibility',
                     raw_shader_sha256='57cdc43590d369b0744da71530cf879b6099cc6d80797809b59abd0fa5cc2182',
                     effective_shader_sha256='cb62ed7fd0878836b763b892f64cb9e4a789f49f304d32d0a2fc334aecb433ea',shim_sha256=shims))
-    termination=dict(reason='partial_stop',end_tick=count,audio_position=count*735,audio_position_num=count*44100,
+    termination=dict(reason='natural_exit' if full else 'partial_stop',end_tick=count,audio_position=count*735,audio_position_num=count*44100,
                      audio_position_den=60,exit_code=0,timeline_end_tick=None,
-                     evidence='planned_partial_stop_at_next_waveOutGetPosition_after_5763_successful_presents;native_exit0')
+                      evidence=('native_ExitProcess_call_0x408618_after_query27000_and_present26999;native_exit0' if full else
+                                'planned_partial_stop_at_next_waveOutGetPosition_after_5763_successful_presents;native_exit0'))
     initial={e['phase']+'-'+e['role']:e['sha256'] for e in get('native_state')}
     fp={}
     for name in ('entry-main','prethread-main','first-query-main'):
@@ -162,16 +194,16 @@ def main():
                   initial_state_sha256=sha(data/'native-prethread-rng.bin')),initial_state_sha256=digest(initial))
     command=[m['run_id'] if arg=='<fresh-id>' else arg for arg in m['reproduce']]
     layout=frames[0]
-    manifest=dict(schema='eidolon-partial-reference-draft-4',run_id=m['run_id'],source=source,
-         capture=dict(kind='controlled-partial',tool_sha256=capture_tool_sha256,command=command),conditions=conditions,
+    manifest=dict(schema='eidolon-reference-draft-4' if full else 'eidolon-partial-reference-draft-4',run_id=m['run_id'],source=source,
+          capture=dict(kind='controlled-reference' if full else 'controlled-partial',tool_sha256=capture_tool_sha256,command=command),conditions=conditions,
          video=dict(width=1920,height=1080,row_stride=7680,pixel_format='rgba8',row_order='bottom-up',
                     color_space=f"native attachment GL_{layout['encoding']:04x}; framebuffer sRGB {layout['sRGB_enabled']}",
-                    frame_count=count,index=index_path.name,index_sha256=sha(index_path),storage='reference'),
+                     frame_count=count,index=index_path.name,index_sha256=sha(index_path),storage=m.get('storage','reference')),
          audio=audio,scenes=[dict(id=f"row-{r['row']:02d}",first=r['first'],last=min(r['last'],count-1))
                             for r in m['staged_scope']['native_rows'] if r['first']<count],termination=termination,
-         completion=dict(finalized=False,frames_observed=count,frames_hashed=count,audio_sample_frames=19964544,
+          completion=dict(finalized=full,frames_observed=count,frames_hashed=count,audio_sample_frames=19964544,
                          dropped_frames=stop['dropped_frames'],dropped_audio_sample_frames=stop['dropped_audio_sample_frames'],errors=stop['errors'],pcm=pcm))
-    observations=dict(acquisition=binding(acquisition,'checkout'),ordered_runtime=binding(data/'backend.jsonl','data'),
+    observations=dict(acquisition=binding(acquisition,'checkout'),ordered_runtime=binding(backend,'data'),
                       native_exit=binding(data/'runner.log','data'),tool_inventory=binding(data/'capture-tool-inventory.json','data'),
                       pcm_completion=binding(envelope_path,'checkout'))
     for name in ('node-state.bin','node-canaries.bin','native-prethread-rng.bin','native-entry-physics.bin','native-first-query-physics.bin'):
@@ -180,13 +212,14 @@ def main():
     loaded={e['role']:e['file_sha256'] for e in get('loaded_module_bytes')}
     identity=m['executed_file_observation']
     assert identity['before_sha256']==identity['after_sha256']==source['exe_sha256']
-    assert target['raw_sha256']==get('scene_anchor_locals')[-1]['original_source_sha256']==source['restoration']['raw_shader_sha256']
+    final_source=(stop if full else get('scene_anchor_locals')[-1])['original_source_sha256']
+    assert target['raw_sha256']==final_source==source['restoration']['raw_shader_sha256']
     assert {name:loaded[name.removesuffix('.dll')+'-shim'] for name in shims}==shims
     producer=dict(m,acquisition=binding(acquisition,'checkout'),package_tool=binding(package_snapshot,'shared'),
        reference_contract=dict(schema=manifest['schema'],source=source,capture_tool_sha256=capture_tool_sha256,
-            video_index_sha256=sha(index_path),frame_count=count,audio_sha256=audio['sha256'],termination=termination,finalized=False,
+             video_index_sha256=sha(index_path),frame_count=count,audio_sha256=audio['sha256'],termination=termination,finalized=full,
             exe_before_sha256=identity['before_sha256'],exe_after_sha256=identity['after_sha256'],
-            target_memory_before_sha256=target['raw_sha256'],target_memory_after_sha256=get('scene_anchor_locals')[-1]['original_source_sha256'],
+             target_memory_before_sha256=target['raw_sha256'],target_memory_after_sha256=final_source,
             loaded_shim_sha256={name:loaded[name.removesuffix('.dll')+'-shim'] for name in shims},observations=observations))
     producer_path=artifacts/f"{m['run_id']}.json"
     write(producer_path,producer)
@@ -221,8 +254,8 @@ def main():
                     compiler=build['compiler'],commands=build['commands']),transformation='450-compatibility',calls=calls,fallback=None)
     sidecar_path=artifacts/f"{m['run_id']}-eligibility.json"; write(sidecar_path,sidecar)
     manifest['provenance']=dict(eligibility=binding(sidecar_path,'checkout'),native_image=binding(image_path,'data'))
-    final=artifacts/f"{m['run_id']}-partial-reference.json"; write(final,manifest)
-    print(json.dumps(dict(status='PUBLISHED_PARTIAL_FOR_REVIEW',manifest=str(final),frames=count,
+    final=artifacts/f"{m['run_id']}-{'reference' if full else 'partial-reference'}.json"; write(final,manifest)
+    print(json.dumps(dict(status='PUBLISHED_FULL_FOR_REVIEW' if full else 'PUBLISHED_PARTIAL_FOR_REVIEW',manifest=str(final),frames=count,
                           raw_frames=sum('raw_zst' in row for row in index),reference_accepted=False)))
 
 

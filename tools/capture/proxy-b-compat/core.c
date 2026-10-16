@@ -30,6 +30,9 @@ static FARPROC real_shader, real_use, real_rect, real_teximage;
 static DWORD creations, substitutions, target_program, draws;
 static BOOL compatibility, context_seen;
 static BOOL boundary_probe;
+static BOOL full_run;
+static DWORD native_queries;
+static void full_initialize(void);
 static HDC owning_dc;
 static HGLRC owning_context;
 static void stage_initialize(CONTEXT *context);
@@ -287,6 +290,11 @@ void eidolon_core_initialize(CONTEXT *context) {
         stop_frames=strtoul(small,NULL,10);
         record("boundary_probe",",\"sequential_frames\":%lu,\"predicted_boundary\":%lu,\"full_reference\":false",stop_frames,stop_frames-3);
     }
+    if (GetEnvironmentVariableA("EIDOLON_B_FULL",small,sizeof(small))) {
+        if(strcmp(small,"27000") || boundary_probe || !compatibility) fail("full_run_scope");
+        full_run=TRUE;
+        full_initialize();
+    }
     record("compatibility_experiment",",\"transformation\":\"%s\",\"expected_raw_sha256\":\"%s\",\"reference_eligible\":false",mode,expected_sha);
     slot(0x40905c,(FARPROC)compat_rect,&real_rect);
     slot(0x409044,(FARPROC)compat_teximage,&real_teximage);
@@ -302,3 +310,4 @@ void eidolon_core_initialize(CONTEXT *context) {
 #include "native.c"
 #include "nodes.c"
 #include "consumer.c"
+#include "full.c"
