@@ -5,19 +5,21 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md) · How the port works: [docs/rust](docs/rust/README.md)
 
+**Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The work was done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
+
 ## Requirements
 
 | | Windows | Linux | macOS |
 |---|---|---|---|
-| Watch (`make run`) | ✅ native | ✅ Wine | ❌ OpenGL 4.1 only |
+| Watch (`make run`) | ✅ native, untested | ✅ Wine | ❌ OpenGL 4.1 only |
 | Check audio (`make verify-audio`) | ✅ | ✅ | ✅ Intel Macs |
-| Check frames (`make verify`) | ✅ native | ✅ Wine + gamescope | ❌ |
+| Check frames (`make verify`) | ✅ native, untested | ✅ Wine + gamescope, tested | ❌ |
 | Capture your own reference (`make reference`) | ❌ | ✅ Wine + gamescope | ❌ |
 
 Install:
 
 - **All:** [rustup](https://rustup.rs). It installs the pinned toolchain and the `i686-pc-windows-gnu` target on first build; a distribution Rust without rustup cannot build this target.
-- **Windows:** [MSYS2](https://www.msys2.org), then `pacman -S make diffutils mingw-w64-i686-gcc`. Run the commands below in the MSYS2 shell.
+- **Windows:** install rustup with the GNU host (`rustup-init --default-host x86_64-pc-windows-gnu`; the MSVC host would need Visual Studio build tools) and [MSYS2](https://www.msys2.org) with `pacman -S make diffutils mingw-w64-i686-gcc`. Run the commands below in the **MSYS2 MINGW32** shell, with `~/.cargo/bin` on `PATH`. The Windows path is written for native use but has not been run on Windows.
 - **Linux:** `make`, Python 3.11+, Wine with 32-bit support, MinGW-w64 for i686. For `make verify` and `make reference` also `gamescope`, `pactl` (PulseAudio or PipeWire), `bsdtar` and `openssl`.
 
 | Distribution | MinGW-w64 package |
@@ -51,9 +53,11 @@ make verify
 **3. Frames on any other GPU**, Linux only, about 2–3 hours:
 
 ```sh
-make reference    # downloads the original and gm.dls, captures it on your GPU into verify/local/
+make reference    # captures the original on your GPU into verify/local/
 make verify       # captures the Rust build and compares it with verify/local/
 ```
+
+`make reference` needs the original archive `eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip` from [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip). Put it in the repository root, or pass its path: `make reference ARCHIVE=~/Downloads/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip`. Without it, the archive is downloaded from scene.org mirrors. It also downloads `gm.dls` from the Microsoft DirectX redistributable on web.archive.org. Both are checked against pinned SHA-256.
 
 Each command ends with `PASS` or `FAIL` and the first differing frames. Frames are rendered by the GPU, so shipped frame hashes match only on the same GPU and driver; audio matches everywhere. Details: [docs/rust/verification.md](docs/rust/verification.md).
 
@@ -98,7 +102,23 @@ Each command ends with `PASS` or `FAIL` and the first differing frames. Frames a
 - Each task ran in its own git worktree and branch with a fixed write zone; the coordinator merged finished branches. Agents agreed shared formats through handoff files with one owner, never through the coordinator.
 - Verification was always a separate agent from the one producing the result, and compared against the original's reference, never against values computed by the port.
 - GPU runs were serialized; runs longer than 45 minutes were detached and polled.
-- Coordinators: opencode with a goal plugin, later Claude Code. Workers: OpenAI models through opencode and Codex CLI, and Claude Opus.
+- Harnesses: OpenCode 2 (development build 0.0.0-dev-20987, with a `/goal` coordinator plugin) for steps 1–3 and the start of step 4; Claude Code 2.1.299 as coordinator from the second half of step 4.
+
+| Harness | Model | Reasoning effort | Sessions / calls | Use |
+|---|---|---|---|---|
+| OpenCode 2 | `gpt-6-astra` | xhigh (2 sessions low) | 55 sessions | Coordinator and most workers, steps 1–4 |
+| OpenCode 2 | `gpt-6.1-sol` | high | 7 sessions | Audit of the size candidate, launch diagnosis, license check |
+| Claude Code | `claude-opus-5-5` | high; xhigh for the size worker T30 | 834 API calls | Coordinator and the step 4 size worker |
+
+| Tokens | OpenCode 2 | Claude Code | Total |
+|---|---:|---:|---:|
+| Input, uncached | 10 736 608 | 1 672 | 10 738 280 |
+| Input, cache read | 479 365 248 | 259 642 176 | 739 007 424 |
+| Input, cache write | — | 7 022 603 | 7 022 603 |
+| Output | 1 624 418 | 197 313 | 1 821 731 |
+| of it reasoning | 977 153 | not reported | — |
+
+Counted from the harnesses' local session logs for this project, from the first session (15 October 2026, 15:27 UTC) to the end of step 4 work (17 October 2026, 07:40 UTC); the later documentation and publication session is not included.
 
 **Tools.**
 

@@ -55,9 +55,10 @@ endif
 	else echo "FAIL frames: first differences (frame, hash):"; diff $(REF)/frames.sha256 $(FRAMES) | head -6; exit 1; fi
 
 # Capture the original EXE on this machine's GPU into verify/local (Linux only).
+# ARCHIVE=path/to/eidolon_..._rc4.zip uses a downloaded archive; otherwise it is downloaded.
 reference:
 ifeq ($(PLATFORM),Linux)
-	python3 tools/reference/capture_original.py
+	python3 tools/reference/capture_original.py $(if $(ARCHIVE),--archive "$(ARCHIVE)")
 else
 	@echo "make reference runs the original under Wine with capture proxies and needs Linux." >&2; exit 1
 endif
