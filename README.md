@@ -102,23 +102,16 @@ Each command ends with `PASS` or `FAIL` and the first differing frames. Frames a
 - Each task ran in its own git worktree and branch with a fixed write zone; the coordinator merged finished branches. Agents agreed shared formats through handoff files with one owner, never through the coordinator.
 - Verification was always a separate agent from the one producing the result, and compared against the original's reference, never against values computed by the port.
 - GPU runs were serialized; runs longer than 45 minutes were detached and polled.
-- Harnesses: OpenCode 2 (development build 0.0.0-dev-20987, with a `/goal` coordinator plugin) for steps 1–3 and the start of step 4; Claude Code 2.1.299 as coordinator from the second half of step 4.
+- Harnesses: OpenCode 2 for steps 1–3 and the start of step 4, then Claude Code as coordinator.
 
-| Harness | Model | Reasoning effort | Sessions / calls | Use |
-|---|---|---|---|---|
-| OpenCode 2 | `gpt-6-astra` | xhigh (2 sessions low) | 55 sessions | Coordinator and most workers, steps 1–4 |
-| OpenCode 2 | `gpt-6.1-sol` | high | 7 sessions | Audit of the size candidate, launch diagnosis, license check |
-| Claude Code | `claude-opus-5-5` | high; xhigh for the size worker T30 | 834 API calls | Coordinator and the step 4 size worker |
+| Harness | Model | Effort | Sessions | Input | Output | Cache |
+|---|---|---|---:|---:|---:|---:|
+| OpenCode 2 | GPT-6 Astra | xhigh | 55 | 10.0 M | 2.5 M | 448.1 M |
+| OpenCode 2 | GPT-6.1 Sol | high | 7 | 0.7 M | 0.1 M | 31.3 M |
+| Claude Code | Claude Opus 5.5 | high | — | < 0.1 M | 0.2 M | 266.7 M |
+| **Total** | | | | **10.7 M** | **2.8 M** | **746.0 M** |
 
-| Tokens | OpenCode 2 | Claude Code | Total |
-|---|---:|---:|---:|
-| Input, uncached | 10 736 608 | 1 672 | 10 738 280 |
-| Input, cache read | 479 365 248 | 259 642 176 | 739 007 424 |
-| Input, cache write | — | 7 022 603 | 7 022 603 |
-| Output | 1 624 418 | 197 313 | 1 821 731 |
-| of it reasoning | 977 153 | not reported | — |
-
-Counted from the harnesses' local session logs for this project, from the first session (15 October 2026, 15:27 UTC) to the end of step 4 work (17 October 2026, 07:40 UTC); the later documentation and publication session is not included.
+Tokens from the harnesses' local session logs, 15–17 October 2026; output includes reasoning, cache counts cache reads and writes. The later documentation session is not included.
 
 **Tools.**
 
