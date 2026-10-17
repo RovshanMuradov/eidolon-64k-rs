@@ -18,7 +18,7 @@ pub unsafe fn eidolon_random_tick(n:*mut Node,_state:*mut State,seed:*mut [i64;2
         let pink=(((*n).work[0]+(*n).work[1]+(*n).work[2]+white*v(0.18479990959167480))*v(0.19999992847442627)).clamp(v(1.0),v(-1.0));
         let mut last=white; let mut mask=S::zero().eq(S::zero());
         loop {
-            last=last*(v(0.125)*v(0.5)); (*n).work[3]=(*n).work[3]+(last&mask);
+            last=last*v(0.0625); (*n).work[3]=(*n).work[3]+(last&mask);
             mask=(*n).work[3].abs().gt(v(1.0));
             if mask.is_zero() { break; }
             (*n).work[3]=(*n).work[3]-(last&mask); last=random(&mut *seed);
