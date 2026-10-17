@@ -115,6 +115,7 @@ pub(super) unsafe fn dispatch(n:*mut Node) {
         id=>super::nodes::eidolon_node_tick(n,state,id),
     }
 }
+#[inline(never)]
 unsafe fn midi(r:*mut Runtime,channel:u32,mut value:i32,cc:u32) {
     if cc==0 { value-=128; }
     if cc>=112 {
