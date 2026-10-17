@@ -1,0 +1,10 @@
+# CG29 runtime contract
+- [V] Public calls: `initialize()` before consumers; `sources(0..30)` returns NUL-terminated shared GLSL strings; `loading_source()` is recipe30; `table(id)` returns exact LE bytes; `curve_word(i)` is a bitcast.
+- [V] Input is compiled from `EIDOLON_COMPACT_GRAPHICS_BLOB`; no runtime file/network access or new Windows imports. T26's packer compresses the embedded raw stream together with the engine and decoder.
+- [V] CG29v1 starts with `CG29\x01\x0c`, then12 table entries `(mode:u8,stride:u8,decoded_size:ULEB32,encoded_size:ULEB32,payload)` in exported ID order, followed by `(pool_size:ULEB32,NUL-delimited ASCII pool,recipe_count:u8,recipes)`; each recipe is `(length:ULEB32,fragment_ids:ULEB32[])`.
+- [V] Modes0/1/2 are raw/ULEB32/byte-column transpose;3 is descriptor-derived curve-role transpose;4 adds integer segment-tangent prediction;5 adds ULEB32;6 adds central-difference/2 using the NaN sign selector. Table0 mode is a compile-time specialization constant.
+- [V] Modes4–6 reserve quiet-NaN payloads because every original curve word is finite; residuals encode differences in IEEE bit patterns. Mode6 central predictions are used only when integer halving stays normal; the decoder performs no FP arithmetic or FP-state modification.
+- [V] Persistent allocations live for process lifetime; repeated initialization is a no-op after publication. Concurrent redundant initialization may retain an extra immutable allocation; T26 initializes once during startup.
+- [V] Tables consume62772 decoded bytes; role scratch consumes9117 bytes while decoding; strings reference the embedded blob. Pointer arrays and allocation overhead depend on the target; no pre-rendered media is stored.
+- [V] Snapshot manifests pin this source and the candidate manifests. For scoped/central shader names, first invert the function-family local map, then the global map; all recipes keep original program order.
+- [?] CPU byte/AST checks are not pixel acceptance; T27 must screen the actual integrated EXE hash. Current T26 production selection uses older tangent mode4, while mode5/6 and scoped names await matched joint packing and pixels.

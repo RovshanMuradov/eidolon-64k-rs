@@ -1,4 +1,5 @@
 [toolchain]
 channel = "1.97.1"
 profile = "minimal"
+components = ["rust-src"]
 targets = ["i686-pc-windows-gnu"]

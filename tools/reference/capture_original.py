@@ -62,13 +62,22 @@ def original_exe(work, archive):
     return exe
 
 
-def sample_bank(work):
-    bank = work / 'data/reference/dependencies/gm.dls'
+def sample_bank():
+    """The system General MIDI bank the original reads; shared by make reference and make run-size."""
+    data = ROOT / '.build/data'
+    bank = data / 'reference/dependencies/gm.dls'
     if not bank.exists():
         step('downloading gm.dls (Microsoft DirectX redistributable via web.archive.org)')
         subprocess.run([sys.executable, str(ROOT / 'tools/capture/dependencies/gm_dls.py'), 'acquire'],
-                       env=dict(os.environ, EIDOLON_DATA=str(work / 'data')), check=True)
+                       env=dict(os.environ, EIDOLON_DATA=str(data)), check=True, stdout=subprocess.DEVNULL)
     return bank
+
+
+def install_bank(prefix, bank):
+    for arch in ('system32', 'syswow64'):
+        target = Path(prefix) / f'drive_c/windows/{arch}/drivers/gm.dls'
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(bank, target)
 
 
 def wine_backends():
@@ -165,7 +174,7 @@ def main():
     work = args.work.resolve()
     work.mkdir(parents=True, exist_ok=True)
     exe = original_exe(work, args.archive)
-    bank = sample_bank(work)
+    bank = sample_bank()
     build = build_proxies(work)
     for name in ('opengl32.dll', 'winmm.dll'):
         shutil.copyfile(build / name, exe.parent / name)
@@ -174,10 +183,7 @@ def main():
     shutil.rmtree(prefix, ignore_errors=True)
     step('creating a fresh Wine prefix with gm.dls installed')
     headless.prepare_prefix(prefix)
-    for arch in ('system32', 'syswow64'):
-        target = prefix / f'drive_c/windows/{arch}/drivers/gm.dls'
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(bank, target)
+    install_bank(prefix, bank)
 
     output = work / 'output'
     shutil.rmtree(output, ignore_errors=True)

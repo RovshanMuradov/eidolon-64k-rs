@@ -1,0 +1,6 @@
+// Original GL uniform names (non-compact shader sources).
+pub const TIME_RESOLUTION: &str = "uTimeResolution\0";
+pub const CLOUDS: &str = "uClouds\0";
+pub const INPUTS: &str = "sTD2DInputs\0";
+pub const ROTATION: [&str; 4] = ["uMainCharacterRotation\0", "uEvilCharacterRotation1\0", "uEvilCharacterRotation2\0", "uEvilCharacterRotation3\0"];
+pub static UNIFORMS: [(u32, &str); 37] = [(36, "uOrigin\0"), (37, "uAngles\0"), (38, "uFovBias\0"), (39, "uBlurSize\0"), (40, "uSharpDistance\0"), (41, "uMainCharacterPos\0"), (42, "uMainBotMood\0"), (43, "uTransmissionProgress\0"), (44, "uDistortUI\0"), (45, "uHabitatDoor\0"), (46, "uBloomKernelSize\0"), (52, "uCredits\0"), (53, "uCreditColor\0"), (54, "uCreditsPos\0"), (55, "uCreditsDir\0"), (56, "uCreditsFade\0"), (62, "uTrain\0"), (63, "uFudge\0"), (69, "uTimelapse\0"), (70, "uBaseLights\0"), (71, "uBeam\0"), (77, "uHangarDoor\0"), (78, "uHangarDoorLight\0"), (85, "uEvilCharacterPos1\0"), (86, "uEvilCharacterPos2\0"), (87, "uEvilCharacterInnerBodyRotation1\0"), (88, "uHatch\0"), (89, "uHatchColor\0"), (101, "uCargoBayDoors\0"), (102, "uEvilCharacterInnerBodyRotation2\0"), (108, "uMaintenanceTunnel\0"), (114, "uWalkwayAnimate\0"), (115, "uEolBossPosition\0"), (116, "uEolBossRotation\0"), (117, "uEolBossAnimation0\0"), (118, "uEolBossAnimation1\0"), (119, "uPillarIntoBoss\0")];

@@ -76,5 +76,5 @@ The port is exact because it copies the original's arithmetic, not just its form
 | Start of playback | Plays while the synth thread is still writing the buffer | Waits until the whole soundtrack is synthesized (a few minutes) |
 | Instrument samples | Reads the system `gm.dls` | Embeds the 15 samples it uses |
 | Shader program 0 | `#version 450` | `#version 450 compatibility`, needed by strict drivers; the reference was captured with the same header |
-| Size | 60 928 bytes, packed | about 730 KB, unpacked |
+| Size | 60 928 bytes, packed | about 730 KB unpacked; 48 128 bytes in the size-optimized build ([size/](../../size/README.md)) |
 | Extra modes | — | `--capture`, `--pcm-sha256`, diagnostic streams |

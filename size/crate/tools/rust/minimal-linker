@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""Rust i686 GNU linker without implicit CRT/TLS/exception/pthread startup."""
+import os
+from pathlib import Path
+import sys
+import shutil
+import json
+
+removed = {'-lmingw32', '-lmingwex', '-lmoldname', '-lmsvcrt', '-lgcc', '-lgcc_eh', '-lpthread'}
+args = [a for a in sys.argv[1:] if a not in removed and Path(a).name not in {'rsbegin.o', 'rsend.o', 'crt2.o', 'crtbegin.o', 'crtend.o'}]
+if any(Path(a).name.startswith('libstd-') for a in args):
+    raise SystemExit('minimal-linker requires no_std; use it only for eidolon-runtime sizecoded builds')
+if os.environ.get('EIDOLON_SAVE_LINK'):
+    target = Path(os.environ['EIDOLON_SAVE_LINK'])
+    target.mkdir(parents=True, exist_ok=True)
+    objects = []
+    for a in args:
+        path = Path(a)
+        if path.is_file() and path.suffix in ['.o', '.rlib', '.a']:
+            dest = target / path.name
+            shutil.copyfile(path, dest)
+            objects.append(str(dest))
+    (target / 'link.json').write_text(json.dumps({'args': args, 'objects': objects}, indent=2) + '\n')
+os.execvp('i686-w64-mingw32-gcc', ['i686-w64-mingw32-gcc', '-nostdlib', *args])
