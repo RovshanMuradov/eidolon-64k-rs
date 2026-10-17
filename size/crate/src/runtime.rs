@@ -195,7 +195,7 @@ fn run(render: Option<RenderPcm>) -> Result<(), Error> {
         let Some(frame) = engine.evaluate(cursor, true) else {
             observe::snapshot(5, &RuntimeSnapshot::endpoint(presented, contract::Clock::from_samples(cursor), engine.previous_seconds, engine.records));
             #[cfg(feature = "sizecoded")]
-            crate::minimal::endpoint(queries, presented, cursor);
+            { crate::minimal::endpoint(queries, presented, cursor); unsafe { crate::minimal::exit(0) } }
             #[cfg(not(feature = "sizecoded"))]
             eprintln!("EIDOLON_RUNTIME mode={} reason=natural_exit queries={queries} frames={presented} terminal_cursor={cursor}",
                 if playback.is_some() { "playback" } else { "graphics-diagnostic" });
