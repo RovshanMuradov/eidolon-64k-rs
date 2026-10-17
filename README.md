@@ -2,8 +2,6 @@
 
 A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k competition at Revision 2017. It reproduces the original exactly: under controlled capture all 27 000 frames and the whole soundtrack match the original executable byte for byte.
 
-Русская версия: [README.ru.md](README.ru.md)
-
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md)
 
