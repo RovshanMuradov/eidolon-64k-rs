@@ -1,4 +1,4 @@
-//! Instruction-ordered translation of 0x406019..0x4062d0; see analysis/graphics/physics.md.
+//! Instruction-ordered translation of 0x406019..0x4062d0; see docs/en/04-physics.md.
 use crate::fp;
 
 pub const POSITION_NAMES: [&str; 4] = [

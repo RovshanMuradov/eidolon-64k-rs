@@ -1,6 +1,7 @@
 //! Recovered fixed-score Rust synthesis with embedded instrument samples.
 //! Native comparison and build pins: artifacts/rust/audio/standalone.json.
 pub mod data;
+pub mod gmdls_samples;
 pub mod arp;
 pub mod graph;
 pub mod effects;
