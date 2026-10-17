@@ -134,9 +134,12 @@ impl Scheduler {
             for stream in &streams {
                 let (n,s)=(stream.count,d.add(stream.at));
                 // Floor predictor; note-off streams (kind 0) are biased 8788/4096 grid units early.
-                let bias=if stream.info>>24&15==0 {8788} else {0};
-                let mut ticks=0u32;
+                let kind=stream.info>>24&15;
+                let bias=if kind==0 {8788} else {0};
+                let mut ticks=0u32; let mut value=0u8;
                 for i in 0..n {
+                    // Controller values are stored as deltas.
+                    if kind==3 { value=value.wrapping_add(*s.add(3*n+i)); *s.add(3*n+i)=value; }
                     ticks=ticks.wrapping_add(*s.add(i) as u32 | (*s.add(n+i) as u32)<<8);
                     let stamp=((ticks*33075-bias)>>12).wrapping_add_signed(*s.add(2*n+i) as i8 as i32);
                     for lane in 0..3 { *s.add(lane*n+i)=(stamp>>(lane*8)) as u8; }

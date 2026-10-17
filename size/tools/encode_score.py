@@ -105,6 +105,9 @@ def encode(streams):
         assert [toff[i] for i, _ in sorted(order)] == [ton[j] + dur[j] for j in regen]
         assert bytes(pl[3]) == bytes(on[3][j] for j in regen)
         durations[k + 1] = dur
+    for info, pl in streams:
+        if (info >> 24) & 15 == 3:
+            pl[3][:] = bytes((pl[3][i] - (pl[3][i - 1] if i else 0)) & 255 for i in range(len(pl[3])))
     out = bytearray(b'')
     for p in range(5):
         for info, pl in streams:
@@ -140,6 +143,10 @@ def decode(header, infos, body):
             t = ton[j] + dur[j]
             off[0][i], off[1][i] = (t - prev) & 255, (t - prev) >> 8; prev = t
             off[3][i] = pl[3][j]
+    for info, pl in streams:
+        if (info >> 24) & 15 == 3:
+            v = 0
+            for i in range(len(pl[3])): v = (v + pl[3][i]) & 255; pl[3][i] = v
     assert q == len(body)
     return streams
 
