@@ -7,59 +7,101 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 
 **Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The work was done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
 
-## Requirements
+## What works where
 
 | | Windows | Linux | macOS |
 |---|---|---|---|
-| Watch (`make run`) | ✅ native, untested | ✅ Wine | ❌ OpenGL 4.1 only |
-| Check audio (`make verify-audio`) | ✅ | ✅ | ✅ Intel Macs |
-| Check frames (`make verify`) | ✅ native, untested | ✅ Wine + gamescope, tested | ❌ |
-| Capture your own reference (`make reference`) | ❌ | ✅ Wine + gamescope | ❌ |
+| Watch: `make run` | native, untested | Wine | ❌ OpenGL 4.1 only |
+| Check audio: `make verify-audio` | ✅ | ✅ | ✅ Intel Macs |
+| Check frames: `make verify` | native, untested | Wine + gamescope, tested | ❌ |
+| Capture your own reference: `make reference` | ❌ | Wine + gamescope, tested | ❌ |
 
-Install:
+Tested on Arch Linux with an NVIDIA GPU. The install commands for other systems follow their standard package names but were not run.
 
-- **All:** [rustup](https://rustup.rs). It installs the pinned toolchain and the `i686-pc-windows-gnu` target on first build; a distribution Rust without rustup cannot build this target.
-- **Windows:** install rustup with the GNU host (`rustup-init --default-host x86_64-pc-windows-gnu`; the MSVC host would need Visual Studio build tools) and [MSYS2](https://www.msys2.org) with `pacman -S make diffutils mingw-w64-i686-gcc`. Run the commands below in the **MSYS2 MINGW32** shell, with `~/.cargo/bin` on `PATH`. The Windows path is written for native use but has not been run on Windows.
-- **Linux:** `make`, Python 3.11+, Wine with 32-bit support, MinGW-w64 for i686. For `make verify` and `make reference` also `gamescope`, `pactl` (PulseAudio or PipeWire), `bsdtar` and `openssl`.
+## 1. Install
 
-| Distribution | MinGW-w64 package |
-|---|---|
-| Arch | `mingw-w64-gcc` |
-| Debian, Ubuntu | `gcc-mingw-w64-i686` |
-| Fedora | `mingw32-gcc` |
+**Arch Linux**
 
-## Watch
+```sh
+sudo pacman -S --needed rustup make python wine mingw-w64-gcc gamescope libpulse libarchive openssl
+rustup default stable
+```
+
+**Debian, Ubuntu**
+
+```sh
+sudo dpkg --add-architecture i386 && sudo apt update
+sudo apt install make python3 wine wine32:i386 gcc-mingw-w64-i686 gamescope pulseaudio-utils libarchive-tools openssl curl
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+**Fedora**
+
+```sh
+sudo dnf install make python3 wine mingw32-gcc gamescope pulseaudio-utils bsdtar openssl
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+**Windows**
+
+1. Install Rust with the GNU host: run [rustup-init.exe](https://rustup.rs) and choose `x86_64-pc-windows-gnu` as the default host.
+2. Install [MSYS2](https://www.msys2.org), open the **MSYS2 MINGW32** shell and run:
+
+```sh
+pacman -S make diffutils mingw-w64-i686-gcc
+export PATH="$PATH:$(cygpath "$USERPROFILE")/.cargo/bin"
+```
+
+Run all following commands in that shell. The first build downloads the pinned Rust toolchain from `rust-toolchain.toml`.
+
+## 2. Get the code
+
+```sh
+git clone <repository-url> eidolon
+cd eidolon
+```
+
+## 3. Watch
 
 ```sh
 make run
 ```
 
-A loading screen stays for a few minutes while the whole soundtrack is synthesized; then the intro plays for 7.5 minutes and exits. Escape quits. On Linux it runs in a 1920×1080 Wine virtual desktop; `RES=1280x720 make run` changes the size.
+A loading screen stays for a few minutes while the soundtrack is synthesized; then the intro plays for 7.5 minutes and exits. Escape quits. On Linux it runs in a 1920×1080 Wine window; `make run RES=1280x720` makes it smaller.
 
-## Verify
+## 4. Verify
 
-**1. Audio**, any machine, a few minutes:
+Each check prints one line: `PASS …` or `FAIL …` with the first differing frames.
+
+**Audio**: any machine, about 3 minutes.
 
 ```sh
 make verify-audio
 ```
 
-**2. Frames on the reference hardware** (NVIDIA RTX 3070 Ti, driver 610.57.04), about 1–1.5 hours:
-
-```sh
-make verify
+```text
+PASS audio: 9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d
 ```
 
-**3. Frames on any other GPU**, Linux only, about 2–3 hours:
+**Frames**: pick the line for your machine. Frames are drawn by the GPU, and different GPUs or drivers round shader math differently, so the shipped frame hashes only fit the hardware they were captured on.
 
-```sh
-make reference    # captures the original on your GPU into verify/local/
-make verify       # captures the Rust build and compares it with verify/local/
+| Your machine | Commands | Time |
+|---|---|---|
+| NVIDIA RTX 3070 Ti, driver 610.57.04, Linux | `make verify` | 1–1.5 h |
+| Any other GPU, Linux | `make reference`, then `make verify` | 2–3 h |
+| Windows | `make verify`; expect `FAIL` unless the GPU and driver match the row above | 1–1.5 h |
+
+```text
+PASS frames: 27000/27000 identical to verify/local/frames.sha256
 ```
 
-`make reference` needs the original archive `eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip` from [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip). Put it in the repository root, or pass its path: `make reference ARCHIVE=~/Downloads/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip`. Without it, the archive is downloaded from scene.org mirrors. It also downloads `gm.dls` from the Microsoft DirectX redistributable on web.archive.org. Both are checked against pinned SHA-256.
+`make reference` captures the original on your GPU into `verify/local/`; `make verify` then compares against it instead of the shipped hashes. It needs the original archive [eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip): put it in the repository root, pass it as `make reference ARCHIVE=~/Downloads/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip`, or let the command download it. It also downloads `gm.dls` from the Microsoft DirectX redistributable on web.archive.org. Both files are checked against pinned SHA-256.
 
-Each command ends with `PASS` or `FAIL` and the first differing frames. Frames are rendered by the GPU, so shipped frame hashes match only on the same GPU and driver; audio matches everywhere. Details: [docs/rust/verification.md](docs/rust/verification.md).
+During frame checks the GPU renders in an invisible window; leave the machine otherwise idle. On Windows the capture window is 1920×1080 and needs a monitor at least that large. Details: [docs/rust/verification.md](docs/rust/verification.md).
+
+**Unit tests**: `make test`, a few seconds.
+
+## All commands
 
 | Command | What it does |
 |---|---|
