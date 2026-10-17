@@ -5,7 +5,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md) · How the port works: [docs/rust](docs/rust/README.md)
 
-**Size.** A size-optimized build of the port takes **48 128 bytes**, 21 % less than the 60 928-byte original, with the same frames and sound byte for byte: [size/](size/README.md).
+**Size.** A size-optimized build of the port takes **47 561 bytes**, 22 % less than the 60 928-byte original, with the same frames and sound byte for byte: [size/](size/README.md).
 
 **Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The work was done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
 
@@ -17,7 +17,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 | Check audio: `make verify-audio` | ✅ | ✅ | ✅ Intel Macs |
 | Check frames: `make verify` | native, untested | Wine + gamescope, tested | ❌ |
 | Capture your own reference: `make reference` | ❌ | Wine + gamescope, tested | ❌ |
-| Build the 48 128-byte version: `make size` | ❌ | tested | ❌ |
+| Build the 47 561-byte version: `make size` | ❌ | tested | ❌ |
 
 Tested on Arch Linux with an NVIDIA GPU. The install commands for other systems follow their standard package names but were not run.
 
@@ -108,15 +108,15 @@ During frame checks the GPU renders in an invisible window; leave the machine ot
 
 ```sh
 make size        # about 1 minute
-make run-size    # plays the 48 128-byte EXE under Wine
+make run-size    # plays the 47 561-byte EXE under Wine
 ```
 
 ```text
-.build/eidolon-size.exe: 48128 bytes (original: 60928 bytes)
-PASS size: identical to the verified build, SHA-256 ce67aee06109441cf8d1694b197b9a8bee9cea0b443575aa1234fd20a0d7f74e
+.build/eidolon-size.exe: 47561 bytes (original: 60928 bytes)
+PASS size: identical to the verified build, SHA-256 a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3
 ```
 
-`PASS` means the build is byte-identical to the 48 128-byte EXE that passed the full frame and audio comparison. NASM 2.10.09 is downloaded and built by the script. Details and the techniques used: [size/README.md](size/README.md).
+`PASS` means the build is byte-identical to the 47 561-byte EXE that passed the full frame and audio comparison. NASM 2.10.09 is downloaded and built by the script. Details and the techniques used: [size/README.md](size/README.md).
 
 ## All commands
 
@@ -127,8 +127,8 @@ PASS size: identical to the verified build, SHA-256 ce67aee06109441cf8d1694b197b
 | `make verify-audio` | Synthesizes the soundtrack and compares its SHA-256 |
 | `make verify` | Renders all frames with a controlled clock and compares their SHA-256 |
 | `make reference` | Captures the original on this machine into `verify/local/` |
-| `make size` | Builds the 48 128-byte version and compares it with the verified one |
-| `make run-size` | Plays the 48 128-byte version |
+| `make size` | Builds the 47 561-byte version and compares it with the verified one |
+| `make run-size` | Plays the 47 561-byte version |
 | `make test` | Rust unit tests |
 | `make clean` | Removes build output, `.build/` and the private Wine prefix `.wine/` |
 
@@ -154,7 +154,7 @@ PASS size: identical to the verified build, SHA-256 ce67aee06109441cf8d1694b197b
 | 1 | Reproducible reference of the original: run it under Wine, control its clock, capture every frame and the PCM, prove repeated runs are identical and that corruption is detected | 27 000 frames + full PCM; repeated full runs byte-identical |
 | 2 | Understand the original: unpack, recover algorithms, data and the synthesizer; explain the 64k size | [docs/en](docs/en/README.md), 64klang2 source match, size breakdown |
 | 3 | Rust port with byte-exact output, independently verified against the reference | This repository |
-| 4 | Size optimization (sizecoding, packers), target 32 KiB | 48 128 bytes with all frames and PCM exact ([size/](size/README.md)); 32 KiB not reached; performance acceptance open |
+| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561 bytes with all frames and PCM exact ([size/](size/README.md)); 32 KiB not reached; performance acceptance open |
 | 5 | Final reproducible build and verification | Not started |
 
 **Agents.** The work was done by AI agents with a coordinator and workers:

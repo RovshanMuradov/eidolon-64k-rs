@@ -1,12 +1,12 @@
 # Size-optimized build
 
-The same intro in **48 128 bytes**: 12 800 bytes (21 %) smaller than the 60 928-byte original. It renders the same 27 000 frames and the same PCM byte for byte.
+The same intro in **47 561 bytes**: 13 367 bytes (22 %) smaller than the 60 928-byte original. It renders the same 27 000 frames and the same PCM byte for byte.
 
 | Build | Bytes |
 |---|---:|
 | Original (kkrunchy-packed) | 60 928 |
 | Rust port, `make build` | ~730 000 |
-| **Rust, size-optimized, `make size`** | **48 128** |
+| **Rust, size-optimized, `make size`** | **47 561** |
 | Target that was not reached | 32 768 |
 
 ## Build
@@ -16,7 +16,7 @@ make size        # Linux; builds .build/eidolon-size.exe and compares it with th
 make run-size    # plays it under Wine; installs gm.dls into the private prefix first
 ```
 
-`make size` prints `PASS size: identical to the verified build` when the result has SHA-256 `ce67aee0…` (`size/expected.sha256`). That exact file passed the full comparison with the original: all 27 000 frames and the whole PCM identical, 510 raw frames byte-compared. Performance measurements and formal acceptance of this build were not completed.
+`make size` prints `PASS size: identical to the verified build` when the result has SHA-256 `a46ecc05…` (`size/expected.sha256`). That exact file passed the full comparison with the original under Wine: all 27 000 frames and the whole PCM identical, 510 raw frames byte-compared. It has not been run on Windows; performance measurements and formal acceptance were not completed.
 
 Byte identity was reproduced from a clean checkout at a different path with Rust 1.97.1 (pinned in `rust-toolchain.toml`), MinGW-w64 GCC 16.2.0, Clang 22.1 and NASM 2.10.09 (built from source by the script). Other compiler versions may produce a different, untested file; the script then prints `FAIL`.
 
@@ -35,6 +35,8 @@ Milestones; from 59 392 bytes on, each passed a full capture before it replaced 
 | 49 152 | Pointer-style decoders, fixed-capacity lists, static physics records, fail-fast errors, lower inlining threshold |
 | 48 640 | Tuned kkrunchy context model (not used in the final build) |
 | 48 128 | Note-off times derived from note durations; kkrunchy x86 filter extended to SSE and three-byte opcodes |
+| 47 616 | One section per function and static, linked in an order found by hill-climbing the packed size (`crate/tools/rust/sizecoded.ld`) |
+| 47 561 | Trailing zero padding after the packed data dropped; `SizeOfRawData` shrunk to match |
 
 Techniques in the final build:
 
@@ -42,6 +44,7 @@ Techniques in the final build:
 - **Audio.** Instrument samples read from the system `gm.dls` instead of embedded; score and patch stored as transposed byte streams and compact records; note-off events derived from note-on durations.
 - **Graphics.** Timeline, curves and pass tables packed as byte columns; curve tangents predicted from neighbouring keys, only residuals stored; unreachable curve keys removed; shader fragments pooled, renamed and ordered for the packer.
 - **Packer.** kkrunchy_k7 whose x86 filter also understands SSE and three-byte opcodes, so the compiler's SSE code compresses better.
+- **Layout.** Functions and statics are linked in the order that packs smallest, and the zero padding kkrunchy adds to the 512-byte file alignment is cut off.
 
 ## Layout
 
@@ -49,7 +52,7 @@ Techniques in the final build:
 |---|---|
 | `crate/` | The size-optimized Rust source; `make size` stages it with the shared `shaders/`, `src/data/` and `Cargo.lock` |
 | `crate/src/data/graphics.cg29` | Compressed graphics tables and shader pool |
-| `crate/tools/rust/` | Custom i686 target spec and a linker wrapper without CRT |
+| `crate/tools/rust/` | Custom i686 target spec, a linker wrapper without CRT and the link-order script `sizecoded.ld` |
 | `packer/` | kkrunchy_k7 by Fabian "ryg" Giesen, public domain ([farbrausch/fr_public](https://github.com/farbrausch/fr_public) @ `8c8f82c`), with the x86 filter extension and two build fixes |
 | `build.py` | The build and pack script behind `make size` |
-| `expected.sha256` | SHA-256 of the verified 48 128-byte EXE |
+| `expected.sha256` | SHA-256 of the verified 47 561-byte EXE |
