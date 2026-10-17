@@ -1,0 +1,385 @@
+{
+  "schema": "eidolon-graphics-g5-reconciliation-v1",
+  "status": "SAVED_G5_STATE_RECONCILED",
+  "native_provenance": "reports/evidence/reverse/manifest.json",
+  "whole_bundle_check": "bash tools/run python tools/verify/review_d12.py",
+  "node_rng_owner": {
+    "dispatch_id": 49,
+    "tick": "0x40514d",
+    "type": "GLITCH",
+    "node_offset": "0x190",
+    "counter_handoff": "audio-to-graphics-sync.md"
+  },
+  "physics_records": [
+    {
+      "base": "0xb17bdf0",
+      "position_uniform": "uMainCharacterPos",
+      "rotation_uniform": "uMainCharacterRotation",
+      "parameters_address": "0x436490",
+      "parameters_f32_bits": [
+        1048576000,
+        1080033280,
+        1073741824,
+        1134559232
+      ],
+      "active_rows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        48
+      ]
+    },
+    {
+      "base": "0xb17be30",
+      "position_uniform": "uEvilCharacterPos1",
+      "rotation_uniform": "uEvilCharacterRotation1",
+      "parameters_address": "0x4364c0",
+      "parameters_f32_bits": [
+        1065353216,
+        1069547520,
+        1073741824,
+        1137180672
+      ],
+      "active_rows": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        48
+      ]
+    },
+    {
+      "base": "0xb17be70",
+      "position_uniform": "uEvilCharacterPos2",
+      "rotation_uniform": "uEvilCharacterRotation2",
+      "parameters_address": "0x4364b0",
+      "parameters_f32_bits": [
+        1065353216,
+        1075838976,
+        1065353216,
+        1137180672
+      ],
+      "active_rows": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ]
+    },
+    {
+      "base": "0xb17beb0",
+      "position_uniform": "uEvilCharacterPos3",
+      "rotation_uniform": "uEvilCharacterRotation3",
+      "parameters_address": "0x4364a0",
+      "parameters_f32_bits": [
+        1065353216,
+        1069547520,
+        1065353216,
+        1137180672
+      ],
+      "active_rows": []
+    }
+  ],
+  "unused_fourth_component_evaluations": [
+    {
+      "row": 49,
+      "uniform": "uAngles",
+      "descriptor": "0x4357b8",
+      "foreign_gate_value": 17,
+      "offset": 0,
+      "length": 0
+    }
+  ],
+  "reset_vector": {
+    "address": "0x0b17bde0",
+    "f32_bits": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "saved_witness": "runtime_diagnostic.files.fault_state",
+    "g5_direct_snapshot": false
+  },
+  "runs": [
+    {
+      "run_manifest": "artifacts/reference/proxy-b-d12-volume-20261016.json",
+      "initial_physics_matches_native_parameter_copies": true,
+      "fp": {
+        "entry-main": {
+          "x87_cw": 639,
+          "mxcsr": 8064,
+          "mxcsr_control": 8064
+        },
+        "prethread-main": {
+          "x87_cw": 639,
+          "mxcsr": 8066,
+          "mxcsr_control": 8064
+        },
+        "first-query-main": {
+          "x87_cw": 639,
+          "mxcsr": 8098,
+          "mxcsr_control": 8064
+        }
+      },
+      "shader_fragments": 235,
+      "linked_programs": 31,
+      "changed_sources": [
+        [
+          2,
+          0,
+          "0x409918"
+        ]
+      ],
+      "context": {
+        "version": "4.6.0 NVIDIA 610.57.04",
+        "glsl": "4.60 NVIDIA",
+        "profile_mask": 2,
+        "flags": 0
+      },
+      "first_draw": {
+        "viewport": [
+          0,
+          0,
+          16384,
+          128
+        ],
+        "draw_buffers": [
+          36064,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "blend": 0,
+        "srgb": 0,
+        "clamp_fragment_color": 35101
+      },
+      "cloud_consumers": [
+        {
+          "frame": 5760,
+          "program_index": 20,
+          "volume_matches_upload": true,
+          "draw_buffers": [
+            36064,
+            36065,
+            36066
+          ],
+          "texture_handles": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "frame": 5761,
+          "program_index": 20,
+          "volume_matches_upload": true,
+          "draw_buffers": [
+            36064,
+            36065,
+            36066
+          ],
+          "texture_handles": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "frame": 5762,
+          "program_index": 20,
+          "volume_matches_upload": true,
+          "draw_buffers": [
+            36064,
+            36065,
+            36066
+          ],
+          "texture_handles": [
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "run_manifest": "artifacts/reference/proxy-b-d12-volume-repeat-20261016.json",
+      "initial_physics_matches_native_parameter_copies": true,
+      "fp": {
+        "entry-main": {
+          "x87_cw": 639,
+          "mxcsr": 8064,
+          "mxcsr_control": 8064
+        },
+        "prethread-main": {
+          "x87_cw": 639,
+          "mxcsr": 8066,
+          "mxcsr_control": 8064
+        },
+        "first-query-main": {
+          "x87_cw": 639,
+          "mxcsr": 8098,
+          "mxcsr_control": 8064
+        }
+      },
+      "shader_fragments": 235,
+      "linked_programs": 31,
+      "changed_sources": [
+        [
+          2,
+          0,
+          "0x409918"
+        ]
+      ],
+      "context": {
+        "version": "4.6.0 NVIDIA 610.57.04",
+        "glsl": "4.60 NVIDIA",
+        "profile_mask": 2,
+        "flags": 0
+      },
+      "first_draw": {
+        "viewport": [
+          0,
+          0,
+          16384,
+          128
+        ],
+        "draw_buffers": [
+          36064,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "blend": 0,
+        "srgb": 0,
+        "clamp_fragment_color": 35101
+      },
+      "cloud_consumers": [
+        {
+          "frame": 5760,
+          "program_index": 20,
+          "volume_matches_upload": true,
+          "draw_buffers": [
+            36064,
+            36065,
+            36066
+          ],
+          "texture_handles": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "frame": 5761,
+          "program_index": 20,
+          "volume_matches_upload": true,
+          "draw_buffers": [
+            36064,
+            36065,
+            36066
+          ],
+          "texture_handles": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "frame": 5762,
+          "program_index": 20,
+          "volume_matches_upload": true,
+          "draw_buffers": [
+            36064,
+            36065,
+            36066
+          ],
+          "texture_handles": [
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "No recorded post-update physics vectors or fragment-output name locations",
+    "G5 bounded evidence does not establish G6 or Rust equivalence",
+    "Reset vector has a T1 saved witness, not a G5 direct observation"
+  ]
+}

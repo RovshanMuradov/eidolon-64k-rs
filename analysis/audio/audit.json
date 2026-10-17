@@ -1,0 +1,1160 @@
+{
+  "schema": "eidolon-audio-audit-v1",
+  "base_manifest": "analysis/audio/manifest.json",
+  "event_closure": {
+    "routed_events": 5718,
+    "unrouted_events": 0,
+    "managers": [
+      {
+        "channel": 0,
+        "offset": 104,
+        "mode": "0x307f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 165,
+        "off_count": 165,
+        "arpeggiator": false
+      },
+      {
+        "channel": 1,
+        "offset": 181,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 91,
+        "off_count": 91,
+        "arpeggiator": false
+      },
+      {
+        "channel": 2,
+        "offset": 111,
+        "mode": "0x105300",
+        "note_range": [
+          0,
+          83
+        ],
+        "on_count": 238,
+        "off_count": 238,
+        "arpeggiator": false
+      },
+      {
+        "channel": 3,
+        "offset": 188,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 233,
+        "off_count": 233,
+        "arpeggiator": false
+      },
+      {
+        "channel": 4,
+        "offset": 118,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 68,
+        "off_count": 68,
+        "arpeggiator": false
+      },
+      {
+        "channel": 5,
+        "offset": 195,
+        "mode": "0x117f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 135,
+        "off_count": 135,
+        "arpeggiator": true
+      },
+      {
+        "channel": 6,
+        "offset": 125,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 144,
+        "off_count": 144,
+        "arpeggiator": false
+      },
+      {
+        "channel": 7,
+        "offset": 132,
+        "mode": "0x102300",
+        "note_range": [
+          0,
+          35
+        ],
+        "on_count": 3,
+        "off_count": 3,
+        "arpeggiator": false
+      },
+      {
+        "channel": 7,
+        "offset": 202,
+        "mode": "0x102f24",
+        "note_range": [
+          36,
+          47
+        ],
+        "on_count": 1,
+        "off_count": 1,
+        "arpeggiator": false
+      },
+      {
+        "channel": 7,
+        "offset": 265,
+        "mode": "0x103b30",
+        "note_range": [
+          48,
+          59
+        ],
+        "on_count": 2,
+        "off_count": 2,
+        "arpeggiator": false
+      },
+      {
+        "channel": 7,
+        "offset": 349,
+        "mode": "0x10473c",
+        "note_range": [
+          60,
+          71
+        ],
+        "on_count": 2,
+        "off_count": 2,
+        "arpeggiator": false
+      },
+      {
+        "channel": 7,
+        "offset": 356,
+        "mode": "0x105348",
+        "note_range": [
+          72,
+          83
+        ],
+        "on_count": 8,
+        "off_count": 8,
+        "arpeggiator": false
+      },
+      {
+        "channel": 8,
+        "offset": 209,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 33,
+        "off_count": 33,
+        "arpeggiator": false
+      },
+      {
+        "channel": 9,
+        "offset": 286,
+        "mode": "0x104a00",
+        "note_range": [
+          0,
+          74
+        ],
+        "on_count": 42,
+        "off_count": 42,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 139,
+        "mode": "0x101818",
+        "note_range": [
+          24,
+          24
+        ],
+        "on_count": 81,
+        "off_count": 81,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 216,
+        "mode": "0x101919",
+        "note_range": [
+          25,
+          25
+        ],
+        "on_count": 54,
+        "off_count": 54,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 223,
+        "mode": "0x101a1a",
+        "note_range": [
+          26,
+          26
+        ],
+        "on_count": 17,
+        "off_count": 17,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 230,
+        "mode": "0x101b1b",
+        "note_range": [
+          27,
+          27
+        ],
+        "on_count": 25,
+        "off_count": 25,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 237,
+        "mode": "0x101c1c",
+        "note_range": [
+          28,
+          28
+        ],
+        "on_count": 105,
+        "off_count": 105,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 244,
+        "mode": "0x101d1d",
+        "note_range": [
+          29,
+          29
+        ],
+        "on_count": 603,
+        "off_count": 603,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 258,
+        "mode": "0x101e1e",
+        "note_range": [
+          30,
+          30
+        ],
+        "on_count": 12,
+        "off_count": 12,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 251,
+        "mode": "0x103b1f",
+        "note_range": [
+          31,
+          59
+        ],
+        "on_count": 164,
+        "off_count": 164,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 272,
+        "mode": "0x103c3c",
+        "note_range": [
+          60,
+          60
+        ],
+        "on_count": 188,
+        "off_count": 188,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 279,
+        "mode": "0x103d3d",
+        "note_range": [
+          61,
+          61
+        ],
+        "on_count": 64,
+        "off_count": 64,
+        "arpeggiator": false
+      },
+      {
+        "channel": 10,
+        "offset": 293,
+        "mode": "0x103e3e",
+        "note_range": [
+          62,
+          62
+        ],
+        "on_count": 261,
+        "off_count": 261,
+        "arpeggiator": false
+      },
+      {
+        "channel": 11,
+        "offset": 146,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 6,
+        "off_count": 6,
+        "arpeggiator": false
+      },
+      {
+        "channel": 12,
+        "offset": 153,
+        "mode": "0x10372c",
+        "note_range": [
+          44,
+          55
+        ],
+        "on_count": 28,
+        "off_count": 28,
+        "arpeggiator": false
+      },
+      {
+        "channel": 12,
+        "offset": 321,
+        "mode": "0x102b18",
+        "note_range": [
+          24,
+          43
+        ],
+        "on_count": 5,
+        "off_count": 5,
+        "arpeggiator": false
+      },
+      {
+        "channel": 12,
+        "offset": 328,
+        "mode": "0x104838",
+        "note_range": [
+          56,
+          72
+        ],
+        "on_count": 14,
+        "off_count": 14,
+        "arpeggiator": false
+      },
+      {
+        "channel": 12,
+        "offset": 335,
+        "mode": "0x105449",
+        "note_range": [
+          73,
+          84
+        ],
+        "on_count": 0,
+        "off_count": 0,
+        "arpeggiator": false
+      },
+      {
+        "channel": 13,
+        "offset": 342,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 37,
+        "off_count": 37,
+        "arpeggiator": false
+      },
+      {
+        "channel": 14,
+        "offset": 160,
+        "mode": "0x107f00",
+        "note_range": [
+          0,
+          127
+        ],
+        "on_count": 0,
+        "off_count": 0,
+        "arpeggiator": false
+      },
+      {
+        "channel": 15,
+        "offset": 167,
+        "mode": "0x101818",
+        "note_range": [
+          24,
+          24
+        ],
+        "on_count": 3,
+        "off_count": 3,
+        "arpeggiator": false
+      },
+      {
+        "channel": 15,
+        "offset": 174,
+        "mode": "0x101919",
+        "note_range": [
+          25,
+          25
+        ],
+        "on_count": 9,
+        "off_count": 9,
+        "arpeggiator": false
+      },
+      {
+        "channel": 15,
+        "offset": 300,
+        "mode": "0x101a1a",
+        "note_range": [
+          26,
+          26
+        ],
+        "on_count": 1,
+        "off_count": 1,
+        "arpeggiator": false
+      },
+      {
+        "channel": 15,
+        "offset": 307,
+        "mode": "0x101b1b",
+        "note_range": [
+          27,
+          27
+        ],
+        "on_count": 4,
+        "off_count": 4,
+        "arpeggiator": false
+      },
+      {
+        "channel": 15,
+        "offset": 314,
+        "mode": "0x101c1c",
+        "note_range": [
+          28,
+          28
+        ],
+        "on_count": 13,
+        "off_count": 13,
+        "arpeggiator": false
+      }
+    ],
+    "active_managers": [
+      104,
+      111,
+      118,
+      125,
+      132,
+      139,
+      146,
+      153,
+      167,
+      174,
+      181,
+      188,
+      195,
+      202,
+      209,
+      216,
+      223,
+      230,
+      237,
+      244,
+      251,
+      258,
+      265,
+      272,
+      279,
+      286,
+      293,
+      300,
+      307,
+      314,
+      321,
+      328,
+      342,
+      349,
+      356
+    ],
+    "cc_trigger_events": 0,
+    "node_counts": [
+      776,
+      763
+    ],
+    "all_graph_samples": [
+      9,
+      101,
+      106,
+      107,
+      127,
+      176,
+      194,
+      230,
+      242,
+      262,
+      263,
+      264,
+      266,
+      409,
+      425,
+      455
+    ],
+    "event_reachable_samples": [
+      9,
+      101,
+      106,
+      107,
+      127,
+      176,
+      194,
+      230,
+      242,
+      262,
+      263,
+      264,
+      409,
+      425,
+      455
+    ],
+    "samplers": [
+      {
+        "sampler": 2896,
+        "mode_low16": 9,
+        "gmdls_node": 3219,
+        "sample": 455,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2905,
+        "mode_low16": 9,
+        "gmdls_node": 3221,
+        "sample": 409,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2914,
+        "mode_low16": 9,
+        "gmdls_node": 3223,
+        "sample": 263,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2923,
+        "mode_low16": 1,
+        "gmdls_node": 3225,
+        "sample": 127,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2932,
+        "mode_low16": 9,
+        "gmdls_node": 3227,
+        "sample": 101,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2941,
+        "mode_low16": 9,
+        "gmdls_node": 3221,
+        "sample": 409,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2950,
+        "mode_low16": 9,
+        "gmdls_node": 3221,
+        "sample": 409,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2959,
+        "mode_low16": 9,
+        "gmdls_node": 3229,
+        "sample": 176,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2968,
+        "mode_low16": 9,
+        "gmdls_node": 3229,
+        "sample": 176,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2977,
+        "mode_low16": 9,
+        "gmdls_node": 3229,
+        "sample": 176,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2986,
+        "mode_low16": 9,
+        "gmdls_node": 3231,
+        "sample": 106,
+        "event_reachable": true
+      },
+      {
+        "sampler": 2995,
+        "mode_low16": 1,
+        "gmdls_node": 3233,
+        "sample": 194,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3004,
+        "mode_low16": 1,
+        "gmdls_node": 3235,
+        "sample": 230,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3013,
+        "mode_low16": 9,
+        "gmdls_node": 3237,
+        "sample": 242,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3022,
+        "mode_low16": 1,
+        "gmdls_node": 3239,
+        "sample": 425,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3031,
+        "mode_low16": 9,
+        "gmdls_node": 3241,
+        "sample": 9,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3040,
+        "mode_low16": 9,
+        "gmdls_node": 3243,
+        "sample": 176,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3049,
+        "mode_low16": 1,
+        "gmdls_node": 3243,
+        "sample": 176,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3058,
+        "mode_low16": 9,
+        "gmdls_node": 3243,
+        "sample": 176,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3067,
+        "mode_low16": 9,
+        "gmdls_node": 3245,
+        "sample": 262,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3076,
+        "mode_low16": 9,
+        "gmdls_node": 3247,
+        "sample": 264,
+        "event_reachable": true
+      },
+      {
+        "sampler": 3085,
+        "mode_low16": 9,
+        "gmdls_node": 3249,
+        "sample": 266,
+        "event_reachable": false
+      },
+      {
+        "sampler": 3094,
+        "mode_low16": 9,
+        "gmdls_node": 3251,
+        "sample": 107,
+        "event_reachable": true
+      }
+    ],
+    "critical_instruction_pins": {
+      "0x401d6a": "0fb67c8640",
+      "0x402024": "83be8401000000",
+      "0x401fe2": "0fb74c4802",
+      "0x40206f": "8b0085c0",
+      "0x402c90": "8b4614240f3c01",
+      "0x402d1d": "6a078d56605f",
+      "0x401771": "ff1510904000"
+    },
+    "direct_note_dispatch_calls": [
+      "0x401538",
+      "0x401552",
+      "0x4015a7"
+    ],
+    "ignored_note_off_velocity": "0x401d6a reads low byte only; source SynthNode.cpp:879..881,936",
+    "limitation": "Conservative graph closure; dynamic PROCESS/voice/envelope branches can suppress use."
+  },
+  "kernel_audit": [
+    {
+      "node_type": "ADD",
+      "count": 152,
+      "tick": "0x40376e",
+      "source_function": "ADD_tick",
+      "source_line": 2110,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x4037b6",
+      "native_sha256": "a9e8b3c0014e5e68de61268d94832a8976fd6e0d3d324d0b6cc0c4bc6ad805fb"
+    },
+    {
+      "node_type": "ADSR",
+      "count": 54,
+      "tick": "0x40226d",
+      "source_function": "ADSR_tick",
+      "source_line": 1165,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "BQFILTER",
+      "count": 36,
+      "tick": "0x403008",
+      "source_function": "BQFILTER_tick",
+      "source_line": 1759,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "CHANNELROOT",
+      "count": 16,
+      "tick": "0x4017e3",
+      "source_function": "CHANNELROOT_tick",
+      "source_line": 518,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "CLIP",
+      "count": 6,
+      "tick": "0x403920",
+      "source_function": "CLIP_tick",
+      "source_line": 2250,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x40397e",
+      "native_sha256": "1411537d0d8726d3b7c25a4b8f9a28dd0c201413185691e65135a60dcd1c5f3c"
+    },
+    {
+      "node_type": "COMBDELAY",
+      "count": 5,
+      "tick": "0x404134",
+      "source_function": "COMBDELAY_tick",
+      "source_line": 2847,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "COMPARE",
+      "count": 1,
+      "tick": "0x403b3d",
+      "source_function": "COMPARE_tick",
+      "source_line": 2415,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403bd0",
+      "native_sha256": "bfa2928b1bdf63a2dd00d3e6042911d489221485f4dc3b3835bccd6cc77d1042"
+    },
+    {
+      "node_type": "COMPEXP",
+      "count": 1,
+      "tick": "0x40477a",
+      "source_function": "COMPEXP_tick",
+      "source_line": 3238,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DCFILTER",
+      "count": 9,
+      "tick": "0x40443d",
+      "source_function": "DCFILTER_tick",
+      "source_line": 2982,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DELAY",
+      "count": 29,
+      "tick": "0x4041f5",
+      "source_function": "DELAY_tick",
+      "source_line": 2886,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DISTORTION",
+      "count": 9,
+      "tick": "0x403c97",
+      "source_function": "DISTORTION_tick",
+      "source_line": 2555,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DIV",
+      "count": 1,
+      "tick": "0x4038c8",
+      "source_function": "DIV_tick",
+      "source_line": 2232,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403920",
+      "native_sha256": "8f180ac4f29d905f926297ea9e5bb8a162cab82aef3408f8b09de66e6c899ce9"
+    },
+    {
+      "node_type": "ENVFOLLOWER",
+      "count": 1,
+      "tick": "0x403a22",
+      "source_function": "ENVFOLLOWER_tick",
+      "source_line": 2334,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403b3d",
+      "native_sha256": "0e0b96a982ef7f260898b33755eaa3eb67403894147ab320e9fa375c53ac1459"
+    },
+    {
+      "node_type": "EVENTSIGNAL",
+      "count": 35,
+      "tick": "0x403bd0",
+      "source_function": "EVENTSIGNAL_tick",
+      "source_line": 2485,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403c13",
+      "native_sha256": "3c63a45f26abbf468f5d013df70ec87058d7f21cdda799a2a7b64f300ba94765"
+    },
+    {
+      "node_type": "FBDELAY",
+      "count": 2,
+      "tick": "0x4042a6",
+      "source_function": "FBDELAY_tick",
+      "source_line": 2927,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "FORMANT",
+      "count": 6,
+      "tick": "0x405b62",
+      "source_function": "FORMANT_tick",
+      "source_line": 4923,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "GLITCH",
+      "count": 5,
+      "tick": "0x40514d",
+      "source_function": "GLITCH_tick",
+      "source_line": 3677,
+      "status": "sample source / RNG subpaths reviewed; whole-kernel numeric audit pending"
+    },
+    {
+      "node_type": "GMDLS",
+      "count": 17,
+      "tick": "0x405b12",
+      "source_function": "GMDLS_tick",
+      "source_line": 4282,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x405b62",
+      "native_sha256": "e75bd165982b77cc4f85cae38caf295f6a651b064d493405a68b52563f7218b3"
+    },
+    {
+      "node_type": "LFO",
+      "count": 18,
+      "tick": "0x402aa8",
+      "source_function": "LFO_tick",
+      "source_line": 1514,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "MAX",
+      "count": 2,
+      "tick": "0x403846",
+      "source_function": "MAX_tick",
+      "source_line": 2163,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x40388e",
+      "native_sha256": "af316a999212ee7f30ef50904ca1e93fffbf7dee1ee0e1171d4de125a12016c6"
+    },
+    {
+      "node_type": "MIDISIGNAL",
+      "count": 7,
+      "tick": "0x403c6f",
+      "source_function": "MIDISIGNAL_tick",
+      "source_line": 2532,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403c97",
+      "native_sha256": "43d00bd83cc836a51da19fa209f1d75e704374b26a0b948e09da1d6e5d562c6c"
+    },
+    {
+      "node_type": "MIN",
+      "count": 2,
+      "tick": "0x4037fe",
+      "source_function": "MIN_tick",
+      "source_line": 2145,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403846",
+      "native_sha256": "631eea876b80265f5026434871411643c5be5d6cb83ff088b42714c33d20354e"
+    },
+    {
+      "node_type": "MIX",
+      "count": 13,
+      "tick": "0x40397e",
+      "source_function": "MIX_tick",
+      "source_line": 2268,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x4039df",
+      "native_sha256": "a4544397b7ef3174398318e0d772c5933d2c6174d12281df270f9f1024fffd06"
+    },
+    {
+      "node_type": "MONO",
+      "count": 3,
+      "tick": "0x4039df",
+      "source_function": "MONO_tick",
+      "source_line": 2307,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403a22",
+      "native_sha256": "2b4a11fb201ff6ffe2a1406a3c5f1657b5e01b62fbfa7ff7aa3619ab5dac6969"
+    },
+    {
+      "node_type": "MUL",
+      "count": 74,
+      "tick": "0x403726",
+      "source_function": "MUL_tick",
+      "source_line": 2094,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x40376e",
+      "native_sha256": "1df51409021fa735d2888029dd5a50770408dee37bc51f38661500c3610f5cf2"
+    },
+    {
+      "node_type": "MULTIADD",
+      "count": 19,
+      "tick": "0x401835",
+      "source_function": "NOTECONTROLLER_tick",
+      "source_line": 549,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "NEG",
+      "count": 12,
+      "tick": "0x40388e",
+      "source_function": "NEG_tick",
+      "source_line": 2198,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x4038c8",
+      "native_sha256": "1935c7ff617d2ea67cd875d2197069222abed045db5bbb7bf12dbf7dd352d368"
+    },
+    {
+      "node_type": "NOISEGEN",
+      "count": 16,
+      "tick": "0x402db1",
+      "source_function": "NOISEGEN_tick",
+      "source_line": 1664,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "NOTECONTROLLER",
+      "count": 16,
+      "tick": "0x401835",
+      "source_function": "NOTECONTROLLER_tick",
+      "source_line": 549,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "ONEPOLEFILTER",
+      "count": 9,
+      "tick": "0x40356f",
+      "source_function": "ONEPOLEFILTER_tick",
+      "source_line": 1978,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "ONEZEROFILTER",
+      "count": 1,
+      "tick": "0x403602",
+      "source_function": "ONEZEROFILTER_tick",
+      "source_line": 2009,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "OSCILLATOR",
+      "count": 23,
+      "tick": "0x402c12",
+      "source_function": "OSCILLATOR_tick",
+      "source_line": 1580,
+      "status": "wrapper input order, 16-sample updates, seven-call random-phase init and unison loop reviewed; Osc_Tick helper pending"
+    },
+    {
+      "node_type": "OSRAND",
+      "count": 6,
+      "tick": "0x4044a0",
+      "source_function": "OSRAND_tick",
+      "source_line": 3001,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "PANNING",
+      "count": 13,
+      "tick": "0x4036ae",
+      "source_function": "PANNING_tick",
+      "source_line": 2068,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "PROCESS",
+      "count": 2,
+      "tick": "0x403c13",
+      "source_function": "PROCESS_tick",
+      "source_line": 2504,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x403c6f",
+      "native_sha256": "0566a36f71a05275542b73d98207b7da4e683ed91cda838a34be3ef02de1a7fe"
+    },
+    {
+      "node_type": "REVERB",
+      "count": 21,
+      "tick": "0x4044f1",
+      "source_function": "REVERB_tick",
+      "source_line": 3028,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "SAMPLER",
+      "count": 23,
+      "tick": "0x404dd0",
+      "source_function": "SAMPLER_tick",
+      "source_line": 3515,
+      "status": "sample source / RNG subpaths reviewed; whole-kernel numeric audit pending"
+    },
+    {
+      "node_type": "SUB",
+      "count": 10,
+      "tick": "0x4037b6",
+      "source_function": "SUB_tick",
+      "source_line": 2127,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x4037fe",
+      "native_sha256": "4c38fad0c7d6fca656f18de3a0c9b27e97908591b63625d7a8301b78841c4675"
+    },
+    {
+      "node_type": "SVFILTER",
+      "count": 4,
+      "tick": "0x405986",
+      "source_function": "SVFILTER_tick",
+      "source_line": 3964,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "SYNTHROOT",
+      "count": 1,
+      "tick": "0x403726",
+      "source_function": "MUL_tick",
+      "source_line": 2094,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x40376e",
+      "native_sha256": "1df51409021fa735d2888029dd5a50770408dee37bc51f38661500c3610f5cf2"
+    },
+    {
+      "node_type": "TRIGGER",
+      "count": 1,
+      "tick": "0x404a20",
+      "source_function": "TRIGGER_tick",
+      "source_line": 3292,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "TRIGGERSEQ",
+      "count": 2,
+      "tick": "0x404a9d",
+      "source_function": "TRIGGERSEQ_tick",
+      "source_line": 3317,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "VOICEMANAGER",
+      "count": 37,
+      "tick": "0x401bf5",
+      "source_function": "VOICEMANAGER_tick",
+      "source_line": 797,
+      "status": "note queues, low-byte note-off and guarded voice creation reviewed; numeric audit pending"
+    },
+    {
+      "node_type": "VOICEROOT",
+      "count": 32,
+      "tick": "0x402205",
+      "source_function": "VOICEROOT_tick",
+      "source_line": 1131,
+      "status": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "VOICE_ATTACKVELOCITY",
+      "count": 19,
+      "tick": "0x405dbe",
+      "source_function": "VOICEPARAM_tick",
+      "source_line": 5055,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x405de9",
+      "native_sha256": "ec1913395f3f39dafe41f4a7b7bd08e44058877db9b19356cd125cdde647b816"
+    },
+    {
+      "node_type": "VOICE_NOTE",
+      "count": 5,
+      "tick": "0x405dbe",
+      "source_function": "VOICEPARAM_tick",
+      "source_line": 5055,
+      "status": "reviewed operation/control correspondence; not PCM proof",
+      "native_end_exclusive": "0x405de9",
+      "native_sha256": "ec1913395f3f39dafe41f4a7b7bd08e44058877db9b19356cd125cdde647b816"
+    }
+  ],
+  "rng": {
+    "owner": "GLITCH id49",
+    "tick": "0x40514d",
+    "state_offset": "0x190",
+    "source_lines": [
+      3792,
+      3802,
+      3908,
+      3927
+    ],
+    "saved_manifest": "artifacts/reference/proxy-b-d12-volume-20261016.json",
+    "saved_manifest_sha256": "965395247535a6fb4b5d8d80a5da1e4502045ebc540669137c390bd25ed5c4b4",
+    "saved_files": {
+      "reference/proxy-b-d12-volume-20261016/node-state.bin": {
+        "bytes": 1152,
+        "sha256": "91d8662d52d86f745ac1532758590a16e765002d6c76c84981561b878caa511a"
+      },
+      "reference/proxy-b-d12-volume-20261016/backend.jsonl": {
+        "bytes": 342811970,
+        "sha256": "5f686fbebc153ad0bc27077a9a74bc0592c1399337d31b45553a3174b2c44c40"
+      }
+    },
+    "source_command": [
+      "g++",
+      "-O2",
+      "-msse4.1",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "-I",
+      "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/source-probe",
+      "tools/analysis/audio/rng_probe.cpp",
+      "-o",
+      "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/source-probe/rng-probe"
+    ],
+    "cpu_result": "PASS: source seed initialization 22/22; two-step node RNG 1/1; outer preservation 1/1",
+    "scope": "22 retained initializations and one first swap, not all 104 swaps or full PCM"
+  },
+  "limitations": [
+    "Dispatch identity is not whole-kernel equivalence.",
+    "Source/native differences include deferred-free placement; arithmetic NaN operand ordering needs retention.",
+    "PCM reference remains independent; no acceptance criteria changed."
+  ]
+}

@@ -1,16 +1,21 @@
-# Eidolon: build the Windows executable and run it (natively on Windows, through Wine elsewhere).
+# Eidolon: build, run and verify against the original (natively on Windows, through Wine elsewhere).
 TARGET := i686-pc-windows-gnu
 EXE    := target/$(TARGET)/release/eidolon-runtime.exe
 RES    ?= 1920x1080
 PREFIX ?= $(CURDIR)/.wine
+# Expected hashes: a reference captured on this machine (make reference) wins over the shipped one.
+REF    := $(if $(wildcard verify/local/frames.sha256),verify/local,verify)
+FRAMES := .build/rust-frames.sha256
 
 ifeq ($(OS),Windows_NT)
   PLATFORM := Windows
+  ENGINE   := cargo run --release --target $(TARGET) --bin eidolon-engine --
 else
   PLATFORM := $(shell uname -s)
+  ENGINE   := cargo run --release --bin eidolon-engine --
 endif
 
-.PHONY: build run test clean
+.PHONY: build run verify verify-audio reference test clean
 
 build:
 	cargo build --release --target $(TARGET) --bin eidolon-runtime
@@ -30,9 +35,36 @@ endif
 	wine explorer /desktop=Eidolon,$(RES) "$$(winepath -w "$(EXE)")" --play
 endif
 
+# Byte-exact PCM check on the CPU; no GPU or Wine needed.
+verify-audio:
+	@echo "Synthesizing the full soundtrack (a few minutes)..."
+	@actual=$$($(ENGINE) --pcm-sha256) && expected=$$(cat $(REF)/pcm.sha256) && \
+	if [ "$$actual" = "$$expected" ]; then echo "PASS audio: $$actual"; \
+	else echo "FAIL audio: got $$actual, expected $$expected ($(REF)/pcm.sha256)"; exit 1; fi
+
+# Byte-exact check of all 27 000 frames rendered with a controlled clock.
+verify: build
+	@mkdir -p .build && rm -f $(FRAMES)
+	@echo "Rendering 27000 frames with a controlled clock (about 1-1.5 hours); expected hashes: $(REF)/frames.sha256"
+ifeq ($(PLATFORM),Windows)
+	"$(EXE)" --capture $(FRAMES)
+else
+	python3 tools/reference/headless.py --prefix .build/rust-prefix $(EXE) --capture 'Z:$(subst /,\,$(CURDIR)/$(FRAMES))'
+endif
+	@if cmp -s $(FRAMES) $(REF)/frames.sha256; then echo "PASS frames: 27000/27000 identical to $(REF)/frames.sha256"; \
+	else echo "FAIL frames: first differences (frame, hash):"; diff $(REF)/frames.sha256 $(FRAMES) | head -6; exit 1; fi
+
+# Capture the original EXE on this machine's GPU into verify/local (Linux only).
+reference:
+ifeq ($(PLATFORM),Linux)
+	python3 tools/reference/capture_original.py
+else
+	@echo "make reference runs the original under Wine with capture proxies and needs Linux." >&2; exit 1
+endif
+
 test:
 	cargo test --release
 
 clean:
 	cargo clean
-	rm -rf "$(PREFIX)"
+	rm -rf "$(PREFIX)" .build

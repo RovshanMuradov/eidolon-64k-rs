@@ -1,0 +1,365 @@
+{
+  "schema": "eidolon-static-packing-v1",
+  "scope": "static files and Python data transformations; no target execution",
+  "environment": {
+    "python": "3.14.7",
+    "zstandard_module": "0.25.0",
+    "objdump": "GNU objdump (GNU Binutils) 2.47",
+    "zstd": [
+      1,
+      5,
+      7
+    ],
+    "resolution_gpu_driver_wine": "not applicable: file-only analysis",
+    "xz": "Python lzma FORMAT_XZ, preset=9|PRESET_EXTREME",
+    "zstd_settings": "level=19,threads=0"
+  },
+  "inputs": {
+    "native": {
+      "sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be",
+      "bytes": 60928,
+      "archive_member": "Eidolon - Poo-Brain (native).exe"
+    },
+    "archive": {
+      "path": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+      "sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008"
+    },
+    "stage1": {
+      "path": "reverse/confirmed-debug/stage1-003f9000.bin",
+      "bytes": 94208,
+      "sha256": "20127373a625993b1254415f0ca65785105c34212e5d2bfe20cba9bde2b91823",
+      "mapped_base": "0x003f9000"
+    },
+    "postfix": {
+      "path": "reverse/confirmed-debug/postfix-00400000.bin",
+      "bytes": 327680,
+      "sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504",
+      "mapped_base": "0x00400000"
+    }
+  },
+  "source": {
+    "repository": "https://github.com/farbrausch/fr_public",
+    "commit": "8c8f82c2ae01133370e649bbc05916e7aceecadd",
+    "subdirectory": "kkrunchy_k7",
+    "sha256": {
+      "depacker.asm": "ebd3df19622e5cf554d8ed2422923d6cfae7a19e7c523b459f8b794ccad2aadb",
+      "depack2.asm": "9f3175ddb27b9ee7849078730d5ce0d59910a14a07077f734105b5ab710495b3",
+      "exepacker.cpp": "cd3553eb684cd382c70c25c53a7330d873100fab629399776f691d7c1f77dcc4",
+      "dis.cpp": "2db6828adf405e7ed951facf27ecc2ba61b5c7241228d370282f2090bedd005c"
+    },
+    "limitation": "corresponding public algorithm/layout; not claimed byte-identical build of original packer"
+  },
+  "physical_file_ranges": [
+    {
+      "name": "compact_PE_headers",
+      "start": "0x0",
+      "end": "0xd4",
+      "bytes": 212,
+      "sha256": "b74e37bc27009377695419d41508e0c707f683829d2cc3021b5007b0eee18c4a"
+    },
+    {
+      "name": "joint_range_coded_stream",
+      "start": "0xd4",
+      "end": "0xe6b0",
+      "bytes": 58844,
+      "sha256": "3198bcf519202ce4dfef3cb0215d65db6d064afea20b41d5411823904f741a99"
+    },
+    {
+      "name": "decoder_helpers",
+      "start": "0xe6b0",
+      "end": "0xe786",
+      "bytes": 214,
+      "sha256": "2ef3d268d203b59087180d3f0d2d400b61eac29a71d58d3a5dce571d616f43e4"
+    },
+    {
+      "name": "decoder_entry_model_and_transfer",
+      "start": "0xe786",
+      "end": "0xec94",
+      "bytes": 1294,
+      "sha256": "96b069562bbaf8828dfd3cee60107b9f90e232b3f7549f7723e70f59a7be811e"
+    },
+    {
+      "name": "decoder_constant_tables",
+      "start": "0xec94",
+      "end": "0xecec",
+      "bytes": 88,
+      "sha256": "720cded3b0856685b664b61b04c5fdac0bc2c7e81da7a12396ba540c6211fa2d"
+    },
+    {
+      "name": "bootstrap_IAT_ILT",
+      "start": "0xecec",
+      "end": "0xed04",
+      "bytes": 24,
+      "sha256": "340d4d8066200a2719f8dba5b5b9950211dc49aeb6a6e4c76385c5e76888e403"
+    },
+    {
+      "name": "bootstrap_import_names",
+      "start": "0xed04",
+      "end": "0xed30",
+      "bytes": 44,
+      "sha256": "7f129387b25accf1a8d6fdb23d141c131ecb6d12920a7e6b3f8c43d33f354ba1"
+    },
+    {
+      "name": "bootstrap_import_descriptor_and_terminator",
+      "start": "0xed30",
+      "end": "0xed58",
+      "bytes": 40,
+      "sha256": "041c32347cd3625a343188a5bc1829bbef0be292a6b8958d04c1da9238c401d8"
+    },
+    {
+      "name": "remaining_file_alignment",
+      "start": "0xed58",
+      "end": "0xee00",
+      "bytes": 168,
+      "sha256": "e3c2af35d1dfc500e16f826a071cc311bf55003a3de77de7ea3376c6b6fa2857"
+    }
+  ],
+  "physical_outer_overhead_bytes": 2084,
+  "static_code_closure": {
+    "stage0": {
+      "bytes": 1508,
+      "instructions": 543,
+      "direct_call_targets": [
+        "0x3ee6b0",
+        "0x3ee6eb",
+        "0x3ee71d",
+        "0x3ee74f"
+      ],
+      "indirect_control_flow": [],
+      "allowed_external_jumps": [],
+      "coverage": "all bytes decoded; direct targets land on instruction boundaries; ret edges validated separately by source/transfer immediates"
+    },
+    "stage2": {
+      "bytes": 589,
+      "instructions": 251,
+      "direct_call_targets": [],
+      "indirect_control_flow": [
+        "call   DWORD PTR [ebx+0x4]",
+        "call   DWORD PTR [ebx]"
+      ],
+      "allowed_external_jumps": [
+        "0x406379"
+      ],
+      "coverage": "all bytes decoded; direct targets land on instruction boundaries; ret edges validated separately by source/transfer immediates"
+    }
+  },
+  "physical_joint_stream_bytes": 58844,
+  "inner_decompressed_ranges": [
+    {
+      "name": "unfilter_setup",
+      "start_va": "0x3f942d",
+      "end_va": "0x3f946d",
+      "bytes": 64,
+      "sha256": "f08352cd9e221f96321ccf73e21c788f248ca1e5b3c73cbc923cb0a495bd5f84"
+    },
+    {
+      "name": "patch_and_import_loader",
+      "start_va": "0x3f946d",
+      "end_va": "0x3f94a4",
+      "bytes": 55,
+      "sha256": "2b23535a81d2880401d0dd96f868276dd1927a81210e9e3bbf7c1f4de35ffc9f"
+    },
+    {
+      "name": "OEP_transfer",
+      "start_va": "0x3f94a4",
+      "end_va": "0x3f94a9",
+      "bytes": 5,
+      "sha256": "fecfe95803c4d773b2bffcb2ca2ead5e9f4c2e1b939983c4ebc0e177413b5717"
+    },
+    {
+      "name": "unfilter_body",
+      "start_va": "0x3f94a9",
+      "end_va": "0x3f967a",
+      "bytes": 465,
+      "sha256": "527703bafbf89332242e77ad440cb6cb5587c9b7b5b9fdcbba5025cb62c96f8c"
+    },
+    {
+      "name": "opcode_tables",
+      "start_va": "0x3f967a",
+      "end_va": "0x3f977a",
+      "bytes": 256,
+      "sha256": "988840e100c364bcbc643e55ec7a99911341c28c6f3c2a56fea8811c04a27203"
+    },
+    {
+      "name": "import_size_and_records",
+      "start_va": "0x3f977a",
+      "end_va": "0x3f99ba",
+      "bytes": 576,
+      "sha256": "8dac23a7b77eb17e1aa8bda9c7d5ab48f489b4545a134a11a6ac109886e5e029"
+    },
+    {
+      "name": "filter_stream_sizes",
+      "start_va": "0x3f99ba",
+      "end_va": "0x3f9a0a",
+      "bytes": 80,
+      "sha256": "c9fecc43e2d2b49e8c0ded42fc4f387cc1177741f0f462313ea35709b785541e"
+    },
+    {
+      "name": "filtered_application_code",
+      "start_va": "0x3f9a0a",
+      "end_va": "0x401000",
+      "bytes": 30198,
+      "sha256": "f7ddc584c991060319b8df6f7d45e1e19862aef3aacf7ad2bf25f83247b7717f"
+    }
+  ],
+  "inner_overhead_uncompressed_bytes": 1501,
+  "filter_stream_bytes": [
+    18443,
+    190,
+    75,
+    35,
+    15,
+    413,
+    314,
+    511,
+    68,
+    339,
+    593,
+    48,
+    956,
+    3348,
+    2544,
+    932,
+    101,
+    628,
+    40,
+    605
+  ],
+  "reconstructed_application_code": {
+    "start_va": "0x401000",
+    "end_va": "0x408647",
+    "bytes": 30279,
+    "sha256": "2f5a0e029bfa5d9a814f4c5ec9d754b50f646a6065c1212630250b9f965ecb2f",
+    "all_20_streams_consumed": true,
+    "exact_postfix_match": true
+  },
+  "application_imports": [
+    {
+      "dll": "KERNEL32.dll",
+      "iat_va": "0x409010",
+      "names": [
+        "GlobalAlloc",
+        "GlobalFree",
+        "CreateThread",
+        "CloseHandle",
+        "lstrcmpiA",
+        "GetTickCount",
+        "GetSystemDirectoryA",
+        "CreateFileA",
+        "ExitProcess",
+        "ReadFile"
+      ]
+    },
+    {
+      "dll": "USER32.dll",
+      "iat_va": "0x409068",
+      "names": [
+        "PeekMessageA",
+        "CreateWindowExA",
+        "GetClientRect",
+        "TranslateMessage",
+        "DispatchMessageA",
+        "GetDC",
+        "GetAsyncKeyState",
+        "ShowCursor"
+      ]
+    },
+    {
+      "dll": "GDI32.dll",
+      "iat_va": "0x409000",
+      "names": [
+        "SetPixelFormat",
+        "ChoosePixelFormat",
+        "SwapBuffers"
+      ]
+    },
+    {
+      "dll": "OPENGL32.dll",
+      "iat_va": "0x40903c",
+      "names": [
+        "glGenTextures",
+        "wglMakeCurrent",
+        "glGetTexImage",
+        "glTexImage2D",
+        "glTexParameteri",
+        "wglGetProcAddress",
+        "wglCreateContext",
+        "glBindTexture",
+        "glRecti",
+        "glViewport"
+      ]
+    },
+    {
+      "dll": "WINMM.dll",
+      "iat_va": "0x40908c",
+      "names": [
+        "waveOutPrepareHeader",
+        "waveOutOpen",
+        "waveOutWrite",
+        "waveOutGetPosition"
+      ]
+    }
+  ],
+  "logical_decoder_output_bytes": 215493594,
+  "logical_decoder_output_end_va": "0xd17c007",
+  "decoder_work_base_va": "0xd183dd3",
+  "decoder_work_source_layout_bytes": 11649936,
+  "decoder_work_source_layout_end_va": "0xdca0163",
+  "decoder_work_source_layout_basis": "depacker.asm Work layout: modelMem=0x200118, runTable=0xa0f790, stretch=0xa10390, APM=0xa14390; matching native operands",
+  "proxies_not_original_packer_attribution": {
+    "stage2_code_tables": {
+      "raw": 845,
+      "zstd19": 634,
+      "xz9e": 680
+    },
+    "import_size_and_records": {
+      "raw": 576,
+      "zstd19": 380,
+      "xz9e": 448
+    },
+    "all_inner_overhead": {
+      "raw": 1501,
+      "zstd19": 1074,
+      "xz9e": 1096
+    },
+    "postfix_payload_proxy": {
+      "raw": 261212,
+      "zstd19": 69874,
+      "xz9e": 65416
+    },
+    "overhead_then_postfix_payload": {
+      "raw": 262713,
+      "zstd19": 70671,
+      "xz9e": 66344
+    },
+    "zeroed_overhead_then_postfix_payload": {
+      "raw": 262713,
+      "zstd19": 69680,
+      "xz9e": 65428
+    },
+    "postfix_payload_then_overhead": {
+      "raw": 262713,
+      "zstd19": 70950,
+      "xz9e": 66416
+    }
+  },
+  "non_additive_marginal_proxies": {
+    "zstd19": {
+      "prepend_minus_payload": 797,
+      "append_minus_payload": 1076,
+      "prepend_minus_zeroed": 991
+    },
+    "xz9e": {
+      "prepend_minus_payload": 928,
+      "append_minus_payload": 1000,
+      "prepend_minus_zeroed": 916
+    }
+  },
+  "limitations": [
+    "Saved stage1 mapping is partial; original range decoder is not re-executed.",
+    "Compressed stream jointly stores loader, metadata and application; no unique additive inner byte attribution.",
+    "Proxy uses post-fixup memory, not a reconstructed original linker or full precompression image.",
+    "Outer physical overhead plus proxy margins is a scenario estimate, not original measured total overhead.",
+    "No startup time/peak working-set measurement; reserved memory and zero skips are not stored bytes."
+  ]
+}

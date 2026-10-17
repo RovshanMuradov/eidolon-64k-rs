@@ -1,0 +1,337 @@
+{
+  "source": {
+    "repository": "https://github.com/ip7z/7zip",
+    "tag": "25.01",
+    "commit": "5e96a8279489832924056b1fa82f29d5837c9469",
+    "files": {
+      "LzmaDec.c": "b9ca2b8707400347c75d6fef288d1354a3b4cf93e8da42f26207b8bd4c4d5e59",
+      "LzmaDec.h": "3aaf07b4ae4173a2d103179455dc7089b5ddbc7fc3db3c0e40964a7499c69266",
+      "7zTypes.h": "5de943c886d5d7bbcf16203e9b292a9e7be327b43fe3dfd9f4ad07d6d0870ef6",
+      "Precomp.h": "fea249c753dfbbdd69d9397e91497205452b784279f70cad4658dc567cd2f85f",
+      "Compiler.h": "e4b14a798e6c01bc885966249afa6b5061a5dd10c723ce86b254e89ae650de7f",
+      "7zWindows.h": "8e7d4ed4f6599ca599514d5c1710668a61865f0c11c44b47994aede33f4cac16"
+    }
+  },
+  "closure_manifest_sha256": "7c1090f5d9db37ffda722579ad7e5b6b833a144222eedd2ac264cf05b45b9a86",
+  "tools": {
+    "gcc": "gcc (GCC) 16.2.1 20260810",
+    "i686-w64-mingw32-gcc": "i686-w64-mingw32-gcc (GCC) 16.2.0"
+  },
+  "results": {
+    "system_bank_payload": {
+      "input_bytes": 261212,
+      "input_sha256": "641bec492fb08ed295225ee03ba0ee2e8f3c6f6c3fc18ed1c95d06cd3ee327a3",
+      "lzma_alone_bytes": 65359,
+      "pe_bytes": 74240,
+      "pe_sha256": "285b6b2207f88569334271a7adf07e447ca4800d5a76cccd3f2fbd017a867c53",
+      "measured_scaffold_overhead": 8881,
+      "sample_indices": [],
+      "sample_pcm_bytes": 0,
+      "imports": {
+        "KERNEL32.dll": [
+          "ExitProcess"
+        ]
+      },
+      "sections": [
+        {
+          "name": ".text",
+          "virtual_bytes": 6288,
+          "rva": "0x1000",
+          "raw_bytes": 6656,
+          "file_offset": 1024
+        },
+        {
+          "name": ".rdata",
+          "virtual_bytes": 65424,
+          "rva": "0x3000",
+          "raw_bytes": 65536,
+          "file_offset": 7680
+        },
+        {
+          "name": ".bss",
+          "virtual_bytes": 392288,
+          "rva": "0x13000",
+          "raw_bytes": 0,
+          "file_offset": 0
+        },
+        {
+          "name": ".idata",
+          "virtual_bytes": 92,
+          "rva": "0x73000",
+          "raw_bytes": 512,
+          "file_offset": 73216
+        },
+        {
+          "name": ".reloc",
+          "virtual_bytes": 32,
+          "rva": "0x74000",
+          "raw_bytes": 512,
+          "file_offset": 73728
+        }
+      ],
+      "host_command": [
+        "gcc",
+        "-Os",
+        "-DZ7_LZMA_SIZE_OPT",
+        "-ffunction-sections",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/system_bank_payload",
+        "tools/analysis/audio/decoder_probe.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01/LzmaDec.c",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/system_bank_payload/decode-host"
+      ],
+      "pe_command": [
+        "i686-w64-mingw32-gcc",
+        "-Os",
+        "-DZ7_LZMA_SIZE_OPT",
+        "-ffunction-sections",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/system_bank_payload",
+        "tools/analysis/audio/decoder_probe.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01/LzmaDec.c",
+        "-nostdlib",
+        "-Wl,--entry,_entry,--gc-sections,--no-insert-timestamp,-s",
+        "-lkernel32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/system_bank_payload/decode-only.exe"
+      ],
+      "host_decode_byte_equality": true,
+      "pe_executed": false
+    },
+    "bundled_sample_payload": {
+      "input_bytes": 348572,
+      "input_sha256": "149be9a4536ac413e2003112765742b08bd14c235c5fa45cd97f579bf9f89ba5",
+      "lzma_alone_bytes": 138156,
+      "pe_bytes": 147456,
+      "pe_sha256": "6f31e7be051504712b7917f84fb711e315d17e02529cbe5722184136b1e3f256",
+      "measured_scaffold_overhead": 9300,
+      "sample_indices": [
+        9,
+        101,
+        106,
+        107,
+        127,
+        176,
+        194,
+        230,
+        242,
+        262,
+        263,
+        264,
+        266,
+        409,
+        425,
+        455
+      ],
+      "sample_pcm_bytes": 87360,
+      "imports": {
+        "KERNEL32.dll": [
+          "ExitProcess"
+        ]
+      },
+      "sections": [
+        {
+          "name": ".text",
+          "virtual_bytes": 6448,
+          "rva": "0x1000",
+          "raw_bytes": 6656,
+          "file_offset": 1024
+        },
+        {
+          "name": ".rdata",
+          "virtual_bytes": 138352,
+          "rva": "0x3000",
+          "raw_bytes": 138752,
+          "file_offset": 7680
+        },
+        {
+          "name": ".bss",
+          "virtual_bytes": 567040,
+          "rva": "0x25000",
+          "raw_bytes": 0,
+          "file_offset": 0
+        },
+        {
+          "name": ".idata",
+          "virtual_bytes": 92,
+          "rva": "0xb0000",
+          "raw_bytes": 512,
+          "file_offset": 146432
+        },
+        {
+          "name": ".reloc",
+          "virtual_bytes": 48,
+          "rva": "0xb1000",
+          "raw_bytes": 512,
+          "file_offset": 146944
+        }
+      ],
+      "host_command": [
+        "gcc",
+        "-Os",
+        "-DZ7_LZMA_SIZE_OPT",
+        "-ffunction-sections",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_sample_payload",
+        "tools/analysis/audio/decoder_probe.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01/LzmaDec.c",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_sample_payload/decode-host"
+      ],
+      "pe_command": [
+        "i686-w64-mingw32-gcc",
+        "-Os",
+        "-DZ7_LZMA_SIZE_OPT",
+        "-ffunction-sections",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_sample_payload",
+        "tools/analysis/audio/decoder_probe.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01/LzmaDec.c",
+        "-nostdlib",
+        "-Wl,--entry,_entry,--gc-sections,--no-insert-timestamp,-s",
+        "-lkernel32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_sample_payload/decode-only.exe"
+      ],
+      "host_decode_byte_equality": true,
+      "pe_executed": false
+    },
+    "bundled_event_closed_payload": {
+      "input_bytes": 346760,
+      "input_sha256": "78b9ecdd3c55d0e49a6ef2bcdc320275a0405db9365eab6f88a9d15dd1efe996",
+      "lzma_alone_bytes": 136898,
+      "pe_bytes": 145920,
+      "pe_sha256": "8f537daa265933a670368d2589845d7a47bd61df6ac723cd6849eb329e4ab1b1",
+      "measured_scaffold_overhead": 9022,
+      "sample_indices": [
+        9,
+        101,
+        106,
+        107,
+        127,
+        176,
+        194,
+        230,
+        242,
+        262,
+        263,
+        264,
+        409,
+        425,
+        455
+      ],
+      "sample_pcm_bytes": 85548,
+      "imports": {
+        "KERNEL32.dll": [
+          "ExitProcess"
+        ]
+      },
+      "sections": [
+        {
+          "name": ".text",
+          "virtual_bytes": 6448,
+          "rva": "0x1000",
+          "raw_bytes": 6656,
+          "file_offset": 1024
+        },
+        {
+          "name": ".rdata",
+          "virtual_bytes": 137104,
+          "rva": "0x3000",
+          "raw_bytes": 137216,
+          "file_offset": 7680
+        },
+        {
+          "name": ".bss",
+          "virtual_bytes": 563424,
+          "rva": "0x25000",
+          "raw_bytes": 0,
+          "file_offset": 0
+        },
+        {
+          "name": ".idata",
+          "virtual_bytes": 92,
+          "rva": "0xaf000",
+          "raw_bytes": 512,
+          "file_offset": 144896
+        },
+        {
+          "name": ".reloc",
+          "virtual_bytes": 48,
+          "rva": "0xb0000",
+          "raw_bytes": 512,
+          "file_offset": 145408
+        }
+      ],
+      "host_command": [
+        "gcc",
+        "-Os",
+        "-DZ7_LZMA_SIZE_OPT",
+        "-ffunction-sections",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_event_closed_payload",
+        "tools/analysis/audio/decoder_probe.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01/LzmaDec.c",
+        "-Wl,--gc-sections",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_event_closed_payload/decode-host"
+      ],
+      "pe_command": [
+        "i686-w64-mingw32-gcc",
+        "-Os",
+        "-DZ7_LZMA_SIZE_OPT",
+        "-ffunction-sections",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01",
+        "-I",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_event_closed_payload",
+        "tools/analysis/audio/decoder_probe.c",
+        "/home/rovshan/Work/asm/Eidolon/.tools/analysis/audio/lzma-25.01/LzmaDec.c",
+        "-nostdlib",
+        "-Wl,--entry,_entry,--gc-sections,--no-insert-timestamp,-s",
+        "-lkernel32",
+        "-o",
+        "/home/rovshan/Work/asm/Eidolon/data/analysis/audio/T19/decoder/bundled_event_closed_payload/decode-only.exe"
+      ],
+      "host_decode_byte_equality": true,
+      "pe_executed": false
+    }
+  },
+  "limitations": [
+    "PE is an unexecuted decoder-only scaffold, not the demo.",
+    "No native payload execution, import reconstruction, fixups or Rust startup.",
+    "Bundled scaffold includes delta16 inverse and index/length table, not synth integration.",
+    "System-bank variant preserves an external OS bank dependency; bundled variant carries sample bytes."
+  ]
+}

@@ -8,6 +8,7 @@ pub mod physics;
 pub mod timeline;
 pub mod observe;
 pub mod synthesis;
+pub mod sha256;
 #[cfg(target_os = "windows")]
 pub mod runtime;
 #[cfg(target_os = "windows")]

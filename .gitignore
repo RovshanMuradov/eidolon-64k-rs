@@ -8,3 +8,6 @@ __pycache__/
 data/
 handoff/
 .wine/
+.build/
+verify/local/
+eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip

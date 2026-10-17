@@ -1,0 +1,840 @@
+{
+  "schema": "eidolon-audio-static-v1",
+  "source": {
+    "repository": "https://github.com/gopher-atz/64klang",
+    "commit": "23d7cfcf5110f5ded50fae4a60e316d557a6d45a",
+    "date": "2018-03-03",
+    "files": {
+      "Synth.cpp": "1afd3a9060e4c7386168122dfa97fed6721b3f3d5c5ea25878ecd8bc35e098d9",
+      "SynthNode.cpp": "0537fdf3e3f9aafc7805f1755f46e7d1fa0983f407d509dde9710b785119b4d4",
+      "SynthNode.h": "02213b717b24f3ec9387327179fc95cd74e2f168a5d02242c1e92da7bd06ab29",
+      "sample_t.cpp": "b3a4179019f0677428a8a739541ce2e84f0c1163d7101b5657bade9d692d6b89",
+      "sample_t.h": "cd8ee0afb7ee7bec5670e499c48d44594d782f6e53805c1c6161bb8487e3b2e6",
+      "SynthAllocator.cpp": "edfe2cb0d4d1403f0bb9f1228fa9e5ccc1503a3a111fc5945c0b1d2c0d8f75dc",
+      "64k2Patch.h": "7c9a9c925ef91fa53ecb992203cd7e08b1a34644f53a592fd026a7fa29c1a2e0",
+      "64k2Song.h": "98782f138d0e055c7cc55c18661bae322c9ef1ff0c827640e8ed7fac1c0415da"
+    },
+    "matched_constant_bytes": 632,
+    "source_extra_constant_bytes": 0,
+    "instruction_pins": {
+      "0x401198": "00108a104083e90175f6",
+      "0x401041": "660f38280530b8160b",
+      "0x401051": "660f70c072f30fe6c0",
+      "0x401648": "b9c0ff000023c1",
+      "0x401665": "0fae542414",
+      "0x405b25": "8b41200fb710",
+      "0x405e47": "8b049dc0964000",
+      "0x405e51": "8b049de0974000"
+    }
+  },
+  "inputs": {
+    "postfix": {
+      "path": "reverse/confirmed-debug/postfix-00400000.bin",
+      "bytes": 327680,
+      "sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504",
+      "mapped_base": "0x00400000"
+    },
+    "native": {
+      "archive_member": "Eidolon - Poo-Brain (native).exe",
+      "copy_path": "/tmp/opencode/eidolon/T1/Eidolon - Poo-Brain (native).exe",
+      "bytes": 60928,
+      "sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
+    },
+    "dls": {
+      "filename": "gm.dls",
+      "archive_member": "gm16.dls",
+      "bytes": 3440660,
+      "sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "transformation": "Byte-identical extraction; filename only changes to gm.dls.",
+      "vendor_mapping": "DirectX.cab/directx.inf, [GM98_Drivers], gm.dls,gm16.dls",
+      "vendor_notice": "$EIDOLON_DATA/reference/dependencies/source/gmreadme.txt"
+    }
+  },
+  "environment": {
+    "python": "3.14.7 (main, Aug 14 2026, 15:35:28) [Clang 22.1.3 ]",
+    "zstandard": "0.25.0",
+    "zstd": [
+      1,
+      5,
+      7
+    ],
+    "lzma": "Python stdlib XZ, preset 9 EXTREME",
+    "resolution": null,
+    "gpu": null,
+    "driver": null,
+    "wine": null,
+    "scope": "static file/source only"
+  },
+  "song": {
+    "va": "0x437040",
+    "bpm": 80.0,
+    "frames": 19964544,
+    "quantum": 64,
+    "encoded_bytes": 32123,
+    "streams": [
+      {
+        "channel": 0,
+        "type": 0,
+        "special": 0,
+        "count": 165,
+        "first_sample": 2778112,
+        "last_sample": 18447296
+      },
+      {
+        "channel": 0,
+        "type": 1,
+        "special": 0,
+        "count": 165,
+        "first_sample": 2645952,
+        "last_sample": 18381312
+      },
+      {
+        "channel": 0,
+        "type": 3,
+        "special": 0,
+        "count": 460,
+        "first_sample": 6350400,
+        "last_sample": 19897728
+      },
+      {
+        "channel": 1,
+        "type": 0,
+        "special": 0,
+        "count": 91,
+        "first_sample": 6532160,
+        "last_sample": 10898048
+      },
+      {
+        "channel": 1,
+        "type": 1,
+        "special": 0,
+        "count": 91,
+        "first_sample": 6515712,
+        "last_sample": 10882688
+      },
+      {
+        "channel": 1,
+        "type": 3,
+        "special": 0,
+        "count": 490,
+        "first_sample": 9831552,
+        "last_sample": 19897728
+      },
+      {
+        "channel": 2,
+        "type": 0,
+        "special": 0,
+        "count": 238,
+        "first_sample": 2778112,
+        "last_sample": 19646400
+      },
+      {
+        "channel": 2,
+        "type": 1,
+        "special": 0,
+        "count": 238,
+        "first_sample": 2645952,
+        "last_sample": 19580352
+      },
+      {
+        "channel": 2,
+        "type": 3,
+        "special": 0,
+        "count": 597,
+        "first_sample": 2514368,
+        "last_sample": 19897728
+      },
+      {
+        "channel": 2,
+        "type": 3,
+        "special": 3,
+        "count": 1,
+        "first_sample": 2654912,
+        "last_sample": 2654912
+      },
+      {
+        "channel": 3,
+        "type": 0,
+        "special": 0,
+        "count": 233,
+        "first_sample": 3042752,
+        "last_sample": 19584384
+      },
+      {
+        "channel": 3,
+        "type": 1,
+        "special": 0,
+        "count": 233,
+        "first_sample": 2778240,
+        "last_sample": 19580352
+      },
+      {
+        "channel": 4,
+        "type": 0,
+        "special": 0,
+        "count": 68,
+        "first_sample": 6482560,
+        "last_sample": 16934208
+      },
+      {
+        "channel": 4,
+        "type": 1,
+        "special": 0,
+        "count": 68,
+        "first_sample": 6350400,
+        "last_sample": 16802048
+      },
+      {
+        "channel": 5,
+        "type": 0,
+        "special": 0,
+        "count": 135,
+        "first_sample": 3439616,
+        "last_sample": 19588480
+      },
+      {
+        "channel": 5,
+        "type": 1,
+        "special": 0,
+        "count": 135,
+        "first_sample": 3175168,
+        "last_sample": 19580352
+      },
+      {
+        "channel": 6,
+        "type": 0,
+        "special": 0,
+        "count": 144,
+        "first_sample": 4266496,
+        "last_sample": 19646400
+      },
+      {
+        "channel": 6,
+        "type": 1,
+        "special": 0,
+        "count": 144,
+        "first_sample": 4233600,
+        "last_sample": 19582464
+      },
+      {
+        "channel": 7,
+        "type": 0,
+        "special": 0,
+        "count": 16,
+        "first_sample": 115584,
+        "last_sample": 18091840
+      },
+      {
+        "channel": 7,
+        "type": 1,
+        "special": 0,
+        "count": 16,
+        "first_sample": 90944,
+        "last_sample": 17728192
+      },
+      {
+        "channel": 7,
+        "type": 3,
+        "special": 1,
+        "count": 3,
+        "first_sample": 0,
+        "last_sample": 19897792
+      },
+      {
+        "channel": 7,
+        "type": 3,
+        "special": 2,
+        "count": 3,
+        "first_sample": 0,
+        "last_sample": 19897792
+      },
+      {
+        "channel": 7,
+        "type": 3,
+        "special": 3,
+        "count": 1,
+        "first_sample": 0,
+        "last_sample": 0
+      },
+      {
+        "channel": 7,
+        "type": 3,
+        "special": 4,
+        "count": 1,
+        "first_sample": 0,
+        "last_sample": 0
+      },
+      {
+        "channel": 7,
+        "type": 3,
+        "special": 6,
+        "count": 1,
+        "first_sample": 0,
+        "last_sample": 0
+      },
+      {
+        "channel": 8,
+        "type": 0,
+        "special": 0,
+        "count": 33,
+        "first_sample": 2910400,
+        "last_sample": 19646400
+      },
+      {
+        "channel": 8,
+        "type": 1,
+        "special": 0,
+        "count": 33,
+        "first_sample": 0,
+        "last_sample": 19580352
+      },
+      {
+        "channel": 9,
+        "type": 0,
+        "special": 0,
+        "count": 42,
+        "first_sample": 9839616,
+        "last_sample": 18091840
+      },
+      {
+        "channel": 9,
+        "type": 1,
+        "special": 0,
+        "count": 42,
+        "first_sample": 9823232,
+        "last_sample": 16934400
+      },
+      {
+        "channel": 10,
+        "type": 0,
+        "special": 0,
+        "count": 1574,
+        "first_sample": 2703680,
+        "last_sample": 19646400
+      },
+      {
+        "channel": 10,
+        "type": 1,
+        "special": 0,
+        "count": 1574,
+        "first_sample": 2695552,
+        "last_sample": 19580352
+      },
+      {
+        "channel": 11,
+        "type": 0,
+        "special": 0,
+        "count": 6,
+        "first_sample": 10385408,
+        "last_sample": 17463424
+      },
+      {
+        "channel": 11,
+        "type": 1,
+        "special": 0,
+        "count": 6,
+        "first_sample": 10253248,
+        "last_sample": 17198976
+      },
+      {
+        "channel": 12,
+        "type": 0,
+        "special": 0,
+        "count": 47,
+        "first_sample": 5357952,
+        "last_sample": 17092160
+      },
+      {
+        "channel": 12,
+        "type": 1,
+        "special": 0,
+        "count": 47,
+        "first_sample": 5291968,
+        "last_sample": 16935168
+      },
+      {
+        "channel": 13,
+        "type": 0,
+        "special": 0,
+        "count": 37,
+        "first_sample": 11509952,
+        "last_sample": 13229824
+      },
+      {
+        "channel": 13,
+        "type": 1,
+        "special": 0,
+        "count": 37,
+        "first_sample": 11113152,
+        "last_sample": 13097664
+      },
+      {
+        "channel": 14,
+        "type": 0,
+        "special": 0,
+        "count": 0,
+        "first_sample": null,
+        "last_sample": null
+      },
+      {
+        "channel": 14,
+        "type": 1,
+        "special": 0,
+        "count": 0,
+        "first_sample": null,
+        "last_sample": null
+      },
+      {
+        "channel": 15,
+        "type": 0,
+        "special": 0,
+        "count": 30,
+        "first_sample": 9905792,
+        "last_sample": 17728000
+      },
+      {
+        "channel": 15,
+        "type": 1,
+        "special": 0,
+        "count": 30,
+        "first_sample": 9889408,
+        "last_sample": 17463552
+      }
+    ],
+    "event_count": 7275,
+    "types": {
+      "3": 1557,
+      "1": 2859,
+      "0": 2859
+    },
+    "first_sample": 0,
+    "last_sample": 19897792,
+    "events_sha256": "b6474811f49a54fc330b04d3bcb006bd78c20ce23a92c0dd227575af36d542f3"
+  },
+  "patch": {
+    "va": "0x43edf0",
+    "mono_offset_words": 3328,
+    "stereo_offset_words": 3728,
+    "max_offset_words": 3836,
+    "graph_nodes": 776,
+    "mono_constants": 200,
+    "stereo_constants": 27,
+    "arp_sequences": [
+      {
+        "loop_index": 0,
+        "steps_u16": [
+          32736,
+          32736,
+          32748,
+          236,
+          32724,
+          212,
+          32736,
+          224,
+          0,
+          32736,
+          32736,
+          224,
+          32748,
+          32748,
+          32724,
+          212,
+          32748,
+          236,
+          32736,
+          224,
+          32724,
+          212,
+          32736,
+          224,
+          32748,
+          32736,
+          0,
+          32724,
+          32736,
+          32736,
+          32736,
+          32736
+        ]
+      }
+    ],
+    "node_types": {
+      "ADD": 152,
+      "ADSR": 54,
+      "BQFILTER": 36,
+      "CHANNELROOT": 16,
+      "CLIP": 6,
+      "COMBDELAY": 5,
+      "COMPARE": 1,
+      "COMPEXP": 1,
+      "DCFILTER": 9,
+      "DELAY": 29,
+      "DISTORTION": 9,
+      "DIV": 1,
+      "ENVFOLLOWER": 1,
+      "EVENTSIGNAL": 35,
+      "FBDELAY": 2,
+      "FORMANT": 6,
+      "GLITCH": 5,
+      "GMDLS": 17,
+      "LFO": 18,
+      "MAX": 2,
+      "MIDISIGNAL": 7,
+      "MIN": 2,
+      "MIX": 13,
+      "MONO": 3,
+      "MUL": 74,
+      "MULTIADD": 19,
+      "NEG": 12,
+      "NOISEGEN": 16,
+      "NOTECONTROLLER": 16,
+      "ONEPOLEFILTER": 9,
+      "ONEZEROFILTER": 1,
+      "OSCILLATOR": 23,
+      "OSRAND": 6,
+      "PANNING": 13,
+      "PROCESS": 2,
+      "REVERB": 21,
+      "SAMPLER": 23,
+      "SUB": 10,
+      "SVFILTER": 4,
+      "SYNTHROOT": 1,
+      "TRIGGER": 1,
+      "TRIGGERSEQ": 2,
+      "VOICEMANAGER": 37,
+      "VOICEROOT": 32,
+      "VOICE_ATTACKVELOCITY": 19,
+      "VOICE_NOTE": 5
+    },
+    "nodes_sha256": "5ed111b471aeab662927046a581292ed9c9ef560e763e6104f193fb705230aaf",
+    "gmdls_indices": [
+      9,
+      101,
+      106,
+      107,
+      127,
+      176,
+      194,
+      230,
+      242,
+      262,
+      263,
+      264,
+      266,
+      409,
+      425,
+      455
+    ],
+    "gmdls_samples": [
+      {
+        "index": 9,
+        "bytes": 2192,
+        "sha256": "c70bf52d5e9885b473c11621f4714f95a2c7bef4bc8d56274ce85ccaea63f433"
+      },
+      {
+        "index": 101,
+        "bytes": 5834,
+        "sha256": "797e4ee56e530958daf54cf72ffbd15ed2eaac0938f8a281015484d6f295d813"
+      },
+      {
+        "index": 106,
+        "bytes": 16584,
+        "sha256": "9f93b7da975cd520e51f6f65fea520c919784263bdc3ac9e7c703bd0e1806d29"
+      },
+      {
+        "index": 107,
+        "bytes": 11968,
+        "sha256": "d9bce0848fab5bba045913555d4cd1fea39b6b337c5ce45a145ebb8f24f94549"
+      },
+      {
+        "index": 127,
+        "bytes": 2252,
+        "sha256": "bd61722423100a4d6f97d4f3f47c78d03ddb19c78a771b669933ce9721c3aa8b"
+      },
+      {
+        "index": 176,
+        "bytes": 12038,
+        "sha256": "20160c0f235975953f6be8d0acd00cd38c57c8d82e19cef52b416cbe71326bf0"
+      },
+      {
+        "index": 194,
+        "bytes": 2896,
+        "sha256": "8cd3fa19806e77bd17608473f7633dd0d28427d15e1d75d717f191c82c1fcde9"
+      },
+      {
+        "index": 230,
+        "bytes": 2334,
+        "sha256": "e4f6fff713a1da7b48ed65e6ad88294ecf5c3d5e0d77c2d926607fbf07f0b8cb"
+      },
+      {
+        "index": 242,
+        "bytes": 4010,
+        "sha256": "934bb6aa868faaa6c6ace170b9ded4c7deaa17e37e2a5bb1206d22ab7eb91930"
+      },
+      {
+        "index": 262,
+        "bytes": 4492,
+        "sha256": "ae7ce4bf1c9e6e95e61ac37b2162972445b5d8f0a89a26be984f7935dfdada31"
+      },
+      {
+        "index": 263,
+        "bytes": 3262,
+        "sha256": "51cad5b6b682e155073faa6f08c2bea3cf9e833fab5c13bfa4a935ff6fdea491"
+      },
+      {
+        "index": 264,
+        "bytes": 3224,
+        "sha256": "24392e82512fa580825ed2d98b6f83ddddeb4a4e642c8b8cb35d81049c789512"
+      },
+      {
+        "index": 266,
+        "bytes": 1812,
+        "sha256": "bf7416564990d247900f12e441c52f2d056399072d42d772b6065b547325a14d"
+      },
+      {
+        "index": 409,
+        "bytes": 9784,
+        "sha256": "29e8f021160d8aea96954eac7e7dbe7b8debc90b8e22e4f70e05a374f9b04c85"
+      },
+      {
+        "index": 425,
+        "bytes": 1872,
+        "sha256": "63d3bdcf217ecf0597efc184a0686e6ab7c826aa7dc0c2128f0d13d2312c91f4"
+      },
+      {
+        "index": 455,
+        "bytes": 2806,
+        "sha256": "5b547b20efea5f3eb596380d780185a942800ca91805c49672f910eecada6448"
+      }
+    ]
+  },
+  "measurement_domain": {
+    "start": "0x401000",
+    "end_exclusive": "0x440c5c",
+    "shader_pointers": [
+      "0x409918",
+      "0x409e38",
+      "0x40ae60",
+      "0x40b1a8",
+      "0x40d358",
+      "0x40e1c0",
+      "0x40e3a0",
+      "0x40e3f0",
+      "0x40e530",
+      "0x40e828",
+      "0x40ecd0",
+      "0x40ed48",
+      "0x40ee1c",
+      "0x40ee58",
+      "0x40ef30",
+      "0x40f008",
+      "0x40f488",
+      "0x4117e8",
+      "0x4123a8",
+      "0x415348",
+      "0x415e10",
+      "0x415e80",
+      "0x4170e4",
+      "0x417118",
+      "0x417fd0",
+      "0x418210",
+      "0x41840c",
+      "0x418430",
+      "0x4184b8",
+      "0x419d48",
+      "0x419fc8",
+      "0x41a108",
+      "0x41a538",
+      "0x41a614",
+      "0x41a618",
+      "0x41a848",
+      "0x41b0b0",
+      "0x41b480",
+      "0x41bf84",
+      "0x41bfc0",
+      "0x41c450",
+      "0x41c648",
+      "0x41c828",
+      "0x41c8f8",
+      "0x41cc78",
+      "0x41d340",
+      "0x41d710",
+      "0x41d990",
+      "0x41da68",
+      "0x41de34",
+      "0x41de70",
+      "0x41e66c",
+      "0x41e6a8",
+      "0x41e9b8",
+      "0x41ebb0",
+      "0x41f020",
+      "0x41f1b8",
+      "0x41f874",
+      "0x41f8d0",
+      "0x41f980",
+      "0x41fbd0",
+      "0x41fc48",
+      "0x420238",
+      "0x420250",
+      "0x4205d0",
+      "0x420728",
+      "0x4207b0",
+      "0x420ba0",
+      "0x421040",
+      "0x421130",
+      "0x421290",
+      "0x4212d8",
+      "0x421a68",
+      "0x421d30",
+      "0x421f40",
+      "0x4220d0",
+      "0x422150",
+      "0x422ac0",
+      "0x423470",
+      "0x423690",
+      "0x4239c0",
+      "0x423a50",
+      "0x424220",
+      "0x4247f0",
+      "0x424938",
+      "0x424a48",
+      "0x424c10",
+      "0x425068",
+      "0x425130",
+      "0x425940",
+      "0x4264d0",
+      "0x426598",
+      "0x426c58"
+    ],
+    "all_domain_bytes_assigned_once": true
+  },
+  "pe": {
+    "image_base": "0x3e0000",
+    "size_of_image": 227295232,
+    "entry_rva": "0xe786",
+    "known_unpacker_entry_fragment_bytes": 1294,
+    "full_unpacker_cost": null
+  },
+  "sizes": {
+    "audio_code": {
+      "raw": 20320,
+      "zstd19": 9540,
+      "xz9e": 9408,
+      "xz9e_x86": 9252,
+      "sha256": "d022a59ebc4c5d31f5bfcbe5fe9f45ccd848ab98cd34840911fc23dc833b9fa5"
+    },
+    "engine_code": {
+      "raw": 9959,
+      "zstd19": 3463,
+      "xz9e": 3408,
+      "xz9e_x86": 3376,
+      "sha256": "f19416c19f888c71e6b2dd28916c316917c02a9178b9566a26cdffb1f79071a1"
+    },
+    "graphics_data": {
+      "raw": 63260,
+      "zstd19": 18264,
+      "xz9e": 16588,
+      "xz9e_x86": 16664,
+      "sha256": "bb2dd2da644b7dd12a80e0c1334c3d761135510a7721e3b580d212474bc46d44"
+    },
+    "other_data": {
+      "raw": 10746,
+      "zstd19": 2400,
+      "xz9e": 2272,
+      "xz9e_x86": 2276,
+      "sha256": "053c9c9157c95ad6727a0903505d9e2003f4fc6c77a7e5da6f3710a1708055e1"
+    },
+    "patch_and_trailer": {
+      "raw": 7744,
+      "zstd19": 4248,
+      "xz9e": 3892,
+      "xz9e_x86": 3892,
+      "sha256": "ed17b8a5a0e4fafbc20f0c6fa82a85da4308ba2e874dee2efadfd89c93b74e9e"
+    },
+    "shaders": {
+      "raw": 117040,
+      "zstd19": 25708,
+      "xz9e": 24816,
+      "xz9e_x86": 24816,
+      "sha256": "8f40d65e117a70bd4442403d72c39bfc5293e13ec7a0ffe93c176f19a4bb1d48"
+    },
+    "song": {
+      "raw": 32143,
+      "zstd19": 6292,
+      "xz9e": 6232,
+      "xz9e_x86": 6252,
+      "sha256": "1e90d01a49c8fd5eeded293dcc04c04f31c7982dfbbbf5c208ab545d605d8fe2"
+    },
+    "joint_native_order": {
+      "raw": 261212,
+      "zstd19": 69874,
+      "xz9e": 65416,
+      "xz9e_x86": 65368,
+      "sha256": "641bec492fb08ed295225ee03ba0ee2e8f3c6f6c3fc18ed1c95d06cd3ee327a3"
+    },
+    "joint_grouped": {
+      "raw": 261212,
+      "zstd19": 69804,
+      "xz9e": 65472,
+      "xz9e_x86": 65460,
+      "sha256": "76be84692bae20e1197106c70e754fe867f81732e059a8801db3dace53801b17"
+    },
+    "decoded_song": {
+      "raw": 32143,
+      "zstd19": 11828,
+      "xz9e": 10216,
+      "xz9e_x86": 10216,
+      "sha256": "371ffffbd719a053ceb3fc1750f1eac126b9f062b65b8aae56d20cd5cd93b25f"
+    },
+    "referenced_dls_pcm": {
+      "raw": 87360,
+      "zstd19": 85649,
+      "xz9e": 84328,
+      "xz9e_x86": 84328,
+      "sha256": "dd2817aa8b43f332b16ba3c40b00db98ca8b5365f6e276c95b228f75c90b2f07"
+    },
+    "whole_dls_bank": {
+      "raw": 3440660,
+      "zstd19": 3050243,
+      "xz9e": 2960024,
+      "xz9e_x86": 2959620,
+      "sha256": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0"
+    },
+    "referenced_dls_delta16_planar": {
+      "raw": 87360,
+      "zstd19": 75197,
+      "xz9e": 72732,
+      "xz9e_x86": 72740,
+      "sha256": "48e61ae31b9aba9040af200844c06a9eec186e051edfa94d5c55cba4cdce9773"
+    },
+    "joint_plus_referenced_dls": {
+      "raw": 348572,
+      "zstd19": 155398,
+      "xz9e": 147940,
+      "xz9e_x86": 148108,
+      "sha256": "03cba746363c31bfb11aa12410ff45af223f4381d4219407685bfe484a7cf2b7"
+    },
+    "joint_plus_delta16_dls": {
+      "raw": 348572,
+      "zstd19": 144958,
+      "xz9e": 138220,
+      "xz9e_x86": 138176,
+      "sha256": "149be9a4536ac413e2003112765742b08bd14c235c5fa45cd97f579bf9f89ba5"
+    },
+    "packed_native_exe": {
+      "raw": 60928,
+      "zstd19": 60576,
+      "xz9e": 60988,
+      "xz9e_x86": 60988,
+      "sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
+    }
+  },
+  "limitations": [
+    "Source lineage/format match, not exact source revision or PCM equivalence.",
+    "2018 source postdates 2017 native; native deferred-free placement differs.",
+    "Memory-layout compression includes gaps; no executable or unpacker generated.",
+    "Referenced DLS is conservative graph reachability, not measured active sample use.",
+    "Shader coverage includes T18 loading pointer; unclassified bytes remain in other_data.",
+    "No decompressor/import/startup/Rust runtime overhead in compressed proxies."
+  ]
+}

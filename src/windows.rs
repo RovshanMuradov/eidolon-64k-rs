@@ -111,6 +111,11 @@ extern "system" {
     pub fn glViewport(x: i32, y: i32, width: i32, height: i32);
     pub fn glRecti(x1: i32, y1: i32, x2: i32, y2: i32);
     pub fn glGetString(name: u32) -> *const u8;
+    pub fn glGetIntegerv(name: u32, values: *mut i32);
+    pub fn glGetError() -> u32;
+    pub fn glReadBuffer(mode: u32);
+    pub fn glPixelStorei(name: u32, value: i32);
+    pub fn glReadPixels(x: i32, y: i32, width: i32, height: i32, format: u32, kind: u32, pixels: *mut c_void);
 }
 #[link(name = "winmm")]
 extern "system" {

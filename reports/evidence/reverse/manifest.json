@@ -1,0 +1,148 @@
+{
+  "schema": "eidolon-t1-static-analysis-v1",
+  "date": "2026-10-15",
+  "inputs": {
+    "archive": {
+      "path": "eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip",
+      "sha256": "11104969a59ef85d1f7ed416abfb01a377834504369902a735eb1a2fd1e40008"
+    },
+    "native": {
+      "archive_member": "Eidolon - Poo-Brain (native).exe",
+      "copy_path": "/tmp/opencode/eidolon/T1/Eidolon - Poo-Brain (native).exe",
+      "bytes": 60928,
+      "sha256": "376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be"
+    }
+  },
+  "static_tools": {
+    "file": "5.48",
+    "objdump_and_strings": "GNU Binutils 2.47",
+    "unzip": "6.00",
+    "sha256sum": "GNU coreutils 9.11",
+    "python": "3.14.7",
+    "rea": "6.5.0",
+    "ghidra": "12.1.4",
+    "jdk": "26.0.2",
+    "mingw_gcc": "16.2.0",
+    "zstandard": "1.5.7"
+  },
+  "ghidra_entry_slice": {
+    "copy_path": "/tmp/opencode/eidolon/T1/unpacker-entry.bin",
+    "source_file_range_half_open": ["0xe786", "0xec94"],
+    "bytes": 1294,
+    "sha256": "96b069562bbaf8828dfd3cee60107b9f90e232b3f7549f7723e70f59a7be811e",
+    "format": "raw-binary",
+    "architecture": "x86",
+    "entry_point_and_load_address": "0x3ee786",
+    "language": "x86:LE:32:default",
+    "compiler_spec": "gcc",
+    "limitations": [
+      "Static fragment; helper routines, tables and destination memory are outside its mapping.",
+      "No PE import reconstruction, Win32 ABI recovery or payload decompression.",
+      "REA PE import rejects the original compact DOS page-count/final-page fields.",
+      "Whole-file raw import seeded at 0x3e0000 did not define the unpacker entry; entry-slice import resolved this."
+    ]
+  },
+  "runtime_environment": {
+    "status": "diagnostic_failure_reproduced",
+    "gpu": "NVIDIA GeForce RTX 3070 Ti",
+    "driver": "610.57.04",
+    "wine": "11.17-1",
+    "gamescope": "3.16.25-1",
+    "backend": "headless",
+    "resolution": [1920, 1080],
+    "refresh_hz": 60,
+    "prefix": "/tmp/opencode/eidolon/T1/prefix",
+    "winearch": "win64",
+    "windows_version": "win10",
+    "graphics_driver": "x11",
+    "wine_dll_overrides": "winemenubuilder.exe,mscoree,mshtml=d",
+    "wine_debug": "-all",
+    "locale": "C",
+    "timezone": "UTC",
+    "wrapper_timeout_seconds": 160,
+    "debugger_timeout_seconds": 120,
+    "clock_control": "none; one-shot breakpoints perturb scheduling",
+    "rng_state": "original seeds; no intervention",
+    "debugger_source_sha256": "6827689113711cb08114f4bcd121c351f5fa15c6c6263d135a4bb3fefbb46408",
+    "wine_headless_sha256": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a",
+    "tools_run_sha256": "957c9840fa552e115da5a411b1eca71e156e432e88efb390d394849bd114f741"
+  },
+  "runtime_diagnostic": {
+    "command": "bash tools/run bash tools/reverse/diagnose-native.sh",
+    "result": "native fault reproduced; debugger terminates child with exit 5 after first-chance dump; gamescope exits 0",
+    "stage1_transfer": "0x003f942d",
+    "postfix_transfer": "0x003f94a4",
+    "application_entry": "0x00406379",
+    "limitations": [
+      "Diagnostic only, not a reference capture; original code bytes restored at every breakpoint hit.",
+      "Dumps are partial raw address ranges, not a reconstructed PE or full memory map.",
+      "No gm.dls is supplied; recovery, audio playback and timeline hooks remain unverified live.",
+      "Ghidra raw-entry-only import did not define disconnected functions; AnalyzeHooks.java supplies explicit seeds."
+    ],
+    "log_evidence": {
+      "path": "reports/evidence/reverse/runtime-fault.log.zst",
+      "bytes": 2718,
+      "sha256": "84c1a2f87872580fc6049898509496b5ff87ded4feecd2fd8f88b7e61969f8f9"
+    },
+    "files": {
+      "debugger": {
+        "path": "reverse/confirmed-debug/debug-native.exe",
+        "bytes": 144553,
+        "sha256": "0007e2875ac55ff8901a273ef6c576a00346705cccd6ac67912db067c557a1a3"
+      },
+      "log": {
+        "path": "reverse/confirmed-debug/run.log",
+        "bytes": 12484,
+        "sha256": "f917752e09dace4de1f08453c44f5dcbe41964589f2896091c9c0da9cc75afac"
+      },
+      "stage1": {
+        "path": "reverse/confirmed-debug/stage1-003f9000.bin",
+        "bytes": 94208,
+        "sha256": "20127373a625993b1254415f0ca65785105c34212e5d2bfe20cba9bde2b91823",
+        "mapped_base": "0x003f9000"
+      },
+      "postfix": {
+        "path": "reverse/confirmed-debug/postfix-00400000.bin",
+        "bytes": 327680,
+        "sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504",
+        "mapped_base": "0x00400000"
+      },
+      "fault_image": {
+        "path": "reverse/confirmed-debug/fault-image-003e0000.bin",
+        "bytes": 2228224,
+        "sha256": "981afe9a1f710a14f381d58fc44968796dcad355a4d07a3f76921a5a9a144e4a",
+        "mapped_base": "0x003e0000"
+      },
+      "fault_stack": {
+        "path": "reverse/confirmed-debug/fault-stack-13ddf000.bin",
+        "bytes": 20480,
+        "sha256": "758f3f2e270ffe1f290e798218ea5194c830dd3fcca8e5af6edb3748055fb580",
+        "mapped_base": "0x13ddf000"
+      },
+      "fault_node": {
+        "path": "reverse/confirmed-debug/fault-edx-13037000.bin",
+        "bytes": 36864,
+        "sha256": "00718b558b7bde196ac7aad6db5be462f8eab376e7afb4cef1b8ee99cbdbc432",
+        "mapped_base": "0x13037000"
+      },
+      "fault_state": {
+        "path": "reverse/confirmed-debug/fault-state-0b16b000.bin",
+        "bytes": 73728,
+        "sha256": "02d39acc470a505de20a1eaa8124b337c854359b2e9dc23b9ef29577f6389c9b",
+        "mapped_base": "0x0b16b000"
+      },
+      "samples": {
+        "path": "reverse/confirmed-debug/samples-00f01070.bin",
+        "bytes": 4096,
+        "sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7",
+        "mapped_base": "0x00f01070"
+      },
+      "synth_init": {
+        "path": "reverse/confirmed-debug/synth-init-0b16b800.bin",
+        "bytes": 1536,
+        "sha256": "861682a8492c1da298d28241bc566aac0d5a04ba9d96ebaf6c2663df9ae4e5b3",
+        "mapped_base": "0x0b16b800"
+      }
+    }
+  }
+}

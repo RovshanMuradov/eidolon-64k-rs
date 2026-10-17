@@ -1,6 +1,6 @@
 //! Windows audiovisual runtime. Synthesis is injected through the shared Rust contract.
 //! Graphics-only mode is explicitly diagnostic and never supplies placeholder audio.
-use std::{ptr, thread, time::Duration};
+use std::{fs::File, io::{BufWriter, Write}, ptr, thread, time::Duration};
 use crate::{contract, engine::Engine, fp::GraphicsFp, graphics::Graphics, observe::{self, RuntimeSnapshot}, synthesis, windows::*};
 
 pub use synthesis::RenderPcm;
@@ -15,15 +15,20 @@ unsafe extern "system" fn window_proc(window: Handle, message: u32, wparam: usiz
 
 struct Window { window: Handle, dc: Handle, context: Handle, cursor_hidden: bool }
 impl Window {
-    unsafe fn new() -> Result<Self, String> {
+    /// `size` creates a fixed client area instead of the maximized popup used for playback.
+    unsafe fn new(size: Option<[u32; 2]>) -> Result<Self, String> {
         let instance = GetModuleHandleA(ptr::null());
         let class_name = b"EidolonRust\0";
         let class = WindowClass { style: 0x20, procedure: window_proc, class_extra: 0, window_extra: 0,
             instance, icon: ptr::null_mut(), cursor: ptr::null_mut(), background: ptr::null_mut(),
             menu: ptr::null(), name: class_name.as_ptr().cast() };
         if RegisterClassA(&class) == 0 { return Err("RegisterClassA failed".into()); }
-        let window = CreateWindowExA(0, class.name, b"Eidolon\0".as_ptr().cast(), 0x91000000,
-            0, 0, 0, 0, ptr::null_mut(), ptr::null_mut(), instance, ptr::null_mut());
+        let ([width, height], style) = match size { // WS_POPUP | WS_VISIBLE, maximized without a size
+            Some(size) => (size.map(|v| v as i32), 0x90000000),
+            None => ([0, 0], 0x91000000),
+        };
+        let window = CreateWindowExA(0, class.name, b"Eidolon\0".as_ptr().cast(), style,
+            0, 0, width, height, ptr::null_mut(), ptr::null_mut(), instance, ptr::null_mut());
         if window.is_null() { return Err("CreateWindowExA failed".into()); }
         let mut result = Self { window, dc: ptr::null_mut(), context: ptr::null_mut(), cursor_hidden: false };
         result.dc = GetDC(window);
@@ -126,13 +131,43 @@ impl Drop for Playback {
 /// The production executable injects the merged standalone audio::render implementation.
 /// Rendering runs on a separate thread; its FP mode is exclusively T23-owned.
 pub fn run_with_synth(render: RenderPcm) -> Result<(), String> {
-    run(Some(render))
+    run(Some(render), None)
 }
 
 /// Controlled 735*n sample cursor with no waveOut/audio; not a production candidate run.
-pub fn graphics_diagnostic() -> Result<(), String> { run(None) }
+pub fn graphics_diagnostic() -> Result<(), String> { run(None, None) }
 
-fn run(render: Option<RenderPcm>) -> Result<(), String> {
+/// Controlled 735*n cursor without audio; writes one `NNNNN sha256` line per presented frame.
+/// The back buffer is read before SwapBuffers exactly like the reference capture: RGBA8, bottom-up, unpadded rows.
+pub fn capture(path: &str) -> Result<(), String> {
+    let file = File::create(path).map_err(|error| format!("{path}: {error}"))?;
+    run(None, Some(Capture { out: BufWriter::new(file), pixels: Vec::new() }))
+}
+
+struct Capture { out: BufWriter<File>, pixels: Vec<u8> }
+impl Capture {
+    const SIZE: [u32; 2] = [1920, 1080];
+
+    unsafe fn frame(&mut self, n: u32) -> Result<(), String> {
+        let [width, height] = Self::SIZE;
+        let mut state = [0i32; 4]; // draw/read framebuffer, read buffer, pack alignment
+        for (value, name) in state.iter_mut().zip([0x8ca6, 0x8caa, 0x0c02, 0x0d05]) { glGetIntegerv(name, value); }
+        if state[0] != 0 || state[1] != 0 { return Err(format!("frame {n}: final pass is not on the default framebuffer")); }
+        self.pixels.resize((width * height * 4) as usize, 0);
+        glReadBuffer(0x0405); // GL_BACK
+        glPixelStorei(0x0d05, 1);
+        glReadPixels(0, 0, width as i32, height as i32, 0x1908, 0x1401, self.pixels.as_mut_ptr().cast());
+        glReadBuffer(state[2] as u32);
+        glPixelStorei(0x0d05, state[3]);
+        let error = glGetError();
+        if error != 0 { return Err(format!("frame {n}: readback GL error 0x{error:04x}")); }
+        writeln!(self.out, "{n:05} {}", crate::sha256::hex(&self.pixels)).map_err(|error| error.to_string())?;
+        if n % 600 == 0 { eprintln!("EIDOLON_CAPTURE frame {n}/{}", contract::PRESENTED_FRAMES); }
+        Ok(())
+    }
+}
+
+fn run(render: Option<RenderPcm>, mut capture: Option<Capture>) -> Result<(), String> {
     let mut worker = render.map(synthesis::spawn).transpose()?;
     let mut ready_pcm = None;
     let poll_synth = |worker: &mut Option<thread::JoinHandle<Result<Vec<f32>, String>>>, ready: &mut Option<Vec<f32>>| -> Result<(), String> {
@@ -143,9 +178,13 @@ fn run(render: Option<RenderPcm>) -> Result<(), String> {
     };
     let _fp = GraphicsFp::enter();
     // Drop order keeps the WGL context alive until Graphics releases all objects.
-    let window = unsafe { Window::new()? };
+    let window = unsafe { Window::new(capture.as_ref().map(|_| Capture::SIZE))? };
     let mut engine = Engine::default();
-    let mut graphics = unsafe { Graphics::new(window.dimensions()?)? };
+    let dimensions = unsafe { window.dimensions()? };
+    if capture.is_some() && dimensions != Capture::SIZE {
+        return Err(format!("capture needs a 1920x1080 window like the reference, got {}x{}", dimensions[0], dimensions[1]));
+    }
+    let mut graphics = unsafe { Graphics::new(dimensions)? };
     let start = unsafe { GetTickCount() };
     while unsafe { GetTickCount() }.wrapping_sub(start) < 1000 {
         poll_synth(&mut worker, &mut ready_pcm)?;
@@ -179,6 +218,10 @@ fn run(render: Option<RenderPcm>) -> Result<(), String> {
             observe::snapshot(5, &RuntimeSnapshot::endpoint(presented, contract::Clock::from_samples(cursor), engine.previous_seconds, engine.records));
             eprintln!("EIDOLON_RUNTIME mode={} reason=natural_exit queries={queries} frames={presented} terminal_cursor={cursor}",
                 if playback.is_some() { "playback" } else { "graphics-diagnostic" });
+            if let Some(capture) = &mut capture {
+                if presented != contract::PRESENTED_FRAMES { return Err(format!("captured {presented} frames")); }
+                capture.out.flush().map_err(|error| error.to_string())?;
+            }
             break;
         };
         let state = RuntimeSnapshot::frame(presented, &frame, engine.records);
@@ -186,6 +229,7 @@ fn run(render: Option<RenderPcm>) -> Result<(), String> {
         unsafe {
             graphics.draw(&mut engine, &frame, false)?;
             observe::snapshot(3, &state);
+            if let Some(capture) = &mut capture { capture.frame(presented)?; }
             if SwapBuffers(window.dc) == 0 { return Err("timeline SwapBuffers failed".into()); }
         }
         observe::snapshot(4, &state);

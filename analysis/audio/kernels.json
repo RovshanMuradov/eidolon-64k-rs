@@ -1,0 +1,1629 @@
+{
+  "schema": "eidolon-kernels-fixed-score-v1",
+  "source_commit": "23d7cfcf5110f5ded50fae4a60e316d557a6d45a",
+  "input_image_sha256": "da9cc65b64aa7d322807d93cb4361bc864a10f00ed47246f5df96fb5b9ecf504",
+  "kernels": [
+    {
+      "node_type": "ADD",
+      "source_function": "ADD_tick",
+      "source_lines": [
+        2110,
+        2119
+      ],
+      "native": {
+        "start": "0x40376e",
+        "end_exclusive": "0x4037b6",
+        "sha256": "a9e8b3c0014e5e68de61268d94832a8976fd6e0d3d324d0b6cc0c4bc6ad805fb",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 152,
+      "source_entered_nodes": 147,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "ADSR",
+      "source_function": "ADSR_tick",
+      "source_lines": [
+        1165,
+        1309
+      ],
+      "native": {
+        "start": "0x40226d",
+        "end_exclusive": "0x40265c",
+        "sha256": "b9b74766f7876dc28b8e2ccfb91cfdde030fae4abde2b98767445a85361c1e07",
+        "direct_calls": [
+          "0x401066"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x30",
+        "0x70",
+        "0xb0",
+        "0xf0"
+      ],
+      "source_entered_modes": [
+        "0x30",
+        "0x70",
+        "0xb0",
+        "0xf0"
+      ],
+      "graph_nodes": 54,
+      "source_entered_nodes": 52,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "BQFILTER",
+      "source_function": "BQFILTER_tick",
+      "source_lines": [
+        1759,
+        1968
+      ],
+      "native": {
+        "start": "0x403008",
+        "end_exclusive": "0x40356f",
+        "sha256": "7b984a711734593f8b4b8cdb4c262eeb32248458fc25c063ed1ab653b7117e37",
+        "direct_calls": [
+          "0x401066",
+          "0x402f6d"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x3",
+        "0x6",
+        "0x7",
+        "0x8",
+        "0x100",
+        "0x101",
+        "0x102",
+        "0x180",
+        "0x183",
+        "0x200"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x3",
+        "0x6",
+        "0x7",
+        "0x8",
+        "0x100",
+        "0x101",
+        "0x102",
+        "0x180",
+        "0x183",
+        "0x200"
+      ],
+      "graph_nodes": 36,
+      "source_entered_nodes": 36,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "CHANNELROOT",
+      "source_function": "CHANNELROOT_tick",
+      "source_lines": [
+        518,
+        541
+      ],
+      "native": {
+        "start": "0x4017e3",
+        "end_exclusive": "0x401835",
+        "sha256": "2823b027ae706a35edd53aa8bda375989100d98313c748bad4e3d839e8e386f6",
+        "direct_calls": [
+          "0x403726"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 16,
+      "source_entered_nodes": 16,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "CLIP",
+      "source_function": "CLIP_tick",
+      "source_lines": [
+        2250,
+        2259
+      ],
+      "native": {
+        "start": "0x403920",
+        "end_exclusive": "0x40397e",
+        "sha256": "1411537d0d8726d3b7c25a4b8f9a28dd0c201413185691e65135a60dcd1c5f3c",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 6,
+      "source_entered_nodes": 6,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "COMBDELAY",
+      "source_function": "COMBDELAY_tick",
+      "source_lines": [
+        2847,
+        2877
+      ],
+      "native": {
+        "start": "0x404134",
+        "end_exclusive": "0x4041f5",
+        "sha256": "a97cff247aef5a81eee35fde0a06eeb586b35d12d11858a44ddb23d6bb319e5d",
+        "direct_calls": [
+          "0x403eb3",
+          "0x404097"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x4",
+        "0x5"
+      ],
+      "source_entered_modes": [
+        "0x4",
+        "0x5"
+      ],
+      "graph_nodes": 5,
+      "source_entered_nodes": 5,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "COMPARE",
+      "source_function": "COMPARE_tick",
+      "source_lines": [
+        2415,
+        2457
+      ],
+      "native": {
+        "start": "0x403b3d",
+        "end_exclusive": "0x403bd0",
+        "sha256": "bfa2928b1bdf63a2dd00d3e6042911d489221485f4dc3b3835bccd6cc77d1042",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0"
+      ],
+      "source_entered_modes": [
+        "0x0"
+      ],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "COMPEXP",
+      "source_function": "COMPEXP_tick",
+      "source_lines": [
+        3238,
+        3283
+      ],
+      "native": {
+        "start": "0x40477a",
+        "end_exclusive": "0x404a20",
+        "sha256": "b51f9240e5b7c4043b169dc0e6e7a56265d5dfd01bbdf9f342fc7ca03c3da7df",
+        "direct_calls": [
+          "0x401066"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DCFILTER",
+      "source_function": "DCFILTER_tick",
+      "source_lines": [
+        2982,
+        2992
+      ],
+      "native": {
+        "start": "0x40443d",
+        "end_exclusive": "0x4044a0",
+        "sha256": "5d186ccb4cc0f7199e34a34e2d757140ca2adcb71ee7f19326c337e3856fb680",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 9,
+      "source_entered_nodes": 9,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DELAY",
+      "source_function": "DELAY_tick",
+      "source_lines": [
+        2886,
+        2918
+      ],
+      "native": {
+        "start": "0x4041f5",
+        "end_exclusive": "0x4042a6",
+        "sha256": "1975a34c7e19814f6c4ac78860aa2a727a7ad07d43d455ba01618ce1a5d221c0",
+        "direct_calls": [
+          "0x403eb3",
+          "0x404097"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x3",
+        "0x4"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x3",
+        "0x4"
+      ],
+      "graph_nodes": 29,
+      "source_entered_nodes": 29,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DISTORTION",
+      "source_function": "DISTORTION_tick",
+      "source_lines": [
+        2555,
+        2693
+      ],
+      "native": {
+        "start": "0x403c97",
+        "end_exclusive": "0x403ea1",
+        "sha256": "8ac0ba165696a568e9e6ec5cbc41dbad98ede3aecfd612e472f51b8c6f2c67a9",
+        "direct_calls": [
+          "0x401066"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x1",
+        "0x3"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x1",
+        "0x3"
+      ],
+      "graph_nodes": 9,
+      "source_entered_nodes": 9,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "DIV",
+      "source_function": "DIV_tick",
+      "source_lines": [
+        2232,
+        2241
+      ],
+      "native": {
+        "start": "0x4038c8",
+        "end_exclusive": "0x403920",
+        "sha256": "8f180ac4f29d905f926297ea9e5bb8a162cab82aef3408f8b09de66e6c899ce9",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "ENVFOLLOWER",
+      "source_function": "ENVFOLLOWER_tick",
+      "source_lines": [
+        2334,
+        2355
+      ],
+      "native": {
+        "start": "0x403a22",
+        "end_exclusive": "0x403b3d",
+        "sha256": "0e0b96a982ef7f260898b33755eaa3eb67403894147ab320e9fa375c53ac1459",
+        "direct_calls": [
+          "0x401066"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "EVENTSIGNAL",
+      "source_function": "EVENTSIGNAL_tick",
+      "source_lines": [
+        2485,
+        2495
+      ],
+      "native": {
+        "start": "0x403bd0",
+        "end_exclusive": "0x403c13",
+        "sha256": "3c63a45f26abbf468f5d013df70ec87058d7f21cdda799a2a7b64f300ba94765",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 35,
+      "source_entered_nodes": 34,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "FBDELAY",
+      "source_function": "FBDELAY_tick",
+      "source_lines": [
+        2927,
+        2973
+      ],
+      "native": {
+        "start": "0x4042a6",
+        "end_exclusive": "0x40443d",
+        "sha256": "6515f854d39ddb3d7223f4ccff2d7ad3b0ee3d75ca550c42eb5216167db59a58",
+        "direct_calls": [
+          "0x403eb3",
+          "0x404097"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x80"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x80"
+      ],
+      "graph_nodes": 2,
+      "source_entered_nodes": 2,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "FORMANT",
+      "source_function": "FORMANT_tick",
+      "source_lines": [
+        4923,
+        4982
+      ],
+      "native": {
+        "start": "0x405b62",
+        "end_exclusive": "0x405dbd",
+        "sha256": "74a3b03eb067c8623baf8dd14b71939b5a614d485eab0320c2df78f73c59cee1",
+        "direct_calls": [
+          "0x401066",
+          "0x40176b"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x1",
+        "0x2",
+        "0x3",
+        "0xa",
+        "0xb",
+        "0x18"
+      ],
+      "source_entered_modes": [
+        "0x1",
+        "0x2",
+        "0x3",
+        "0xa",
+        "0xb",
+        "0x18"
+      ],
+      "graph_nodes": 6,
+      "source_entered_nodes": 6,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "GLITCH",
+      "source_function": "GLITCH_tick",
+      "source_lines": [
+        3677,
+        3955
+      ],
+      "native": {
+        "start": "0x40514d",
+        "end_exclusive": "0x405986",
+        "sha256": "67cc41bfcb7462c1ccdee37d97caaecb612bfd4cd33001f4853a8d253dfa08d2",
+        "direct_calls": [
+          "0x401038",
+          "0x401066",
+          "0x4018a6",
+          "0x404cf0"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x3"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x3"
+      ],
+      "graph_nodes": 5,
+      "source_entered_nodes": 5,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "sample source / RNG subpaths reviewed; whole-kernel numeric audit pending"
+    },
+    {
+      "node_type": "GMDLS",
+      "source_function": "GMDLS_tick",
+      "source_lines": [
+        4282,
+        4302
+      ],
+      "native": {
+        "start": "0x405b12",
+        "end_exclusive": "0x405b62",
+        "sha256": "e75bd165982b77cc4f85cae38caf295f6a651b064d493405a68b52563f7218b3",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x9",
+        "0x65",
+        "0x6a",
+        "0x6b",
+        "0x7f",
+        "0xb0",
+        "0xc2",
+        "0xe6",
+        "0xf2",
+        "0x106",
+        "0x107",
+        "0x108",
+        "0x10a",
+        "0x199",
+        "0x1a9",
+        "0x1c7"
+      ],
+      "source_entered_modes": [
+        "0x9",
+        "0x65",
+        "0x6a",
+        "0x6b",
+        "0x7f",
+        "0xb0",
+        "0xc2",
+        "0xe6",
+        "0xf2",
+        "0x106",
+        "0x107",
+        "0x108",
+        "0x199",
+        "0x1a9",
+        "0x1c7"
+      ],
+      "graph_nodes": 17,
+      "source_entered_nodes": 16,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "LFO",
+      "source_function": "LFO_tick",
+      "source_lines": [
+        1514,
+        1571
+      ],
+      "native": {
+        "start": "0x402aa8",
+        "end_exclusive": "0x402c12",
+        "sha256": "a2a52872d7a3e8fb691af2c31cb2cfac5c74737f5f522b817d2e5a16762a108e",
+        "direct_calls": [
+          "0x401038",
+          "0x401066",
+          "0x40265c"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x3",
+        "0x8",
+        "0x108",
+        "0x200",
+        "0x800",
+        "0x908",
+        "0xa08"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x3",
+        "0x8",
+        "0x108",
+        "0x200",
+        "0x800",
+        "0x908",
+        "0xa08"
+      ],
+      "graph_nodes": 18,
+      "source_entered_nodes": 18,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "MAX",
+      "source_function": "MAX_tick",
+      "source_lines": [
+        2163,
+        2172
+      ],
+      "native": {
+        "start": "0x403846",
+        "end_exclusive": "0x40388e",
+        "sha256": "af316a999212ee7f30ef50904ca1e93fffbf7dee1ee0e1171d4de125a12016c6",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 2,
+      "source_entered_nodes": 2,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "MIDISIGNAL",
+      "source_function": "MIDISIGNAL_tick",
+      "source_lines": [
+        2532,
+        2546
+      ],
+      "native": {
+        "start": "0x403c6f",
+        "end_exclusive": "0x403c97",
+        "sha256": "43d00bd83cc836a51da19fa209f1d75e704374b26a0b948e09da1d6e5d562c6c",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x80",
+        "0x181",
+        "0x382",
+        "0x384",
+        "0x386",
+        "0x401"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x80",
+        "0x181",
+        "0x382",
+        "0x384",
+        "0x386",
+        "0x401"
+      ],
+      "graph_nodes": 7,
+      "source_entered_nodes": 7,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "MIN",
+      "source_function": "MIN_tick",
+      "source_lines": [
+        2145,
+        2154
+      ],
+      "native": {
+        "start": "0x4037fe",
+        "end_exclusive": "0x403846",
+        "sha256": "631eea876b80265f5026434871411643c5be5d6cb83ff088b42714c33d20354e",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 2,
+      "source_entered_nodes": 2,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "MIX",
+      "source_function": "MIX_tick",
+      "source_lines": [
+        2268,
+        2278
+      ],
+      "native": {
+        "start": "0x40397e",
+        "end_exclusive": "0x4039df",
+        "sha256": "a4544397b7ef3174398318e0d772c5933d2c6174d12281df270f9f1024fffd06",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 13,
+      "source_entered_nodes": 13,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "MONO",
+      "source_function": "MONO_tick",
+      "source_lines": [
+        2307,
+        2325
+      ],
+      "native": {
+        "start": "0x4039df",
+        "end_exclusive": "0x403a22",
+        "sha256": "2b4a11fb201ff6ffe2a1406a3c5f1657b5e01b62fbfa7ff7aa3619ab5dac6969",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0"
+      ],
+      "source_entered_modes": [
+        "0x0"
+      ],
+      "graph_nodes": 3,
+      "source_entered_nodes": 3,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "MUL",
+      "source_function": "MUL_tick",
+      "source_lines": [
+        2094,
+        2103
+      ],
+      "native": {
+        "start": "0x403726",
+        "end_exclusive": "0x40376e",
+        "sha256": "1df51409021fa735d2888029dd5a50770408dee37bc51f38661500c3610f5cf2",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 74,
+      "source_entered_nodes": 74,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "MULTIADD",
+      "source_function": "NOTECONTROLLER_tick",
+      "source_lines": [
+        549,
+        566
+      ],
+      "native": {
+        "start": "0x401835",
+        "end_exclusive": "0x4018a6",
+        "sha256": "495f0db32362532ab0c317a26db30d35913c2a97980e9e6c733789a77e1c36e0",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 19,
+      "source_entered_nodes": 19,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "NEG",
+      "source_function": "NEG_tick",
+      "source_lines": [
+        2198,
+        2206
+      ],
+      "native": {
+        "start": "0x40388e",
+        "end_exclusive": "0x4038c8",
+        "sha256": "1935c7ff617d2ea67cd875d2197069222abed045db5bbb7bf12dbf7dd352d368",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 12,
+      "source_entered_nodes": 12,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "NOISEGEN",
+      "source_function": "NOISEGEN_tick",
+      "source_lines": [
+        1664,
+        1718
+      ],
+      "native": {
+        "start": "0x402db1",
+        "end_exclusive": "0x402f6d",
+        "sha256": "60936ad1bb2fdd8ba194a3ad19b621885d985ef9ceb80a0a0c79f3d8e2fa28dc",
+        "direct_calls": [
+          "0x401038"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 16,
+      "source_entered_nodes": 16,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "NOTECONTROLLER",
+      "source_function": "NOTECONTROLLER_tick",
+      "source_lines": [
+        549,
+        566
+      ],
+      "native": {
+        "start": "0x401835",
+        "end_exclusive": "0x4018a6",
+        "sha256": "495f0db32362532ab0c317a26db30d35913c2a97980e9e6c733789a77e1c36e0",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 16,
+      "source_entered_nodes": 15,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "ONEPOLEFILTER",
+      "source_function": "ONEPOLEFILTER_tick",
+      "source_lines": [
+        1978,
+        2000
+      ],
+      "native": {
+        "start": "0x40356f",
+        "end_exclusive": "0x403602",
+        "sha256": "91288817210e57a62e156c6f4ad6ecd3b01c430a69469351d865b86601629a6b",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 9,
+      "source_entered_nodes": 9,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "ONEZEROFILTER",
+      "source_function": "ONEZEROFILTER_tick",
+      "source_lines": [
+        2009,
+        2031
+      ],
+      "native": {
+        "start": "0x403602",
+        "end_exclusive": "0x4036ae",
+        "sha256": "d7f75e137be3a56716f340899977c3ebaba4dfed55c5f85c28c9f8acb114c989",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "OSCILLATOR",
+      "source_function": "OSCILLATOR_tick",
+      "source_lines": [
+        1580,
+        1655
+      ],
+      "native": {
+        "start": "0x402c12",
+        "end_exclusive": "0x402db1",
+        "sha256": "5a5b9b9d58d8f1c26eec519060598a40f9acb0fab60904863ff17e41dfc61fad",
+        "direct_calls": [
+          "0x401038",
+          "0x401066",
+          "0x40265c"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x800",
+        "0x801",
+        "0x802",
+        "0x803",
+        "0x807",
+        "0x808",
+        "0xc09",
+        "0x1a00",
+        "0x1c01",
+        "0x1e08"
+      ],
+      "source_entered_modes": [
+        "0x0",
+        "0x1",
+        "0x2",
+        "0x800",
+        "0x801",
+        "0x802",
+        "0x803",
+        "0x807",
+        "0x808",
+        "0xc09",
+        "0x1a00",
+        "0x1c01",
+        "0x1e08"
+      ],
+      "graph_nodes": 23,
+      "source_entered_nodes": 22,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "wrapper input order, 16-sample updates, seven-call random-phase init and unison loop reviewed; Osc_Tick helper pending"
+    },
+    {
+      "node_type": "OSRAND",
+      "source_function": "OSRAND_tick",
+      "source_lines": [
+        3001,
+        3011
+      ],
+      "native": {
+        "start": "0x4044a0",
+        "end_exclusive": "0x4044df",
+        "sha256": "7a0a14974fdb98ee1c8ffd1ac04c4b69bca4173a49c2a5004f4b671ad6e01856",
+        "direct_calls": [
+          "0x401038"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 6,
+      "source_entered_nodes": 6,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "PANNING",
+      "source_function": "PANNING_tick",
+      "source_lines": [
+        2068,
+        2086
+      ],
+      "native": {
+        "start": "0x4036ae",
+        "end_exclusive": "0x403726",
+        "sha256": "0ea7e64e2ac7d665fee67b0e0a0503e03ea5527de725de27bd39c73acdf10f9a",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 13,
+      "source_entered_nodes": 13,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "PROCESS",
+      "source_function": "PROCESS_tick",
+      "source_lines": [
+        2504,
+        2523
+      ],
+      "native": {
+        "start": "0x403c13",
+        "end_exclusive": "0x403c6f",
+        "sha256": "0566a36f71a05275542b73d98207b7da4e683ed91cda838a34be3ef02de1a7fe",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 2,
+      "source_entered_nodes": 2,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "REVERB",
+      "source_function": "REVERB_tick",
+      "source_lines": [
+        3028,
+        3134
+      ],
+      "native": {
+        "start": "0x4044f1",
+        "end_exclusive": "0x40477a",
+        "sha256": "55b2fed9297083530ba58c0523a27a08eab79dfb030b35c8fb879882ce036f2d",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 21,
+      "source_entered_nodes": 21,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "SAMPLER",
+      "source_function": "SAMPLER_tick",
+      "source_lines": [
+        3515,
+        3660
+      ],
+      "native": {
+        "start": "0x404dd0",
+        "end_exclusive": "0x40514d",
+        "sha256": "350fe81fade4e6488eb48235ce5f83be26a901e190c534ca1ec7ce9b08bd58bf",
+        "direct_calls": [
+          "0x401066",
+          "0x40176b",
+          "0x404cf0"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x1",
+        "0x9"
+      ],
+      "source_entered_modes": [
+        "0x1",
+        "0x9"
+      ],
+      "graph_nodes": 23,
+      "source_entered_nodes": 22,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "sample source / RNG subpaths reviewed; whole-kernel numeric audit pending"
+    },
+    {
+      "node_type": "SUB",
+      "source_function": "SUB_tick",
+      "source_lines": [
+        2127,
+        2136
+      ],
+      "native": {
+        "start": "0x4037b6",
+        "end_exclusive": "0x4037fe",
+        "sha256": "4c38fad0c7d6fca656f18de3a0c9b27e97908591b63625d7a8301b78841c4675",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 10,
+      "source_entered_nodes": 10,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "SVFILTER",
+      "source_function": "SVFILTER_tick",
+      "source_lines": [
+        3964,
+        4030
+      ],
+      "native": {
+        "start": "0x405986",
+        "end_exclusive": "0x405b12",
+        "sha256": "89e8621a0b79a8cdfb225c691b9b7695351e3ab6a31b8e9807be331ce8a73210",
+        "direct_calls": [
+          "0x402f6d"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x2",
+        "0x4",
+        "0x201"
+      ],
+      "source_entered_modes": [
+        "0x2",
+        "0x4",
+        "0x201"
+      ],
+      "graph_nodes": 4,
+      "source_entered_nodes": 4,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "SYNTHROOT",
+      "source_function": "MUL_tick",
+      "source_lines": [
+        2094,
+        2103
+      ],
+      "native": {
+        "start": "0x403726",
+        "end_exclusive": "0x40376e",
+        "sha256": "1df51409021fa735d2888029dd5a50770408dee37bc51f38661500c3610f5cf2",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "TRIGGER",
+      "source_function": "TRIGGER_tick",
+      "source_lines": [
+        3292,
+        3308
+      ],
+      "native": {
+        "start": "0x404a20",
+        "end_exclusive": "0x404a9d",
+        "sha256": "244c470f083d4ce216582ff455717fea6f460a04575ad2e0eece66b5d1408ce1",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 1,
+      "source_entered_nodes": 1,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "TRIGGERSEQ",
+      "source_function": "TRIGGERSEQ_tick",
+      "source_lines": [
+        3317,
+        3424
+      ],
+      "native": {
+        "start": "0x404a9d",
+        "end_exclusive": "0x404cf0",
+        "sha256": "c7f6b7ad94e3b581bce8f0c0e335abff70c52d5ba6b31f8748e70b4ca5ca3d6f",
+        "direct_calls": [
+          "0x401038"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x301",
+        "0x601"
+      ],
+      "source_entered_modes": [
+        "0x301",
+        "0x601"
+      ],
+      "graph_nodes": 2,
+      "source_entered_nodes": 2,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "VOICEMANAGER",
+      "source_function": "VOICEMANAGER_tick",
+      "source_lines": [
+        797,
+        1124
+      ],
+      "native": {
+        "start": "0x401bf5",
+        "end_exclusive": "0x402205",
+        "sha256": "ab4ef15285526ab9b7e2dc55c82f554906e70188dcbce5ebb794b0bcc393cb9e",
+        "direct_calls": [
+          "0x401066",
+          "0x4018a6",
+          "0x401a67",
+          "0x405e78",
+          "0x405f4e"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [
+        "0x101818",
+        "0x101919",
+        "0x101a1a",
+        "0x101b1b",
+        "0x101c1c",
+        "0x101d1d",
+        "0x101e1e",
+        "0x102300",
+        "0x102b18",
+        "0x102f24",
+        "0x10372c",
+        "0x103b1f",
+        "0x103b30",
+        "0x103c3c",
+        "0x103d3d",
+        "0x103e3e",
+        "0x10473c",
+        "0x104838",
+        "0x104a00",
+        "0x105300",
+        "0x105348",
+        "0x105449",
+        "0x107f00",
+        "0x117f00",
+        "0x307f00"
+      ],
+      "source_entered_modes": [
+        "0x101818",
+        "0x101919",
+        "0x101a1a",
+        "0x101b1b",
+        "0x101c1c",
+        "0x101d1d",
+        "0x101e1e",
+        "0x102300",
+        "0x102b18",
+        "0x102f24",
+        "0x10372c",
+        "0x103b1f",
+        "0x103b30",
+        "0x103c3c",
+        "0x103d3d",
+        "0x103e3e",
+        "0x10473c",
+        "0x104838",
+        "0x104a00",
+        "0x105300",
+        "0x105348",
+        "0x105449",
+        "0x107f00",
+        "0x117f00",
+        "0x307f00"
+      ],
+      "graph_nodes": 37,
+      "source_entered_nodes": 36,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "note queues, low-byte note-off and guarded voice creation reviewed; numeric audit pending"
+    },
+    {
+      "node_type": "VOICEROOT",
+      "source_function": "VOICEROOT_tick",
+      "source_lines": [
+        1131,
+        1143
+      ],
+      "native": {
+        "start": "0x402205",
+        "end_exclusive": "0x40226d",
+        "sha256": "c26ce6827e1e57ef6dfbcd4c845dd6982ebb747dfba89034c9b8eeedc90ff80d",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 32,
+      "source_entered_nodes": 30,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "dispatch/graph mapped; detailed numeric audit pending"
+    },
+    {
+      "node_type": "VOICE_ATTACKVELOCITY",
+      "source_function": "VOICEPARAM_tick",
+      "source_lines": [
+        5055,
+        5062
+      ],
+      "native": {
+        "start": "0x405dbe",
+        "end_exclusive": "0x405de9",
+        "sha256": "ec1913395f3f39dafe41f4a7b7bd08e44058877db9b19356cd125cdde647b816",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 19,
+      "source_entered_nodes": 19,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    },
+    {
+      "node_type": "VOICE_NOTE",
+      "source_function": "VOICEPARAM_tick",
+      "source_lines": [
+        5055,
+        5062
+      ],
+      "native": {
+        "start": "0x405dbe",
+        "end_exclusive": "0x405de9",
+        "sha256": "ec1913395f3f39dafe41f4a7b7bd08e44058877db9b19356cd125cdde647b816",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      },
+      "immediate_modes": [],
+      "source_entered_modes": [],
+      "graph_nodes": 5,
+      "source_entered_nodes": 5,
+      "numerical_scope": "fixed-score end-to-end PCM equality; not per-call/all-input equivalence",
+      "prior_static_review": "reviewed operation/control correspondence; not PCM proof"
+    }
+  ],
+  "helpers": [
+    {
+      "name": "s_rand",
+      "source_file": "sample_t.cpp",
+      "source_line": 142,
+      "native": {
+        "start": "0x401038",
+        "end_exclusive": "0x401066",
+        "sha256": "8b040a32b11e73c60e829253188a9fba11809ca6bdbd2064f481e7d32123abc8",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "s_exp2",
+      "source_file": "sample_t.cpp",
+      "source_line": 163,
+      "native": {
+        "start": "0x401066",
+        "end_exclusive": "0x4010e3",
+        "sha256": "8a77bbff340a0dcb53a08634d46db921876cf8e5dc5f3f5e46e64bec995a2e90",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "SynthMalloc",
+      "source_file": "SynthAllocator.cpp",
+      "source_line": 11,
+      "native": {
+        "start": "0x40176b",
+        "end_exclusive": "0x401785",
+        "sha256": "f9c17ce1feabf905c21271ac3f7d031eaf3cd502871e57c7a67b2b80f510272f",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "SynthFree",
+      "source_file": "SynthAllocator.cpp",
+      "source_line": 26,
+      "native": {
+        "start": "0x401785",
+        "end_exclusive": "0x4017a5",
+        "sha256": "6ac7e2a9985a58fe1ce0dd45c6ec5a570f966f7e476af2a50c93d3d457ee8805",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "SynthMemSet",
+      "source_file": "SynthAllocator.cpp",
+      "source_line": 55,
+      "native": {
+        "start": "0x4017a5",
+        "end_exclusive": "0x4017c3",
+        "sha256": "2761e1819b160178e4bb2bc96f45f99fe4eac1f5d56a46150425a442d857805c",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "SynthMemCopy",
+      "source_file": "SynthAllocator.cpp",
+      "source_line": 70,
+      "native": {
+        "start": "0x4017c3",
+        "end_exclusive": "0x4017e3",
+        "sha256": "4335bc694bb941dab1a04bf66c4105cb1e5cdb6360a34f86af3fca7e66d55c4c",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "GetDelayTimeFraction",
+      "source_file": "SynthNode.cpp",
+      "source_line": 589,
+      "native": {
+        "start": "0x4018a6",
+        "end_exclusive": "0x40190e",
+        "sha256": "4c032b931830ea0e5f3be4d14014d59af806e4fd67a1a5ac9bf3884a11247bd0",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "InsertArpKeys",
+      "source_file": "SynthNode.cpp",
+      "source_line": 600,
+      "native": {
+        "start": "0x40190e",
+        "end_exclusive": "0x401a19",
+        "sha256": "20e00ef0a413693551d6e30afd487f670fc240fad27c7eb7b23cf98cc8db6ee0",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "ClearArpVoices",
+      "source_file": "SynthNode.cpp",
+      "source_line": 673,
+      "native": {
+        "start": "0x401a19",
+        "end_exclusive": "0x401a67",
+        "sha256": "f999e73c5403f8189258343b3ff62cfcd0f45b4072cd174e54c9391519998d98",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "ArpeggiatorStep",
+      "source_file": "SynthNode.cpp",
+      "source_line": 707,
+      "native": {
+        "start": "0x401a67",
+        "end_exclusive": "0x401bf5",
+        "sha256": "3110e51e4e686679c5df4048ead250bedfff0079e2e3137923daca42bd31c311",
+        "direct_calls": [
+          "0x4018a6",
+          "0x40190e",
+          "0x401a19"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "Osc_Tick",
+      "source_file": "SynthNode.cpp",
+      "source_line": 1334,
+      "native": {
+        "start": "0x40265c",
+        "end_exclusive": "0x402aa8",
+        "sha256": "61685bb50333dab93ce0eaec8decb996845e0d00b8565cf7e54089c5c1cd5985",
+        "direct_calls": [
+          "0x401038"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "Frequency_Map",
+      "source_file": "SynthNode.cpp",
+      "source_line": 1730,
+      "native": {
+        "start": "0x402f6d",
+        "end_exclusive": "0x403008",
+        "sha256": "786bde431dd76d5b6a9dcec76d736e09cc1aaef3e59f26f2f61d0e0e323323a7",
+        "direct_calls": [
+          "0x401066"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "DELAY_init",
+      "source_file": "SynthNode.cpp",
+      "source_line": 2722,
+      "native": {
+        "start": "0x403ea1",
+        "end_exclusive": "0x403eb3",
+        "sha256": "847af844c86ac4bed61ed04c1f1af29e33acc0d265451ce7a3290b93477aebc6",
+        "direct_calls": [
+          "0x40176b"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "UpdateDelayParams",
+      "source_file": "SynthNode.cpp",
+      "source_line": 2730,
+      "native": {
+        "start": "0x403eb3",
+        "end_exclusive": "0x404097",
+        "sha256": "06eccfb7e3af18bbcf475e10b5dab7248f58fd672449fb832a2ee347fe039013",
+        "direct_calls": [
+          "0x401066",
+          "0x4018a6"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "SetBufferSample",
+      "source_file": "SynthNode.cpp",
+      "source_line": 2831,
+      "native": {
+        "start": "0x404097",
+        "end_exclusive": "0x404134",
+        "sha256": "93a268fce355190cdad4106feadb02b42378590e3ee5142aaca814220ba5ed16",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "REVERB_init / VOICEMANAGER_init folded allocation",
+      "source_file": "SynthNode.cpp",
+      "source_line": 3020,
+      "native": {
+        "start": "0x4044df",
+        "end_exclusive": "0x4044f1",
+        "sha256": "34ea4d3c68300cfccc4b949586ae30c861c70eb27f609afaf905938f0f9f8498",
+        "direct_calls": [
+          "0x40176b"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "Sampler_Sample",
+      "source_file": "SynthNode.cpp",
+      "source_line": 3492,
+      "native": {
+        "start": "0x404cf0",
+        "end_exclusive": "0x404dd0",
+        "sha256": "6aa62517c755e06aa92c63179065ffb9f3246a88ab3d659536f0917a1580bb7d",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "CONSTANT_tick",
+      "source_file": "SynthNode.cpp",
+      "source_line": 5045,
+      "native": {
+        "start": "0x405dbd",
+        "end_exclusive": "0x405dbe",
+        "sha256": "ae3f4619b0413d70d3004b9131c3752153074e45725be13b9a148978895e359e",
+        "direct_calls": [],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "CreateNode",
+      "source_file": "SynthNode.cpp",
+      "source_line": 5075,
+      "native": {
+        "start": "0x405de9",
+        "end_exclusive": "0x405e78",
+        "sha256": "51a554138252892cc370218caf5e638c9418a62770c0e5f289b527a0f323a30a",
+        "direct_calls": [
+          "0x40176b"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "CreateNodes",
+      "source_file": "SynthNode.cpp",
+      "source_line": 5115,
+      "native": {
+        "start": "0x405e78",
+        "end_exclusive": "0x405f4e",
+        "sha256": "52e4f380d0e710884435d64e8681a674bc68fabfa0e87a69e077a63fccd76bc8",
+        "direct_calls": [
+          "0x405de9",
+          "0x405e78"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    },
+    {
+      "name": "DestroyVoiceNodes",
+      "source_file": "SynthNode.cpp",
+      "source_line": 5171,
+      "native": {
+        "start": "0x405f4e",
+        "end_exclusive": "0x405f98",
+        "sha256": "cf29ea382fbcf1ac4b7a0fa49bfe646fb8397676186aafbef3678edef1339df0",
+        "direct_calls": [
+          "0x401785",
+          "0x405f4e"
+        ],
+        "scope": "contiguous symbol interval; not a recovered CFG"
+      }
+    }
+  ],
+  "recurrence_instruction_pins": {
+    "0x402f85": "f6430880",
+    "0x402fa4": "f6430840",
+    "0x40351e": "660f595640",
+    "0x403537": "660f5cc8",
+    "0x40353e": "660f584910",
+    "0x40354b": "660f598690000000",
+    "0x40355b": "83c120",
+    "0x4035f9": "0f294e60",
+    "0x4036a5": "0f294660",
+    "0x403708": "660f51c1",
+    "0x405a75": "660f594640",
+    "0x405a96": "660f594e40",
+    "0x405aa4": "660f594e40",
+    "0x405ac5": "660f595640",
+    "0x405afd": "83c030"
+  },
+  "source_native_tables": {
+    "FORMANT_Coeff": {
+      "va": "0x4093d0",
+      "bytes": 750,
+      "sha256": "2f9c0c4858fda3d8749690b9d8d617077da6d437759943ca2202952fca8b7e82",
+      "source_line": 4836,
+      "comparison": "complete source/native byte equality"
+    },
+    "DELAY_TIME_FRACTION": {
+      "va": "0x409348",
+      "bytes": 132,
+      "sha256": "d34f3e6f86442513c4cccbda59f8fb00c6cd8feba73cf981fd31661b20b4fcd0",
+      "source_line": 458,
+      "comparison": "complete source/native byte equality"
+    },
+    "ArpStepGateFraction": {
+      "va": "0x4098fc",
+      "bytes": 16,
+      "sha256": "dcb8158a3e78ee94aae5c10fc8828fc2c50700749337c9df91ae2f5106bcb8e5",
+      "source_line": 696,
+      "comparison": "complete source/native byte equality"
+    }
+  },
+  "comparison_controls": {
+    "single_bit_change_rejected": true,
+    "missing_final_frame_rejected": true,
+    "one_frame_shift_rejected": true
+  },
+  "comparison_manifests": {
+    "source-check.json": "7738800191dd8b73ebeb335f804c8439701422fa3f44888df7c24b0f2c59e000",
+    "source-check-closed.json": "061122806e16db49eef024e5a68300a53f51979eb37c6c1e930a7ed76638b725"
+  },
+  "limits": [
+    "No claim of all-input or internal-state equivalence.",
+    "Known native/source allocator timing and host ABI differences retained in kernels.md.",
+    "Saved diagnostic PCM agreement does not change runtime reference eligibility."
+  ]
+}
