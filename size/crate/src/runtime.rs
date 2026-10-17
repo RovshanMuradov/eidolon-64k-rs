@@ -90,6 +90,7 @@ fn mm(result: u32, operation: &str) -> Result<(), Error> {
 
 impl Playback {
     unsafe fn start(mut pcm: Vec<f32>) -> Result<Self, Error> {
+        #[cfg(not(feature = "sizecoded"))]
         if pcm.len() != contract::PCM_SAMPLES { return Err("pcm extent".into()); }
         let format = WaveFormat { tag: 3, channels: 2, rate: contract::SAMPLE_RATE,
             bytes_per_second: contract::SAMPLE_RATE * 8, block_align: 8, bits: 32, extra: 0 };

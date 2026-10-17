@@ -163,6 +163,7 @@ fn patch()->super::alloc::vec::Vec<u16> {
 
 /// CPU diagnostic prefix entrypoint. Production calls the exact-size `audio::render`.
 pub fn render_prefix(output:&mut [f32])->Result<RenderStats,&'static str> {
+    #[cfg(not(feature="sizecoded"))]
     if output.is_empty() || output.len()%128!=0 || output.len()>super::TOTAL_FRAMES as usize*2 {
         return Err("prefix");
     }
