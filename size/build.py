@@ -4,7 +4,7 @@
 Steps: stage size/crate with the shared shaders and tables, build the sizecoded PE with one section per
 function and static, laid out in the order of size/crate/tools/rust/sizecoded.ld, clear its export
 directory and .eh_frame/.edata, build NASM 2.10.09 and the patched kkrunchy_k7 from source, pack under
-Wine, then compare the SHA-256 with size/expected.sha256.
+Wine, drop the trailing zero padding, then compare the SHA-256 with size/expected.sha256.
 """
 import hashlib
 import os
@@ -138,6 +138,16 @@ def pack(packer, prepared):
     return packed.read_bytes()
 
 
+def trim(data):
+    """Drop the zero padding after the packed data; the loader zero-fills the rest of the section."""
+    data = bytearray(data.rstrip(b'\0'))
+    pe = struct.unpack_from('<I', data, 60)[0]
+    section = pe + 24 + struct.unpack_from('<H', data, pe + 20)[0]
+    raw_offset = struct.unpack_from('<I', data, section + 20)[0]
+    struct.pack_into('<I', data, section + 16, len(data) - raw_offset)
+    return bytes(data)
+
+
 def main():
     for tool in ('cargo', 'wine', 'clang++', 'i686-w64-mingw32-g++', 'gcc', 'make'):
         if not shutil.which(tool):
@@ -145,7 +155,7 @@ def main():
     WORK.mkdir(parents=True, exist_ok=True)
     tree = stage()
     prepared = prepare(build_pe(tree))
-    packed = pack(build_packer(build_nasm()), prepared)
+    packed = trim(pack(build_packer(build_nasm()), prepared))
     OUTPUT.write_bytes(packed)
     expected = (SIZE / 'expected.sha256').read_text().split()[0]
     actual = sha(packed)
