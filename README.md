@@ -60,8 +60,8 @@ Run all following commands in that shell. The first build downloads the pinned R
 ## 2. Get the code
 
 ```sh
-git clone <repository-url> eidolon
-cd eidolon
+git clone https://github.com/RovshanMuradov/eidolon-64k-rs.git
+cd eidolon-64k-rs
 ```
 
 ## 3. Watch
