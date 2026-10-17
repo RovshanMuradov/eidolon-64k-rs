@@ -45,7 +45,7 @@ verify-audio:
 # Byte-exact check of all 27 000 frames rendered with a controlled clock.
 verify: build
 	@mkdir -p .build && rm -f $(FRAMES)
-	@echo "Rendering 27000 frames with a controlled clock (about 1-1.5 hours); expected hashes: $(REF)/frames.sha256"
+	@echo "Rendering 27000 frames with a controlled clock (about 20-30 minutes); expected hashes: $(REF)/frames.sha256"
 ifeq ($(PLATFORM),Windows)
 	"$(EXE)" --capture $(FRAMES)
 else

@@ -90,9 +90,9 @@ PASS audio: 9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d
 
 | Your machine | Commands | Time |
 |---|---|---|
-| NVIDIA RTX 3070 Ti, driver 610.57.04, Linux | `make verify` | 1–1.5 h |
-| Any other GPU, Linux | `make reference`, then `make verify` | 2–3 h |
-| Windows | `make verify`; expect `FAIL` unless the GPU and driver match the row above | 1–1.5 h |
+| NVIDIA RTX 3070 Ti, driver 610.57.04, Linux | `make verify` | 20–30 min |
+| Any other GPU, Linux | `make reference`, then `make verify` | 1.5–2 h |
+| Windows | `make verify`; expect `FAIL` unless the GPU and driver match the row above | 20–30 min |
 
 ```text
 PASS frames: 27000/27000 identical to verify/local/frames.sha256

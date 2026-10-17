@@ -26,7 +26,7 @@ Audio is computed on the CPU and matches on any x86 machine. Frames are computed
 |---|---|---|
 | `make verify-audio` | any x86 / x86_64 | 2–5 min |
 | `make reference` | Linux | about 1–1.5 h |
-| `make verify` | Linux (Wine + gamescope), Windows (native) | about 1–1.5 h |
+| `make verify` | Linux (Wine + gamescope), Windows (native) | about 20–30 min |
 
 `make reference` downloads the original from scene.org and `gm.dls` from the Microsoft DirectX redistributable on web.archive.org, both checked against pinned SHA-256. It then builds `opengl32.dll` and `winmm.dll` proxies against your Wine (`tools/capture/proxy-b*`, driven by `tools/reference/capture_original.py`). The proxies control the clock, read back each frame and record its hash; the original EXE is not modified. Shader program 0 gets the same `#version 450 compatibility` header as in the Rust build.
 
