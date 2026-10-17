@@ -126,13 +126,13 @@ impl Drop for Playback {
             #[cfg(not(feature = "sizecoded"))]
             eprintln!("waveOut cleanup failed: reset={reset}, unprepare={unprepare}");
             #[cfg(feature = "sizecoded")]
-            crate::minimal::message("waveOut cleanup failed:\n");
+            crate::minimal::message("waveOut cleanup failed\n");
         }
         let close = waveOutClose(self.handle);
         #[cfg(not(feature = "sizecoded"))]
         if close != 0 { eprintln!("waveOutClose failed: {close}"); }
         #[cfg(feature = "sizecoded")]
-        if close != 0 { crate::minimal::message("waveOutClose failed:\n"); }
+        if close != 0 { crate::minimal::message("waveOut cleanup failed\n"); }
         let _ = close;
     } }
 }
