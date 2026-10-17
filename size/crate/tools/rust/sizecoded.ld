@@ -95,6 +95,7 @@ SECTIONS
     *(.rdata$_RNvNtCs*_7eidolon7physics7INITIAL)
     *(.rdata$_RNvNtNtCs*_7eidolon5audio10score_code5SCORE)
     *(.rdata$_RNvNtCs*_7eidolon8gl_names8UNIFORMS)
+    *(.rd$*)
     *(.rdata)
 	     *(SORT(.rdata$*))
     . = ALIGN(4);
