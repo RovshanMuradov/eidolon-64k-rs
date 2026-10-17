@@ -20,6 +20,17 @@ REGISTRY = [  # unattended runs: X11 driver, no crash dialog, no auto-debugger
 ]
 
 
+# Runs inside gamescope. Wine services can outlive the program and keep gamescope open, so every
+# Wine process of this prefix is stopped once the program exits.
+CHILD = '''wine "$@"; echo $? > "$EIDOLON_EXIT_FILE"
+wineserver -k 2>/dev/null; sleep 1
+for d in /proc/[0-9]*; do
+  [[ $(readlink "$d/exe" 2>/dev/null) == */wine* ]] || continue
+  grep -qzx "WINEPREFIX=$WINEPREFIX" "$d/environ" 2>/dev/null && kill -9 "${d#/proc/}" 2>/dev/null
+done
+exit 0'''
+
+
 def windows_path(path):
     return 'Z:' + str(Path(path).resolve()).replace('/', '\\')
 
@@ -61,7 +72,7 @@ def run(exe, arguments, prefix, extra_env=None, timeout=3 * 3600, log=None):
         env['EIDOLON_EXIT_FILE'] = str(code_file)
         command = ['gamescope', '--backend', 'headless', '-W', str(WIDTH), '-H', str(HEIGHT),
                    '-w', str(WIDTH), '-h', str(HEIGHT), '-r', '60', '--',
-                   'bash', '-c', 'wine "$@"; echo $? > "$EIDOLON_EXIT_FILE"', '_', str(exe), *arguments]
+                   'bash', '-c', CHILD, '_', str(exe), *arguments]
         output = open(log, 'wb') if log else None
         process = subprocess.Popen(command, env=env, stdout=output, stderr=subprocess.STDOUT if output else None,
                                    start_new_session=True)
