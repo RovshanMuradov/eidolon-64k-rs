@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build the size-optimized intro (no_std Rust + patched kkrunchy) and compare it with the verified build.
 
-Steps: stage size/crate with the shared shaders and tables, build the sizecoded PE, clear its export
+Steps: stage size/crate with the shared shaders and tables, build the sizecoded PE with one section per
+function and static, laid out in the order of size/crate/tools/rust/sizecoded.ld, clear its export
 directory and .eh_frame/.edata, build NASM 2.10.09 and the patched kkrunchy_k7 from source, pack under
 Wine, then compare the SHA-256 with size/expected.sha256.
 """
@@ -60,7 +61,8 @@ def build_pe(tree):
     env = dict(os.environ, CARGO_TARGET_DIR=str(target), CARGO_PROFILE_SIZECODED_OPT_LEVEL='z',
                CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER=str(tree / 'tools/rust/minimal-linker'),
                EIDOLON_COMPACT_GRAPHICS_BLOB=str(tree / 'src/data/graphics.cg29'), RUSTC_BOOTSTRAP='1',
-               RUSTFLAGS=f'{RUSTFLAGS} --remap-path-prefix={tree}=/eidolon  -C link-arg=-Wl,--no-insert-timestamp')
+               RUSTFLAGS=f'{RUSTFLAGS} --remap-path-prefix={tree}=/eidolon  -C link-arg=-Wl,--no-insert-timestamp '
+                         f'-Z function-sections=yes -C link-arg=-Wl,-T,{tree}/tools/rust/sizecoded.ld')
     env.pop('CARGO_ENCODED_RUSTFLAGS', None)
     run(['cargo', 'build', '--target', tree / 'tools/rust/i686-pc-windows-gnu.json', '--profile', 'sizecoded',
          '--features', 'sizecoded,compact-graphics,fixed-core', '--bin', 'eidolon-runtime', '--locked', '--offline',
