@@ -22,6 +22,19 @@ Byte identity was reproduced from a clean checkout at a different path with Rust
 
 Like the original, this build reads `gm.dls` from the Windows system directory and checks it is the standard 3 440 660-byte bank; the bank is not counted in the size.
 
+### Candidate builds
+
+Use a separate workspace and output when measuring an optimization:
+
+```sh
+python3 size/build.py --candidate --work-dir .build/candidate --output .build/candidate.exe
+```
+
+This prints `CANDIDATE`, not `PASS`, and leaves the accepted hash unchanged. The workspace contains
+`unprepared.exe`, `input.exe`, `packed.exe`, and `build.json`: hashes of the staged inputs, tool versions,
+packer identity, and delivered EXE identity. A successful build does not perform a media comparison.
+`--link-order path/to/order.ld` overrides only the staged linker script and requires `--candidate`.
+
 ## How the bytes were saved
 
 Milestones; from 59 392 bytes on, each passed a full capture before it replaced the previous one:

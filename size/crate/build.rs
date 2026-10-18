@@ -1,5 +1,8 @@
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
+    // Cargo does not otherwise watch scripts consumed by an external linker.
+    println!("cargo:rerun-if-changed=tools/rust");
+    println!("cargo:rerun-if-env-changed=EIDOLON_SAVE_LINK");
     if std::env::var_os("CARGO_FEATURE_HASHED_IMPORTS").is_some() { hashed_imports(); }
     if std::env::var_os("CARGO_FEATURE_SAMPLE_DELTA").is_some() {
         sample_delta();

@@ -63,7 +63,7 @@ else
 	@echo "make reference runs the original under Wine with capture proxies and needs Linux." >&2; exit 1
 endif
 
-# Size-optimized build (no_std Rust + patched kkrunchy), compared with the verified 48 128-byte EXE (Linux only).
+# Size-optimized build (no_std Rust + patched kkrunchy), compared with size/expected.sha256 (Linux only).
 size:
 ifeq ($(PLATFORM),Linux)
 	python3 size/build.py
