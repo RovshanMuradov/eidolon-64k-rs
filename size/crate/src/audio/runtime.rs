@@ -115,6 +115,7 @@ pub(super) unsafe fn dispatch(n:*mut Node) {
         id=>super::nodes::eidolon_node_tick(n,state,id),
     }
 }
+#[inline(never)]
 unsafe fn midi(r:*mut Runtime,channel:u32,mut value:i32,cc:u32) {
     if cc==0 { value-=128; }
     if cc>=112 {
@@ -163,6 +164,7 @@ fn patch()->super::alloc::vec::Vec<u16> {
 
 /// CPU diagnostic prefix entrypoint. Production calls the exact-size `audio::render`.
 pub fn render_prefix(output:&mut [f32])->Result<RenderStats,&'static str> {
+    #[cfg(not(feature="sizecoded"))]
     if output.is_empty() || output.len()%128!=0 || output.len()>super::TOTAL_FRAMES as usize*2 {
         return Err("prefix");
     }

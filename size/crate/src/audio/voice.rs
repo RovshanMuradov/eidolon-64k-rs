@@ -16,6 +16,7 @@ unsafe fn set_glide(voice: *mut Voice, note: i32) {
 }
 unsafe fn frequency(note: S) -> S { v(440.0)*exp2((note-v(69.0))*v(0.083333313465118408))/v(44100.0) }
 
+#[inline(never)]
 pub unsafe fn eidolon_voice_tick(n: *mut Node, c: *mut Context) {
     let state = (*c).state;
     let mode = mode(n);

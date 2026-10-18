@@ -21,4 +21,8 @@ if os.environ.get('EIDOLON_SAVE_LINK'):
             shutil.copyfile(path, dest)
             objects.append(str(dest))
     (target / 'link.json').write_text(json.dumps({'args': args, 'objects': objects}, indent=2) + '\n')
-os.execvp('i686-w64-mingw32-gcc', ['i686-w64-mingw32-gcc', '-nostdlib', *args])
+import subprocess
+status = subprocess.run(['i686-w64-mingw32-gcc', '-nostdlib', *args]).returncode
+if status == 0 and '-o' in args:
+    status = subprocess.run([sys.executable, str(Path(__file__).with_name('merge-constants')), args[args.index('-o') + 1]]).returncode
+sys.exit(status)

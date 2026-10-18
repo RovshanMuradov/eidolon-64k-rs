@@ -4,6 +4,7 @@ use super::graph::{self, Node, State, call_input, input, cached, mode};
 use super::math::{Stereo as S, exp2, lerp};
 fn v(x: f64) -> S { S::splat(x) }
 
+#[inline(never)]
 unsafe fn adsr_map(x: S) -> S {
     let t = x.max(S::zero());
     v(1.0) / (t * t * t * v(418381.75) + v(1.0))
