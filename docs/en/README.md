@@ -6,6 +6,11 @@ The whole 450-second intro is computed at startup from 60 928 bytes. A 64klang g
 
 **Subject:** `Eidolon - Poo-Brain (native).exe`, 60 928 bytes, SHA-256 `376b476c358a969da7d5d45c091355520453086ee8cd22625fdbb4fa3a9fd6be`; Revision 2017, 64k category. Music by 64klang2 (Gopher). The 720p and 1080p builds differ from it in 24 bytes of resolution constants.
 
+For the Rust port and its modified assembly packer, see
+[the port guide](../rust/README.md), [compact ASM source map](../rust/asm-map.md#compact-build-and-modified-assembly)
+and [current size results](../../size/RESULTS.md). Addresses and file-layout
+measurements in these original-binary chapters refer to the subject pinned above.
+
 ## Overview
 
 ```mermaid
@@ -33,7 +38,7 @@ flowchart LR
 | [04-physics.md](04-physics.md) | Spring physics of the characters |
 | [05-rendering.md](05-rendering.md) | GL resources, texture generators, raymarcher, post-processing |
 | [06-audio.md](06-audio.md) | Synthesizer: score, graph, node kernels, samples |
-| [07-size.md](07-size.md) | What the 60 928 bytes contain and why 32 KiB is out of reach |
+| [07-size.md](07-size.md) | What the 60 928 bytes contain and what the measurements say about the 32 KiB target |
 
 ## Notation
 

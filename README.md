@@ -5,9 +5,9 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md) · How the port works: [docs/rust](docs/rust/README.md)
 
-**Size.** A size-optimized build of the port takes **47 561 bytes**, 22 % less than the 60 928-byte original, with the same frames and sound byte for byte: [size/](size/README.md).
+**Size.** The integrated size build takes **44 139 bytes**, 7.2 % less than the previous 47 561-byte build and 27.6 % less than the original. A clean checkout reproduces it byte for byte; final packed-image verification is in progress. Results and exact verification scope: [size/RESULTS.md](size/RESULTS.md).
 
-**Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The work was done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
+**Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The initial port and baseline optimization were done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Recovery and integration continued on 18 October. Initial agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
 
 ## What works where
 
@@ -17,7 +17,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 | Check audio: `make verify-audio` | ✅ | ✅ | ✅ Intel Macs |
 | Check frames: `make verify` | native, untested | Wine + gamescope, tested | ❌ |
 | Capture your own reference: `make reference` | ❌ | Wine + gamescope, tested | ❌ |
-| Build the 47 561-byte version: `make size` | ❌ | tested | ❌ |
+| Build the compact candidate: `python3 size/build.py --candidate` | ❌ | clean rebuild tested | ❌ |
 
 Tested on Arch Linux with an NVIDIA GPU. The install commands for other systems follow their standard package names but were not run.
 
@@ -107,16 +107,21 @@ During frame checks the GPU renders in an invisible window; leave the machine ot
 ## 5. Size-optimized build (optional, Linux)
 
 ```sh
-make size        # about 1 minute
-make run-size    # plays the 47 561-byte EXE under Wine
+make check-size-inputs
+python3 size/build.py --candidate    # about 1 minute; writes .build/eidolon-size.exe
 ```
 
 ```text
-.build/eidolon-size.exe: 47561 bytes (original: 60928 bytes)
-PASS size: identical to the verified build, SHA-256 a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3
+.build/eidolon-size.exe: 44139 bytes (original: 60928 bytes)
+CANDIDATE size: SHA-256 d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458; media verification required
 ```
 
-`PASS` means the build is byte-identical to the 47 561-byte EXE that passed the full frame and audio comparison. NASM 2.10.09 is downloaded and built by the script. Details and the techniques used: [size/README.md](size/README.md).
+`make size` additionally checks `size/expected.sha256`. That pin still identifies
+the fully verified 47 561-byte baseline, so it currently rejects this new candidate;
+`make run-size` uses the same gate. The pin will be updated after final verification.
+`CANDIDATE` records a successful build, while `PASS size` means identity with the
+pinned file. NASM 2.10.09 is downloaded and built by the script. Build instructions,
+techniques and report navigation: [size/README.md](size/README.md).
 
 ## All commands
 
@@ -127,8 +132,11 @@ PASS size: identical to the verified build, SHA-256 a46ecc05529d07d3f0ab333595f3
 | `make verify-audio` | Synthesizes the soundtrack and compares its SHA-256 |
 | `make verify` | Renders all frames with a controlled clock and compares their SHA-256 |
 | `make reference` | Captures the original on this machine into `verify/local/` |
-| `make size` | Builds the 47 561-byte version and compares it with the verified one |
-| `make run-size` | Plays the 47 561-byte version |
+| `python3 size/build.py --candidate` | Builds the current 44 139-byte candidate and records provenance |
+| `make size` | Checks generated inputs, builds the compact EXE and enforces `size/expected.sha256` |
+| `make run-size` | Runs `make size`, installs the sample bank, then plays under Wine |
+| `make check-size-inputs` | Checks frozen audio, shaders, model configuration and layout |
+| `make test-size` | Runs generated-input checks and 34 transformation regressions |
 | `make test` | Rust unit tests |
 | `make clean` | Removes build output, `.build/` and the private Wine prefix `.wine/` |
 
@@ -154,10 +162,10 @@ PASS size: identical to the verified build, SHA-256 a46ecc05529d07d3f0ab333595f3
 | 1 | Reproducible reference of the original: run it under Wine, control its clock, capture every frame and the PCM, prove repeated runs are identical and that corruption is detected | 27 000 frames + full PCM; repeated full runs byte-identical |
 | 2 | Understand the original: unpack, recover algorithms, data and the synthesizer; explain the 64k size | [docs/en](docs/en/README.md), 64klang2 source match, size breakdown |
 | 3 | Rust port with byte-exact output, independently verified against the reference | This repository |
-| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561 bytes with all frames and PCM exact ([size/](size/README.md)); 32 KiB not reached; performance acceptance open |
-| 5 | Final reproducible build and verification | Not started |
+| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561-byte verified baseline → 44 139-byte integrated candidate; 32 KiB not reached ([results](size/RESULTS.md)) |
+| 5 | Final reproducible build and verification | Clean checkout reproduces the candidate exactly; final capture and runtime/resource measurements in progress |
 
-**Agents.** The work was done by AI agents with a coordinator and workers:
+**Initial agents.** The 15–17 October work used a coordinator and workers:
 
 - The coordinator only planned: split each step into tasks (T1–T33), wrote a brief of at most 15 lines per task, accepted 4-line replies and recorded every decision as one line in a state file. By protocol it never read code or logs itself.
 - Workers had fixed roles per step: reverse engineering, capture, independent verification; graphics & engine and audio & compactness; Rust engine, Rust audio and independent verification; optimization and candidate verification.
@@ -166,6 +174,12 @@ PASS size: identical to the verified build, SHA-256 a46ecc05529d07d3f0ab333595f3
 - GPU runs were serialized; runs longer than 45 minutes were detached and polled.
 - Harnesses: OpenCode 2 for steps 1–3 and the start of step 4, then Claude Code as coordinator.
 
+On 18 October, an OpenCode integration agent reviewed the recovered code and
+evidence directly, with four workers for packer/layout, Rust/audio, shaders and
+independent verification. This phase recovered unfinished experiments, repaired
+unsafe transformations and false-positive checks, and reproduced the integrated
+candidate from a clean checkout; see [the integration record](size/RESULTS.md).
+
 | Harness | Model | Effort | Sessions | Input | Output | Cache |
 |---|---|---|---:|---:|---:|---:|
 | OpenCode 2 | GPT-6 Astra | xhigh | 55 | 10.0 M | 2.5 M | 448.1 M |
@@ -173,7 +187,7 @@ PASS size: identical to the verified build, SHA-256 a46ecc05529d07d3f0ab333595f3
 | Claude Code | Claude Opus 5.5 | high | — | < 0.1 M | 0.2 M | 266.7 M |
 | **Total** | | | | **10.7 M** | **2.8 M** | **746.0 M** |
 
-Tokens from the harnesses' local session logs, 15–17 October 2026; output includes reasoning, cache counts cache reads and writes. The later documentation session is not included.
+Tokens from the harnesses' local session logs, 15–17 October 2026; output includes reasoning, cache counts cache reads and writes. Later documentation and recovery/integration sessions are not included.
 
 **Tools.**
 

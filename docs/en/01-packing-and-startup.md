@@ -1,5 +1,9 @@
 # 1. Packing and startup
 
+This chapter measures the original 60 928-byte EXE. The Rust size build's
+modified encoder, decoder and PE layout are mapped in
+[Compact build and modified assembly](../rust/asm-map.md#compact-build-and-modified-assembly).
+
 The EXE is a 58 844-byte kkrunchy stream plus 2 084 bytes of wrapper. The unpacker restores the code, resolves 35 imports and jumps to `0x406379`.
 
 ## File layout
