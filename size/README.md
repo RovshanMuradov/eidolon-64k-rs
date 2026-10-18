@@ -76,10 +76,11 @@ Milestones; from 59 392 bytes on, each passed a full capture before it replaced 
 Techniques in the final build:
 
 - **No standard library.** `no_std` with its own entry point, allocator and import loader; custom i686 target and a linker wrapper without CRT; `opt-level = "z"`, `panic = immediate-abort`, fail-fast errors.
-- **Audio.** Instrument samples read from the system `gm.dls` instead of embedded; score and patch stored as transposed byte streams and compact records; note-off events derived from note-on durations.
-- **Graphics.** Timeline, curves and pass tables packed as byte columns; curve tangents predicted from neighbouring keys, only residuals stored; unreachable curve keys removed; shader fragments pooled, renamed and ordered for the packer.
-- **Packer.** kkrunchy_k7 whose x86 filter also understands SSE and three-byte opcodes, so the compiler's SSE code compresses better. Its context model (`model_asm.asm` for the packer, `depacker.asm` for the decoder; both must stay in step) has 14 hashed contexts whose byte masks, bit masks and position/word terms were tuned on this intro's data with a C mirror of the model, 7 mixer weight sets (previous byte, partial byte, confidence, position mod 4, high nibble, second and third previous byte), and tuned learning rates; the stage-1 decoder was reworked for size (squash table computed with the FPU, compact context init, `ebp`-relative layout). The stage-0 import table uses only a FirstThunk array with overlapped hints.
-- **Link order.** `minimal-linker` renames rustc's anonymous `.rdata` constants to `.rd$xxxx` (hash of the contents) so `sizecoded.ld` can order them individually.
+- **Audio.** Instrument samples read from the system `gm.dls` instead of embedded; score and patch stored as transposed byte streams and compact records; note-off events derived from note-on durations. Static graph analysis removes unused controller streams and canonicalizes unused velocities. Controller values use deltas; unused formant rows are zeroed. Repository-owned generators check the frozen data.
+- **Graphics.** Timeline, curves and pass tables packed as byte columns; curve tangents predicted from neighbouring keys, only residuals stored; unreachable curve keys removed. The frozen fo2 shader pool has deterministic reconstruction, explicit rename mappings and binding-aware validation; see [shaders/fo2-notes.md](shaders/fo2-notes.md).
+- **Code.** Selected DSP routines remain out of line, and backend options are chosen by packed size. The PE postprocessor redirects equal read-only FP loads using an allowlisted instruction decoder; all constant data is retained. Successful natural completion exits the process directly.
+- **Packer.** kkrunchy_k7 whose x86 filter also understands SSE and three-byte opcodes. The t15t model has 14 hashed contexts and 8 mixers, including a 4 KiB region context. `model.json` generates configuration shared by encoder and decoder. The smaller decoder computes its squash table with the FPU and uses an `ebp`-relative work area; the compact stage-0 import table overlaps hints. [Recovery notes](packer/RECOVERY.md) distinguish the historical recovered checkpoint from integrated builds.
+- **Link order.** `minimal-linker` renames anonymous `.rdata` constants to content-derived `.rd$xxxx` sections before linking; the FP pass runs after linking. The frozen manifest checks full anonymous digests, unique names and exact section membership. A changed source layout requires explicit regeneration. Trailing packed zero padding is trimmed.
 
 ## Layout
 
@@ -87,7 +88,10 @@ Techniques in the final build:
 |---|---|
 | `crate/` | The size-optimized Rust source; `make size` stages it with the shared `shaders/`, `src/data/` and `Cargo.lock` |
 | `crate/src/data/graphics.cg29` | Compressed graphics tables and shader pool |
+| `shaders/` | Frozen fo2 reconstruction sources, recipes, rename mappings and provenance |
 | `crate/tools/rust/` | Custom i686 target spec, a linker wrapper without CRT and the link-order script `sizecoded.ld` |
-| `packer/` | kkrunchy_k7 by Fabian "ryg" Giesen, public domain ([farbrausch/fr_public](https://github.com/farbrausch/fr_public) @ `8c8f82c`), with the x86 filter extension and two build fixes |
+| `packer/` | Public-domain kkrunchy_k7 by Fabian "ryg" Giesen ([farbrausch/fr_public](https://github.com/farbrausch/fr_public) @ `8c8f82c`), extended filter, shared t15t model configuration and decoder checks |
+| `tools/`, `tests/` | Reproducible data generators, bounded experiments and transformation checks |
+| `verify/` | Packed-image capture/review adapter, external-oracle pins and independent reports |
 | `build.py` | The build and pack script behind `make size` |
 | `expected.sha256` | SHA-256 of the verified 47 561-byte EXE |
