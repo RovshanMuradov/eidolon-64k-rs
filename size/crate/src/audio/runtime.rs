@@ -129,7 +129,7 @@ unsafe fn midi(r:*mut Runtime,channel:u32,mut value:i32,cc:u32) {
     (*(*r).context.state).midi[(channel*128+cc) as usize]=S::splat(value as f64)/S::splat(128.0);
 }
 
-/// PATCH words from the isomorphic record streams of patch_code (tools/optimize/audio_patch).
+/// PATCH words from the isomorphic record streams (size/tools/encode_patch.py).
 fn patch()->super::alloc::vec::Vec<u16> {
     use super::patch_code::*;
     let mut out=super::alloc::vec![0u16;WORDS];
@@ -164,7 +164,6 @@ fn patch()->super::alloc::vec::Vec<u16> {
 
 /// CPU diagnostic prefix entrypoint. Production calls the exact-size `audio::render`.
 pub fn render_prefix(output:&mut [f32])->Result<RenderStats,&'static str> {
-    #[cfg(not(feature="sizecoded"))]
     if output.is_empty() || output.len()%128!=0 || output.len()>super::TOTAL_FRAMES as usize*2 {
         return Err("prefix");
     }

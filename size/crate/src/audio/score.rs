@@ -86,7 +86,7 @@ struct Stream { at:usize, count:usize, next:usize, info:u32 }
 /// Native stream order; production dispatch advances exactly one 64-frame quantum.
 pub struct Scheduler { data:Vec<u8>, streams:[Stream; super::score_code::STREAMS] }
 impl Scheduler {
-    /// Fixed embedded SCORE (validated at build time by tools/optimize/audio_score): stored
+    /// Fixed embedded SCORE (validated by size/tools/encode_score.py): stored
     /// planes regrouped per stream, note-off streams derived from the following note-on
     /// stream's durations, then the same tick expansion as `expand` (floor predictors).
     pub fn fixed() -> Self {
