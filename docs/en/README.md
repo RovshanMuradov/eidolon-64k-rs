@@ -8,7 +8,7 @@ The whole 450-second intro is computed at startup from 60 928 bytes. A 64klang g
 
 For the Rust port and its modified assembly packer, see
 [the port guide](../rust/README.md), [compact ASM source map](../rust/asm-map.md#compact-build-and-modified-assembly)
-and [current size results](../../size/RESULTS.md). Addresses and file-layout
+and [current size results](../../size/README.md). Addresses and file-layout
 measurements in these original-binary chapters refer to the subject pinned above.
 
 ## Overview

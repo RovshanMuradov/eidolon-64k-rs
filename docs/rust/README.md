@@ -88,7 +88,7 @@ The port is exact because it copies the original's arithmetic, not just its form
 The integrated compact build is **44 139 bytes**, down from the previous
 47 561-byte build. A clean checkout reproduces its exact SHA-256. Full media
 verification of this final candidate is in progress; the current evidence is
-recorded in [size/RESULTS.md](../../size/RESULTS.md).
+recorded in [size/README.md](../../size/README.md#verification).
 
 | Area | Compact implementation |
 |---|---|

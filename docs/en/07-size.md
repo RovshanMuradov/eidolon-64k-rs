@@ -60,5 +60,5 @@ a different representation or a jointly compressed executable.
 The Rust rewrite has since produced a reproducible 44 139-byte integrated
 candidate using compact data, shader transformations, a modified packer and
 retuned layout. Its verification status and comparisons are recorded in
-[size/RESULTS.md](../../size/RESULTS.md). The original-binary measurements above
+[size/README.md](../../size/README.md#verification). The original-binary measurements above
 describe the 60 928-byte file.

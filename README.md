@@ -5,7 +5,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md) · How the port works: [docs/rust](docs/rust/README.md)
 
-**Size.** The integrated size build takes **44 139 bytes**, 7.2 % less than the previous 47 561-byte build and 27.6 % less than the original. A clean checkout reproduces it byte for byte; final packed-image verification is in progress. Results and exact verification scope: [size/RESULTS.md](size/RESULTS.md).
+**Size.** The compact build takes **44 139 bytes**, 7.2 % less than the previous 47 561-byte build and 27.6 % less than the original. A clean checkout reproduces it byte for byte; final packed-image verification is in progress: [size/](size/README.md).
 
 **Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The initial port and baseline optimization were done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Recovery and integration continued on 18 October. Initial agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
 
@@ -162,7 +162,7 @@ techniques and report navigation: [size/README.md](size/README.md).
 | 1 | Reproducible reference of the original: run it under Wine, control its clock, capture every frame and the PCM, prove repeated runs are identical and that corruption is detected | 27 000 frames + full PCM; repeated full runs byte-identical |
 | 2 | Understand the original: unpack, recover algorithms, data and the synthesizer; explain the 64k size | [docs/en](docs/en/README.md), 64klang2 source match, size breakdown |
 | 3 | Rust port with byte-exact output, independently verified against the reference | This repository |
-| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561-byte verified baseline → 44 139-byte integrated candidate; 32 KiB not reached ([results](size/RESULTS.md)) |
+| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561-byte verified baseline → 44 139-byte candidate; 32 KiB not reached ([size/](size/README.md)) |
 | 5 | Final reproducible build and verification | Clean checkout reproduces the candidate exactly; final capture and runtime/resource measurements in progress |
 
 **Initial agents.** The 15–17 October work used a coordinator and workers:
@@ -174,11 +174,10 @@ techniques and report navigation: [size/README.md](size/README.md).
 - GPU runs were serialized; runs longer than 45 minutes were detached and polled.
 - Harnesses: OpenCode 2 for steps 1–3 and the start of step 4, then Claude Code as coordinator.
 
-On 18 October, an OpenCode integration agent reviewed the recovered code and
-evidence directly, with four workers for packer/layout, Rust/audio, shaders and
-independent verification. This phase recovered unfinished experiments, repaired
-unsafe transformations and false-positive checks, and reproduced the integrated
-candidate from a clean checkout; see [the integration record](size/RESULTS.md).
+On 18 October, OpenCode continued the packer, Rust/audio and shader work with
+four workers, including an independent verifier. It recovered experiments,
+fixed unsafe transformations and false-positive checks, and reproduced the
+compact build from a clean checkout.
 
 | Harness | Model | Effort | Sessions | Input | Output | Cache |
 |---|---|---|---:|---:|---:|---:|

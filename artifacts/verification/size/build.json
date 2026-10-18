@@ -1,0 +1,47 @@
+{
+  "schema": "eidolon-size-build-checks-1",
+  "source_commit": "dbefed39ce3083be25f7699fec46d400c4755991",
+  "delivered": {
+    "bytes": 44139,
+    "sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458"
+  },
+  "unprepared_sha256": "f448f284e1400dc10b145e0b3893b96954ac7e4b8b5b781a534cb8ce41020dd2",
+  "prepared_sha256": "455f2486ce5f48d945bbd60f78915a56f9a328178fce7286273bdce42bdda475",
+  "clean_build": {
+    "status": "BYTE_IDENTICAL",
+    "fresh_rust_target": true,
+    "fresh_nasm_build": true,
+    "reused_inputs": ["Pinned Rust toolchain and Cargo dependencies", "Hash-verified NASM source archive"],
+    "manifest_sha256": "748a05e4957ed7268862a96e2852b8a2ad202ed05c20cc0d5a3e1cdae732e3f0",
+    "transformation_tests_passed": 34
+  },
+  "tool_versions": {
+    "rustc": "1.97.1",
+    "clang": "22.1.8",
+    "mingw_gcc": "16.2.0",
+    "nasm": "2.10.09",
+    "wine": "11.17"
+  },
+  "packer_comparison": [
+    {
+      "model": "t14m7",
+      "packer_sha256": "599404ca42d63be14614d8076dfcc4b58a0e3c5382f76c446b05897e226eff04",
+      "delivered_bytes": 44288,
+      "delivered_sha256": "50ca1a3569dfa2b4f18a8e9b6effeb0b24a2855a4a8e811d30c744a06133a441"
+    },
+    {
+      "model": "t15t",
+      "packer_sha256": "635fe1eaf84e00dbd74df3494cd0e8b77979514f14692bed7e1e77f2ec5ce39a",
+      "delivered_bytes": 44139,
+      "delivered_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458"
+    }
+  ],
+  "layout_search": {
+    "seed": 20261018,
+    "seed_measurements": 4,
+    "proposal_measurements": 64,
+    "manifest_sha256": "5e4d0e2f403a97a757d796a0e8027921f0427cfb3f0b1e7baf2d8d8b31ca2f35",
+    "script_sha256": "e8776d22fb12fee3f1a3837b7c0ef499c1b997e9232cd34df92e0f1bf77bee4e"
+  },
+  "media_capture_performed": false
+}

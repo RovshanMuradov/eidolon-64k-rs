@@ -72,6 +72,6 @@ Reports are keyed by the delivered file's full SHA-256. The exploratory
 44 101-byte file passed `FULL_MEDIA_EXACT_PARTIAL`; the corrected 44 139-byte
 candidate has a clean byte-identical rebuild and is undergoing final capture.
 Native Windows testing and formal acceptance remain open. See
-[integrated results](../../size/RESULTS.md) and
+[size-build results](../../size/README.md#verification) and
 [runtime reports](../../size/verify/reports/README.md) for the exact scope of
 each result.

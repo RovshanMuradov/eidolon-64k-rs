@@ -80,6 +80,5 @@ data. Indexed accesses, writes and unrecognized encodings are left alone.
 
 Link-order proposals are scored by the **complete trimmed EXE**, including
 the decoder and headers. Code size alone is not that metric. See
-[the frozen layout](../../size/INTEGRATED-LAYOUT.md),
-[packer recovery](../../size/packer/RECOVERY.md) and
-[integrated results](../../size/RESULTS.md) for reproduction and evidence.
+[the layout tools](../../size/tools/README.md#changing-link-order) and
+[size-build verification](../../size/README.md#verification) for reproduction and evidence.

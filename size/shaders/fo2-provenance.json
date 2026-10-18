@@ -3,43 +3,19 @@
   "checkpoint": {
     "name": "tx / gfx1",
     "bytes": 93664,
-    "sha256": "261e528dc6aca9b20a7db54b4687e435bb6ca488d484cb1aac0991b23a4c1e60",
-    "capture_status": "Prior exact capture reported by parent; not re-run by this agent."
+    "sha256": "261e528dc6aca9b20a7db54b4687e435bb6ca488d484cb1aac0991b23a4c1e60"
   },
   "candidate": {
     "name": "fo2",
     "bytes": 92848,
-    "sha256": "00d105dc4a09c991271f9d5f9493fda9a6b18d589f01f52f130a44b05c86166e",
-    "gpu_capture_status": "Pending independent verifier; not acceptance."
+    "sha256": "00d105dc4a09c991271f9d5f9493fda9a6b18d589f01f52f130a44b05c86166e"
   },
   "source_sha256": "0783dc89095f6ebbcbce1f9b873dbc632c26e981662968b72acc879a2a2fe357",
   "rename_map_sha256": "76eebe0c0f892bb9e5a32e777f03f694339ddebc912eb494021ea606843d8d78",
   "origin": {
     "base_commit": "bcab00d",
     "original_blob_sha256": "f238178cc08c83855eecd7f922331275d8315992bc0dcbe6a695f0ad33fec76c",
-    "all_12_tables_identical": true,
-    "chain": [
-      "tx",
-      "pm1",
-      "pm2",
-      "rn2",
-      "io2",
-      "fo2"
-    ],
-    "historical_seed": {
-      "pm1": null,
-      "pm2": null,
-      "rn2": 1,
-      "io2": null,
-      "fo2": null
-    },
-    "historical_search": "Timed runs recovered from frozen outputs; historical evaluation count and invoked seed arguments were not logged. round.py with tag 2 would pass seed 2 to pm2/io2/fo2. rn2 previously ignored --seed and unconditionally used 1. No timed run is needed for reconstruction.",
-    "recovery_evaluations": 0,
-    "new_search_evaluations": 0,
-    "new_search_evaluation_bound": 200,
-    "reproduction": "Frozen source and recipe data; does not rerun timed search.",
-    "pool_proxy_bytes": 14167,
-    "pool_proxy_is_whole_exe_metric": false
+    "all_12_tables_identical": true
   },
   "fragment_sha256": [
     "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
@@ -540,56 +516,5 @@
       "payload_bytes": 0,
       "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
-  ],
-  "build": {
-    "base_commit": "bcab00d",
-    "unprepared_pe": {
-      "bytes": 173568,
-      "sha256": "52f0d4c9c57bf6b1f0d4632b8f03d657229a21b6befa61f1ebba6f01524ef0d3"
-    },
-    "whole_exe": {
-      "bytes": 46777,
-      "sha256": "f4dcdac406c6362af352a6d14429bf60e563a5991138f635d59fe49f6e468711"
-    },
-    "gpu_verified": false
-  },
-  "validation": {
-    "glslang_version": "11:16.4.0",
-    "compiled_and_binding_checked_programs": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28,
-      29,
-      30
-    ],
-    "unsupported_programs": {
-      "21": "Unmodified baseline and candidate both fail: global const initializer depends on uniform uE."
-    },
-    "full_comparison_exit_code": 2
-  }
+  ]
 }
