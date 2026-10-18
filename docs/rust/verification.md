@@ -68,10 +68,12 @@ expressions or equal compile failures. Its replacement preserves bindings and
 rejects count mismatches and compile failures. Program 21 is explicitly
 unsupported by the offline glslang comparison; it is never counted as a pass.
 
-Reports are keyed by the delivered file's full SHA-256. The exploratory
-44 101-byte file passed `FULL_MEDIA_EXACT_PARTIAL`; the corrected 44 139-byte
-candidate has a clean byte-identical rebuild and is undergoing final capture.
-Native Windows testing and formal acceptance remain open. See
+Reports are keyed by the delivered file's full SHA-256. Both the exploratory
+44 101-byte file and the corrected 44 139-byte build passed
+`FULL_MEDIA_EXACT_PARTIAL`; the latter also has a clean byte-identical rebuild.
+The playback pair records single-run observations with known contention at the
+end of the final run. Native Windows testing, isolated repeated performance
+measurements and formal acceptance remain open. See
 [size-build results](../../size/README.md#verification) and
 [runtime reports](../../size/verify/reports/README.md) for the exact scope of
 each result.

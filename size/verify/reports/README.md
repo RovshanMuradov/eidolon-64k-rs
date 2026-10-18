@@ -48,6 +48,14 @@ is sampled about once per second; the owned-process sum can double-count shared
 pages and excludes GPU VRAM/shared system services. No isolated depacker time,
 synthesis-only time, frame-time distribution, or native FPS is claimed.
 
+Integration subsequently identified a concurrent workload: review-branch tests,
+build and decoder checks ran from `2026-10-18T04:04:37.792855Z` to
+`04:05:39.349943Z`. This overlaps the final playback acquisition by 31.75 seconds
+and the baseline by zero. Both startup observations precede this workload. The
+pair must therefore be read as observations with known tail contention, not an
+isolated benchmark. The [completion record](../../../artifacts/verification/size/completion.json)
+records the time-window audit; the original acquisition reports remain intact.
+
 Separate NVIDIA cache paths were requested, but neither requested directory was
 present at review. Effective driver-cache behavior and cold-cache
 state are therefore **unverified**. The portable runner now creates the requested
@@ -69,8 +77,8 @@ metadata trigger was not isolated. No extra playback was launched.
 
 The summary pins the input/build/source-validation reports, both playback reviews,
 and the **22 media/input controls plus five paired-playback controls**. All pass.
-Clean-checkout reproducibility belongs to the integrating session's separate
-candidate-keyed attestation; this report makes no claim that it was unperformed.
+Clean-checkout reproducibility is confirmed by the integrating session's
+[candidate-keyed attestation](../../../artifacts/verification/size/build.json).
 Native Windows remains explicitly untested and formal acceptance remains open.
 All owned acquisitions are closed and GPU ownership is released.
 
@@ -130,5 +138,5 @@ propagates a nonzero Gamescope exit even when Wine exits zero, and the reviewer
 requires unambiguous exit records and supervisor cleanup. The capture's actual
 source snapshots and hashes remain preserved separately from this later review.
 
-Native Windows, final clean
-rebuild, matched solo performance/resources, and formal acceptance remain open.
+The final corrected executable's capture and clean rebuild are recorded above.
+Native Windows, isolated repeated performance measurements and formal acceptance remain open.

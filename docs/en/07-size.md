@@ -57,8 +57,8 @@ a different representation or a jointly compressed executable.
 - Repacking the finished EXE gives ~60.5 KB.
 - Removing dead code and nodes, and factoring shaders and curves, could save some bytes. No savings of this scale have been demonstrated.
 
-The Rust rewrite has since produced a reproducible 44 139-byte integrated
-candidate using compact data, shader transformations, a modified packer and
+The Rust rewrite has since produced a reproducible, media-exact 44 139-byte
+build using compact data, shader transformations, a modified packer and
 retuned layout. Its verification status and comparisons are recorded in
 [size/README.md](../../size/README.md#verification). The original-binary measurements above
 describe the 60 928-byte file.

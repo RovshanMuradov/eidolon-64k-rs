@@ -5,7 +5,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md) · How the port works: [docs/rust](docs/rust/README.md)
 
-**Size.** The compact build takes **44 139 bytes**, 7.2 % less than the previous 47 561-byte build and 27.6 % less than the original. A clean checkout reproduces it byte for byte; final packed-image verification is in progress: [size/](size/README.md).
+**Size.** The verified compact build takes **44 139 bytes**, 7.2 % less than the previous 47 561-byte build and 27.6 % less than the original. A clean checkout reproduces it byte for byte; the delivered EXE passed the full frame and audio comparison: [size/](size/README.md).
 
 **Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The initial port and baseline optimization were done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Recovery and integration continued on 18 October. Initial agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
 
@@ -17,7 +17,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 | Check audio: `make verify-audio` | ✅ | ✅ | ✅ Intel Macs |
 | Check frames: `make verify` | native, untested | Wine + gamescope, tested | ❌ |
 | Capture your own reference: `make reference` | ❌ | Wine + gamescope, tested | ❌ |
-| Build the compact candidate: `python3 size/build.py --candidate` | ❌ | clean rebuild tested | ❌ |
+| Build the 44 139-byte version: `make size` | ❌ | clean rebuild and full capture tested | ❌ |
 
 Tested on Arch Linux with an NVIDIA GPU. The install commands for other systems follow their standard package names but were not run.
 
@@ -107,21 +107,19 @@ During frame checks the GPU renders in an invisible window; leave the machine ot
 ## 5. Size-optimized build (optional, Linux)
 
 ```sh
-make check-size-inputs
-python3 size/build.py --candidate    # about 1 minute; writes .build/eidolon-size.exe
+make size        # about 1 minute; writes .build/eidolon-size.exe
+make run-size    # plays the 44 139-byte EXE under Wine
 ```
 
 ```text
 .build/eidolon-size.exe: 44139 bytes (original: 60928 bytes)
-CANDIDATE size: SHA-256 d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458; media verification required
+PASS size: identical to the verified build, SHA-256 d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458
 ```
 
-`make size` additionally checks `size/expected.sha256`. That pin still identifies
-the fully verified 47 561-byte baseline, so it currently rejects this new candidate;
-`make run-size` uses the same gate. The pin will be updated after final verification.
-`CANDIDATE` records a successful build, while `PASS size` means identity with the
-pinned file. NASM 2.10.09 is downloaded and built by the script. Build instructions,
-techniques and report navigation: [size/README.md](size/README.md).
+`PASS size` means identity with the verified file pinned by `size/expected.sha256`.
+NASM 2.10.09 is downloaded and built by the script. For experiments,
+`python3 size/build.py --candidate` records a new build without enforcing that pin.
+Build instructions, techniques and runtime observations: [size/README.md](size/README.md).
 
 ## All commands
 
@@ -132,7 +130,7 @@ techniques and report navigation: [size/README.md](size/README.md).
 | `make verify-audio` | Synthesizes the soundtrack and compares its SHA-256 |
 | `make verify` | Renders all frames with a controlled clock and compares their SHA-256 |
 | `make reference` | Captures the original on this machine into `verify/local/` |
-| `python3 size/build.py --candidate` | Builds the current 44 139-byte candidate and records provenance |
+| `python3 size/build.py --candidate` | Builds an experimental EXE and records provenance without enforcing the verified hash |
 | `make size` | Checks generated inputs, builds the compact EXE and enforces `size/expected.sha256` |
 | `make run-size` | Runs `make size`, installs the sample bank, then plays under Wine |
 | `make check-size-inputs` | Checks frozen audio, shaders, model configuration and layout |
@@ -162,8 +160,8 @@ techniques and report navigation: [size/README.md](size/README.md).
 | 1 | Reproducible reference of the original: run it under Wine, control its clock, capture every frame and the PCM, prove repeated runs are identical and that corruption is detected | 27 000 frames + full PCM; repeated full runs byte-identical |
 | 2 | Understand the original: unpack, recover algorithms, data and the synthesizer; explain the 64k size | [docs/en](docs/en/README.md), 64klang2 source match, size breakdown |
 | 3 | Rust port with byte-exact output, independently verified against the reference | This repository |
-| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561-byte verified baseline → 44 139-byte candidate; 32 KiB not reached ([size/](size/README.md)) |
-| 5 | Final reproducible build and verification | Clean checkout reproduces the candidate exactly; final capture and runtime/resource measurements in progress |
+| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561 → 44 139 bytes, full media exact; 32 KiB not reached ([size/](size/README.md)) |
+| 5 | Final reproducible build and verification | Clean build and exact full capture passed; bounded runtime observations recorded; native Windows and formal acceptance remain open |
 
 **Initial agents.** The 15–17 October work used a coordinator and workers:
 

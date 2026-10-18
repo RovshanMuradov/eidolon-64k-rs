@@ -1,31 +1,30 @@
 # Size-optimized build
 
-The integrated candidate is **44 139 bytes**: 3 422 bytes (7.2 %) smaller than
+The verified build is **44 139 bytes**: 3 422 bytes (7.2 %) smaller than
 the previous 47 561-byte build and 16 789 bytes (27.6 %) smaller than the
-60 928-byte original. A clean checkout reproduces the exact file; final
-packed-image verification is in progress.
+60 928-byte original. A clean checkout reproduces the exact file, and its full
+packed-image capture matches all frames and PCM byte for byte.
 
 | Build | Bytes |
 |---|---:|
 | Original (kkrunchy-packed) | 60 928 |
 | Rust port, `make build` | ~730 000 |
 | Previous fully media-verified Rust baseline | 47 561 |
-| **Integrated Rust candidate, `size/build.py --candidate`** | **44 139** |
+| **Rust, size-optimized, `make size`** | **44 139** |
 | Target that was not reached | 32 768 |
 
 ## Build
 
 ```sh
-make check-size-inputs
-python3 size/build.py --candidate   # Linux; builds .build/eidolon-size.exe and records build.json
+make size       # Linux; builds .build/eidolon-size.exe and checks its SHA-256
+make run-size   # installs gm.dls in the private prefix and plays under Wine
 ```
 
-The candidate SHA-256 is
+The verified SHA-256 is
 `d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458`.
-`make size` also enforces `size/expected.sha256`, which still pins the previous
-47 561-byte file (`a46ecc05…`) until final verification completes. It currently
-reports a hash mismatch for the new candidate. `make run-size` passes that same
-gate before installing `gm.dls` in the private prefix and playing under Wine.
+`make size` checks generated inputs and enforces this value through
+`size/expected.sha256`. `PASS size` means identity with the file that passed the
+full comparison; it does not run a new media capture.
 
 The clean rebuild used Rust 1.97.1 (pinned in `rust-toolchain.toml`), MinGW-w64
 GCC 16.2.0, Clang 22.1.8 and NASM 2.10.09, with fresh Rust and NASM build
@@ -61,7 +60,7 @@ documented in [tools/README.md](tools/README.md).
 | Host audio | All 19 964 544 stereo frames / 159 716 352 PCM bytes exact |
 | Assembly decoder | 208 770-byte roundtrip, damaged-stream rejection and observer signatures pass |
 | Offline shader comparison | 30 programs pass; program 21 explicitly unsupported by glslang; overall exit 2 |
-| Final packed-image capture | Pending for the 44 139-byte candidate |
+| Final packed-image capture | All 27 000 frames, 510 raw anchors, full PCM and 151 physics samples exact; restoration, endpoint and cleanup pass |
 
 The [packed-image verifier](verify/README.md) checks the delivered EXE against
 external pinned references: all 27 000 frames, 510 raw anchors, the full PCM,
@@ -72,7 +71,24 @@ and formal acceptance remain open.
 The earlier 44 101-byte experiment passed full media checks; its
 [capture reports](verify/reports/README.md) include a separate failed smoke run.
 The corrected build retains all constant data and restores public audio extent
-checks, adding 38 bytes. It requires its own capture.
+checks, adding 38 bytes. Its independent full capture also passed. The
+[completion record](../artifacts/verification/size/completion.json) binds the
+clean rebuild and final capture to the same executable hash.
+
+### Runtime observations
+
+One uninjected playback per executable, on the same Wine/GPU setup:
+
+| Observation | Previous 47 561-byte build | Final 44 139-byte build |
+|---|---:|---:|
+| Launch → first uncorked audio | 217.02 s | 237.02 s |
+| Target sampled peak RSS | 954.95 MiB | 994.73 MiB |
+
+These are single-run observations. About 32 seconds at the end of the final run
+overlapped review-branch validation; both startup observations preceded it.
+Cold-cache state and workload isolation are unverified. The pair establishes
+neither a slowdown cause nor a statistical performance result. Full conditions
+and sampling limits are in the [runtime reports](verify/reports/README.md).
 
 ## How the bytes were saved
 
@@ -90,8 +106,9 @@ Milestones; from 59 392 bytes on, each passed a full capture before it replaced 
 | 47 616 | One section per function and static, linked in an order found by hill-climbing the packed size (`crate/tools/rust/sizecoded.ld`) |
 | 47 561 | Trailing zero padding after the packed data dropped; `SizeOfRawData` shrunk to match |
 | 46 083 | Stronger kkrunchy context model (14 hashed models with position and word terms, 7 mixer weight sets), reworked smaller stage-1 depacker, compact stage-0 import table |
+| 44 139 | Compact audio, fo2 shader pool, safe FP-load redirection, t15t model and a retuned combined layout |
 
-The current candidate combines compact audio, fo2 shaders, safe FP-load
+The current build combines compact audio, fo2 shaders, safe FP-load
 redirection and t15t. Four starting layouts and 64 proposals produced the frozen
 order. On the same final PE, t14m7 packs to 44 288 bytes and t15t to **44 139**.
 
@@ -119,4 +136,4 @@ Low-level changes are mapped to their source files in
 | `tools/`, `tests/` | Reproducible data generators, bounded experiments and transformation checks |
 | `verify/` | Packed-image capture/review adapter, external-oracle pins and independent reports |
 | `build.py` | The build and pack script behind `make size` |
-| `expected.sha256` | Current verified-build pin; still the 47 561-byte baseline while final candidate verification runs |
+| `expected.sha256` | SHA-256 of the verified 44 139-byte EXE |
