@@ -372,8 +372,9 @@ def review(args, oracle):
                   manifest_sha256=state['manifest_sha256'], state_sha256=sha(job / 'state.json'),
                   oracle=oracle.provenance, production_accepted=False, native_windows_tested=False,
                   verifier_sha256=sha(__file__), status='FAIL', failures=[],
-                  remaining=['formal milestone acceptance', 'matched solo performance/resource checks',
-                             'clean checkout rebuild of the final integrated candidate', 'native Windows execution'])
+                  remaining=['formal milestone acceptance', 'native Windows execution'],
+                  not_assessed_by_media_review=['matched playback performance/resource observations',
+                                               'clean checkout rebuild; see a separate candidate-keyed attestation'])
     out = job / 'output'
     try:
         need(state['phase'] == 'closed', 'capture has not closed')

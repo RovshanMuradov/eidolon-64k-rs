@@ -1,0 +1,29 @@
+{
+  "schema": "eidolon-size-verification-input-1",
+  "method": "kkrunchy_k7",
+  "files": {
+    "candidate": {
+      "path": "eidolon-runtime.exe",
+      "bytes": 44139,
+      "sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+      "source": "/home/rovshan/Work/asm/eidolon-finish-packer/.build/phase2/final.exe"
+    },
+    "unprepared": {
+      "path": "unprepared.exe",
+      "bytes": 172544,
+      "sha256": "f448f284e1400dc10b145e0b3893b96954ac7e4b8b5b781a534cb8ce41020dd2",
+      "source": "/home/rovshan/Work/asm/eidolon-finish-packer/.build/phase2/build/unprepared.exe"
+    },
+    "prepared": {
+      "path": "prepared.exe",
+      "bytes": 172544,
+      "sha256": "455f2486ce5f48d945bbd60f78915a56f9a328178fce7286273bdce42bdda475",
+      "source": "/home/rovshan/Work/asm/eidolon-finish-packer/.build/phase2/build/input.exe"
+    }
+  },
+  "delivered_files": [
+    "eidolon-runtime.exe"
+  ],
+  "delivered_bytes": 44139,
+  "production_accepted": false
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "eidolon-size-playback-review-1",
+  "status": "UNINSTRUMENTED_PLAYBACK_MEASURED",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "candidate_bytes": 44139,
+  "state_sha256": "870b9d7ccdcdb19cd781e21a13d5ff2237eaf08df531fa0990045e9afd96a343",
+  "job": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139",
+  "observed_utc": "2026-10-18T04:15:32.949821+00:00",
+  "verifier_sha256": "9c2b87a19dab4fae290f37de968e12ebf1368a930f0d50348b08636221bf7e40",
+  "production_accepted": false,
+  "native_windows_tested": false,
+  "limitations": [
+    "One run per executable; external approximately one-second sampling, no statistical speedup claim.",
+    "First uncorked audio is an external startup-to-device-submission observation, not an internal synthesis-only or depacker timestamp.",
+    "Owned-process RSS sums can double-count shared pages; GPU VRAM, kernel memory, and shared audio-server memory are excluded.",
+    "Observed target VmHWM is the kernel high-water mark at sampled times; process exit can hide a later peak.",
+    "Fresh copied Wine prefixes and distinct requested shader-cache paths; effective driver-cache behavior, filesystem/page caches, and ambient desktop activity are not established as cold or controlled.",
+    "Private null sink measures live-clock playback submission, not physical-speaker output.",
+    "No per-frame latency distribution is measured; presentation counts are from the real-clock endpoint, not capture-file I/O.",
+    "Wine on Linux; native Windows execution is untested."
+  ],
+  "failures": [],
+  "process_exit": {
+    "capture": 0,
+    "wrapper_records": [
+      [
+        "0",
+        "0"
+      ]
+    ]
+  },
+  "measurements": {
+    "launcher_wall_seconds": 691.0547557240352,
+    "launch_to_first_uncorked_audio_seconds": 237.019337,
+    "target_first_seen_seconds": 6.001329,
+    "target_last_seen_seconds": 686.05424,
+    "observed_audio_span_seconds": 449.03490300000004,
+    "target_peak_sampled_rss_bytes": 1043046400,
+    "target_max_observed_hwm_bytes": 1043046400,
+    "owned_process_peak_sampled_rss_bytes": 2046193664,
+    "sample_interval_max_seconds": 1.000123000000002,
+    "samples": 691,
+    "audio_observations": 450,
+    "frames_presented": 26023,
+    "queries": 26024,
+    "terminal_cursor": 19845000
+  },
+  "prefix_seed_sha256": {
+    "system.reg": "61f8ce3c8f7e44b4543eb4cc55effb0b22448b0d9454f270d2122e30161f0131",
+    "user.reg": "5e70e3659c529142b50b849fa2b8db3acb4622bd1682b35c1f09b8ba4e6a242d",
+    "userdef.reg": "e2d3ddb64535fd64880a4b46f1fb53d1a97daf10e6ee466fd943f18ae8d4dbcb",
+    "drive_c/windows/system32/drivers/gm.dls": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+    "drive_c/windows/syswow64/drivers/gm.dls": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0"
+  },
+  "wine_version": "wine-11.17",
+  "environment": {
+    "XDG_CACHE_HOME": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139/cache",
+    "WINEPREFIX": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139/prefix",
+    "EIDOLON_SCRATCH": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139",
+    "WINE_TIMEOUT": "1020",
+    "WINEDEBUG": "-all",
+    "PULSE_SINK": "eidolon_playback_001969_playback_final44139",
+    "WINEDLLOVERRIDES": "winemenubuilder.exe,mscoree,mshtml=d",
+    "__GL_SHADER_DISK_CACHE_PATH": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139/cache/nvidia"
+  },
+  "reference_sources": {
+    "tools/capture/rust/playback.py": "7d95b7f8e75bab879950159800fe64769fb37517a5cac65c4dd5c638c0b94030",
+    "tools/verify/rust/review_playback.py": "c3cf3cde2569de526bbc4ea3e1996acd691c7499db3e0253aabefaecfaf8e391"
+  },
+  "evidence_sha256": {
+    "sources": {
+      "playback.py": "001969dcb79c92852f9b96bb816b0b6db3bf93438dbc51e3ff10d8b62f5e0b21",
+      "headless.sh": "4e60b9f171b823680341cf20e5396b5b499db09307430ca6bf2fc741ab9ec7b9"
+    },
+    "runner_log": "9bcace3c2be7540e7d3834d2b31890e552ac604f9a3118d772d3a3a55b4a7aff",
+    "telemetry": "4d54340718fb97dac27ef9e87e4408866be54d52aa7002e7d608e34d698523d8"
+  },
+  "mapped_file_count": 157,
+  "mapped_candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "context_log_lines": [
+    "[gamescope] [\u001b[0;34mInfo\u001b[0m]  \u001b[0;37mconsole:\u001b[0m gamescope version 3.16.25 (gcc 16.1.1)",
+    "[gamescope] [\u001b[0;34mInfo\u001b[0m]  \u001b[0;37mvulkan:\u001b[0m selecting physical device 'NVIDIA GeForce RTX 3070 Ti': queue family 2 (general queue family 0)"
+  ],
+  "shader_cache_observation": {
+    "configured_path": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139/cache/nvidia",
+    "directory_exists": false,
+    "files_observed": 0,
+    "effective_driver_cache_behavior": "not established by external telemetry; no cold-cache claim"
+  },
+  "cleanup": {
+    "remaining_pids": [],
+    "sink_present": false,
+    "runner_exists": false,
+    "supervisor_exists": false
+  }
+}

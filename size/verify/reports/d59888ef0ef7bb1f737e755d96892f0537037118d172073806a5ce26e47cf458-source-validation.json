@@ -1,0 +1,21 @@
+{
+  "schema": "eidolon-phase2-source-validation-1",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "build_manifest_sha256": "364a79673ec7aa97652f7a1bad6c56320aebe91a121b04b5309c2d968ea14988",
+  "source_files": 194,
+  "source_mismatches": [],
+  "source_commit": "6b4a4657e46d8659b473ab4698ce16fc33c55a5f",
+  "production_accepted": false,
+  "build_tool_identities": {
+    "packer": {
+      "path": "/home/rovshan/Work/asm/eidolon-finish-packer/.build/phase2/build/packer/kkrunchy.exe",
+      "bytes": 243200,
+      "sha256": "28e44cf24efc9f23e8bf73049766043b02f236b9844855e76458bc5a1d82f906"
+    },
+    "nasm": {
+      "path": "/home/rovshan/Work/asm/eidolon-finish-packer/.build/phase2/build/nasm-2.10.09/nasm",
+      "bytes": 1113376,
+      "sha256": "05db0d7ea82282cc832cea3ed86216a87c5efbdba69ce6e4bd9eee06656760df"
+    }
+  }
+}

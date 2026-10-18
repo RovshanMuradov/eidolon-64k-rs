@@ -8,6 +8,9 @@ archive is required; it is not distributed in this repository.
 This is a Linux/Wine/Gamescope verification harness. A successful full result is
 `FULL_MEDIA_EXACT_PARTIAL`, with `production_accepted: false`. It does not certify
 native Windows behavior, clean-build reproducibility, or performance.
+`not_assessed_by_media_review` describes this review's scope; companion playback
+reports and candidate-keyed rebuild attestations can provide that evidence without
+leaving a stale claim that those tasks are unperformed.
 
 ## Requirements
 
@@ -113,3 +116,45 @@ mutations are in memory or disposable local files. No GPU capture is started.
 It also rejects failing or duplicate process-closure records. Add
 `--manifest .build/verify/candidate/candidate.json` to test the preserved candidate
 inputs and rejection of a rehashed but invalid preparation transform.
+
+## Bounded, uninjected playback observations
+
+`playback.py` adapts the pinned reference playback observer. It launches the
+unmodified EXE directly with `--play`, using the real audio clock, a private null
+sink, fresh prefix, and separate requested shader-cache paths. It shares the capture
+lock. Run at most one baseline and one final playback, sequentially:
+
+```sh
+python3 -B size/verify/playback.py run \
+  --config .build/verify/reference-paths.json \
+  --exe .build/verify/candidate/eidolon-runtime.exe \
+  --sha256 FULL_64_CHARACTER_SHA256 --job .build/verify/playback-final
+python3 -B size/verify/playback.py review \
+  --job .build/verify/playback-final --output .build/verify/playback-final-review.json
+```
+
+Each run is bounded to 1,020 seconds plus cleanup. Review requires the real-clock
+natural endpoint, exactly one clean Wine/Gamescope closure, an actual uncorked
+44100 Hz stereo float stream attributed to the mapped candidate and private sink,
+unchanged executable/source/telemetry identities, and complete process cleanup.
+
+The measurements are total launcher wall time, startup to first uncorked audio,
+target-process sampled RSS/high-water mark, and sampled sum of owned process RSS.
+The latter includes the runner session and prefix services and can double-count
+shared pages. GPU VRAM and shared system services are outside that measurement.
+One-second external samples can miss a peak. Startup includes Wine/bootstrap,
+shader setup, synthesis, and device submission; it does not isolate synthesis or
+unpacking. No injected capture frames, frame-file I/O timings, or native FPS are
+reported as playback performance. A single matched pair is descriptive evidence,
+not a statistical benchmark or a formal acceptance threshold.
+The review records whether the requested NVIDIA cache directory/files exist;
+their presence or absence does not establish an effective cold-cache state.
+
+Join the closed reviews with `playback.py compare --baseline BASELINE_REVIEW
+--candidate FINAL_REVIEW --media FULL_MEDIA_REVIEW --output PAIRED_REPORT`.
+It requires matching prefix seed/driver context/tool versions, successful strict
+reviews, candidate identity, and serialized acquisition timestamps. The optional
+`--console` argument pins external observer diagnostics. `check_playback.py` takes
+the same three review paths and `--output`; it tests rejection of mismatched
+prefixes/media identities, failed playback closure, and surviving supervisors
+without starting another playback.
