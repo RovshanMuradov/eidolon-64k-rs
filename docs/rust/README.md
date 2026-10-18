@@ -85,10 +85,9 @@ The port is exact because it copies the original's arithmetic, not just its form
 
 ## Size-optimized variant
 
-The integrated compact build is **44 139 bytes**, down from the previous
-47 561-byte build. A clean checkout reproduces its exact SHA-256, and the
-delivered EXE passed the full frame and audio comparison. The evidence is
-recorded in [size/README.md](../../size/README.md#verification).
+The compact build is **44 139 bytes**. A clean checkout reproduces the exact EXE,
+and all frames and PCM match the original. Build and verification results:
+[size/README.md](../../size/README.md#verification).
 
 | Area | Compact implementation |
 |---|---|
@@ -100,12 +99,8 @@ recorded in [size/README.md](../../size/README.md#verification).
 | Linker | Validated content-derived constant sections and a frozen function/data order, followed by conservative FP-load redirection |
 | Packer | Modified kkrunchy: 14 contexts, 8 mixers, compact assembly decoder and import table |
 
-The size build's data reductions and shader transformations have their own
-checks. Exact representable constant-only products are folded, while runtime
-floating-point evaluation order and FP modes remain part of the media contract.
-The regular runtime's `--capture` mode does not exercise this packed executable;
-use the [packed-image verification workflow](verification.md#size-build-verification).
-
-Build commands and the current expected-hash policy are in
-[size/README.md](../../size/README.md); the low-level source map is in
+Data reductions and shader transformations have separate tests. Constant-only
+products are folded when exactly representable; runtime FP order and modes are
+preserved. The [size verifier](verification.md#size-build-verification) captures
+the packed EXE through its decoder. The low-level source map is in
 [asm-map.md](asm-map.md#compact-build-and-modified-assembly).

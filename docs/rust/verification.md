@@ -58,22 +58,16 @@ and the original entry point. The regular runtime checks above cover `src/`.
 | Build identity | `size/build.py` writes `build.json` with input, tool and output identities; normal mode also checks `size/expected.sha256` |
 | Full packed-image capture | [`size/verify/verify.py`](../../size/verify/README.md), with explicitly configured hash-pinned external references |
 
-The full packed-image review checks 27 000 frame hashes, 510 captured raw
-anchors, all 159 716 352 PCM bytes, 151 physics samples, decoded sections,
-FP/GL restoration, endpoint behavior and process closure. A build-hash match
-or host PCM match alone does not establish all of these properties.
+The 44 139-byte EXE passed `FULL_MEDIA_EXACT_PARTIAL`: 27 000 frame hashes,
+510 raw anchors, all 159 716 352 PCM bytes and 151 physics samples exact;
+decoded sections, FP/GL restoration, endpoint and process cleanup passed.
+A clean checkout reproduced the same file.
 
-The old shader checker erased identifier bindings and could accept differing
-expressions or equal compile failures. Its replacement preserves bindings and
-rejects count mismatches and compile failures. Program 21 is explicitly
-unsupported by the offline glslang comparison; it is never counted as a pass.
+The offline shader checker preserves identifier bindings and rejects count
+mismatches and compile failures. Thirty programs pass; program 21 is explicitly
+unsupported by glslang. Its pixels are covered by the full EXE capture.
 
-Reports are keyed by the delivered file's full SHA-256. Both the exploratory
-44 101-byte file and the corrected 44 139-byte build passed
-`FULL_MEDIA_EXACT_PARTIAL`; the latter also has a clean byte-identical rebuild.
-The playback pair records single-run observations with known contention at the
-end of the final run. Native Windows testing, isolated repeated performance
-measurements and formal acceptance remain open. See
-[size-build results](../../size/README.md#verification) and
-[runtime reports](../../size/verify/reports/README.md) for the exact scope of
-each result.
+The playback comparison has one run per build, with concurrent work at the end
+of the final run. Native Windows, repeated isolated measurements and formal
+acceptance remain open. See [size-build results](../../size/README.md#verification)
+and [runtime reports](../../size/verify/reports/README.md).

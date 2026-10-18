@@ -1,15 +1,15 @@
 # Size-optimized build
 
-The verified build is **44 139 bytes**: 3 422 bytes (7.2 %) smaller than
-the previous 47 561-byte build and 16 789 bytes (27.6 %) smaller than the
-60 928-byte original. A clean checkout reproduces the exact file, and its full
-packed-image capture matches all frames and PCM byte for byte.
+The same intro in **44 139 bytes**: 16 789 bytes (27.6 %) smaller than the
+60 928-byte original. All 27 000 frames and the whole PCM match byte for byte;
+a clean checkout reproduces the exact EXE.
 
 | Build | Bytes |
 |---|---:|
 | Original (kkrunchy-packed) | 60 928 |
 | Rust port, `make build` | ~730 000 |
-| Previous fully media-verified Rust baseline | 47 561 |
+| Previous published size build | 48 128 |
+| Intermediate build used for playback comparison | 47 561 |
 | **Rust, size-optimized, `make size`** | **44 139** |
 | Target that was not reached | 32 768 |
 
@@ -41,11 +41,10 @@ Use a separate workspace and output when measuring an optimization:
 python3 size/build.py --candidate --work-dir .build/candidate --output .build/candidate.exe
 ```
 
-This prints `CANDIDATE`, not `PASS`, and leaves the accepted hash unchanged. The workspace contains
-`unprepared.exe`, `input.exe`, `packed.exe`, and `build.json`: hashes of the staged inputs, tool versions,
-packer identity, and delivered EXE identity. A successful build does not perform a media comparison.
-`--link-order path/to/order.ld --layout-manifest path/to/lay2.json` overrides the staged layout
-as a validated pair and requires `--candidate`.
+This prints `CANDIDATE` and records the PE inputs, tool versions and output hashes
+in the workspace's `build.json`. It skips the verified-hash check. Use
+`--link-order path/to/order.ld --layout-manifest path/to/lay2.json` to supply a
+matching layout script and manifest; both options require `--candidate`.
 
 Regeneration, layout experiments, shader comparison and decoder checks are
 documented in [tools/README.md](tools/README.md).
@@ -62,18 +61,12 @@ documented in [tools/README.md](tools/README.md).
 | Offline shader comparison | 30 programs pass; program 21 explicitly unsupported by glslang; overall exit 2 |
 | Final packed-image capture | All 27 000 frames, 510 raw anchors, full PCM and 151 physics samples exact; restoration, endpoint and cleanup pass |
 
-The [packed-image verifier](verify/README.md) checks the delivered EXE against
-external pinned references: all 27 000 frames, 510 raw anchors, the full PCM,
-151 physics samples, decoder restoration, endpoint and process closure.
-`make verify` instead checks the regular `src/` runtime. Native Windows testing
-and formal acceptance remain open.
-
-The earlier 44 101-byte experiment passed full media checks; its
-[capture reports](verify/reports/README.md) include a separate failed smoke run.
-The corrected build retains all constant data and restores public audio extent
-checks, adding 38 bytes. Its independent full capture also passed. The
-[completion record](../artifacts/verification/size/completion.json) binds the
-clean rebuild and final capture to the same executable hash.
+The [packed-image verifier](verify/README.md) checks this EXE against pinned
+external references. `make verify` checks the regular `src/` runtime.
+The [completion record](../artifacts/verification/size/completion.json) links the
+clean rebuild and full capture; [reports/](verify/reports/README.md) also retains
+the earlier experiment's failed smoke run. Native Windows is untested and formal
+acceptance remains open.
 
 ### Runtime observations
 
@@ -84,11 +77,10 @@ One uninjected playback per executable, on the same Wine/GPU setup:
 | Launch → first uncorked audio | 217.02 s | 237.02 s |
 | Target sampled peak RSS | 954.95 MiB | 994.73 MiB |
 
-These are single-run observations. About 32 seconds at the end of the final run
-overlapped review-branch validation; both startup observations preceded it.
-Cold-cache state and workload isolation are unverified. The pair establishes
-neither a slowdown cause nor a statistical performance result. Full conditions
-and sampling limits are in the [runtime reports](verify/reports/README.md).
+The final run's last 32 seconds overlapped review-branch tests and a build; both
+startup observations preceded that work. Cold-cache state is unknown. One pair
+does not establish a performance trend. Conditions and sampling limits are in
+the [runtime reports](verify/reports/README.md).
 
 ## How the bytes were saved
 
@@ -111,6 +103,8 @@ Milestones; from 59 392 bytes on, each passed a full capture before it replaced 
 The current build combines compact audio, fo2 shaders, safe FP-load
 redirection and t15t. Four starting layouts and 64 proposals produced the frozen
 order. On the same final PE, t14m7 packs to 44 288 bytes and t15t to **44 139**.
+The total saving is 3 989 bytes (8.3 %) from the published 48 128-byte build,
+or 3 422 bytes (7.2 %) from the intermediate 47 561-byte build.
 
 Techniques in the final build:
 

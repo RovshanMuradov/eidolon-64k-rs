@@ -5,7 +5,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 - Original: [pouët](https://www.pouet.net/prod.php?which=69669) · [demozoo](https://demozoo.org/productions/170753/) · [scene.org](https://files.scene.org/view/parties/2017/revision17/pc_64k_intro/eidolon_-_poo-brain_-_revision2017_64k_-_rc4.zip) · [YouTube](https://youtu.be/rsZHBJdaz-Y)
 - How the original works: [docs/en](docs/en/README.md) · How the port works: [docs/rust](docs/rust/README.md)
 
-**Size.** The verified compact build takes **44 139 bytes**, 7.2 % less than the previous 47 561-byte build and 27.6 % less than the original. A clean checkout reproduces it byte for byte; the delivered EXE passed the full frame and audio comparison: [size/](size/README.md).
+**Size.** The size-optimized build takes **44 139 bytes**, 27.6 % less than the 60 928-byte original, with the same frames and sound byte for byte. A clean checkout reproduces the exact EXE: [size/](size/README.md).
 
 **Research note.** This is a research project that tests what frontier AI models can do on a complete reverse-engineering task: understand a packed 64k binary, build an exact reference of its output, port it to another language with byte-identical results and verify that independently. The initial port and baseline optimization were done by AI agents on 15–17 October 2026 (about 40 hours wall-clock, 270 commits); the human set the goals and made the override decisions. Recovery and integration continued on 18 October. Initial agents, models and token use are listed in [How this project was made](#how-this-project-was-made).
 
@@ -17,7 +17,7 @@ A Rust port of **Eidolon** by Poo-Brain, the 64k intro that won the PC 64k compe
 | Check audio: `make verify-audio` | ✅ | ✅ | ✅ Intel Macs |
 | Check frames: `make verify` | native, untested | Wine + gamescope, tested | ❌ |
 | Capture your own reference: `make reference` | ❌ | Wine + gamescope, tested | ❌ |
-| Build the 44 139-byte version: `make size` | ❌ | clean rebuild and full capture tested | ❌ |
+| Build the 44 139-byte version: `make size` | ❌ | tested | ❌ |
 
 Tested on Arch Linux with an NVIDIA GPU. The install commands for other systems follow their standard package names but were not run.
 
@@ -160,8 +160,8 @@ Build instructions, techniques and runtime observations: [size/README.md](size/R
 | 1 | Reproducible reference of the original: run it under Wine, control its clock, capture every frame and the PCM, prove repeated runs are identical and that corruption is detected | 27 000 frames + full PCM; repeated full runs byte-identical |
 | 2 | Understand the original: unpack, recover algorithms, data and the synthesizer; explain the 64k size | [docs/en](docs/en/README.md), 64klang2 source match, size breakdown |
 | 3 | Rust port with byte-exact output, independently verified against the reference | This repository |
-| 4 | Size optimization (sizecoding, packers), target 32 KiB | 47 561 → 44 139 bytes, full media exact; 32 KiB not reached ([size/](size/README.md)) |
-| 5 | Final reproducible build and verification | Clean build and exact full capture passed; bounded runtime observations recorded; native Windows and formal acceptance remain open |
+| 4 | Size optimization (sizecoding, packers), target 32 KiB | 44 139 bytes with all frames and PCM exact; 32 KiB not reached ([size/](size/README.md)) |
+| 5 | Final reproducible build and verification | Clean build and full capture passed; playback measured once per build; native Windows and formal acceptance open |
 
 **Initial agents.** The 15–17 October work used a coordinator and workers:
 
