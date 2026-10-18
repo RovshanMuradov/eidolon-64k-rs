@@ -20,7 +20,7 @@ pub unsafe fn eidolon_sequencer_tick(n:*mut Node,state:*mut State,seed:*mut [i64
     }
     (*n).work[0]=(*n).work[0]+(input(n,0).ge(v(0.5))|bpmstep).select((*n).work[0],z);
     (*n).work[0]=reset.select(v(1.0),(*n).work[0]);
-    let next=(*n).work[0].ge(v(128.0)+v(128.0));
+    let next=(*n).work[0].ge(v(256.0));
     (*n).work[0]=next.select(v(1.0),(*n).work[0]);
     if !next.is_zero() {
         let maximum=v((mode&255) as f64);

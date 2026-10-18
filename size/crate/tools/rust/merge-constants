@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+"""Redirect equal, immutable FP loads in an i386 PE; NEVER erase constant copies.
+
+Only explicitly decoded SSE *read* instructions with a relocated, absolute
+disp32 operand qualify. Values must fit entirely in read-only .rdata, contain no
+loader relocations, and have identical bytes and compatible 16-byte alignment.
+The only changed bytes are the qualifying instructions' HIGHLOW relocations.
+Keeping all .rdata bytes is essential: a pointer or indexed load can reach an
+arbitrarily distant/interior part of a table. A distance guard cannot prove death.
+
+objdump supplies instruction boundaries, not operand semantics. An allowlisted
+binary decoder checks the opcode, width, addressing mode, bytes and exact site.
+Unrecognized instructions, writes, addresses and indexed operands stay untouched.
+Usage: merge-constants file.exe
+"""
+import argparse
+from bisect import bisect_left
+from collections import defaultdict
+from pathlib import Path
+import re
+import struct
+import subprocess
+
+
+class PE:
+    def __init__(self, data):
+        self.data = data
+        if data[:2] != b'MZ':
+            raise ValueError('not a PE image')
+        pe = self.unpack('<I', 60)[0]
+        if data[pe:pe + 4] != b'PE\0\0' or self.unpack('<H', pe + 4)[0] != 0x14c:
+            raise ValueError('expected an i386 PE')
+        optional = pe + 24
+        optional_size = self.unpack('<H', pe + 20)[0]
+        if optional_size < 144 or self.unpack('<H', optional)[0] != 0x10b:
+            raise ValueError('expected a PE32 optional header')
+        self.base = self.unpack('<I', optional + 28)[0]
+        self.sections = {}
+        for i in range(self.unpack('<H', pe + 6)[0]):
+            entry = optional + optional_size + 40 * i
+            name = bytes(data[entry:entry + 8]).rstrip(b'\0')
+            vsize, rva, rsize, raw = self.unpack('<IIII', entry + 8)
+            flags = self.unpack('<I', entry + 36)[0]
+            if name in self.sections or raw + rsize > len(data):
+                raise ValueError('invalid or duplicate PE section')
+            self.sections[name] = (self.base + rva, min(vsize, rsize), raw, flags)
+        self.relocations = []
+        if self.unpack('<I', optional + 92)[0] < 6:
+            return
+        rva, size = self.unpack('<II', optional + 96 + 5 * 8)
+        if size == 0:
+            return
+        start = self.offset(self.base + rva, size)
+        if start is None:
+            raise ValueError('unbacked relocation directory')
+        p, end = start, start + size
+        while p < end:
+            page, block = self.unpack('<II', p)
+            if block < 8 or block % 2 or p + block > end:
+                raise ValueError('invalid relocation block')
+            for k in range(p + 8, p + block, 2):
+                e = self.unpack('<H', k)[0]
+                kind = e >> 12
+                if kind == 0:
+                    continue
+                if kind != 3:
+                    raise ValueError('only HIGHLOW base relocations are supported')
+                va = self.base + page + (e & 0xfff)
+                if self.offset(va, 4) is None:
+                    raise ValueError('unbacked relocation site')
+                self.relocations.append(va)
+            p += block
+        self.relocations.sort()
+        if any(b < a + 4 for a, b in zip(self.relocations, self.relocations[1:])):
+            raise ValueError('overlapping relocation sites')
+
+    def unpack(self, fmt, offset):
+        if offset < 0 or offset + struct.calcsize(fmt) > len(self.data):
+            raise ValueError('truncated PE')
+        return struct.unpack_from(fmt, self.data, offset)
+
+    def offset(self, va, width, name=None):
+        matches = []
+        for key, (start, size, raw, _) in self.sections.items():
+            if (name is None or key == name) and start <= va and va + width <= start + size:
+                matches.append(raw + va - start)
+        return matches[0] if len(matches) == 1 else None
+
+    def relocated(self, va, width):
+        i = bisect_left(self.relocations, va - 3)
+        return i < len(self.relocations) and self.relocations[i] < va + width
+
+
+# Opcode prefix (including 0f), memory width. Every entry reads memory and
+# leaves the loaded address unobservable. No stores, RMW, prefetch or LEA.
+READS = {}
+for prefix, width in ((b'', 16), (b'\x66', 16), (b'\xf3', 4), (b'\xf2', 8)):
+    for opcode in (0x10, 0x51, 0x58, 0x59, 0x5c, 0x5d, 0x5e, 0x5f):
+        READS[prefix + bytes((0x0f, opcode))] = width
+for prefix in (b'', b'\x66'):
+    for opcode in (0x28, 0x54, 0x55, 0x56, 0x57):
+        READS[prefix + bytes((0x0f, opcode))] = 16
+for prefix, width in ((b'', 8), (b'\x66', 16), (b'\xf3', 4), (b'\xf2', 8)):
+    READS[prefix + b'\x0f\x5a'] = width  # FP conversions
+for prefix, width in ((b'', 4), (b'\x66', 8)):
+    for opcode in (0x2e, 0x2f):
+        READS[prefix + bytes((0x0f, opcode))] = width
+READS.update({b'\x66\x0f\x6e': 4, b'\xf3\x0f\x7e': 8,
+              b'\x66\x0f\x6f': 16, b'\xf3\x0f\x6f': 16})
+
+
+def absolute_read(code):
+    """Return (disp32 offset, read width), or None for any other encoding."""
+    opcode = code[:-5]
+    if opcode in READS and code[-5] & 0xc7 == 0x05:
+        # mod=00 r/m=101: DS:absolute disp32, no SIB/base/index/address prefix.
+        return len(code) - 4, READS[opcode]
+    return None
+
+
+def instructions(path):
+    listing = subprocess.run(['objdump', '-d', '-w', '-j', '.text', str(path)],
+                             capture_output=True, text=True, check=True).stdout
+    for line in listing.splitlines():
+        # GNU objdump's tab-delimited address / raw bytes / disassembly columns.
+        fields = line.split('\t')
+        if len(fields) >= 3 and re.fullmatch(r'\s*[0-9a-fA-F]+:', fields[0]):
+            raw = fields[1].strip()
+            if re.fullmatch(r'[0-9a-fA-F]{2}(?:\s+[0-9a-fA-F]{2})*', raw):
+                yield int(fields[0].strip()[:-1], 16), bytes.fromhex(raw)
+
+
+def merge(data, insns):
+    pe = PE(data)
+    if b'.text' not in pe.sections or b'.rdata' not in pe.sections:
+        return 0
+    text_flags = pe.sections[b'.text'][3]
+    rdata_flags = pe.sections[b'.rdata'][3]
+    if not text_flags & 0x20000000 or text_flags & 0x80000000:
+        return 0
+    if not rdata_flags & 0x40000000 or rdata_flags & (0x80000000 | 0x20000000):
+        return 0
+    sites = set(pe.relocations)
+    loads = defaultdict(list)
+    for va, code in insns:
+        off = pe.offset(va, len(code), b'.text')
+        if off is None or data[off:off + len(code)] != code:
+            raise ValueError('disassembly does not match .text bytes')
+        read = absolute_read(code)
+        if read is None:
+            continue
+        disp, width = read
+        site = va + disp
+        if site not in sites or pe.relocated(va, disp):
+            continue
+        target = struct.unpack_from('<I', code, disp)[0]
+        if pe.offset(target, width, b'.rdata') is not None and not pe.relocated(target, width):
+            loads[target].append((site, width))
+    seen = defaultdict(list)
+    edits = []
+    for target, refs in sorted(loads.items()):
+        width = max(width for _, width in refs)
+        off = pe.offset(target, width, b'.rdata')
+        key = bytes(data[off:off + width])
+        keep = next((c for c in seen[key] if c % 16 == 0 or c % 16 == target % 16), None)
+        if keep is None:
+            seen[key].append(target)
+        else:
+            edits.extend((site, keep) for site, _ in refs)
+    for site, keep in edits:
+        struct.pack_into('<I', data, pe.offset(site, 4, b'.text'), keep)
+    return len(edits)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('image', type=Path)
+    args = parser.parse_args()
+    data = bytearray(args.image.read_bytes())
+    count = merge(data, instructions(args.image))
+    if count:
+        args.image.write_bytes(data)
+    print(f'merge-constants: redirected {count} FP reads; all constant bytes retained')
+
+
+if __name__ == '__main__':
+    main()

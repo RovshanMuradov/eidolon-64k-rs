@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Build the size-optimized intro (no_std Rust + patched kkrunchy) and compare it with the verified build.
 
-Steps: stage size/crate with the shared shaders and tables, build the sizecoded PE, clear its export
+Steps: stage size/crate with the shared shaders and tables, build the sizecoded PE with one section per
+function and static, laid out in the order of size/crate/tools/rust/sizecoded.ld, clear its export
 directory and .eh_frame/.edata, build NASM 2.10.09 and the patched kkrunchy_k7 from source, pack under
-Wine, then compare the SHA-256 with size/expected.sha256.
+Wine, drop the trailing zero padding, then compare the SHA-256 with size/expected.sha256.
 """
 import hashlib
 import os
@@ -23,7 +24,9 @@ NASM_URLS = ['https://www.nasm.us/pub/nasm/releasebuilds/2.10.09/nasm-2.10.09.ta
              'https://web.archive.org/web/2020id_/https://www.nasm.us/pub/nasm/releasebuilds/2.10.09/nasm-2.10.09.tar.xz']
 NASM_SHA256 = '9ffd9f910c783ee798cf2986cec01ebeeb01ba0ecacef64d2d4bea927c41fbf2'
 RUSTFLAGS = ('-C target-feature=+sse2,+sse4.1 -C jump-tables=no -Z location-detail=none -Z fmt-debug=none '
-             '-Z unstable-options -C panic=immediate-abort -Z tune-cpu=nehalem -C llvm-args=-inline-threshold=20')
+             '-Z unstable-options -C panic=immediate-abort -Z tune-cpu=nehalem -C llvm-args=-inline-threshold=20 '
+             '-C llvm-args=-regalloc=basic -C llvm-args=-disable-machine-licm -C llvm-args=-disable-machine-cse '
+             '-C llvm-args=-disable-early-taildup')
 
 
 def step(message):
@@ -60,7 +63,8 @@ def build_pe(tree):
     env = dict(os.environ, CARGO_TARGET_DIR=str(target), CARGO_PROFILE_SIZECODED_OPT_LEVEL='z',
                CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER=str(tree / 'tools/rust/minimal-linker'),
                EIDOLON_COMPACT_GRAPHICS_BLOB=str(tree / 'src/data/graphics.cg29'), RUSTC_BOOTSTRAP='1',
-               RUSTFLAGS=f'{RUSTFLAGS} --remap-path-prefix={tree}=/eidolon  -C link-arg=-Wl,--no-insert-timestamp')
+               RUSTFLAGS=f'{RUSTFLAGS} --remap-path-prefix={tree}=/eidolon  -C link-arg=-Wl,--no-insert-timestamp '
+                         f'-Z function-sections=yes -C link-arg=-Wl,-T,{tree}/tools/rust/sizecoded.ld')
     env.pop('CARGO_ENCODED_RUSTFLAGS', None)
     run(['cargo', 'build', '--target', tree / 'tools/rust/i686-pc-windows-gnu.json', '--profile', 'sizecoded',
          '--features', 'sizecoded,compact-graphics,fixed-core', '--bin', 'eidolon-runtime', '--locked', '--offline',
@@ -136,6 +140,16 @@ def pack(packer, prepared):
     return packed.read_bytes()
 
 
+def trim(data):
+    """Drop the zero padding after the packed data; the loader zero-fills the rest of the section."""
+    data = bytearray(data.rstrip(b'\0'))
+    pe = struct.unpack_from('<I', data, 60)[0]
+    section = pe + 24 + struct.unpack_from('<H', data, pe + 20)[0]
+    raw_offset = struct.unpack_from('<I', data, section + 20)[0]
+    struct.pack_into('<I', data, section + 16, len(data) - raw_offset)
+    return bytes(data)
+
+
 def main():
     for tool in ('cargo', 'wine', 'clang++', 'i686-w64-mingw32-g++', 'gcc', 'make'):
         if not shutil.which(tool):
@@ -143,7 +157,7 @@ def main():
     WORK.mkdir(parents=True, exist_ok=True)
     tree = stage()
     prepared = prepare(build_pe(tree))
-    packed = pack(build_packer(build_nasm()), prepared)
+    packed = trim(pack(build_packer(build_nasm()), prepared))
     OUTPUT.write_bytes(packed)
     expected = (SIZE / 'expected.sha256').read_text().split()[0]
     actual = sha(packed)

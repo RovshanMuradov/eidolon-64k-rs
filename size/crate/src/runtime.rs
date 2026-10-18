@@ -90,6 +90,7 @@ fn mm(result: u32, operation: &str) -> Result<(), Error> {
 
 impl Playback {
     unsafe fn start(mut pcm: Vec<f32>) -> Result<Self, Error> {
+        #[cfg(not(feature = "sizecoded"))]
         if pcm.len() != contract::PCM_SAMPLES { return Err("pcm extent".into()); }
         let format = WaveFormat { tag: 3, channels: 2, rate: contract::SAMPLE_RATE,
             bytes_per_second: contract::SAMPLE_RATE * 8, block_align: 8, bits: 32, extra: 0 };
@@ -126,13 +127,13 @@ impl Drop for Playback {
             #[cfg(not(feature = "sizecoded"))]
             eprintln!("waveOut cleanup failed: reset={reset}, unprepare={unprepare}");
             #[cfg(feature = "sizecoded")]
-            crate::minimal::message("waveOut cleanup failed:\n");
+            crate::minimal::message("waveOut cleanup failed\n");
         }
         let close = waveOutClose(self.handle);
         #[cfg(not(feature = "sizecoded"))]
         if close != 0 { eprintln!("waveOutClose failed: {close}"); }
         #[cfg(feature = "sizecoded")]
-        if close != 0 { crate::minimal::message("waveOutClose failed:\n"); }
+        if close != 0 { crate::minimal::message("waveOut cleanup failed\n"); }
         let _ = close;
     } }
 }
@@ -194,7 +195,7 @@ fn run(render: Option<RenderPcm>) -> Result<(), Error> {
         let Some(frame) = engine.evaluate(cursor, true) else {
             observe::snapshot(5, &RuntimeSnapshot::endpoint(presented, contract::Clock::from_samples(cursor), engine.previous_seconds, engine.records));
             #[cfg(feature = "sizecoded")]
-            crate::minimal::endpoint(queries, presented, cursor);
+            { crate::minimal::endpoint(queries, presented, cursor); unsafe { crate::minimal::exit(0) } }
             #[cfg(not(feature = "sizecoded"))]
             eprintln!("EIDOLON_RUNTIME mode={} reason=natural_exit queries={queries} frames={presented} terminal_cursor={cursor}",
                 if playback.is_some() { "playback" } else { "graphics-diagnostic" });

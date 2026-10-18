@@ -69,7 +69,7 @@ pub unsafe fn exit(code: u32) -> ! { ExitProcess(code) }
 #[cold]
 #[inline(never)]
 pub fn fail(text: &str) -> ! {
-    message("EIDOLON_RUNTIME error: "); message(text); message("\n");
+    let _ = text; message("EIDOLON_RUNTIME error:\n");
     unsafe { exit(1) }
 }
 
