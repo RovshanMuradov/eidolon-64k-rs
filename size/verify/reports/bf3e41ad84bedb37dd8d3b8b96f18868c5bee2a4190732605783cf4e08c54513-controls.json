@@ -1,8 +1,12 @@
 {
   "status": "OFFLINE_CORRUPTION_CONTROLS_PASS",
-  "checks": 18,
+  "checks": 22,
   "results": [
     "observed full ledger: 27000 exact frames and natural endpoint",
+    "observed clean child/Wine/Gamescope closure",
+    "Gamescope 139 rejected despite child/Wine zero",
+    "earlier clean wrapper line cannot mask failing closure",
+    "duplicate child closure rejected",
     "truncated final record",
     "extra trailing bytes",
     "wrong magic",
@@ -32,5 +36,5 @@
     "pcm_file_sha256": "dabe5ec205dfb3b39d4a2467e98374b3660c80e228bc001e03112f6591fbc4da",
     "native_reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64"
   },
-  "checker_sha256": "fb99a9c782e5e5cfc4b1ae4ff168c700ea98389b9769c531fc852ac1f9c2ee1c"
+  "checker_sha256": "89b219af70f7d10801003c2fcb0ebeb9569c853da2b8eab0f5e5eb95c3419936"
 }

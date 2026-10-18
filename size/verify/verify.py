@@ -345,9 +345,22 @@ def cleanup(state):
             pass
     sinks = subprocess.check_output(['pactl', 'list', 'short', 'sinks'], text=True)
     result = dict(remaining_pids=remaining, sink_present=state['sink'] in sinks,
-                  runner_exists=Path(f"/proc/{state['runner_pid']}").exists())
-    need(not remaining and not result['sink_present'] and not result['runner_exists'], f'capture cleanup: {result}')
+                  runner_exists=Path(f"/proc/{state['runner_pid']}").exists(),
+                  supervisor_exists=Path(f"/proc/{state['pid']}").exists())
+    need(not remaining and not result['sink_present'] and not result['runner_exists'] and
+         not result['supervisor_exists'], f'capture cleanup: {result}')
     return result
+
+
+def process_exit(log, capture_exit):
+    """Require exactly one clean child and wrapper closure; no substring passes."""
+    child = re.findall(r'^CHILD_EXIT (\d+) stages=(\d{3})$', log, re.MULTILINE)
+    wrapper = re.findall(r'^WINE_EXIT=(\d+|none) GAMESCOPE_EXIT=(\d+) SECONDS=\d+$', log, re.MULTILINE)
+    return dict(capture=capture_exit, child_records=child, wrapper_records=wrapper,
+                child_stages_complete=child == [('0', '111')],
+                wine=wrapper[-1][0] if wrapper else None,
+                gamescope=int(wrapper[-1][1]) if wrapper else None,
+                clean=capture_exit == 0 and child == [('0', '111')] and wrapper == [('0', '0')])
 
 
 def review(args, oracle):
@@ -370,6 +383,9 @@ def review(args, oracle):
         checked(state['candidate'], state['candidate_sha256'])
         manifest, files = inputs(checked(state['manifest'], state['manifest_sha256']), oracle)
         need(files['candidate'] == Path(state['candidate']) and files['unprepared'] == Path(state['original']), 'capture/bundle identity')
+        need(state['candidate_sha256'] == manifest['files']['candidate']['sha256'] and
+             state['original_sha256'] == manifest['files']['unprepared']['sha256'] and
+             state['candidate_bytes'] == files['candidate'].stat().st_size, 'capture/bundle pins or size differ')
         for name, pin in state['sources'].items():
             checked(job / name, pin)
         checked(job / 'live.dll', state['helper_sha256'])
@@ -381,7 +397,15 @@ def review(args, oracle):
             checked(job / name, item['sha256'])
             need((job / name).stat().st_size == item['bytes'], 'output extent changed')
         need(state['candidate_after_sha256'] == state['candidate_sha256'], 'candidate changed during capture')
+        result['evidence_sha256'] = dict(capture_sources=state['sources'], helper=state['helper_sha256'],
+                                         launcher=state['launcher_sha256'], retention=state['retention_sha256'],
+                                         runner_log=state['runner_log_sha256'], live_identity=state['live_identity_sha256'],
+                                         original_pe=state['original_sha256'], prepared_pe=manifest['files']['prepared']['sha256'],
+                                         events=state['output'].get('output/events.bin', {}).get('sha256'),
+                                         decoded_image=state['output'].get('output/decoded-image.bin', {}).get('sha256'))
         pe = oracle.pe(files['unprepared'])
+        need(state['marker_rva'] == pe.exports()['eidolon_runtime_event'] and
+             state['position_iat_rva'] == pe.imports()['waveOutGetPosition'], 'capture routing differs from pinned original PE')
         for stage in range(3):
             a = (out / f'stage{stage}-before.bin').read_bytes()
             b = (out / f'stage{stage}-after.bin').read_bytes()
@@ -464,11 +488,7 @@ def review(args, oracle):
             oracle.physical(out, label, first, second, parts)
         result['hook_physical_restoration'] = True
         log = (job / 'runner.log').read_text(errors='replace')
-        wrapper = re.findall(r'WINE_EXIT=(\d+|none) GAMESCOPE_EXIT=(\d+)', log)
-        result['process_exit'] = dict(capture=state['exit_code'],
-                                      child_stages_complete='CHILD_EXIT 0 stages=111' in log,
-                                      wine=wrapper[-1][0] if wrapper else None,
-                                      gamescope=int(wrapper[-1][1]) if wrapper else None)
+        result['process_exit'] = process_exit(log, state['exit_code'])
         result['gl'] = {name: (out / f'gl-{name}.txt').read_text() for name in ('vendor', 'renderer', 'version')}
         result['timing_observations'] = dict(runner_seconds=state['elapsed_seconds'],
                                             markers={k: int(v) for k, v in re.findall(r'RUNTIME_TIMING kind=(\d+) elapsed_ms=(\d+)', log)},
@@ -481,7 +501,7 @@ def review(args, oracle):
         else:
             need('PLANNED_SHORT_STOP frames=3' in log and not summary['endpoint'], 'bounded smoke endpoint')
         result['media_bytes_and_sampled_state_exact'] = not result['failures']
-        need(state['exit_code'] == 0 and 'CHILD_EXIT 0 stages=111' in log and 'WINE_EXIT=0 GAMESCOPE_EXIT=0' in log, 'process exit/decoder closure')
+        need(result['process_exit']['clean'], 'process exit/decoder closure')
         result['cleanup'] = cleanup(state)
         result['status'] = ('FULL_MEDIA_EXACT_PARTIAL' if state['full'] else 'SHORT_EXACT_PARTIAL') if not result['failures'] else 'MEDIA_MISMATCH'
     except (ValueError, OSError, KeyError, TypeError, struct.error, oracle.c.zstandard.ZstdError) as exc:

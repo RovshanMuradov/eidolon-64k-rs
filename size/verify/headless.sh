@@ -34,4 +34,5 @@ rc=$(cat "$RC_FILE" 2>/dev/null || echo none)
 echo "WINE_EXIT=$rc GAMESCOPE_EXIT=$gs SECONDS=$(( $(date +%s) - start ))"
 [[ $rc == none && ( $gs == 124 || $gs == 137 ) ]] && { echo "TIMEOUT after ${WINE_TIMEOUT:-3600}s" >&2; exit 124; }
 [[ $rc == none ]] && exit 125
+[[ $rc == 0 && $gs != 0 ]] && exit "$gs"
 exit "$rc"
