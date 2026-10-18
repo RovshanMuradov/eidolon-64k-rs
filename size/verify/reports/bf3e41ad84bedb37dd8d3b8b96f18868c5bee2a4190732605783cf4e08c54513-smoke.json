@@ -1,0 +1,115 @@
+{
+  "schema": "eidolon-size-review-1",
+  "job": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/smoke44101b",
+  "observed_utc": "2026-10-18T03:05:42.755270+00:00",
+  "candidate_sha256": "bf3e41ad84bedb37dd8d3b8b96f18868c5bee2a4190732605783cf4e08c54513",
+  "delivered_bytes": 44101,
+  "capture_exit_code": 0,
+  "full": false,
+  "frames_requested": 3,
+  "manifest_sha256": "76d10fd8283b12a7c5cffbc3c1d79fb08d5a8d94ccdd13081719a87bf1de1dfe",
+  "state_sha256": "941da2ea6c92dc50d30cee08c16b35479500c5b2c86b362e7f0e2781185e5d49",
+  "oracle": {
+    "paths": {
+      "toolkit": "/home/rovshan/Work/asm/Eidolon/data/optimization/T30/vt",
+      "reference_checkout": "/home/rovshan/Work/asm/Eidolon/data/optimization/T30/vt",
+      "reference_data": "/home/rovshan/Work/asm/Eidolon/data",
+      "reference_shared": "/home/rovshan/Work/asm/Eidolon",
+      "prefix_template": "/home/rovshan/Work/asm/Eidolon/.tools/capture/T11-prefix-baseline"
+    },
+    "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+    "frame_index_sha256": "bd063d93c996da12e27554e8a6120aaaaa57fa0c4d8d4aac7c302911a3b6eb62",
+    "pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "native_times_sha256": "363ca20b3e537f57da1d0dd937a3e1fc9f3c92e3377af9c7d8d12706186cf406",
+    "physics_state_sha256": "f5a9a5d47cc649b05178dc47f7bc7579e44a4327806ae6138cd2e60a5d6afc63",
+    "physics_build_sha256": "75ea1b2cef34bcd1b9f10c81d1c8716d91eafd038f1799ae0ef060f403a75c21",
+    "physics_sha256": "63b8e81989d03824dc7c8633a0f8a24fd5d1d95ff89fce163c35504e57b7c976",
+    "toolkit_pins": {
+      "tools/verify/reference.py": "4aa95c4551f74c63374661e2404801999e446eabed9f5e5b0db9a7990e362d89",
+      "tools/verify/rust/conformance.py": "0e20bbe883067f65d27e9167455f8c9d5a35b70818ff7e9659a3b494163cf9b3",
+      "tools/verify/rust/monitor_full.py": "97a3d2a9acf2975c8b1f44ff0f64945432270e00e098c8577ecb8f171714db83",
+      "tools/verify/rust/runtime_events.py": "658376e10f4de0342208817c3d8a6915322e2fe3b1a0ff2f328b3a2881e64664",
+      "tools/verify/rust/native_vectors.py": "20186b7ac784ce56bedc7b175e3e16d6f53e70db13444784592962a0830047a3",
+      "tools/verify/optimization/pe.py": "a504858d06c923033b8f165c7467a41ea12aca8fea07f385bd5a52d620dfa420",
+      "tools/verify/optimization/full.py": "662f35c08fabc4e9070096a36a990aaf2b572f921f84366503076c790982e745",
+      "tools/capture/rust/capture.c": "5e27b5de1070ed9b648b71b75e5180eba85bf889d6b1212d2edf772742889c4d",
+      "tools/capture/rust/live.c": "7b2777cc3ba35f1259b7fb48d13769a586c978dbb9f714bd1a0409c8bc3d3670",
+      "tools/capture/rust/hook.S": "c1491cae08f390c1c1c94d246d8f2063e0fabe5b1588c7417c62ef7f27b01573",
+      "tools/capture/rust/semantic.c": "339371060ee3a78205b65b7e7a36e88c4ed33b5bfe67c508c0a34215cfdf1ce8",
+      "tools/capture/rust/curves.c": "b4e61e8897e0b0322463bfcf65f3d4fdd117c6d6eea57ce2b7eab926cc2ff020",
+      "tools/capture/optimization/launch_kkrunchy.c": "1c6bc1315fceb1f96592dabd088334a17c8b518ab3505d2e44cf17e4fcd88c22",
+      "tools/capture/optimization/kkrunchy.py": "37f818686d75d7134b04d35d544b8745ddd674408afc73b9d2f1e4fc3f159f78",
+      "tools/verify/optimization/kkrunchy_review.py": "f0e1fd027b88f38dbc3a1c4da05eb2987376f2bfc1f58476c7f8b630e9787a49",
+      "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a"
+    }
+  },
+  "production_accepted": false,
+  "native_windows_tested": false,
+  "verifier_sha256": "4e6e981325f1fc3c4cefa9b4d791084b25c22e4610258f5cc48a790c84ed2b10",
+  "status": "FAIL",
+  "failures": [
+    "process exit/decoder closure"
+  ],
+  "remaining": [
+    "formal milestone acceptance",
+    "matched solo performance/resource checks",
+    "clean checkout rebuild of the final integrated candidate",
+    "native Windows execution"
+  ],
+  "decoder_stages_restored": 3,
+  "decoded_sections_exact": [
+    ".text",
+    ".data",
+    ".rdata",
+    ".edata"
+  ],
+  "pcm_bytes_exact": 159716352,
+  "pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+  "observations": {
+    "records": 18,
+    "queries": 3,
+    "post_presents": 3,
+    "frame_hashes": 3,
+    "matching_frame_hashes": 3,
+    "frame_mismatches": 0,
+    "first_frame_mismatch": null,
+    "time_mismatches": 0,
+    "first_time_mismatch": null,
+    "initial_physics": true,
+    "pcm_digest_observations": 2,
+    "endpoint": false,
+    "terminal_stability": false
+  },
+  "pending_bytes": 0,
+  "raw_anchors_exact": 1,
+  "raw_anchor_failures": [],
+  "gl_restoration_frames": 3,
+  "physics_samples": 3,
+  "physics_differences": [],
+  "hook_physical_restoration": true,
+  "process_exit": {
+    "capture": 0,
+    "child_stages_complete": true,
+    "wine": "0",
+    "gamescope": 139
+  },
+  "gl": {
+    "vendor": "NVIDIA Corporation",
+    "renderer": "NVIDIA GeForce RTX 3070 Ti",
+    "version": "4.6.0 NVIDIA 610.57.04"
+  },
+  "timing_observations": {
+    "runner_seconds": 251.89381644001696,
+    "markers": {
+      "6": 239759,
+      "1": 240721
+    },
+    "scope": "instrumented capture; concurrent host work; not a solo benchmark"
+  },
+  "media_bytes_and_sampled_state_exact": true,
+  "cleanup": {
+    "remaining_pids": [],
+    "sink_present": false,
+    "runner_exists": false
+  }
+}

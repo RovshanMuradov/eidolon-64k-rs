@@ -1,0 +1,29 @@
+{
+  "schema": "eidolon-size-verification-input-1",
+  "method": "kkrunchy_k7",
+  "files": {
+    "candidate": {
+      "path": "eidolon-runtime.exe",
+      "bytes": 44101,
+      "sha256": "bf3e41ad84bedb37dd8d3b8b96f18868c5bee2a4190732605783cf4e08c54513",
+      "source": "/tmp/opencode/eidolon-plan-combined/code+gfx-fo2-t15t/trimmed.exe"
+    },
+    "unprepared": {
+      "path": "unprepared.exe",
+      "bytes": 172544,
+      "sha256": "18ea4b2cbcecf43fc567400050bc4bb3c7c389d3b60ae01b9cd8afc309997129",
+      "source": "/tmp/opencode/eidolon-plan-combined/unprepared.exe"
+    },
+    "prepared": {
+      "path": "prepared.exe",
+      "bytes": 172544,
+      "sha256": "cbf83903aac8ba626107098031dc2f0bab10e7f0a4d9d66842e63f02138b1177",
+      "source": "/tmp/opencode/eidolon-plan-combined/code+gfx-fo2-t15t/input.exe"
+    }
+  },
+  "delivered_files": [
+    "eidolon-runtime.exe"
+  ],
+  "delivered_bytes": 44101,
+  "production_accepted": false
+}
