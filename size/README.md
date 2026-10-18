@@ -1,141 +1,49 @@
-# Size-optimized build
+# Size optimization: source review
 
-The integrated candidate is **44 139 bytes**: 3 422 bytes (7.2 %) smaller than
-the previous 47 561-byte build and 16 789 bytes (27.6 %) smaller than the
-60 928-byte original. A clean checkout reproduces the exact file; final
-packed-image verification is in progress.
+This branch is a code excerpt for review. Generated score/shader payloads, JSON
+inputs, generators and tests are omitted, so it cannot reproduce the executable.
+The complete buildable version is preserved at [checkpoint `7eb8cc3`][buildable]
+and locally on `size/review-buildable`.
+
+## Before → after
+
+| Read | Change |
+|---|---|
+| [`packer/model_asm.asm`](packer/model_asm.asm), [`model_config.inc`](packer/model_config.inc) | 11 contexts / 3 mixers → 14 / 8; added word, position and 4 KiB-region terms improve bit prediction |
+| [`packer/depacker.asm`](packer/depacker.asm) | Work fields grouped near `EBP` for short displacements; squash table computed with x87; smaller initialization sequences |
+| [`packer/exepacker.cpp`](packer/exepacker.cpp) | Duplicate import tables → one thunk array with shared terminator/hint bytes |
+| [`crate/src/audio/`](crate/src/audio/) | Selected DSP functions kept out of line; exact constant products folded, e.g. `44100 × 2 → 88200`; controller deltas decoded by prefix sum; unused formant rows zeroed |
+| [`crate/tools/rust/`](crate/tools/rust/) | Anonymous COFF constants given stable names before linking; function/data order retuned; equal immutable FP reads redirected to shared addresses after linking |
+| [`build.py`](build.py) | Basic register allocation; machine LICM, machine CSE and early tail duplication disabled, chosen by packed size |
+| [`crate/src/runtime.rs`](crate/src/runtime.rs) | Natural completion exits the process directly, avoiding teardown code |
+
+The FP pass retains every constant byte and checks instruction encoding, read
+width, alignment and relocations. The linker checks unique section membership
+and full constant digests. These production transformations account for the
+remaining Python code in this review.
+
+## Measured result of the complete build
 
 | Build | Bytes |
 |---|---:|
-| Original (kkrunchy-packed) | 60 928 |
-| Rust port, `make build` | ~730 000 |
-| Previous fully media-verified Rust baseline | 47 561 |
-| **Integrated Rust candidate, `size/build.py --candidate`** | **44 139** |
-| Target that was not reached | 32 768 |
+| Previous Rust baseline | 47 561 |
+| Corrected integrated candidate | **44 139** |
+| Saving | **3 422 (7.2 %)** |
 
-## What changed
+This includes the generated audio and fo2 shader data in the complete checkpoint.
+The objective is the whole packed EXE; individual savings are not additive.
+On the same final PE, t14m7 produces 44 288 bytes and t15t produces 44 139.
 
-| Read | Before → after |
-|---|---|
-| [`packer/model_asm.asm`](packer/model_asm.asm), [`depacker.asm`](packer/depacker.asm) | 11 contexts / 3 mixers → 14 / 8, with word, position and 4 KiB-region contexts; work fields moved near `EBP`, squash table generated with x87 |
-| [`packer/exepacker.cpp`](packer/exepacker.cpp) | Separate import lookup/address tables → one thunk array with shared terminator/hint bytes |
-| [`crate/src/audio/`](crate/src/audio/), [`tools/encode_score.py`](tools/encode_score.py) | Unused score inputs removed, controller values stored as deltas, unused formant rows zeroed; selected DSP routines kept out of line |
-| [`crate/tools/rust/`](crate/tools/rust/) | Previous link order → frozen order for the combined code/data; immutable FP reads share constant addresses, with all data retained |
-| [`shaders/fo2-source.json`](shaders/fo2-source.json), [`tools/astcheck.py`](tools/astcheck.py) | Shader pool 94 822 → 92 848 bytes through renaming and reordering; comparison retains declaration bindings |
+The complete checkpoint reproduced the exact file from a fresh build, passed
+32 transformation tests and the 208 770-byte assembly decoder roundtrip.
+Its EXE SHA-256 is:
 
-The objective is the complete packed EXE. Savings from these changes are not
-additive: code and data order affect the same compression model. Generated tables
-are collapsed in GitHub diffs; their generators and the Rust/ASM source remain visible.
-
-## Build
-
-```sh
-make check-size-inputs
-python3 size/build.py --candidate   # Linux; builds .build/eidolon-size.exe and records build.json
+```
+d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458
 ```
 
-The candidate SHA-256 is
-`d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458`.
-`make size` also enforces `size/expected.sha256`, which still pins the previous
-47 561-byte file (`a46ecc05…`) until final verification completes. It currently
-reports a hash mismatch for the new candidate. `make run-size` passes that same
-gate before installing `gm.dls` in the private prefix and playing under Wine.
+Full media verification of that final file is pending. Detailed acquisition
+tools and reports are on [`size/finish-integration`][research].
 
-The clean rebuild used Rust 1.97.1 (pinned in `rust-toolchain.toml`), MinGW-w64
-GCC 16.2.0, Clang 22.1.8 and NASM 2.10.09, with fresh Rust and NASM build
-directories. Other tool versions may produce different bytes. Build identities
-are recorded in the [clean-rebuild report][rebuild]. On the same final PE,
-t14m7 produces 44 288 bytes and t15t produces 44 139 bytes ([comparison][comparison]).
-
-Like the original, this build reads `gm.dls` from the Windows system directory and checks it is the standard 3 440 660-byte bank; the bank is not counted in the size.
-
-### Candidate builds
-
-Use a separate workspace and output when measuring an optimization:
-
-```sh
-python3 size/build.py --candidate --work-dir .build/candidate --output .build/candidate.exe
-```
-
-This prints `CANDIDATE`, not `PASS`, and leaves the accepted hash unchanged. The workspace contains
-`unprepared.exe`, `input.exe`, `packed.exe`, and `build.json`: hashes of the staged inputs, tool versions,
-packer identity, and delivered EXE identity. A successful build does not perform a media comparison.
-`--link-order path/to/order.ld --layout-manifest path/to/lay2.json` overrides the staged layout
-as a validated pair and requires `--candidate`.
-
-Regeneration, layout changes, shader comparison and decoder checks are
-documented in [tools/README.md](tools/README.md).
-
-## Verification
-
-| Check | Result |
-|---|---|
-| Clean build | Byte-identical 44 139-byte EXE |
-| Generated inputs and transformation tests | `make test-size`: all input checks and 32 tests pass |
-| Regular Rust tests | Five pass |
-| Host audio | All 19 964 544 stereo frames / 159 716 352 PCM bytes exact |
-| Assembly decoder | 208 770-byte roundtrip, damaged-stream rejection and observer signatures pass |
-| Offline shader comparison | 30 programs pass; program 21 explicitly unsupported by glslang; overall exit 2 |
-| Final packed-image capture | Pending for the 44 139-byte candidate |
-
-The [packed-image verifier][capture-tools] checks the delivered EXE against
-external pinned references: all 27 000 frames, 510 raw anchors, the full PCM,
-151 physics samples, decoder restoration, endpoint and process closure.
-`make verify` instead checks the regular `src/` runtime. Native Windows testing
-and formal acceptance remain open.
-
-The earlier 44 101-byte experiment passed full media checks; its
-[capture reports][captures] include a separate failed smoke run.
-The corrected build retains all constant data and restores public audio extent
-checks, adding 38 bytes. It requires its own capture.
-
-## How the bytes were saved
-
-Milestones; from 59 392 bytes on, each passed a full capture before it replaced the previous one:
-
-| Bytes | Change |
-|---:|---|
-| 320 512 | Rust port packed with UPX (LZMA); baseline |
-| 60 416 | `no_std` core, compact audio and graphics, packed with kkrunchy |
-| 59 392 | Timeline codec: tracks plus unique curves with predicted tangents |
-| 50 688 | Custom target without frame pointers; curve keys no scene can reach removed; uniforms and struct members renamed; score planes transposed and patch records relaid; GL entry points loaded from one name string; FNV-1a bank check instead of system crypto; dead shader locals removed; shader fragments reordered for the packer |
-| 49 152 | Pointer-style decoders, fixed-capacity lists, static physics records, fail-fast errors, lower inlining threshold |
-| 48 640 | Tuned kkrunchy context model (not used in the final build) |
-| 48 128 | Note-off times derived from note durations; kkrunchy x86 filter extended to SSE and three-byte opcodes |
-| 47 616 | One section per function and static, linked in an order found by hill-climbing the packed size (`crate/tools/rust/sizecoded.ld`) |
-| 47 561 | Trailing zero padding after the packed data dropped; `SizeOfRawData` shrunk to match |
-| 46 083 | Stronger kkrunchy context model (14 hashed models with position and word terms, 7 mixer weight sets), reworked smaller stage-1 depacker, compact stage-0 import table |
-
-The current candidate combines compact audio, fo2 shaders, safe FP-load
-redirection and t15t. Four starting layouts and 64 proposals produced the frozen
-order. On the same final PE, t14m7 packs to 44 288 bytes and t15t to **44 139**.
-
-Techniques in the final build:
-
-- **No standard library.** `no_std` with its own entry point, allocator and import loader; custom i686 target and a linker wrapper without CRT; `opt-level = "z"`, `panic = immediate-abort`, fail-fast errors.
-- **Audio.** Instrument samples read from the system `gm.dls` instead of embedded; score and patch stored as transposed byte streams and compact records; note-off events derived from note-on durations. Static graph analysis removes unused controller streams and canonicalizes unused velocities. Controller values use deltas; unused formant rows are zeroed. Repository-owned generators check the frozen data.
-- **Graphics.** Timeline, curves and pass tables packed as byte columns; curve tangents predicted from neighbouring keys, only residuals stored; unreachable curve keys removed. The fo2 shader pool has deterministic reconstruction, explicit rename mappings and binding-aware validation.
-- **Code.** Selected DSP routines remain out of line, and backend options are chosen by packed size. The PE postprocessor redirects equal read-only FP loads using an allowlisted instruction decoder; all constant data is retained. Successful natural completion exits the process directly.
-- **Packer.** kkrunchy_k7 whose x86 filter also understands SSE and three-byte opcodes. The t15t model has 14 hashed contexts and 8 mixers, including a 4 KiB region context. `model.json` generates configuration shared by encoder and decoder. The smaller decoder computes its squash table with the FPU and uses an `ebp`-relative work area; the compact stage-0 import table overlaps hints.
-- **Link order.** `minimal-linker` renames anonymous `.rdata` constants to content-derived `.rd$xxxx` sections before linking; the FP pass runs after linking. The frozen manifest checks full anonymous digests, unique names and exact section membership. A changed source layout requires explicit regeneration. Trailing packed zero padding is trimmed.
-
-Low-level changes are mapped to their source files in
-[docs/rust/asm-map.md](../docs/rust/asm-map.md#compact-build-and-modified-assembly).
-
-## Layout
-
-| Path | Contents |
-|---|---|
-| `crate/` | The size-optimized Rust source; `make size` stages it with the shared `shaders/`, `src/data/` and `Cargo.lock` |
-| `crate/src/data/graphics.cg29` | Compressed graphics tables and shader pool |
-| `shaders/` | Frozen fo2 reconstruction sources, recipes, rename mappings and provenance |
-| `crate/tools/rust/` | Custom i686 target spec, a linker wrapper without CRT and the link-order script `sizecoded.ld` |
-| `packer/` | Public-domain kkrunchy_k7 by Fabian "ryg" Giesen ([farbrausch/fr_public](https://github.com/farbrausch/fr_public) @ `8c8f82c`), extended filter, shared t15t model configuration and decoder checks |
-| `tools/`, `tests/` | Reproducible data generators, bounded experiments and transformation checks |
-| `build.py` | The build and pack script behind `make size` |
-| `expected.sha256` | Current verified-build pin; still the 47 561-byte baseline while final candidate verification runs |
-
-[rebuild]: https://github.com/RovshanMuradov/eidolon-64k-rs/blob/e53e5960581905d0183e5d5195609074a4925806/size/reports/d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-rebuild.json
-[comparison]: https://github.com/RovshanMuradov/eidolon-64k-rs/blob/e53e5960581905d0183e5d5195609074a4925806/size/reports/final-model-comparison.json
-[capture-tools]: https://github.com/RovshanMuradov/eidolon-64k-rs/blob/d4c7756fa94beb6d7db230e254d12c682a119ed2/size/verify/README.md
-[captures]: https://github.com/RovshanMuradov/eidolon-64k-rs/blob/d4c7756fa94beb6d7db230e254d12c682a119ed2/size/verify/reports/README.md
+[buildable]: https://github.com/RovshanMuradov/eidolon-64k-rs/tree/7eb8cc3d6d15974521d67ebc9b1df7e4139601d0
+[research]: https://github.com/RovshanMuradov/eidolon-64k-rs/tree/size/finish-integration/size

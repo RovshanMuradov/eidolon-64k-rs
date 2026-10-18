@@ -6,9 +6,7 @@ function and static, laid out in the order of size/crate/tools/rust/sizecoded.ld
 directory and .eh_frame/.edata, build NASM 2.10.09 and the patched kkrunchy_k7 from source, pack under
 Wine, drop the trailing zero padding, then compare the SHA-256 with size/expected.sha256.
 """
-import argparse
 import hashlib
-import json
 import os
 from pathlib import Path
 import shutil
@@ -46,23 +44,6 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def file_identity(path):
-    data = path.read_bytes()
-    return {'bytes': len(data), 'sha256': sha(data)}
-
-
-def input_hashes(tree):
-    """Record the actual staged inputs, including an experimental link-order override."""
-    inputs = {}
-    for prefix, directory in (('tree', tree), ('packer', SIZE / 'packer')):
-        for path in sorted(directory.rglob('*')):
-            if path.is_file() and '__pycache__' not in path.parts:
-                inputs[f'{prefix}/{path.relative_to(directory)}'] = sha(path.read_bytes())
-    for name in ('size/build.py', 'rust-toolchain.toml'):
-        inputs[name] = sha((ROOT / name).read_bytes())
-    return inputs
-
-
 def stage():
     tree = WORK / 'tree'
     shutil.rmtree(tree, ignore_errors=True)
@@ -79,10 +60,6 @@ def stage():
 def build_pe(tree):
     step('building the sizecoded Rust executable')
     target = WORK / 'target'
-    linker_dir = tree / 'tools/rust'
-    run([sys.executable, linker_dir / 'layout.py', '--check'], tree)
-    # size/crate/build.rs watches tools/rust (including the manifest, scripts,
-    # and post-link merger), so Cargo relinks without discarding core/alloc.
     env = dict(os.environ, CARGO_TARGET_DIR=str(target), CARGO_PROFILE_SIZECODED_OPT_LEVEL='z',
                CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER=str(tree / 'tools/rust/minimal-linker'),
                EIDOLON_COMPACT_GRAPHICS_BLOB=str(tree / 'src/data/graphics.cg29'), RUSTC_BOOTSTRAP='1',
@@ -134,7 +111,6 @@ def build_nasm():
 
 def build_packer(nasm):
     step('building the patched kkrunchy_k7 packer')
-    run([sys.executable, SIZE / 'packer/generate_model.py', '--check'], ROOT)
     work = WORK / 'packer'
     shutil.rmtree(work, ignore_errors=True)
     shutil.copytree(SIZE / 'packer', work)
@@ -175,65 +151,17 @@ def trim(data):
 
 
 def main():
-    global WORK, OUTPUT
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--candidate', action='store_true',
-                        help='build and record an experimental candidate without checking the accepted hash')
-    parser.add_argument('--work-dir', type=Path, default=WORK,
-                        help='private build directory (default: .build/size)')
-    parser.add_argument('--output', type=Path, default=OUTPUT,
-                        help='delivered EXE path (default: .build/eidolon-size.exe)')
-    parser.add_argument('--link-order', type=Path,
-                        help='staged linker script override (requires --candidate and --layout-manifest)')
-    parser.add_argument('--layout-manifest', type=Path,
-                        help='matching strict layout manifest for --link-order')
-    args = parser.parse_args()
-    if bool(args.link_order) != bool(args.layout_manifest):
-        parser.error('--link-order and --layout-manifest must be supplied together')
-    if args.link_order and not args.candidate:
-        parser.error('--link-order/--layout-manifest require --candidate')
-    WORK, OUTPUT = args.work_dir.resolve(), args.output.resolve()
-    if WORK == ROOT or ROOT.is_relative_to(WORK):
-        parser.error('--work-dir must not be the repository or one of its parents')
-    if OUTPUT == WORK or OUTPUT.is_relative_to(WORK / 'tree') or OUTPUT.is_relative_to(WORK / 'packer'):
-        parser.error('--output must be outside the disposable staging directories')
     for tool in ('cargo', 'wine', 'clang++', 'i686-w64-mingw32-g++', 'gcc', 'make'):
         if not shutil.which(tool):
             sys.exit(f'missing tool: {tool}')
     WORK.mkdir(parents=True, exist_ok=True)
     tree = stage()
-    if args.link_order:
-        shutil.copyfile(args.link_order, tree / 'tools/rust/sizecoded.ld')
-        shutil.copyfile(args.layout_manifest, tree / 'tools/rust/lay2.json')
-    inputs = input_hashes(tree)
-    unprepared = build_pe(tree)
-    (WORK / 'unprepared.exe').write_bytes(unprepared)
-    prepared = prepare(unprepared)
-    nasm = build_nasm()
-    packer = build_packer(nasm)
-    packed = trim(pack(packer, prepared))
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    prepared = prepare(build_pe(tree))
+    packed = trim(pack(build_packer(build_nasm()), prepared))
     OUTPUT.write_bytes(packed)
+    expected = (SIZE / 'expected.sha256').read_text().split()[0]
     actual = sha(packed)
-    expected = None if args.candidate else (SIZE / 'expected.sha256').read_text().split()[0]
-    status = 'CANDIDATE' if args.candidate else ('EXPECTED_HASH_MATCH' if actual == expected else 'HASH_MISMATCH')
-    report = {
-        'schema': 'eidolon-size-build-1', 'status': status,
-        'media_capture_performed': False, 'expected_sha256': expected,
-        'source_sha256': inputs, 'rustflags': RUSTFLAGS,
-        'unprepared': file_identity(WORK / 'unprepared.exe'),
-        'prepared': file_identity(WORK / 'input.exe'),
-        'packer': file_identity(packer), 'nasm': file_identity(nasm),
-        'delivered': file_identity(OUTPUT),
-        'tool_versions': {tool: run([tool, '--version'], ROOT).splitlines()[0]
-                          for tool in ('rustc', 'cargo', 'clang++', 'i686-w64-mingw32-g++', 'wine')},
-    }
-    (WORK / 'build.json').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
-    displayed = OUTPUT.relative_to(ROOT) if OUTPUT.is_relative_to(ROOT) else OUTPUT
-    print(f'{displayed}: {len(packed)} bytes (original: 60928 bytes)')
-    if args.candidate:
-        print(f'CANDIDATE size: SHA-256 {actual}; media verification required')
-        return
+    print(f'{OUTPUT.relative_to(ROOT)}: {len(packed)} bytes (original: 60928 bytes)')
     if actual == expected:
         print(f'PASS size: identical to the verified build, SHA-256 {actual}')
     else:
