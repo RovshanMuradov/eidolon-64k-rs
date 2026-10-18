@@ -47,7 +47,7 @@ pub unsafe fn eidolon_oscillator_tick(n:*mut Node,state:*mut State,seed:*mut [i6
     if (*n).last_tick&15==1 {
         if opcode==6 {
             (*n).work[0]=if mode&0x800!=0 {
-                (*state).bpm*exp2((input(n,0)-v(0.5))*v(128.0)*v(0.083333313465118408))/(v(60.0)*v(44100.0))
+                (*state).bpm*exp2((input(n,0)-v(0.5))*v(128.0)*v(0.083333313465118408))/v(2646000.0)
             } else { let t=input(n,0).max(S::zero()); t*t*t*t*t*v(0.0010000001639127731) };
             if (*n).work[31].is_zero() { (*n).work[31]=v(1.0); (*n).work[5]=random(&mut *seed); }
         } else {

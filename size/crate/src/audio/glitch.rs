@@ -17,12 +17,12 @@ pub unsafe fn eidolon_glitch_tick(n:*mut Node,state:*mut State,seed:*mut [i64;2]
         (*n).work[6]=input(n,3).clamp(v(1.0),z).left();
         (*n).work[2]=exp2(input(n,5)*v(128.0)*v(0.083333313465118408));
         match mode {
-            0=>{ (*n).work[4]=(*n).work[6]*(*n).work[6]/(v(32768.0)*v(0.125)); (*n).work[5]=(input(n,4)*input(n,4)/(v(32768.0)*v(0.125))).left(); },
+            0=>{ (*n).work[4]=(*n).work[6]*(*n).work[6]/v(4096.0); (*n).work[5]=(input(n,4)*input(n,4)/v(4096.0)).left(); },
             1=>{ let sp=exp2(v(0.5)*input(n,4)); (*n).work[4]=sp.left(); (*n).work[5]=sp.right(); },
             2=>{ let sp=input(n,4).clamp(v(1.0),z); (*n).work[4]=sp.left(); (*n).work[5]=sp.right(); (*n).work[6]=(*n).work[6]*v(0.5); },
             3=>{}, _=>super::fatal(),
         }
-        (*n).work[10]=v(44100.0)*v(8.0);
+        (*n).work[10]=v(352800.0);
         *ptr::addr_of_mut!((*n).work[11]).cast::<*mut u8>()=(*n).custom;
     }
     let out=input(n,0);

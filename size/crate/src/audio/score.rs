@@ -86,7 +86,7 @@ struct Stream { at:usize, count:usize, next:usize, info:u32 }
 /// Native stream order; production dispatch advances exactly one 64-frame quantum.
 pub struct Scheduler { data:Vec<u8>, streams:[Stream; super::score_code::STREAMS] }
 impl Scheduler {
-    /// Fixed embedded SCORE (validated at build time by tools/optimize/audio_score): stored
+    /// Fixed embedded SCORE (validated by size/tools/encode_score.py): stored
     /// planes regrouped per stream, note-off streams derived from the following note-on
     /// stream's durations, then the same tick expansion as `expand` (floor predictors).
     pub fn fixed() -> Self {
@@ -134,9 +134,12 @@ impl Scheduler {
             for stream in &streams {
                 let (n,s)=(stream.count,d.add(stream.at));
                 // Floor predictor; note-off streams (kind 0) are biased 8788/4096 grid units early.
-                let bias=if stream.info>>24&15==0 {8788} else {0};
-                let mut ticks=0u32;
+                let kind=stream.info>>24&15;
+                let bias=if kind==0 {8788} else {0};
+                let mut ticks=0u32; let mut value=0u8;
                 for i in 0..n {
+                    // Controller values are stored as deltas.
+                    if kind==3 { value=value.wrapping_add(*s.add(3*n+i)); *s.add(3*n+i)=value; }
                     ticks=ticks.wrapping_add(*s.add(i) as u32 | (*s.add(n+i) as u32)<<8);
                     let stamp=((ticks*33075-bias)>>12).wrapping_add_signed(*s.add(2*n+i) as i8 as i32);
                     for lane in 0..3 { *s.add(lane*n+i)=(stamp>>(lane*8)) as u8; }

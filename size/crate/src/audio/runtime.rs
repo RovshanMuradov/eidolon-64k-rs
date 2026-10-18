@@ -115,6 +115,7 @@ pub(super) unsafe fn dispatch(n:*mut Node) {
         id=>super::nodes::eidolon_node_tick(n,state,id),
     }
 }
+#[inline(never)]
 unsafe fn midi(r:*mut Runtime,channel:u32,mut value:i32,cc:u32) {
     if cc==0 { value-=128; }
     if cc>=112 {
@@ -128,7 +129,7 @@ unsafe fn midi(r:*mut Runtime,channel:u32,mut value:i32,cc:u32) {
     (*(*r).context.state).midi[(channel*128+cc) as usize]=S::splat(value as f64)/S::splat(128.0);
 }
 
-/// PATCH words from the isomorphic record streams of patch_code (tools/optimize/audio_patch).
+/// PATCH words from the isomorphic record streams (size/tools/encode_patch.py).
 fn patch()->super::alloc::vec::Vec<u16> {
     use super::patch_code::*;
     let mut out=super::alloc::vec![0u16;WORDS];

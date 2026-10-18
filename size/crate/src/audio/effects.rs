@@ -23,12 +23,12 @@ unsafe fn delay_params(n:*mut Node,state:*mut State,allpass:bool,mode:u32) {
         0=>super::arp::fraction(state,temp),
         1=>temp*v(1640.0),
         2=>temp*v(5644.796875),
-        3=>temp*(v(44100.0)*v(2.0)),
+        3=>temp*v(88200.0),
         4=>(v(1.0)/(*(*state).voice).frequency)*exp2((temp-v(0.5))*v(128.0)*v(0.083333313465118408)),
         5=>(v(1.0)/(*(*state).voice).frequency)*temp,
         _=>temp,
     };
-    (*n).work[10]=v(44100.0)*v(4.0);
+    (*n).work[10]=v(176400.0);
     let mut pos=(*n).work[10]+v(1.0)+(*n).work[0]-temp.clamp((*n).work[10]-v(1.0),v(4.0));
     if allpass {
         pos=pos+v(1.0);

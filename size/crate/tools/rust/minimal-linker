@@ -1,24 +1,69 @@
 #!/usr/bin/env python3
-"""Rust i686 GNU linker without implicit CRT/TLS/exception/pthread startup."""
+"""Rust i686 GNU linker without implicit CRT/TLS/exception/pthread startup.
+
+Anonymous constants all come out of rustc in sections named plain `.rdata`, which a linker
+script cannot order one by one. Before linking, each of them in the eidolon object is renamed
+to `.rd$xxxx` (four hex digits of a hash of its contents), so sizecoded.ld can place them."""
 import os
 from pathlib import Path
 import sys
 import shutil
 import json
 
+from layout import prepare_object
+
+
+def save_link(argv, target, validated):
+    """Save a self-contained replay, including the unrenamed rejected object."""
+    target.mkdir(parents=True, exist_ok=True)
+    objects = []
+    saved_args = []
+    for arg in argv:
+        path = Path(arg)
+        if path.is_file() and path.suffix in ('.o', '.rlib', '.a', '.def'):
+            dest = target / path.name
+            shutil.copyfile(path, dest)
+            objects.append(str(dest))
+            saved_args.append(str(dest))
+        else:
+            saved_args.append(arg)
+    (target / 'link.json').write_text(json.dumps({
+        'args': saved_args, 'objects': objects, 'layout_validated': validated,
+    }, indent=2) + '\n')
+
+
 removed = {'-lmingw32', '-lmingwex', '-lmoldname', '-lmsvcrt', '-lgcc', '-lgcc_eh', '-lpthread'}
 args = [a for a in sys.argv[1:] if a not in removed and Path(a).name not in {'rsbegin.o', 'rsend.o', 'crt2.o', 'crtbegin.o', 'crtend.o'}]
 if any(Path(a).name.startswith('libstd-') for a in args):
     raise SystemExit('minimal-linker requires no_std; use it only for eidolon-runtime sizecoded builds')
-if os.environ.get('EIDOLON_SAVE_LINK'):
-    target = Path(os.environ['EIDOLON_SAVE_LINK'])
-    target.mkdir(parents=True, exist_ok=True)
-    objects = []
-    for a in args:
-        path = Path(a)
-        if path.is_file() and path.suffix in ['.o', '.rlib', '.a']:
-            dest = target / path.name
-            shutil.copyfile(path, dest)
-            objects.append(str(dest))
-    (target / 'link.json').write_text(json.dumps({'args': args, 'objects': objects}, indent=2) + '\n')
-os.execvp('i686-w64-mingw32-gcc', ['i686-w64-mingw32-gcc', '-nostdlib', *args])
+
+
+output = Path(args[args.index('-o') + 1])
+save_dir = Path(os.environ['EIDOLON_SAVE_LINK']).resolve() if os.environ.get('EIDOLON_SAVE_LINK') else None
+if save_dir:
+    save_link(args, save_dir / 'unrenamed', False)
+    (save_dir / 'unrenamed/validation-error.txt').unlink(missing_ok=True)
+runtime_objects = 0
+for k, a in enumerate(args):
+    path = Path(a)
+    if path.suffix == '.o' and path.name.startswith('eidolon_runtime-') and path.is_file():
+        renamed = output.parent / (path.stem + '.rd.o')
+        try:
+            renamed.write_bytes(prepare_object(path.read_bytes()))
+        except ValueError as error:
+            if save_dir:
+                (save_dir / 'unrenamed/validation-error.txt').write_text(str(error) + '\n')
+            raise SystemExit(f'minimal-linker: {error}') from error
+        args[k] = str(renamed)
+        runtime_objects += 1
+
+if runtime_objects != 1:
+    raise SystemExit(f'minimal-linker: expected one runtime object, got {runtime_objects}')
+
+if save_dir:
+    save_link(args, save_dir, True)
+import subprocess
+status = subprocess.run(['i686-w64-mingw32-gcc', '-nostdlib', *args]).returncode
+if status == 0 and '-o' in args:
+    status = subprocess.run([sys.executable, str(Path(__file__).with_name('merge-constants')), args[args.index('-o') + 1]]).returncode
+sys.exit(status)

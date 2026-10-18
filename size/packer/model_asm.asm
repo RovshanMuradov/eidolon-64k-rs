@@ -10,9 +10,7 @@ section       .bss
 
 %define MEMSHIFT  23
 %define MEM       (1<<MEMSHIFT)
-%define NMODEL    11
-%define NINPUT    48
-%define NWEIGHT   (256+256+16+128)
+%include "model_config.inc"
 %define MAXLEN    2047
 %define USEAPM    1
 %define APMSIZE   8192
@@ -33,8 +31,9 @@ struc Work
   .matchp     resd 1
   .matchl     resd 1
   .matchw     resd 1
-  .pr         resd 4
-  .ctx        resd 3
+  .pr         resd NMIX+1
+  .ctx        resd NMIX
+  .wh2        resd 1
   .bit        resd 1
   .bitscaled  resd 1
 %if USEAPM  
@@ -45,7 +44,7 @@ struc Work
   .modelMem   resb MEM
   .tx         resw NINPUT
   .wx         resw NINPUT*NWEIGHT
-  .tx2        resw 4
+  .tx2        resw 8
   .wx2        resw 8
   .runTable   resd 256
   .stateCode  resb 256*2  ; must follow immediately after runTable
@@ -58,6 +57,7 @@ struc Work
   .size:
 endstruc
 
+_kkWorkData:
 WorkData      resb Work.size
 
 ; ---- code
@@ -163,6 +163,9 @@ train:
 
 %ifndef BINARY
 global @modelInitASM@0
+global _kkWorkData
+global _kkWorkSize
+global _kkMaxStream
 global @modelASM@4
 %endif
   
@@ -179,10 +182,7 @@ global @modelASM@4
   mov       byte [ebp+Work.bpos], 8
   mov       eax, 2048
   lea       edi, [ebp+Work.pr]
-  stosd
-  stosd
-  stosd
-  stosd
+  times NMIX+1 stosd
   
   ; initialize run table via numerical integration of 1/x
   mov       ebx, 14155776
@@ -371,9 +371,9 @@ global @modelASM@4
   mov       eax, [ebp+Work.bit]
   shl       eax, 12
   sub       eax, [ebp+Work.pr+edx*4]
-  imul      eax, byte 7
+  imul      eax, byte LR
   
-  cmp       dl, 3
+  cmp       dl, NMIX
   je        .updmixerdone
   
   mov       edi, [ebp+Work.ctx+edx*4]
@@ -391,7 +391,11 @@ global @modelASM@4
   ; assumes ecx=0
   mov       edi, WorkData+Work.wx2
   mov       esi, WorkData+Work.tx2
+%if NMIX > 4
+  mov       cl, 2
+%else
   inc       ecx
+%endif
   call      train
   
   ; update c0 and position in bit
@@ -407,6 +411,20 @@ global @modelASM@4
   inc       ecx
   mov       [ebp+Work.c0], ecx
   
+  ; word hash
+  mov       edi, [_bufPtr]
+  movzx     eax, byte [edi-1]
+  mov       edx, [ebp+Work.wh2]
+  xor       edx, eax
+  imul      edx, edx, WK
+  or        al, 0x20
+  sub       al, 'a'
+  cmp       al, 26
+  jb        .iswordch
+  xor       edx, edx
+.iswordch:
+  mov       [ebp+Work.wh2], edx
+
   ; update context models
   lea       esi, [ebp+Work.cm]
   xor       eax, eax
@@ -455,8 +473,27 @@ global @modelASM@4
 
 .hashnotset:
   jnz       .hashnext
+  movzx     ebx, byte [posm+ecx-1]
+  mov       edx, [_bufPtr]
+  sub       edx, [_startBufPtr]
+  btr       ebx, 7
+  sbb       edi, edi
+  and       edi, [ebp+Work.wh2]
+  btr       ebx, 6
+  jnc       .noregion
+  push      edx
+  shr       edx, RSH
+  shl       edx, 8
+  xor       edi, edx
+  pop       edx
+.noregion:
+  and       edx, ebx
+  xor       edx, edi
+  xor       eax, edx
+  imul      eax, eax, 0x01000193
   add       esi, byte ContextModel.size
-  loop      .updcontext
+  dec       ecx
+  jnz       near .updcontext
   
   ; match processing
   ; assumes esi points to "match"
@@ -608,7 +645,7 @@ global @modelASM@4
   mov       eax, [ebp+Work.bitscaled]
   lea       ebx, [WorkData+Work.stateMap+ebx*4]
   sub       eax, [ebx]
-  sar       eax, 8
+  sar       eax, SM
   add       [ebx], eax
   mov       eax, [esi+ContextModel.cps]
   movzx     ebx, byte [eax]
@@ -617,7 +654,7 @@ global @modelASM@4
   shr       eax, 4
   push      eax
   mov       eax, [WorkData+Work.stretch+eax*4]
-  sar       eax, 2
+  sar       eax, ST
   stosw
   pop       eax
   
@@ -649,6 +686,7 @@ global @modelASM@4
   mov       al, [ebp+Work.c0]
   inc       ah
   mov       [ebp+Work.ctx+4], eax
+  ENCODER_MIX_CONTEXTS
   
   xor       ebx, ebx
   mov       eax, [ebp+Work.matchl]
@@ -658,12 +696,12 @@ global @modelASM@4
   cmp       eax, ebx
   cmova     eax, ebx
   mov       eax, [ebp+Work.runTable+eax*4]
-  shr       eax, 3
+  shr       eax, RT
   add       [ebp+Work.ctx+8], eax
   
 .mix:
   ; perform mixing
-  push      byte 2
+  push      byte NMIX-1
   pop       ebx
   
 .mixloop:
@@ -679,7 +717,7 @@ global @modelASM@4
 .mixdploop:
   movq      mm1, [esi]
   pmaddwd   mm1, [edi]
-  psrad     mm1, 8
+  psrad     mm1, DP
   paddd     mm0, mm1
   add       esi, byte 8
   add       edi, byte 8
@@ -689,7 +727,7 @@ global @modelASM@4
   psrlq     mm1, 32
   paddd     mm0, mm1
   movd      eax, mm0
-  sar       eax, 3
+  sar       eax, MX
 
   mov       [WorkData+Work.tx2+ebx*2], ax
   call      squash
@@ -702,7 +740,7 @@ global @modelASM@4
   mov       esi, WorkData+Work.tx2
   mov       edi, WorkData+Work.wx2
   xor       eax, eax
-  push      byte 3
+  push      byte NMIX
   pop       ecx
   
 .finalmix:  
@@ -715,7 +753,7 @@ global @modelASM@4
   
   sar       eax, 16
   call      squash
-  mov       [ebp+Work.pr+12], eax
+  mov       [ebp+Work.pr+NMIX*4], eax
   
 %if USEAPM  
   ; APM stage
@@ -729,19 +767,19 @@ global @modelASM@4
   ; update APM tables
   push      ecx
   sub       ecx, [edi]
-  sar       ecx, 8
+  sar       ecx, APMR
   add       [edi], ecx
   add       edi, byte 4
   pop       ecx
   sub       ecx, [edi]
-  sar       ecx, 8
+  sar       ecx, APMR
   add       [edi], ecx
   
   ; calc new APM index
   mov       ebx, [_bufPtr]
   movzx     ebx, byte [ebx-1]
   mov       ecx, ebx
-  shl       ebx, 4
+  shl       ebx, AC
   add       ebx, ecx
   add       ebx, [ebp+Work.c0]
   and       ebx, APMSIZE-1
@@ -767,6 +805,10 @@ global @modelASM@4
   imul      ebx, ecx
   add       eax, ebx
   shr       eax, 11
+  cmp       ah, 16
+  jb        .apmok
+  mov       ax, 4095
+.apmok:
 %endif  
   
   ; return value
@@ -783,6 +825,8 @@ global @modelASM@4
 ; ---- initialized data
 
 section       .data
+_kkWorkSize dd Work.size
+_kkMaxStream dd MAXSTREAM
 
 %ifdef BINARY
 _bufPtr dd 0
@@ -795,6 +839,4 @@ extern _startBufPtr
 squashTab     dw    1,   2,   4,   6,  10,  17,  27,  45,  74, 120, 194
               dw  311, 488, 747,1102,1546,2048,2550,2994,3349,3608,3785
               dw 3902,3976,4022,4051,4069,4079,4086,4090,4092,4094,4095
-masks         db 0x1f, 0x27, 0x88, 0x07, 0x0a, 0x09, 0x05, 0x03, 0x04, 0x02, 0x01
-bitm          db 0xff, 0xff, 0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-
+MODEL_TABLES

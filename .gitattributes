@@ -1,0 +1,7 @@
+# Generated tables and fingerprints: review their generators and source inputs.
+size/crate/src/audio/patch_code.rs linguist-generated=true
+size/crate/src/audio/score_code.rs linguist-generated=true
+size/crate/src/audio/formants.rs linguist-generated=true
+size/crate/tools/rust/lay2.json linguist-generated=true
+size/packer/model_config.inc linguist-generated=true
+size/shaders/fo2-provenance.json linguist-generated=true
