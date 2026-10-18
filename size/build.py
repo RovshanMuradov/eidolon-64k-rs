@@ -58,6 +58,16 @@ def stage():
 def build_pe(tree):
     step('building the sizecoded Rust executable')
     target = WORK / 'target'
+    linker_dir = tree / 'tools/rust'
+    run([sys.executable, linker_dir / 'layout.py', '--check'], tree)
+    # Cargo does not track the contents of a custom linker or its -T script.
+    # Invalidate its products when layout inputs change, even with identical
+    # Rust sources/RUSTFLAGS; otherwise a cached PE silently keeps the old order.
+    link_inputs = ('minimal-linker', 'coff.py', 'layout.py', 'lay2.json', 'sizecoded.ld')
+    link_hash = sha(b''.join(name.encode() + b'\0' + (linker_dir / name).read_bytes() for name in link_inputs))
+    stamp = WORK / 'link-inputs.sha256'
+    if not stamp.exists() or stamp.read_text().strip() != link_hash:
+        shutil.rmtree(target, ignore_errors=True)
     env = dict(os.environ, CARGO_TARGET_DIR=str(target), CARGO_PROFILE_SIZECODED_OPT_LEVEL='z',
                CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER=str(tree / 'tools/rust/minimal-linker'),
                EIDOLON_COMPACT_GRAPHICS_BLOB=str(tree / 'src/data/graphics.cg29'), RUSTC_BOOTSTRAP='1',
@@ -67,6 +77,7 @@ def build_pe(tree):
     run(['cargo', 'build', '--target', tree / 'tools/rust/i686-pc-windows-gnu.json', '--profile', 'sizecoded',
          '--features', 'sizecoded,compact-graphics,fixed-core', '--bin', 'eidolon-runtime', '--locked', '--offline',
          '-Z', 'build-std=core,alloc', '-Z', 'json-target-spec'], tree, env)
+    stamp.write_text(link_hash + '\n')
     return (target / 'i686-pc-windows-gnu/sizecoded/eidolon-runtime.exe').read_bytes()
 
 
@@ -109,6 +120,7 @@ def build_nasm():
 
 def build_packer(nasm):
     step('building the patched kkrunchy_k7 packer')
+    run([sys.executable, SIZE / 'packer/generate_model.py', '--check'], ROOT)
     work = WORK / 'packer'
     shutil.rmtree(work, ignore_errors=True)
     shutil.copytree(SIZE / 'packer', work)

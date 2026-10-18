@@ -4,13 +4,13 @@
 Anonymous constants all come out of rustc in sections named plain `.rdata`, which a linker
 script cannot order one by one. Before linking, each of them in the eidolon object is renamed
 to `.rd$xxxx` (four hex digits of a hash of its contents), so sizecoded.ld can place them."""
-import hashlib
 import os
 from pathlib import Path
-import struct
 import sys
 import shutil
 import json
+
+from layout import prepare_object
 
 removed = {'-lmingw32', '-lmingwex', '-lmoldname', '-lmsvcrt', '-lgcc', '-lgcc_eh', '-lpthread'}
 args = [a for a in sys.argv[1:] if a not in removed and Path(a).name not in {'rsbegin.o', 'rsend.o', 'crt2.o', 'crtbegin.o', 'crtend.o'}]
@@ -18,34 +18,21 @@ if any(Path(a).name.startswith('libstd-') for a in args):
     raise SystemExit('minimal-linker requires no_std; use it only for eidolon-runtime sizecoded builds')
 
 
-def rename_anonymous_rdata(data):
-    """Rename COFF sections named exactly .rdata to .rd$xxxx (unique, content-derived)."""
-    data = bytearray(data)
-    count = struct.unpack_from('<H', data, 2)[0]
-    optional = struct.unpack_from('<H', data, 16)[0]
-    used = set()
-    for i in range(count):
-        header = 20 + optional + 40 * i
-        if data[header:header + 8] != b'.rdata\0\0':
-            continue
-        size, pointer = struct.unpack_from('<II', data, header + 16)
-        relocations = struct.unpack_from('<H', data, header + 32)[0]
-        digest = hashlib.sha1(bytes(data[pointer:pointer + size]) + struct.pack('<I', relocations)).hexdigest()
-        name = digest[:4]
-        while name in used:
-            name = '%04x' % ((int(name, 16) + 1) & 0xffff)
-        used.add(name)
-        data[header:header + 8] = b'.rd$' + name.encode()
-    return bytes(data)
-
-
 output = Path(args[args.index('-o') + 1])
+runtime_objects = 0
 for k, a in enumerate(args):
     path = Path(a)
     if path.suffix == '.o' and path.name.startswith('eidolon_runtime-') and path.is_file():
         renamed = output.parent / (path.stem + '.rd.o')
-        renamed.write_bytes(rename_anonymous_rdata(path.read_bytes()))
+        try:
+            renamed.write_bytes(prepare_object(path.read_bytes()))
+        except ValueError as error:
+            raise SystemExit(f'minimal-linker: {error}') from error
         args[k] = str(renamed)
+        runtime_objects += 1
+
+if runtime_objects != 1:
+    raise SystemExit(f'minimal-linker: expected one runtime object, got {runtime_objects}')
 
 if os.environ.get('EIDOLON_SAVE_LINK'):
     target = Path(os.environ['EIDOLON_SAVE_LINK'])

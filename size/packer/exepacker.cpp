@@ -16,6 +16,7 @@
 
 extern "C" sU8 depacker[],depacker2[];
 extern "C" sU32 depackerSize,depacker2Size;
+extern "C" sU32 kkMaxStream;
 
 /****************************************************************************/
 
@@ -886,6 +887,15 @@ sU8 *EXEPacker::Pack(sU8 *source,sInt &outSize,DebugInfo *info,PackerCallback cb
   while(skip<dataSize && !UnImage[dataSize-skip-1])
     skip++;
 
+  // The t15t region mixer has 256 rows, one per 4 KiB of prefiltered data.
+  if(dataSize-skip >= kkMaxStream || dataSize == skip)
+  {
+    delete[] (UnImage-8);
+    delete[] OutImage;
+    sSPrintF(Error,512,"prefiltered stream must be nonempty and smaller than %u bytes",kkMaxStream);
+    return 0;
+  }
+
   // compress the image (right to its destination)
   { const char *dp = getenv("KK_DUMP");
     if(dp) { FILE *f = fopen(dp,"wb"); fwrite(UnImage,1,dataSize-skip,f); fclose(f);
@@ -1072,4 +1082,3 @@ sU32 EXEPacker::GetActualSize()
 {
   return ActualSize;
 }
-

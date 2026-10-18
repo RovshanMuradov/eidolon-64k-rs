@@ -1,0 +1,31 @@
+{
+  "model": "t15t (c15.json)",
+  "layout": "lay2.json, completed insertion descent",
+  "base_commit": "a29719c",
+  "unprepared_pe": {
+    "bytes": 175104,
+    "sha256": "8976d3f144c2c012fd2482af9bc54c86e31e46e67063d4942635fe778c2b20d6"
+  },
+  "prepared_pe": {
+    "bytes": 175104,
+    "sha256": "48c78ce6c6a616dcf0a414929a7856ab2a8354b42f908e33d4fcd2654de20932"
+  },
+  "prefilter_stream": {
+    "bytes": 207205,
+    "sha256": "ef14f072315d6e1e6a3a9e72c2443b26c12923dcb4f98fc6ab65e35bf38c7724"
+  },
+  "depacker_rdf": {
+    "bytes": 2225,
+    "sha256": "2444472d996b4c18554d96789cacdd83c661fbe21f2b0250199715947d1219b1"
+  },
+  "packed_pe": {
+    "bytes": 46080,
+    "sha256": "e777b73e949b86399dac75dd0a3c98eedf421d5cfcb066b930308ec318a4b4dc"
+  },
+  "trimmed_pe": {
+    "bytes": 45782,
+    "sha256": "35f2eeda640ad18ad3d60fc0fa60854b7b4eb23d415f0c3d52a35a4daf204f31"
+  },
+  "coded_bytes": 43818,
+  "acceptance": "Packer reproduction and prefilter decoder roundtrip only; native image/media acceptance is separate."
+}

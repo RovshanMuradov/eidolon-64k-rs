@@ -7,6 +7,8 @@
 // ---- helpers
 
 extern "C" void __fastcall modelInitASM();
+extern "C" sU8 kkWorkData[];
+extern "C" sU32 kkWorkSize;
 extern "C" sInt __fastcall modelASM(sInt bit);
 
 static sU32 sMulShift12(sU32 a,sU32 b)
@@ -82,6 +84,7 @@ sU32 RangecoderPack(const sU8 *in,sU32 inSize,sU8 *out,PackerCallback cb)
   range = ~0U;
   cache = 0;
   firstByte = true;
+  sSetMem(kkWorkData,0,kkWorkSize);
   modelInitASM();
   bufPtr = startBufPtr = (sU8 *) in;
 
@@ -160,6 +163,7 @@ sU32 RangecoderDepack(sU8 *out,const sU8 *in,sInt outSize)
   for(sInt i=0;i<4;i++)
     code = (code << 8) | *in++;
 
+  sSetMem(kkWorkData,0,kkWorkSize);
   modelInitASM();
   bufPtr = startBufPtr = out;
 

@@ -4,19 +4,7 @@
 
 bits          32
 
-%define NMODEL    14
-%define NINPUT    60
-%define NMIX      7
-%define NWEIGHT   (6400)
-%define WK        0x2f0b4ae5
-%define LR        7
-%define SM        9
-%define APMR      7
-%define ST        1
-%define DP        8
-%define MX        3
-%define RT        3
-%define AC        8
+%include "model_config.inc"
 
 %define MEMSHIFT  23
 %define MEM       (1<<MEMSHIFT)
@@ -31,14 +19,14 @@ struc ContextModel
   .size:
 endstruc
 
-; ---- work area; ebp points at W_src (offset 0), tx sits just below it
+; ---- work area; ebp points at W_src (offset 0); everything up to tx is within disp8
 
-%define WBIAS (NINPUT*2+8)
+%define WBIAS (16 + 4*(2*NMIX + 2 + 10))
 absolute      -WBIAS
-W_zeroprob    resd 1
-W_bitcounter  resd 1
-W_tx          resw NINPUT
-W_src         resd 1
+W_tx2         resw 8
+W_ctx         resd NMIX
+W_pr          resd NMIX+1
+W_outprob     resd 1      ; must follow pr
 W_dst         resd 1
 W_csub        resd 1
 W_range       resd 1
@@ -49,15 +37,15 @@ W_bpos        resd 1
 W_matchp      resd 1
 W_matchl      resd 1
 W_matchw      resd 1
+W_src         resd 1      ; at offset 0 (STAGE0ENTRY signature: mov dword [ebp+0], PACKED)
 W_bit         resd 1
-W_bitscaled   resd 1
 W_origdst     resd 1
+W_zeroprob    resd 1
+W_bitcounter  resd 1
+W_APMi        resd 1
 W_wh2         resd 1
-W_ctx         resd NMIX
-W_pr          resd NMIX+1
-W_outprob     resd 1
-W_tx2         resw 8
-W_APMi        resd 1   ; disp32: keeps tx2 within disp8 range
+W_pad         resd 1
+W_tx          resw NINPUT
 W_wx2         resw 8
 W_cm          resb ContextModel.size * NMODEL
 W_match       resd MEM/16  ; must follow W_cm
@@ -71,6 +59,8 @@ W_stateMap    resd 256
 W_stretch     resd 4096
 W_APM         resd APMSIZE*33
 W_end:
+
+W_src_at_zero equ 1/(1-(W_src*W_src+15)/16)  ; assemble error unless W_src = 0
 
 section       .bss
 
@@ -100,13 +90,15 @@ section       .text
 ;   destroy: ecx,edx
 
 squash:
-  cmp       eax, -2047
-  jl        .small
-  cmp       eax, 2047
+  mov       ecx, 2047
+  cmp       eax, ecx
   jle       .notbig
-  mov       eax, 2047     ; squash(2047) = 4095
+  xchg      eax, ecx      ; squash(2047) = 4095
 
 .notbig:
+  neg       ecx
+  cmp       eax, ecx
+  jl        .small
   mov       ecx, eax
   sar       ecx, 7
   lea       ecx, [WD+W_sq+ecx*2+16*2]
@@ -268,7 +260,7 @@ STAGE0ENTRY:
   inc       ecx
 
 .runTableLoop:
-  lea       esi, [ecx*2+1]
+  lea       esi, [ecx+ecx+1]
   mov       eax, 774541002
   cdq
   div       esi
@@ -469,11 +461,6 @@ STAGE0ENTRY:
   ; ---- model main loop
   push      ebx
 
-  mov       ecx, [ebp+W_bit]
-  shl       ecx, 16
-  sub       ecx, byte -128
-  mov       [ebp+W_bitscaled], ecx
-
   ; update mixers
   xor       edx, edx
 
@@ -580,20 +567,29 @@ STAGE0ENTRY:
 .hashnotset:
   jnz       .hashnext
 
-  ; position and word terms
+  ; position, region and word terms
   movzx     ebx, byte [posm+ecx-1]
+  mov       edx, [ebp+W_dst]
+  sub       edx, [ebp+W_origdst]
   btr       ebx, 7
   sbb       edi, edi
   and       edi, [ebp+W_wh2]
-  mov       edx, [ebp+W_dst]
-  sub       edx, [ebp+W_origdst]
+  btr       ebx, 6
+  jnc       .noregion
+  push      edx
+  shr       edx, RSH
+  shl       edx, 8
+  xor       edi, edx
+  pop       edx
+.noregion:
   and       edx, ebx
   xor       edx, edi
   xor       eax, edx
   imul      eax, eax, 0x01000193
 
   add       esi, byte ContextModel.size
-  loop      .updcontext
+  dec       ecx
+  jnz       near .updcontext
 
   ; match processing
   ; assumes esi points to "match"
@@ -739,7 +735,9 @@ STAGE0ENTRY:
   ; state mapping
   mov       edx, [esi+ContextModel.st]
   lea       edx, [WD+W_stateMap+edx*4]
-  mov       eax, [ebp+W_bitscaled]
+  mov       eax, [ebp+W_bit]
+  shl       eax, 16
+  sub       eax, byte -128
   sub       eax, [edx]
   sar       eax, SM
   add       [edx], eax
@@ -782,25 +780,7 @@ STAGE0ENTRY:
   inc       ah
   stosd
   scasd
-  mov       eax, ebx
-  sub       eax, [ebp+W_origdst]
-  and       eax, 3
-  add       al, 3
-  mov       ah, al
-  mov       al, cl
-  stosd
-  movzx     eax, byte [ebx-1]
-  shr       eax, 4
-  add       al, 7
-  mov       ah, al
-  mov       al, cl
-  stosd
-  movzx     eax, byte [ebx-2]
-  mov       ah, 23
-  stosd
-  movzx     eax, byte [ebx-3]
-  mov       ah, 24
-  stosd
+  DECODER_MIX_CONTEXTS
 
   xor       ebx, ebx
   mov       eax, [ebp+W_matchl]
@@ -929,6 +909,4 @@ section       .data
 sqR0          dd    2980.9579870417283   ; e^8
 sqQ           dd    0.6065306597126334   ; e^-0.5
 sq4096        dd    4096
-masks         db 0x33, 0xe1, 0x0e, 0x03, 0x0d, 0x19, 0x07, 0x03, 0xa2, 0x02, 0x01, 0x00, 0x00, 0x01
-bitm          db 0xfd, 0x7f, 0xff, 0xe0, 0xf8, 0xff, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-posm          db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x80, 0x81
+MODEL_TABLES
