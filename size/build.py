@@ -24,7 +24,9 @@ NASM_URLS = ['https://www.nasm.us/pub/nasm/releasebuilds/2.10.09/nasm-2.10.09.ta
              'https://web.archive.org/web/2020id_/https://www.nasm.us/pub/nasm/releasebuilds/2.10.09/nasm-2.10.09.tar.xz']
 NASM_SHA256 = '9ffd9f910c783ee798cf2986cec01ebeeb01ba0ecacef64d2d4bea927c41fbf2'
 RUSTFLAGS = ('-C target-feature=+sse2,+sse4.1 -C jump-tables=no -Z location-detail=none -Z fmt-debug=none '
-             '-Z unstable-options -C panic=immediate-abort -Z tune-cpu=nehalem -C llvm-args=-inline-threshold=20')
+             '-Z unstable-options -C panic=immediate-abort -Z tune-cpu=nehalem -C llvm-args=-inline-threshold=20 '
+             '-C llvm-args=-regalloc=basic -C llvm-args=-disable-machine-licm -C llvm-args=-disable-machine-cse '
+             '-C llvm-args=-disable-early-taildup')
 
 
 def step(message):
