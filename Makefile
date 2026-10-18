@@ -15,7 +15,7 @@ else
   ENGINE   := cargo run --release --bin eidolon-engine --
 endif
 
-.PHONY: build run verify verify-audio reference size run-size test clean
+.PHONY: build run verify verify-audio reference size run-size check-size-inputs test-size test clean
 
 build:
 	cargo build --release --target $(TARGET) --bin eidolon-runtime
@@ -63,13 +63,26 @@ else
 	@echo "make reference runs the original under Wine with capture proxies and needs Linux." >&2; exit 1
 endif
 
-# Size-optimized build (no_std Rust + patched kkrunchy), compared with the verified 48 128-byte EXE (Linux only).
+# Size-optimized build (no_std Rust + patched kkrunchy), compared with size/expected.sha256 (Linux only).
 size:
 ifeq ($(PLATFORM),Linux)
+	$(MAKE) check-size-inputs
 	python3 size/build.py
 else
 	@echo "make size packs with kkrunchy under Wine and needs Linux." >&2; exit 1
 endif
+
+check-size-inputs:
+	python3 size/tools/generate_audio.py --check
+	python3 size/tools/reconstruct_shaders.py --check
+	python3 size/packer/generate_model.py --check
+	python3 size/crate/tools/rust/layout.py --check
+
+# CPU-only regression checks for the size-build transformations (requires glslangValidator).
+test-size: check-size-inputs
+	python3 -m unittest discover -s size/tests -v
+	python3 -m unittest discover -s tests -p test_size_layout.py -v
+	python3 -m unittest discover -s size/tools -p test_shader_validation.py -v
 
 # Like the original, the size-optimized build reads gm.dls from the Windows system directory.
 run-size: export WINEPREFIX := $(PREFIX)

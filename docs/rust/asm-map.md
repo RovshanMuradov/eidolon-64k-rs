@@ -2,6 +2,9 @@
 
 Addresses are virtual addresses in the unpacked original (base `0x400000`); see [docs/en](../en/README.md) for what each part does.
 
+The Rust column names modules in the regular `src/` tree. The compact variant's
+source locations and packer changes are listed [below](#compact-build-and-modified-assembly).
+
 ## Engine and graphics
 
 | Original | Address | Rust |
@@ -54,3 +57,28 @@ Addresses are virtual addresses in the unpacked original (base `0x400000`); see 
 | Trigger sequencer | `0x404a9d` | `audio/sequencer.rs` |
 | Glitch | `0x40514d` | `audio/glitch.rs` |
 | ADSR, arithmetic and routing nodes | `0x40226d`, … | `audio/nodes.rs` |
+
+## Compact build and modified assembly
+
+The compact PE is linked anew; the original virtual addresses above identify
+the reverse-engineered routines, not addresses to patch in the Rust EXE.
+
+| Source | Low-level change |
+|---|---|
+| [`size/packer/model_asm.asm`](../../size/packer/model_asm.asm) | Encoder model expanded from 11 contexts / 3 mixers to 14 / 8; adds word, position and 4 KiB-region contexts and tuned update rates |
+| [`size/packer/depacker.asm`](../../size/packer/depacker.asm) | Matching decoder; frequently accessed work fields placed near `EBP` for signed-byte displacements, compact initialization, x87-generated squash table |
+| [`size/packer/model_config.inc`](../../size/packer/model_config.inc) | Shared generated dimensions, masks and context macros keep encoder and decoder synchronized |
+| [`size/packer/exepacker.cpp`](../../size/packer/exepacker.cpp) | Emits compact PE imports: `OriginalFirstThunk = 0`, one thunk array and overlapping terminator/hint bytes; checks the model's stream-size bound |
+| [`size/crate/tools/rust/minimal-linker`](../../size/crate/tools/rust/minimal-linker) | Renames anonymous COFF constants before linking; checks section membership/digests against the frozen layout |
+| [`size/crate/tools/rust/merge-constants`](../../size/crate/tools/rust/merge-constants) | After linking, redirects allowlisted absolute SSE reads to equal immutable values, checking width, alignment and relocations; retains every constant byte |
+| [`size/crate/src/audio/`](../../size/crate/src/audio/) | Compact data decoders, selected out-of-line DSP functions and exact constant folding; compiler/backend options are recorded in `size/build.py` |
+
+For example, a valid absolute FP read can be redirected from one copy of a
+constant to another equal, suitably aligned copy. More instructions then use
+the same address bytes, which can improve compression without deleting table
+data. Indexed accesses, writes and unrecognized encodings are left alone.
+
+Link-order proposals are scored by the **complete trimmed EXE**, including
+the decoder and headers. Code size alone is not that metric. See
+[the layout tools](../../size/tools/README.md#changing-link-order) and
+[size-build verification](../../size/README.md#verification) for reproduction and evidence.
