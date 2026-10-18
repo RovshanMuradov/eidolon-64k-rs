@@ -11,7 +11,7 @@ import shutil
 import struct
 import tempfile
 
-from verify import Oracle, ROOT, checked, inputs, load, need, sha, write
+from verify import Oracle, ROOT, checked, inputs, load, need, process_exit, sha, write
 
 
 def run(args):
@@ -25,6 +25,16 @@ def run(args):
     need(not pending and observed['matching_frame_hashes'] == 27000 and
          observed['queries'] == 27001 and observed['endpoint'] and observed['terminal_stability'], 'positive full-ledger control')
     results = ['observed full ledger: 27000 exact frames and natural endpoint']
+    log = checked(job / 'runner.log', state['runner_log_sha256']).read_text()
+    need(process_exit(log, 0)['clean'], 'positive closed-process control')
+    results.append('observed clean child/Wine/Gamescope closure')
+    bad = log.replace('GAMESCOPE_EXIT=0', 'GAMESCOPE_EXIT=139')
+    need(not process_exit(bad, 0)['clean'], 'Gamescope failure masked by child exit zero')
+    results.append('Gamescope 139 rejected despite child/Wine zero')
+    need(not process_exit('WINE_EXIT=0 GAMESCOPE_EXIT=0 SECONDS=1\n' + bad, 0)['clean'], 'earlier clean wrapper line masks later failure')
+    results.append('earlier clean wrapper line cannot mask failing closure')
+    need(not process_exit(log + 'CHILD_EXIT 0 stages=111\n', 0)['clean'], 'duplicate child closure')
+    results.append('duplicate child closure rejected')
 
     def rejects(label, operation):
         try:

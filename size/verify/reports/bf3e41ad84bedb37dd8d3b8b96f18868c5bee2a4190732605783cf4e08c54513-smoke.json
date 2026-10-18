@@ -1,7 +1,7 @@
 {
   "schema": "eidolon-size-review-1",
   "job": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/smoke44101b",
-  "observed_utc": "2026-10-18T03:05:42.755270+00:00",
+  "observed_utc": "2026-10-18T03:18:17.935543+00:00",
   "candidate_sha256": "bf3e41ad84bedb37dd8d3b8b96f18868c5bee2a4190732605783cf4e08c54513",
   "delivered_bytes": 44101,
   "capture_exit_code": 0,
@@ -45,7 +45,7 @@
   },
   "production_accepted": false,
   "native_windows_tested": false,
-  "verifier_sha256": "4e6e981325f1fc3c4cefa9b4d791084b25c22e4610258f5cc48a790c84ed2b10",
+  "verifier_sha256": "87d1e0d7e9b6f9716a90eaa3b631c6196181819e9b2d7d829414e1d9e7ac001c",
   "status": "FAIL",
   "failures": [
     "process exit/decoder closure"
@@ -56,6 +56,27 @@
     "clean checkout rebuild of the final integrated candidate",
     "native Windows execution"
   ],
+  "evidence_sha256": {
+    "capture_sources": {
+      "capture.c": "5e27b5de1070ed9b648b71b75e5180eba85bf889d6b1212d2edf772742889c4d",
+      "live.c": "6afa9fa65a9177a925d7468638c487fb909cbb1c8a6d8f79b33d8af93d063667",
+      "hook.S": "c1491cae08f390c1c1c94d246d8f2063e0fabe5b1588c7417c62ef7f27b01573",
+      "semantic.c": "339371060ee3a78205b65b7e7a36e88c4ed33b5bfe67c508c0a34215cfdf1ce8",
+      "curves.c": "b4e61e8897e0b0322463bfcf65f3d4fdd117c6d6eea57ce2b7eab926cc2ff020",
+      "launch.c": "1c6bc1315fceb1f96592dabd088334a17c8b518ab3505d2e44cf17e4fcd88c22",
+      "verify.py": "0aa1c68c350e9a7972a02cd4ab9b9f70eb832a39508e34e3e9914943d3d901b6",
+      "headless.sh": "42643dda43da9d8ceaf6bfe409bdfcdcef943669329f6d1a1b702f70ffc58c1a"
+    },
+    "helper": "e63bfac41d95009cd4e9467cd3298fc02e07ca7f6299b70345067d4348e523fd",
+    "launcher": "d33905595ee48ad5a7dfe11e32c914df34e0d33efc9b954fd6681b4850be7604",
+    "retention": "12951edab18d98ae32a8d6dcc58bfa5bbda88a6636165e90b3b6da4f138e3566",
+    "runner_log": "07906b58470f6b11916b9d70f59776d21e86107f65fde9169984a18f205ef0be",
+    "live_identity": "786469421f2762866bec411bed1d0a7620f8a685762893a52d75434f1bf231f9",
+    "original_pe": "18ea4b2cbcecf43fc567400050bc4bb3c7c389d3b60ae01b9cd8afc309997129",
+    "prepared_pe": "cbf83903aac8ba626107098031dc2f0bab10e7f0a4d9d66842e63f02138b1177",
+    "events": "0a844cfc1f4d0513a51945d286bd4be5701ea6934106aafde91663af98fac5d3",
+    "decoded_image": "cb3ec9d28e1af545094857de2a9f87235e11578cce292bc6e6b48b438771e3d7"
+  },
   "decoder_stages_restored": 3,
   "decoded_sections_exact": [
     ".text",
@@ -89,9 +110,22 @@
   "hook_physical_restoration": true,
   "process_exit": {
     "capture": 0,
+    "child_records": [
+      [
+        "0",
+        "111"
+      ]
+    ],
+    "wrapper_records": [
+      [
+        "0",
+        "139"
+      ]
+    ],
     "child_stages_complete": true,
     "wine": "0",
-    "gamescope": 139
+    "gamescope": 139,
+    "clean": false
   },
   "gl": {
     "vendor": "NVIDIA Corporation",
@@ -110,6 +144,7 @@
   "cleanup": {
     "remaining_pids": [],
     "sink_present": false,
-    "runner_exists": false
+    "runner_exists": false,
+    "supervisor_exists": false
   }
 }

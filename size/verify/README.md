@@ -85,7 +85,9 @@ other CPU/GPU workloads as solo performance benchmarks.
 - All 159,716,352 PCM bytes must match, including completion and terminal-memory
   stability observations. All 151 native sampled physics states are compared.
 - Natural terminal query 27,000 at sample cursor 19,845,000, clean process exits,
-  marker/position GPR and FP restoration, and prefix/sink/session cleanup pass.
+  marker/position GPR and FP restoration, and prefix/sink/session/supervisor
+  cleanup pass. Exactly one clean child and wrapper exit record is required;
+  Wine exit zero cannot mask a Gamescope teardown failure.
 
 Mismatch reports retain the first differing frame/time and sample cursor, raw
 anchor failures, differing PCM sample/channel, and differing physics-word indices. Review exits nonzero on
@@ -108,3 +110,6 @@ It first checks the real 27,000-frame ledger and 151 physics samples, then rejec
 record corruption, fabricated late-frame timing, changed pixels/alpha, PCM
 stability faults, terminal-cursor changes, and an MXCSR restoration fault. The
 mutations are in memory or disposable local files. No GPU capture is started.
+It also rejects failing or duplicate process-closure records. Add
+`--manifest .build/verify/candidate/candidate.json` to test the preserved candidate
+inputs and rejection of a rehashed but invalid preparation transform.

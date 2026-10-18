@@ -1,0 +1,52 @@
+{
+  "schema": "eidolon-size-smoke-crash-review-1",
+  "candidate_sha256": "bf3e41ad84bedb37dd8d3b8b96f18868c5bee2a4190732605783cf4e08c54513",
+  "capture": "smoke44101b",
+  "smoke_status": "FAIL",
+  "production_accepted": false,
+  "candidate_exit": 0,
+  "wine_exit": 0,
+  "gamescope_exit": 139,
+  "crash": {
+    "pid": 490785,
+    "executable": "/usr/bin/gamescope",
+    "executable_sha256": "a194819d6fadbe38cf90c7f417a8967cd9ad84f5cbfc8f787ca50ac2840cb9e5",
+    "version": "3.16.25",
+    "timestamp_utc": "2026-10-18T02:58:03Z",
+    "signal": "SIGSEGV",
+    "si_code": "SEGV_MAPERR",
+    "fault_instruction_pointer": "0x00007f8e4fbd1070",
+    "symbolization": "Faulting function and Gamescope frames remain unresolved; libc exit is identified.",
+    "observed_stack": [
+      "unresolved fault address 0x00007f8e4fbd1070",
+      "gamescope +0x10d018, immediately after call *0x1f0(%rax)",
+      "gamescope +0x1152f0",
+      "libc exit handlers",
+      "libc exit",
+      "__libc_start_main"
+    ],
+    "other_threads": "PipeWire event loop in epoll_wait; another Gamescope worker in poll.",
+    "prior_history": "coredumpctl lists repeated Gamescope crashes predating this candidate. No specific shared cause is established."
+  },
+  "timeline": [
+    "All three frame, full PCM, physics, decoded-section and restoration checks matched.",
+    "Observer requested PLANNED_SHORT_STOP frames=3.",
+    "Launcher recorded CHILD_EXIT 0 stages=111.",
+    "Gamescope recorded Primary child shut down, then crashed during process-exit cleanup.",
+    "The wrapper recorded WINE_EXIT=0 GAMESCOPE_EXIT=139.",
+    "Subsequent review confirmed no surviving supervisor, runner, prefix processes or private sink."
+  ],
+  "kernel_check": {
+    "since_utc": "2026-10-18T02:50:00Z",
+    "until_utc": "2026-10-18T03:01:00Z",
+    "patterns": "oom|Out of memory|Killed process|NVRM|Xid",
+    "matching_entries": 0
+  },
+  "evidence": {
+    "runner_log_sha256": "07906b58470f6b11916b9d70f59776d21e86107f65fde9169984a18f205ef0be",
+    "gdb_backtrace_path": ".build/verify/gamescope-smoke-backtrace.txt",
+    "gdb_backtrace_sha256": "821ca81a96eff8f7516f79de9dc388139fee17ff4653aae9b1f4a747676f145a",
+    "extracted_core_copy": "Deleted after diagnosis; no core memory is committed."
+  },
+  "conclusion": "Observed compositor teardown failure after successful bounded candidate execution. The exact faulting function and root cause remain unresolved. This smoke is rejected; no exit or cleanup requirement is waived. The separately captured full run has its own clean closure evidence."
+}
