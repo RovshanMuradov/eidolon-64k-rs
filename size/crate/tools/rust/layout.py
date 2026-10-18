@@ -3,6 +3,8 @@
 
 --import-order accepts a research {text: [...], rdata: [...]} order and an
 unrenamed --object. This explicit operation writes a new manifest and script.
+--migrate-order explicitly drops absent seed members and appends new members
+in object order. --output-dir writes a consistent manifest/script pair there.
 Normal builds only validate; they never update the frozen layout implicitly.
 """
 import argparse
@@ -38,8 +40,8 @@ def render(script, manifest):
     return script
 
 
-def check_script(manifest):
-    script = SCRIPT.read_text()
+def check_script(manifest, path=SCRIPT):
+    script = path.read_text()
     if render(script, manifest) != script:
         raise ValueError('stale sizecoded.ld: run python3 size/crate/tools/rust/layout.py')
 
@@ -90,25 +92,72 @@ def import_order(order, data):
     return manifest
 
 
+def migrate_order(order, data):
+    """Resolve an old exact/glob/script-line order against a new object explicitly."""
+    renamed, _ = rename_anonymous_rdata(data)
+    names = [s['name'] for s in sections(renamed) if s['name'].startswith(PREFIXES)]
+    resolved = {'text': [], 'rdata': []}
+    changes = {'removed': [], 'added': [], 'discarded': []}
+    used = set()
+    for key in ('discarded', 'text', 'rdata'):
+        for entry in order.get(key, []):
+            pat = entry.strip()
+            if pat.startswith('*(') and pat.endswith(')'):
+                pat = pat[2:-1]
+            pat = pattern(pat)
+            matches = [name for name in names if fnmatchcase(name, pat)]
+            if len(matches) > 1:
+                raise ValueError(f'ambiguous seed pattern: {pat}')
+            if not matches:
+                changes['removed'].append(pat)
+                continue
+            name = matches[0]
+            if name in used:
+                if name not in changes['discarded']:
+                    raise ValueError(f'duplicate seed member: {name}')
+                continue
+            used.add(name)
+            if key == 'discarded':
+                changes['discarded'].append(name)
+            else:
+                resolved[key].append(name)
+    for name in names:
+        if name not in used:
+            resolved['text' if name.startswith('.text$') else 'rdata'].append(name)
+            changes['added'].append(name)
+    return import_order(resolved, data), changes
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true')
     parser.add_argument('--object', type=Path, help='validate an unrenamed runtime COFF object')
-    parser.add_argument('--import-order', type=Path)
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument('--import-order', type=Path)
+    action.add_argument('--migrate-order', type=Path)
+    parser.add_argument('--output-dir', type=Path, default=HERE)
     args = parser.parse_args()
-    if args.import_order:
+    target = args.output_dir.resolve()
+    if args.import_order or args.migrate_order:
         if not args.object or args.check:
-            parser.error('--import-order requires --object and cannot be used with --check')
-        manifest = import_order(json.loads(args.import_order.read_text()), args.object.read_bytes())
-        MANIFEST.write_text(json.dumps(manifest, indent=2) + '\n')
+            parser.error('order import/migration requires --object and cannot be used with --check')
+        order = json.loads((args.import_order or args.migrate_order).read_text())
+        if args.migrate_order:
+            manifest, changes = migrate_order(order, args.object.read_bytes())
+            print(json.dumps(changes, indent=2))
+        else:
+            manifest = import_order(order, args.object.read_bytes())
     else:
-        manifest = json.loads(MANIFEST.read_text())
+        manifest = json.loads(((target / 'lay2.json') if args.check else MANIFEST).read_text())
     if args.check:
-        check_script(manifest)
+        check_script(manifest, target / 'sizecoded.ld')
     else:
-        SCRIPT.write_text(render(SCRIPT.read_text(), manifest))
+        target.mkdir(parents=True, exist_ok=True)
+        (target / 'lay2.json').write_text(json.dumps(manifest, indent=2) + '\n')
+        (target / 'sizecoded.ld').write_text(render(SCRIPT.read_text(), manifest))
     if args.object:
-        prepare_object(args.object.read_bytes())
+        data, _ = rename_anonymous_rdata(args.object.read_bytes())
+        validate(data, manifest)
     print('PASS lay2 layout' + (' and object membership' if args.object else ''))
 
 

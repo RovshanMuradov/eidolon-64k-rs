@@ -1,5 +1,8 @@
 # t15t / lay2 recovery
 
+This document records the original recovery input. The subsequently frozen
+corrected CODE + FO2 layout is documented in `size/INTEGRATED-LAYOUT.md`.
+
 This is a source recovery of the completed research candidate, based on
 `a29719c`, rather than a new layout search. `recovery.json` records its exact
 input/output fingerprints. The reference artifacts are generated files and
@@ -50,9 +53,10 @@ The overlap with another linker pass is **`size/crate/tools/rust/minimal-linker`
 keep `prepare_object()` and its replacement object **before** invoking the
 linker; run PE constant merging **after** that invocation. A post-link pass
 must replace the final `os.execvp` with a checked subprocess call.
-`EIDOLON_SAVE_LINK` still saves the renamed object. `size/build.py` checks
-generated model/layout inputs and invalidates the Cargo target cache when
-linker/layout sources change, because Cargo does not track `-T` contents.
+`EIDOLON_SAVE_LINK` saves both unrenamed and validated renamed objects.
+`size/build.py` checks generated model/layout inputs; `size/crate/build.rs`
+watches the linker directory so changes force relinking without deleting the
+Cargo target cache.
 
 ```sh
 python3 size/crate/tools/rust/layout.py --check

@@ -5,6 +5,7 @@ import importlib.util
 import json
 from pathlib import Path
 import struct
+import subprocess
 import sys
 import unittest
 
@@ -33,6 +34,31 @@ def object_with(entries):
 
 
 class LayoutTests(unittest.TestCase):
+    def test_explicit_migration_filters_stale_seed_and_adds_new_members(self):
+        source = object_with([('.text$new', b'new'), ('.text$kept', b'kept'),
+                              ('.text$dead', b'dead'), ('.rdata', b'new graphics')])
+        seed = {'text': ['    *(.text$missing)', '    *(.text$kept)', '    *(.text$dead)'],
+                'rdata': ['.rd$1234'], 'discarded': ['.text$dead']}
+        manifest, changes = layout.migrate_order(seed, source)
+        self.assertEqual(manifest['text'], ['.text$kept', '.text$new'])
+        self.assertEqual(manifest['discarded'], ['.text$dead'])
+        self.assertEqual(changes['removed'], ['.text$missing', '.rd$1234'])
+        self.assertIn('.text$new', changes['added'])
+        data, _ = coff.rename_anonymous_rdata(source)
+        layout.validate(data, manifest)
+        with self.assertRaisesRegex(ValueError, 'ambiguous seed pattern'):
+            layout.migrate_order({'text': ['.text$*'], 'rdata': []}, source)
+
+    def test_candidate_layout_overrides_require_a_pair_and_candidate_mode(self):
+        for args in [('--candidate', '--link-order', 'test.ld'),
+                     ('--candidate', '--layout-manifest', 'test.json'),
+                     ('--link-order', 'test.ld', '--layout-manifest', 'test.json')]:
+            result = subprocess.run([sys.executable, ROOT / 'size/build.py', *args],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn('--link-order', result.stderr)
+            self.assertIn('--layout-manifest', result.stderr)
+
     def test_real_symbols_with_different_length_crate_hashes_and_uppercase_backrefs(self):
         symbols = [
             '.text$_RNvMs2_NtCs3a47Jk7K1QY_5alloc7raw_vecNtB5_11RawVecInner10deallocateB7_',
