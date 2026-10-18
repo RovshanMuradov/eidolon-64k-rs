@@ -1,0 +1,18 @@
+{
+  "tools/verify/reference.py": "4aa95c4551f74c63374661e2404801999e446eabed9f5e5b0db9a7990e362d89",
+  "tools/verify/rust/conformance.py": "0e20bbe883067f65d27e9167455f8c9d5a35b70818ff7e9659a3b494163cf9b3",
+  "tools/verify/rust/monitor_full.py": "97a3d2a9acf2975c8b1f44ff0f64945432270e00e098c8577ecb8f171714db83",
+  "tools/verify/rust/runtime_events.py": "658376e10f4de0342208817c3d8a6915322e2fe3b1a0ff2f328b3a2881e64664",
+  "tools/verify/rust/native_vectors.py": "20186b7ac784ce56bedc7b175e3e16d6f53e70db13444784592962a0830047a3",
+  "tools/verify/optimization/pe.py": "a504858d06c923033b8f165c7467a41ea12aca8fea07f385bd5a52d620dfa420",
+  "tools/verify/optimization/full.py": "662f35c08fabc4e9070096a36a990aaf2b572f921f84366503076c790982e745",
+  "tools/capture/rust/capture.c": "5e27b5de1070ed9b648b71b75e5180eba85bf889d6b1212d2edf772742889c4d",
+  "tools/capture/rust/live.c": "7b2777cc3ba35f1259b7fb48d13769a586c978dbb9f714bd1a0409c8bc3d3670",
+  "tools/capture/rust/hook.S": "c1491cae08f390c1c1c94d246d8f2063e0fabe5b1588c7417c62ef7f27b01573",
+  "tools/capture/rust/semantic.c": "339371060ee3a78205b65b7e7a36e88c4ed33b5bfe67c508c0a34215cfdf1ce8",
+  "tools/capture/rust/curves.c": "b4e61e8897e0b0322463bfcf65f3d4fdd117c6d6eea57ce2b7eab926cc2ff020",
+  "tools/capture/optimization/launch_kkrunchy.c": "1c6bc1315fceb1f96592dabd088334a17c8b518ab3505d2e44cf17e4fcd88c22",
+  "tools/capture/optimization/kkrunchy.py": "37f818686d75d7134b04d35d544b8745ddd674408afc73b9d2f1e4fc3f159f78",
+  "tools/verify/optimization/kkrunchy_review.py": "f0e1fd027b88f38dbc3a1c4da05eb2987376f2bfc1f58476c7f8b630e9787a49",
+  "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a"
+}

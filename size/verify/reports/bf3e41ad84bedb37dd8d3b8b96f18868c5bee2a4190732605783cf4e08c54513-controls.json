@@ -1,0 +1,36 @@
+{
+  "status": "OFFLINE_CORRUPTION_CONTROLS_PASS",
+  "checks": 18,
+  "results": [
+    "observed full ledger: 27000 exact frames and natural endpoint",
+    "truncated final record",
+    "extra trailing bytes",
+    "wrong magic",
+    "record sequence gap",
+    "mixed capture thread",
+    "late-frame hash corruption located at frame 13365, sample 9823275",
+    "internally consistent fabricated native time rejected",
+    "query/pre/post mismatch",
+    "initial PCM digest corruption",
+    "terminal PCM stability corruption",
+    "terminal cursor corruption",
+    "initial physics corruption",
+    "observed ledger matches all 151 native physics samples",
+    "terminal raw alpha-byte corruption",
+    "physical MXCSR restoration corruption",
+    "candidate manifest/preparation identity verified",
+    "repinned prepared-code corruption"
+  ],
+  "reference_state_sha256": "e7b64a0c3b12e00d064aa6a3a46190ed095bd68ce541a0f9751362c9f65c618a",
+  "ledger_sha256": "18d279a8ac1a0a43981a03f15e13169ad7e8173445b91237cd5058aecbc7b637",
+  "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+  "production_accepted": false,
+  "public_reference_crosscheck": {
+    "status": "PUBLIC_REFERENCE_FILES_MATCH_PINNED_ORACLE",
+    "frames": 27000,
+    "frames_file_sha256": "905861c7ec968d95bd030bf813e36aa2cc0e6621898baa8b086c29ede3ffc5da",
+    "pcm_file_sha256": "dabe5ec205dfb3b39d4a2467e98374b3660c80e228bc001e03112f6591fbc4da",
+    "native_reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64"
+  },
+  "checker_sha256": "fb99a9c782e5e5cfc4b1ae4ff168c700ea98389b9769c531fc852ac1f9c2ee1c"
+}
