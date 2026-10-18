@@ -137,8 +137,8 @@ change these executable hashes and requires its own measurement and capture.
   and numeric proposal filtering uses exact decimal values instead of Python
   binary-float rounding. Candidate-generating heuristics remain proposals, not
   equivalence proofs; no new search was needed here.
-- Legacy `capture.py`, `captures.py` and `bundle.py` still reference the private
-  T30 workflow. They were not invoked and are not dependencies of these commands.
-  The independent verifier owns capture tooling and authoritative full GPU checks.
+- Integration replaced the private-path T30 capture wrappers with
+  [`size/verify/verify.py`](../verify/README.md), which uses explicit reference
+  configuration. The independent verifier owns authoritative full GPU checks.
 - Program-21 glslang support and actual integrated GPU behavior remain unverified
   by this agent. No GPU captures were performed.

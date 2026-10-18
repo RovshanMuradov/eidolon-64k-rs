@@ -47,6 +47,10 @@ python3 size/tools/pack_matrix.py \
 Repeat `--input` or `--packer` for a finite matrix. The fresh output directory retains each candidate
 and its manifest; measurements never replace the accepted hash.
 
+For the delivered packed executable's independent frame/audio/depacker verification, use
+[`verify/`](verify/README.md). Its reference archive and hash-pinned observer toolkit are external,
+explicitly configured inputs. `make verify` checks the regular runtime, not the packed size build.
+
 ## How the bytes were saved
 
 Milestones; from 59 392 bytes on, each passed a full capture before it replaced the previous one:
