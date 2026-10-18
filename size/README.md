@@ -33,7 +33,8 @@ python3 size/build.py --candidate --work-dir .build/candidate --output .build/ca
 This prints `CANDIDATE`, not `PASS`, and leaves the accepted hash unchanged. The workspace contains
 `unprepared.exe`, `input.exe`, `packed.exe`, and `build.json`: hashes of the staged inputs, tool versions,
 packer identity, and delivered EXE identity. A successful build does not perform a media comparison.
-`--link-order path/to/order.ld` overrides only the staged linker script and requires `--candidate`.
+`--link-order path/to/order.ld --layout-manifest path/to/lay2.json` overrides the staged layout
+as a validated pair and requires `--candidate`; see [INTEGRATED-LAYOUT.md](INTEGRATED-LAYOUT.md).
 
 To compare packers against the same already-built PE:
 
