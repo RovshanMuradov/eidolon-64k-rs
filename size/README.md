@@ -51,6 +51,11 @@ For the delivered packed executable's independent frame/audio/depacker verificat
 [`verify/`](verify/README.md). Its reference archive and hash-pinned observer toolkit are external,
 explicitly configured inputs. `make verify` checks the regular runtime, not the packed size build.
 
+`make check-size-inputs` checks frozen audio, shaders, model configuration and linker layout without
+rewriting them; `make size` also runs these checks. `make test-size` adds the CPU-only transformation
+regressions and requires `glslangValidator`. Full source-level PCM can be checked with
+`python3 size/tools/verify_audio.py --bank /path/to/gm.dls --reference /path/to/pcm.f32le`.
+
 ## How the bytes were saved
 
 Milestones; from 59 392 bytes on, each passed a full capture before it replaced the previous one:
