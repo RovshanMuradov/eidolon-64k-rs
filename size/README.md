@@ -42,8 +42,10 @@ Its EXE SHA-256 is:
 d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458
 ```
 
-Full media verification of that final file is pending. Detailed acquisition
-tools and reports are on [`size/finish-integration`][research].
+That final file also passed the full media comparison: 27 000 frames, 510 raw
+anchors, the whole PCM and 151 physics samples exact, with clean process exit.
+Native Windows is untested. Detailed acquisition tools and reports are on
+[`size/finish-integration`][research].
 
 [buildable]: https://github.com/RovshanMuradov/eidolon-64k-rs/tree/7eb8cc3d6d15974521d67ebc9b1df7e4139601d0
 [research]: https://github.com/RovshanMuradov/eidolon-64k-rs/tree/size/finish-integration/size
