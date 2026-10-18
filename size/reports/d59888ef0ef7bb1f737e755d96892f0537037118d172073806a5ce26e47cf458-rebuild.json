@@ -1,0 +1,36 @@
+{
+  "schema": "eidolon-clean-rebuild-1",
+  "observed_utc": "2026-10-18T03:26:52.401036+00:00",
+  "source_commit": "dbefed39ce3083be25f7699fec46d400c4755991",
+  "clean_checkout": "/home/rovshan/Work/asm/eidolon-finish-integration/.build/clean-repro",
+  "status": "BYTE_IDENTICAL",
+  "fresh_target_and_nasm": true,
+  "reused_inputs": [
+    "Pinned Rust toolchain and Cargo dependency cache",
+    "Hash-verified NASM source archive only"
+  ],
+  "delivered": {
+    "bytes": 44139,
+    "sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458"
+  },
+  "unprepared": {
+    "bytes": 172544,
+    "sha256": "f448f284e1400dc10b145e0b3893b96954ac7e4b8b5b781a534cb8ce41020dd2"
+  },
+  "build_manifest_sha256": "748a05e4957ed7268862a96e2852b8a2ad202ed05c20cc0d5a3e1cdae732e3f0",
+  "elapsed_seconds_including_checks": 49.84864184795879,
+  "commands": [
+    {
+      "command": ["make", "test-size"],
+      "exit_code": 0,
+      "log_sha256": "b1b619228113f78b05057b9df02a414936be562ba0c518074e0a63b723c54df2"
+    },
+    {
+      "command": ["python3", "size/build.py", "--candidate"],
+      "exit_code": 0,
+      "log_sha256": "5b947c8efc221ba30b3a26727bef895c262eab16d4d6af43d8164a660e142951"
+    }
+  ],
+  "media_capture_performed": false,
+  "performance_benchmark": false
+}
