@@ -1,0 +1,49 @@
+{
+  "schema": "eidolon-size-completion-1",
+  "status": "REPRODUCIBLE_FULL_MEDIA_EXACT",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "delivered_bytes": 44139,
+  "baseline_bytes": 47561,
+  "saving_bytes": 3422,
+  "build_pin_updated": true,
+  "production_accepted": false,
+  "native_windows_tested": false,
+  "evidence": {
+    "clean_build": {
+      "path": "artifacts/verification/size/build.json",
+      "sha256": "3e9a188cf54693d8e64de19ee1ca5d61689925545a0e36edee832ee72eb22530"
+    },
+    "independent_verification": {
+      "path": "size/verify/reports/d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-phase2.json",
+      "sha256": "d68a54e1e025db0e8152166440943e713761910849cee77d7f89550d5d58a0ad"
+    },
+    "full_media": {
+      "path": "size/verify/reports/d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-full.json",
+      "sha256": "b873dba475f1edf40469099e0369bad8897bd6e98891715b35061970c6329e79"
+    }
+  },
+  "exact_coverage": {
+    "frames": 27000,
+    "raw_anchors": 510,
+    "pcm_bytes": 159716352,
+    "physics_samples": 151,
+    "decoder_stages": 3,
+    "endpoint_and_cleanup": true
+  },
+  "performance_context": {
+    "isolated_pair": false,
+    "runs_per_executable": 1,
+    "baseline_startup_seconds": 217.01824,
+    "final_startup_seconds": 237.019337,
+    "baseline_target_peak_sampled_rss_bytes": 1001336832,
+    "final_target_peak_sampled_rss_bytes": 1043046400,
+    "parent_validation_started_utc": "2026-10-18T04:04:37.792855+00:00",
+    "parent_validation_finished_utc": "2026-10-18T04:05:39.349943+00:00",
+    "parent_validation_log_sha256": "4a0b1a627ae05768cb754fa25b1d62dfca1d1e1326454ac3364454ed7ff6a3ce",
+    "baseline_acquisition_overlap_seconds": 0,
+    "final_acquisition_overlap_seconds": 31.754151,
+    "startup_overlap": false,
+    "interpretation": "Single-pair observations. The final playback tail overlapped review-branch validation; startup preceded the overlap. Cold-cache state and workload isolation are unverified. No causal or statistical performance conclusion."
+  },
+  "remaining": ["Native Windows execution", "Formal acceptance criteria", "Isolated repeated performance measurements"]
+}

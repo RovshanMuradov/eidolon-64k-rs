@@ -42,3 +42,32 @@ The research harness that accepted the port is kept in the repository.
 | `artifacts/reference/`, `artifacts/verification/rust/` | Hashes and results of the accepted runs |
 
 Accepted result: all 27 000 frames and the full PCM identical, 510 retained raw frames byte-compared, physics and uniform state compared at sampled frames. Most of `tests/rust/` needs the raw reference data (5.8 GB), which is not published; 57 of its tests run without it.
+
+## Size-build verification
+
+The compact executable is built from `size/crate/`, postprocessed and packed.
+Its verification observes the **delivered EXE** through both decoder stages
+and the original entry point. The regular runtime checks above cover `src/`.
+
+| Check | Command or evidence |
+|---|---|
+| Frozen audio, shader, model and layout inputs | `make check-size-inputs` |
+| PE-merger, layout/model and shader regressions | `make test-size`: 34 tests; requires `glslangValidator` and GNU `objdump` |
+| Complete source-level PCM | `python3 size/tools/verify_audio.py --bank /path/to/gm.dls --reference /path/to/pcm.f32le` |
+| Production assembly decoder roundtrip and damaged-stream rejection | `python3 size/packer/check.py --input .build/size/input.exe --packer .build/size/packer/kkrunchy.exe` |
+| Build identity | `size/build.py` writes `build.json` with input, tool and output identities; normal mode also checks `size/expected.sha256` |
+| Full packed-image capture | [`size/verify/verify.py`](../../size/verify/README.md), with explicitly configured hash-pinned external references |
+
+The 44 139-byte EXE passed `FULL_MEDIA_EXACT_PARTIAL`: 27 000 frame hashes,
+510 raw anchors, all 159 716 352 PCM bytes and 151 physics samples exact;
+decoded sections, FP/GL restoration, endpoint and process cleanup passed.
+A clean checkout reproduced the same file.
+
+The offline shader checker preserves identifier bindings and rejects count
+mismatches and compile failures. Thirty programs pass; program 21 is explicitly
+unsupported by glslang. Its pixels are covered by the full EXE capture.
+
+The playback comparison has one run per build, with concurrent work at the end
+of the final run. Native Windows, repeated isolated measurements and formal
+acceptance remain open. See [size-build results](../../size/README.md#verification)
+and [runtime reports](../../size/verify/reports/README.md).

@@ -1,0 +1,14 @@
+{
+  "status": "OFFLINE_PLAYBACK_CORRUPTION_CONTROLS_PASS",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "checks": 5,
+  "results": [
+    "real serialized pair and full-media identity accepted",
+    "prefix mismatch rejected",
+    "full-media identity mismatch rejected",
+    "failed playback closure rejected",
+    "surviving supervisor rejected"
+  ],
+  "checker_sha256": "94128fcd06a02f818c1efdea94bf9e28104f8de54a0e53bd38dbce430e65710e",
+  "production_accepted": false
+}

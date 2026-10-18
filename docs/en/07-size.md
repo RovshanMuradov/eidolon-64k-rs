@@ -47,10 +47,18 @@ In the EXE this image, together with the inner loader, is the 58 844-byte kkrunc
        + 58 844 compressed stream: loader 1 501 + code 30 198 + data
 ```
 
-## The 32 KiB limit
+## The 32 KiB target
 
-32 KiB is out of reach without losing content: the shaders and graphics tables alone are ~41 KB compressed.
+32 KiB has not been reached. The shaders and graphics tables above total about
+41 KB when compressed separately with xz, but that is not a lower bound for
+a different representation or a jointly compressed executable.
 
 - Reaching 32 768 bytes requires removing 28 160 bytes, i.e. 46%.
 - Repacking the finished EXE gives ~60.5 KB.
 - Removing dead code and nodes, and factoring shaders and curves, could save some bytes. No savings of this scale have been demonstrated.
+
+The Rust rewrite has since produced a reproducible, media-exact 44 139-byte
+build using compact data, shader transformations, a modified packer and
+retuned layout. Its verification status and comparisons are recorded in
+[size/README.md](../../size/README.md#verification). The original-binary measurements above
+describe the 60 928-byte file.

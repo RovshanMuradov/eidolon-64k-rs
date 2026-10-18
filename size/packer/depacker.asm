@@ -1,20 +1,14 @@
-; kkrunch_p7 depacker (asm version)
-; fabian "ryg/farbrausch" giesen 2006
+; kkrunchy_k7 depacker (asm version), extended context model
+; fabian "ryg/farbrausch" giesen 2006; model extensions and size rework 2026
 ; I hereby place this code in the public domain.
-
-; ---- uninitialized data
 
 bits          32
 
-section       .bss
+%include "model_config.inc"
 
 %define MEMSHIFT  23
 %define MEM       (1<<MEMSHIFT)
-%define NMODEL    11
-%define NINPUT    48
-%define NWEIGHT   (256+256+16+128)
 %define MAXLEN    2047
-%define USEAPM    1
 %define APMSIZE   8192
 
 struc ContextModel
@@ -25,51 +19,53 @@ struc ContextModel
   .size:
 endstruc
 
-struc Work
-  .src        resd 1
-  .dst        resd 1
-  .csub       resd 1
-  .range      resd 1
-  .outsize    resd 1
-  .c0         resd 1
-  .c0s        resd 1
-  .bpos       resd 1
-  .lentemp    resd 1
-  .matchp     resd 1
-  .matchl     resd 1
-  .matchw     resd 1
-  .pr         resd 4
-%if USEAPM
-  .outprob    resd 1 ; MUST follow pr
-%endif  
-  .ctx        resd 3
-  .bit        resd 1
-  .bitscaled  resd 1
-  .origdst    resd 1
-  .zeroprob   resd 1
-  .bitcounter resd 1
-%if USEAPM  
-  .APMi       resd 1
-%endif  
-  .cm         resb ContextModel.size * NMODEL
-  .match      resd MEM/16
-  .modelMem   resb MEM
-  .tx         resw NINPUT
-  .wx         resw NINPUT*NWEIGHT
-  .tx2        resw 4
-  .wx2        resw 8
-  .runTable   resd 256
-  .stateCode  resb 256*2  ; must follow immediately after runTable
-  .stateNext  resb 256*2
-  .stateMap   resd 256
-  .stretch    resd 4096
-%if USEAPM
-  .APM        resd APMSIZE*33
-%endif  
-  .size:
-endstruc
+; ---- work area; ebp points at W_src (offset 0); everything up to tx is within disp8
 
-WorkData      resb Work.size
+%define WBIAS (16 + 4*(2*NMIX + 2 + 10))
+absolute      -WBIAS
+W_tx2         resw 8
+W_ctx         resd NMIX
+W_pr          resd NMIX+1
+W_outprob     resd 1      ; must follow pr
+W_dst         resd 1
+W_csub        resd 1
+W_range       resd 1
+W_outsize     resd 1
+W_c0          resd 1
+W_c0s         resd 1
+W_bpos        resd 1
+W_matchp      resd 1
+W_matchl      resd 1
+W_matchw      resd 1
+W_src         resd 1      ; at offset 0 (STAGE0ENTRY signature: mov dword [ebp+0], PACKED)
+W_bit         resd 1
+W_origdst     resd 1
+W_zeroprob    resd 1
+W_bitcounter  resd 1
+W_APMi        resd 1
+W_wh2         resd 1
+W_pad         resd 1
+W_tx          resw NINPUT
+W_wx2         resw 8
+W_cm          resb ContextModel.size * NMODEL
+W_match       resd MEM/16  ; must follow W_cm
+W_modelMem    resb MEM
+W_wx          resw NINPUT*NWEIGHT
+W_sq          resw 33
+W_runTable    resd 256
+W_stateCode   resb 256*2  ; must follow immediately after runTable
+W_stateNext   resb 256*2
+W_stateMap    resd 256
+W_stretch     resd 4096
+W_APM         resd APMSIZE*33
+W_end:
+
+W_src_at_zero equ 1/(1-(W_src*W_src+15)/16)  ; assemble error unless W_src = 0
+
+section       .bss
+
+WorkData      resb W_end + WBIAS
+%define WD    (WorkData+WBIAS)
 
 ; ---- fixups
 
@@ -94,21 +90,18 @@ section       .text
 ;   destroy: ecx,edx
 
 squash:
-  cmp       eax, -2047
-  jge       .notsmall
-  xor       eax, eax
-  ret
-  
-.notsmall:
-  cmp       eax, 2047
+  mov       ecx, 2047
+  cmp       eax, ecx
   jle       .notbig
-  mov       eax, 4095
-  ret
-  
+  xchg      eax, ecx      ; squash(2047) = 4095
+
 .notbig:
+  neg       ecx
+  cmp       eax, ecx
+  jl        .small
   mov       ecx, eax
   sar       ecx, 7
-  lea       ecx, [squashTab+ecx*2+16*2]
+  lea       ecx, [WD+W_sq+ecx*2+16*2]
   and       eax, byte 127
   mov       edx, [ecx+2]
   sub       edx, [ecx]
@@ -118,10 +111,13 @@ squash:
   sar       eax, 7
   add       ax, [ecx]
   ret
-  
+
+.small:
+  xor       eax, eax
+  ret
+
 ; contextHash
-;   in: esi=model
-;       eax=i
+;   in: eax=i
 ;   out: eax=p
 ;   destroy: edx
 
@@ -129,32 +125,27 @@ contextHash:
   mov       edx, eax
   shr       edx, 24
   and       eax, ((MEM / 4) - 1) & ~1
-  lea       eax, [ebp+Work.modelMem+eax*4]
-  
+  lea       eax, [ebp+W_modelMem+eax*4]
+
   cmp       dl, [eax]
-  jne       .notequal1
-  inc       eax
-  ret
-  
-.notequal1:
+  je        .found
   add       eax, byte 4
   cmp       dl, [eax]
-  jne       .notequal2
-  inc       eax
-  ret
-  
-.notequal2:    
+  je        .found
+
   mov       dh, [eax+1]
   cmp       dh, [eax-3]
   jbe       .noswap
   sub       eax, byte 4
-  
+
 .noswap:
   movzx     edx, dl
   mov       [eax], edx
+
+.found:
   inc       eax
   ret
-  
+
 ; train
 ;   in: eax=err
 ;       esi=t
@@ -179,8 +170,8 @@ train:
   movq      [edi], mm2
   add       esi, byte 8
   add       edi, byte 8
-  loop      .lp  
-  
+  loop      .lp
+
   ret
 
 ; decodebit
@@ -188,74 +179,88 @@ train:
 ;   out: edx=bit; eax, ecx destroyed
 
 decodebit:
-  mov       ecx, [ebp+Work.src]
-  mul       dword [ebp+Work.range]
+  mov       ecx, [ebp+W_src]
+  mul       dword [ebp+W_range]
   shrd      eax, edx, 12
-  
+
   mov       ecx, [ecx]
   bswap     ecx
-  sub       ecx, [ebp+Work.csub]
+  sub       ecx, [ebp+W_csub]
   xor       edx, edx
   cmp       eax, ecx
   ja        .one
-  
-  add       [ebp+Work.csub], eax
-  sub       [ebp+Work.range], eax
+
+  add       [ebp+W_csub], eax
+  sub       [ebp+W_range], eax
   jmp       short .renorm
 
 .one:
-  mov       [ebp+Work.range], eax
+  mov       [ebp+W_range], eax
   inc       edx
 
 .renorm:
-  cmp       byte [ebp+Work.range+3], 0
+  cmp       byte [ebp+W_range+3], 0
   jne       .done
-  
+
   ; renormalize
-  inc       dword [ebp+Work.src]
-  shl       dword [ebp+Work.range], 8
-  shl       dword [ebp+Work.csub], 8
+  inc       dword [ebp+W_src]
+  shl       dword [ebp+W_range], 8
+  shl       dword [ebp+W_csub], 8
   jmp       short .renorm
-  
+
 .done:
   ret
 
 ; ---- the actual depacker entry
 
 STAGE0ENTRY:
-  mov       ebp, WorkData
-  mov				dword [ebp+Work.src], PACKED
+  mov       ebp, WD
+  mov       dword [ebp+W_src], PACKED
   mov       eax, DEPACKED
-  mov				dword [ebp+Work.dst], eax
-  mov       dword [ebp+Work.origdst], eax
+  mov       [ebp+W_dst], eax
+  mov       [ebp+W_origdst], eax
   push      eax
-  mov				dword [ebp+Work.outsize], DEPACKEDSIZE
-    
+  mov       dword [ebp+W_outsize], DEPACKEDSIZE
+
 ; ---- model initialization (assumes everything filled with zero)
 
-  dec       dword [ebp+Work.range]  
-  inc       dword [ebp+Work.c0]
-  inc       dword [ebp+Work.zeroprob]
-  mov       byte [ebp+Work.bpos], 8
+  dec       dword [ebp+W_range]
+  inc       dword [ebp+W_c0]
+  inc       dword [ebp+W_zeroprob]
+  mov       byte [ebp+W_bpos], 8
   mov       eax, 2048
-  lea       edi, [ebp+Work.pr]
-  stosd
-  stosd
-  stosd
-  stosd
-%if USEAPM  
-  stosd
-%endif
-  
+  lea       edi, [ebp+W_pr]
+  push      byte NMIX+2
+  pop       ecx
+  rep       stosd
+
+  ; squash table and first APM row: round(4096/(1+e^((16-j)/2))), j=0..32
+  ; (assumes ecx=0)
+  mov       edi, WD+W_sq
+  mov       esi, WD+W_APM
+  mov       cl, 33
+  fld       dword [sqR0]
+.sqLoop:
+  fld1
+  fadd      st0, st1
+  fidivr    dword [sq4096]
+  fistp     word [edi]
+  movzx     eax, word [edi]
+  shl       eax, 4
+  mov       [esi], eax
+  scasw
+  lodsd
+  fmul      dword [sqQ]
+  loop      .sqLoop
+  fstp      st0
+
   ; initialize run table via numerical integration of 1/x
   mov       ebx, 14155776
-  mov       edi, WorkData+Work.runTable+4
-
-  xor       ecx, ecx
+  mov       edi, WD+W_runTable+4
   inc       ecx
-  
+
 .runTableLoop:
-  lea       esi, [ecx*2+1]
+  lea       esi, [ecx+ecx+1]
   mov       eax, 774541002
   cdq
   div       esi
@@ -265,39 +270,39 @@ STAGE0ENTRY:
   stosd
   inc       cl
   jnz       .runTableLoop
-  
+
   ; build state table.
   ; note: edi already points to stateCode
   ; assumes ecx=0
-  mov       esi, WorkData+Work.stateNext
+  mov       esi, WD+W_stateNext
   xor       ebx, ebx
   mov       cl, 4
-  
+
 .stateTableLoop:
   xor       ebx, byte 1
   mov       ah, [edi+ebx]
   cmp       ah, 2
   jbe       .log_underflow
-  
+
   movzx     eax, ah
-  mov       eax, [WorkData+Work.runTable+eax*4-4]
+  mov       eax, [WD+W_runTable+eax*4-4]
   shl       eax, 2
   dec       ah
-  
+
 .log_underflow:
   xor       ebx, byte 1
   mov       al, [edi+ebx]
-  
+
   inc       eax
   cmp       al, 40
   jbe       .no_inc_overflow
   mov       al, 40
-  
+
 .no_inc_overflow:
   test      bl, 1
   jz        .bit_even
   xchg      al, ah
-  
+
 .bit_even:
   push      edi
   mov       edx, ecx
@@ -305,7 +310,7 @@ STAGE0ENTRY:
   je        .found
   inc       edx
   scasw
-  
+
 .found:
   not       ecx
   add       ecx, edx
@@ -315,15 +320,15 @@ STAGE0ENTRY:
   mov       ecx, edx
   pop       edi
   inc       ebx
-  
+
   cmp       bh, 2
   jne       .stateTableLoop
-    
+
   ; build initial state map.
   ; note that ecx=0x100 at this point
   mov       esi, edi
-  mov       edi, WorkData+Work.stateMap
-  
+  mov       edi, WD+W_stateMap
+
 .stateMapLoop:
   xor       eax, eax
   lodsb
@@ -337,24 +342,24 @@ STAGE0ENTRY:
   div       ebx
   stosd
   loop      .stateMapLoop
-  
+
   ; transform state code table to and masks
   mov       ch, 2
-  mov       esi, WorkData+Work.stateCode
+  mov       esi, WD+W_stateCode
   mov       edi, esi
-  
+
 .stateCodeLoop:
   lodsb
   sub       al, 1
   salc
   stosb
   loop      .stateCodeLoop
-  
+
   ; build stretch table (inverse of squash)
-  mov       edi, WorkData+Work.stretch
+  mov       edi, WD+W_stretch
   or        ebx, byte -1 ; =previous i
   mov       eax, -2047
-  
+
 .stretchLoop:
   push      eax
   call      squash
@@ -364,103 +369,81 @@ STAGE0ENTRY:
   mov       ebx, eax
   pop       eax
   rep       stosd
-  
+
   inc       eax
   cmp       eax, 2048
   jle       .stretchLoop
-  
-  ; initialize context model
+
+  ; initialize context models: on the zeroed hash table contextHash(1) and
+  ; contextHash(0) both return modelMem+1
   ; assumes ecx=0 here
-  lea       esi, [ebp+Work.cm]
+  mov       edi, WD+W_cm
+  mov       eax, WD+W_modelMem+1
   mov       cl, NMODEL
-  
+
 .ctxModelLoop:
-  xor       eax, eax
-  inc       eax
-  call      contextHash
-  mov       [esi+ContextModel.cpr], eax
-  xor       eax, eax
-  call      contextHash
-  mov       [esi+ContextModel.cps], eax
-  add       esi, byte ContextModel.size
+  stosd
+  stosd
+  scasd
+  scasd
   loop      .ctxModelLoop
 
-%if USEAPM
-  ; initialize APM
-  lea       edi, [ebp+Work.APM]
-  mov       esi, edi
-  push      byte -16
-  pop       eax
-  
-.APMLoop:
-  push      eax
-  shl       eax, 7
-  call      squash
-  shl       eax, 4
-  stosd
-  pop       eax
-  inc       eax
-  cmp       eax, byte 16
-  jle       .APMLoop
-
-  ; and clone it!
+  ; clone the first APM row; APM[0] = squash(-2048)<<4 = 0 (assumes ecx=0)
+  mov       esi, WD+W_APM
+  mov       [esi], ecx
+  lea       edi, [esi+33*4]
   mov       ecx, (APMSIZE-1)*33
   rep       movsd
-%endif  
 
 ; ---- main decoding loop
 
   xor       ebx, ebx ; =byte
   inc       ebx
-  
+
 .decodebitloop:
   xor       eax, eax
-  cmp       eax, [ebp+Work.bitcounter]
+  cmp       eax, [ebp+W_bitcounter]
   jne       .nozeropage
-  
-  mov       eax, [ebp+Work.zeroprob]
+
+  mov       eax, [ebp+W_zeroprob]
   call      decodebit
-  
-  mov       eax, [ebp+Work.zeroprob]
+
+  mov       eax, [ebp+W_zeroprob]
   neg       edx
   inc       eax
   shr       edx, 32-12 ; eqv. to and edx, 4095 here
   add       eax, edx
   shr       eax, 1
-  mov       [ebp+Work.zeroprob], eax
-  
+  mov       [ebp+W_zeroprob], eax
+
   test      edx, edx
   jz        .nozeropage
-  
+
   mov       eax, 8192
-  add       dword [ebp+Work.dst], eax
-  sub       dword [ebp+Work.outsize], eax
+  add       [ebp+W_dst], eax
+  sub       [ebp+W_outsize], eax
   jmp       short .decodebitloop
 
 .nozeropage:
-%if USEAPM
-  mov       eax, [ebp+Work.outprob]
-%else
-  mov       eax, [ebp+Work.pr+12]
-%endif  
+  mov       eax, [ebp+W_outprob]
   cmp       ah, 8
   adc       eax, byte 0
-  
+
   call      decodebit
 
   ; byte writing+prepare for model
-  mov       [ebp+Work.bit], edx
-  inc       word [ebp+Work.bitcounter]
+  mov       [ebp+W_bit], edx
+  inc       word [ebp+W_bitcounter]
   shr       edx, 1
   adc       bl, bl
   jnc       .decodenobytedone
 
-  mov       eax, [ebp+Work.dst]
+  mov       eax, [ebp+W_dst]
   mov       [eax], bl
-  inc       dword [ebp+Work.dst]
+  inc       dword [ebp+W_dst]
   mov       bl, 1
 
-  dec       dword [ebp+Work.outsize]
+  dec       dword [ebp+W_outsize]
   jnz       .decodenobytedone
 
   ; ---- import processing
@@ -472,146 +455,109 @@ STAGE0ENTRY:
   push      eax
   mov       esi, IMPORTS
   mov       ebx, LOADLIBRARY
-%if 0
-  push      ebp
-  
-.imploop:
-  inc       esi
-  lodsd
-  test      eax, eax
-  jz        .impend
-  xchg      eax, edi
-  push      esi
-  call      [ebx]
-  test      eax, eax
-  jz        .imperr
-  xchg      eax, ebp
-  
-.impfunc:
-  lodsb
-  test      al, al
-  jnz       .impfunc
-  cmp       [esi], al
-  je        .imploop
-  js        .impord
-  push      esi
-  
-.impget:
-  push      ebp
-  call      [ebx+4]
-  stosd
-  test      eax, eax
-  jnz       .impfunc
-  
-.imperr:
-  inc       eax
-  pop       ebx
-  pop       ebx
-  ret
-  
-.impord:
-  inc       esi
-  xor       eax, eax
-  lodsw
-  push      eax
-  jmp       short .impget        
-
-.impend:
-  pop       ebp
-%endif  
   ret
 
 .decodenobytedone:
   ; ---- model main loop
   push      ebx
 
-  mov       ecx, [ebp+Work.bit]
-  shl       ecx, 16
-  sub       ecx, byte -128
-  mov       [ebp+Work.bitscaled], ecx
-  
   ; update mixers
   xor       edx, edx
-  
+
 .updmixer:
-  mov       eax, [ebp+Work.bit]
+  mov       eax, [ebp+W_bit]
   shl       eax, 12
-  sub       eax, [ebp+Work.pr+edx*4]
-  imul      eax, byte 7
-  
-  cmp       dl, 3
+  sub       eax, [ebp+W_pr+edx*4]
+  imul      eax, byte LR
+
+  cmp       dl, NMIX
   je        .updmixerdone
-  
-  mov       edi, [ebp+Work.ctx+edx*4]
-  imul      edi, byte (NINPUT*2)
-  lea       edi, [ebp+Work.wx+edi]
-  mov       esi, WorkData+Work.tx
+
+  imul      edi, [ebp+W_ctx+edx*4], byte (NINPUT*2)
+  lea       edi, [ebp+W_wx+edi]
+  lea       esi, [ebp+W_tx]
   push      byte (NINPUT/4)
   pop       ecx
   call      train
-  
+
   inc       edx
   jmp       short .updmixer
-  
+
 .updmixerdone:
   ; assumes ecx=0
-  mov       edi, WorkData+Work.wx2
-  mov       esi, WorkData+Work.tx2
+  mov       edi, WD+W_wx2
+  lea       esi, [ebp+W_tx2]
+%if NMIX > 4
+  mov       cl, 2
+%else
   inc       ecx
+%endif
   call      train
-  
+
   ; update c0 and position in bit
-  mov       eax, [ebp+Work.bit]
-  shl       dword [ebp+Work.c0], 1
-  add       [ebp+Work.c0], eax
-  
-  dec       dword [ebp+Work.bpos]
+  mov       eax, [ebp+W_bit]
+  shl       dword [ebp+W_c0], 1
+  add       [ebp+W_c0], eax
+
+  dec       dword [ebp+W_bpos]
   jnz       near .nonewbyte
-  
+
   ; assumes ecx=0
-  mov       byte [ebp+Work.bpos], 8
+  mov       byte [ebp+W_bpos], 8
   inc       ecx
-  mov       [ebp+Work.c0], ecx
-  
+  mov       [ebp+W_c0], ecx
+
+  ; word hash
+  mov       edi, [ebp+W_dst]
+  movzx     eax, byte [edi-1]
+  mov       edx, [ebp+W_wh2]
+  xor       edx, eax
+  imul      edx, edx, WK
+  or        al, 0x20
+  sub       al, 'a'
+  cmp       al, 26
+  jb        .iswordch
+  xor       edx, edx
+.iswordch:
+  mov       [ebp+W_wh2], edx
+
   ; update context models
-  lea       esi, [ebp+Work.cm]
+  mov       esi, WD+W_cm
   xor       eax, eax
   push      byte NMODEL
   pop       ecx
-  
+
 .updcontext:
   and       eax, byte -2
   mov       [esi+ContextModel.ctx], eax
-  
+
   ; update run context
   mov       ebx, [esi+ContextModel.cpr]
-  mov       edi, [ebp+Work.dst]
+  mov       edi, [ebp+W_dst]
   mov       dh, [edi-1] ; bufPtr[-1]
   cmp       dh, [ebx+1] ; cpr[1]
   je        .norunflush
   mov       dl, 0
   mov       [ebx], dx
-  
+
 .norunflush:
   inc       byte [ebx]
   inc       eax
   call      contextHash
   mov       [esi+ContextModel.cpr], eax
-  
+
   ; fnv hash function
   ; assumes edi=_bufPtr
-  mov       eax, 0x811c9dc5
-  inc       ecx
-  imul      eax, ecx
-  dec       ecx
+  lea       eax, [ecx+1]
+  imul      eax, eax, 0x811c9dc5
   mov       bl, [masks+ecx-1]
   mov       dh, [bitm+ecx-1]
-  
+
 .hashnext:
   dec       edi
   shr       bl, 1
   jnc       .hashnotset
-  
+
   mov       dl, [edi]
   and       dl, dh
   xor       al, dl
@@ -620,223 +566,243 @@ STAGE0ENTRY:
 
 .hashnotset:
   jnz       .hashnext
-  add       esi, ContextModel.size
-  loop      .updcontext
-  
+
+  ; position, region and word terms
+  movzx     ebx, byte [posm+ecx-1]
+  mov       edx, [ebp+W_dst]
+  sub       edx, [ebp+W_origdst]
+  btr       ebx, 7
+  sbb       edi, edi
+  and       edi, [ebp+W_wh2]
+  btr       ebx, 6
+  jnc       .noregion
+  push      edx
+  shr       edx, RSH
+  shl       edx, 8
+  xor       edi, edx
+  pop       edx
+.noregion:
+  and       edx, ebx
+  xor       edx, edi
+  xor       eax, edx
+  imul      eax, eax, 0x01000193
+
+  add       esi, byte ContextModel.size
+  dec       ecx
+  jnz       near .updcontext
+
   ; match processing
   ; assumes esi points to "match"
   and       eax, (MEM/16)-1
-  mov       edi, [ebp+Work.dst]
+  mov       edi, [ebp+W_dst]
   xchg      edi, [esi+eax*4] ; now edi=Match[h]
-  mov       esi, [ebp+Work.dst]
-  
-  mov       ecx, [ebp+Work.matchl]
+  mov       esi, [ebp+W_dst]
+
+  mov       ecx, [ebp+W_matchl]
   jecxz     .searchmatch
-  
+
   inc       ecx
-  inc       dword [ebp+Work.matchp]
+  inc       dword [ebp+W_matchp]
   jmp       short .updmatch
-  
+
 .searchmatch:
   test      edi, edi
   jz        .updmatch
-  
-  mov       [ebp+Work.matchp], edi
+
+  mov       [ebp+W_matchp], edi
 
   std
   cmpsb
 
   mov       ecx, edi
-  sub       ecx, [ebp+Work.origdst]
-  mov       [ebp+Work.lentemp], ecx
+  sub       ecx, [ebp+W_origdst]
+  push      ecx
   repe      cmpsb
   cld
-  
+
   je        .allequal
   inc       ecx
-  
+
 .allequal:
   neg       ecx
-  add       ecx, [ebp+Work.lentemp]
+  pop       eax
+  add       ecx, eax
 
 .updmatch:
-  cmp       ecx, MAXLEN
-  jbe       .noverylongmatch
-  mov       ecx, MAXLEN
-  
-.noverylongmatch:
-  mov       [ebp+Work.matchl], ecx
-  
+  mov       eax, MAXLEN
+  cmp       ecx, eax
+  cmova     ecx, eax
+  mov       [ebp+W_matchl], ecx
+
   cmp       ecx, byte 32
   jbe       .nolongmatch
   push      byte 32
   pop       ecx
-  
+
 .nolongmatch:
   shl       ecx, 6
-  mov       [ebp+Work.matchw], ecx
+  mov       [ebp+W_matchw], ecx
 
 .nonewbyte:
   ; start model mixing
-  mov       ecx, [ebp+Work.c0]
+  mov       ecx, [ebp+W_c0]
   shl       ecx, 3
-  mov       [ebp+Work.c0s], ecx
-  
+  mov       [ebp+W_c0s], ecx
+
   ; constant model
-  mov       edi, WorkData+Work.tx
+  lea       edi, [ebp+W_tx]
   push      byte 127
   pop       eax
   stosw
-  
+
   ; match model
   xor       eax, eax
-  cmp       eax, [ebp+Work.matchl]
+  cmp       eax, [ebp+W_matchl]
   je        .nomatch
 
-  mov       ebx, [ebp+Work.matchp]
+  mov       ebx, [ebp+W_matchp]
   movzx     ebx, byte [ebx]
   inc       bh
-  mov       cl, [ebp+Work.bpos]
+  mov       cl, [ebp+W_bpos]
   shr       ebx, cl
   sbb       edx, edx
-  cmp       ebx, [ebp+Work.c0]
+  cmp       ebx, [ebp+W_c0]
   jne       .nomatch
-  
-  mov       eax, [ebp+Work.matchw]
+
+  mov       eax, [ebp+W_matchw]
   xor       eax, edx
   sub       eax, edx
   jmp       short .matchdone
-  
+
 .nomatch:
-  mov       [ebp+Work.matchl], eax  
-  
-.matchdone:  
+  mov       [ebp+W_matchl], eax
+
+.matchdone:
   stosw
-  
-  mov       eax, [ebp+Work.matchl]
+
+  mov       eax, [ebp+W_matchl]
   cmp       eax, 400
   jbe       .contextmodels
-  
-  mov       dword [ebp+Work.ctx], 512+14
+
+  mov       dword [ebp+W_ctx], 512+14
   jmp       .mix
 
   ; context models
 .contextmodels:
-  lea       esi, [ebp+Work.cm]
+  mov       esi, WD+W_cm
   xor       eax, eax
   mov       ah, 2
-  mov       [ebp+Work.ctx+8], eax
+  mov       [ebp+W_ctx+8], eax
   push      byte NMODEL
   pop       ecx
-  
+
 .contextloop:
   ; run model
   push      ecx
-  
+
   mov       eax, [esi+ContextModel.cpr]
   movzx     edx, byte [eax+1]
   movzx     eax, byte [eax]
-  mov       cl, [ebp+Work.bpos]
+  mov       cl, [ebp+W_bpos]
   inc       dh
-  mov       eax, [WorkData+Work.runTable+eax*4]
+  mov       eax, [WD+W_runTable+eax*4]
   shr       edx, cl
   sbb       ecx, ecx
   xor       eax, ecx
   sub       eax, ecx
-  
-  cmp       edx, [ebp+Work.c0]
+
+  cmp       edx, [ebp+W_c0]
   je        .run
   xor       eax, eax
-  
+
 .run:
   stosw
   pop       ecx
-  
+
   ; nonstationary context
   mov       eax, [esi+ContextModel.cps]
-  mov       edx, [ebp+Work.bit]
+  mov       edx, [ebp+W_bit]
   movzx     ebx, byte [eax]
-  add       ebx, ebx
-  add       ebx, edx
-  mov       bl, [WorkData+Work.stateNext+ebx]
+  mov       bl, [WD+W_stateNext+ebx*2+edx]
   mov       [eax], bl
 
   mov       eax, [esi+ContextModel.ctx]
-  xor       eax, [ebp+Work.c0s]
+  xor       eax, [ebp+W_c0s]
   call      contextHash
-  
-.nsset:
   mov       [esi+ContextModel.cps], eax
-  
-  ; state mapping
-  mov       ebx, [esi+ContextModel.st]
-  mov       eax, [ebp+Work.bitscaled]
-  lea       ebx, [WorkData+Work.stateMap+ebx*4]
-  sub       eax, [ebx]
-  sar       eax, 8
-  add       [ebx], eax
-  mov       eax, [esi+ContextModel.cps]
   movzx     ebx, byte [eax]
+
+  ; state mapping
+  mov       edx, [esi+ContextModel.st]
+  lea       edx, [WD+W_stateMap+edx*4]
+  mov       eax, [ebp+W_bit]
+  shl       eax, 16
+  sub       eax, byte -128
+  sub       eax, [edx]
+  sar       eax, SM
+  add       [edx], eax
   mov       [esi+ContextModel.st], ebx
-  mov       eax, [WorkData+Work.stateMap+ebx*4]
+  mov       eax, [WD+W_stateMap+ebx*4]
   shr       eax, 4
   push      eax
-  mov       eax, [WorkData+Work.stretch+eax*4]
-  sar       eax, 2
+  mov       eax, [WD+W_stretch+eax*4]
+  sar       eax, ST
   stosw
   pop       eax
-  
+
   shr       eax, 4
   mov       edx, eax
   not       dl
-  
-  push      eax
+
   sub       eax, edx
   stosw
-  pop       eax
-  
-  and       al, [WorkData+Work.stateCode+ebx*2+0]
-  and       dl, [WorkData+Work.stateCode+ebx*2+1]
+  add       eax, edx
+
+  and       al, [WD+W_stateCode+ebx*2+0]
+  and       dl, [WD+W_stateCode+ebx*2+1]
   sub       eax, edx
   stosw
 
   cmp       ebx, byte 1
-  sbb       dword [ebp+Work.ctx+8], byte -1
+  sbb       dword [ebp+W_ctx+8], byte -1
 
   add       esi, byte ContextModel.size
   dec       ecx
   jnz       near .contextloop
-  
+
   ; weighting contexts
-  mov       ebx, [ebp+Work.dst]
+  mov       ebx, [ebp+W_dst]
+  lea       edi, [ebp+W_ctx]
   movzx     eax, byte [ebx-1]
-  mov       [ebp+Work.ctx+0], eax
-  mov       al, [ebp+Work.c0]
+  stosd
+  mov       ecx, [ebp+W_c0]
+  mov       al, cl
   inc       ah
-  mov       [ebp+Work.ctx+4], eax
-  
+  stosd
+  scasd
+  DECODER_MIX_CONTEXTS
+
   xor       ebx, ebx
-  mov       eax, [ebp+Work.matchl]
+  mov       eax, [ebp+W_matchl]
   dec       eax
   cmovs     eax, ebx
   not       bl
   cmp       eax, ebx
   cmova     eax, ebx
-  mov       eax, [ebp+Work.runTable+eax*4]
-  shr       eax, 3
-  add       [ebp+Work.ctx+8], eax
-  
+  mov       eax, [ebp+W_runTable+eax*4]
+  shr       eax, RT
+  add       [ebp+W_ctx+8], eax
+
 .mix:
   ; perform mixing
-  push      byte 2
+  push      byte NMIX-1
   pop       ebx
-  
+
 .mixloop:
-  mov       eax, [ebp+Work.ctx+ebx*4]
-  imul      eax, byte (NINPUT*2)
-  lea       edi, [ebp+Work.wx+eax]
-  mov       esi, WorkData+Work.tx
-    
+  imul      edi, [ebp+W_ctx+ebx*4], byte (NINPUT*2)
+  lea       edi, [ebp+W_wx+edi]
+  lea       esi, [ebp+W_tx]
+
   pxor      mm0, mm0
   push      byte (NINPUT/4)
   pop       ecx
@@ -844,87 +810,82 @@ STAGE0ENTRY:
 .mixdploop:
   movq      mm1, [esi]
   pmaddwd   mm1, [edi]
-  psrad     mm1, 8
+  psrad     mm1, DP
   paddd     mm0, mm1
   add       esi, byte 8
   add       edi, byte 8
   loop      .mixdploop
-  
+
   movq      mm1, mm0
   psrlq     mm1, 32
   paddd     mm0, mm1
   movd      eax, mm0
-  sar       eax, 3
+  sar       eax, MX
 
-  mov       [WorkData+Work.tx2+ebx*2], ax
+  mov       [ebp+W_tx2+ebx*2], ax
   call      squash
-  mov       [ebp+Work.pr+ebx*4], eax
-  
+  mov       [ebp+W_pr+ebx*4], eax
+
   dec       ebx
   jns       .mixloop
-  
+
   ; the final mix
-  mov       esi, WorkData+Work.tx2
-  mov       edi, WorkData+Work.wx2
+  lea       esi, [ebp+W_tx2]
+  mov       edi, WD+W_wx2
   xor       eax, eax
-  push      byte 3
+  push      byte NMIX
   pop       ecx
-  
-.finalmix:  
+
+.finalmix:
   movsx     ebx, word [edi]
   movsx     edx, word [esi]
   imul      ebx, edx
   add       eax, ebx
   cmpsw
   loop      .finalmix
-  
+
   sar       eax, 16
   call      squash
-  mov       [ebp+Work.pr+12], eax
-  
-%if USEAPM
+  mov       [ebp+W_pr+NMIX*4], eax
+
   ; APM stage
   ; assumes p still in eax
-  mov       ecx, [ebp+Work.bit]
-  mov       edx, [ebp+Work.APMi]
-  lea       edi, [ebp+Work.APM+16*4+edx*4]
+  mov       ecx, [ebp+W_bit]
+  mov       edx, [ebp+W_APMi]
+  lea       edi, [ebp+W_APM+16*4+edx*4]
   neg       ecx
   and       ecx, 0x100fe ;=g
-  
+
   ; update APM tables
   push      ecx
   sub       ecx, [edi]
-  sar       ecx, 8
+  sar       ecx, APMR
   add       [edi], ecx
-  add       edi, byte 4
+  scasd
   pop       ecx
   sub       ecx, [edi]
-  sar       ecx, 8
+  sar       ecx, APMR
   add       [edi], ecx
-  
+
   ; calc new APM index
-  mov       ebx, [ebp+Work.dst]
+  mov       ebx, [ebp+W_dst]
   movzx     ebx, byte [ebx-1]
-  mov       ecx, ebx
-  shl       ebx, 4
-  add       ebx, ecx
-  add       ebx, [ebp+Work.c0]
+  imul      ebx, ebx, (1<<AC)+1
+  add       ebx, [ebp+W_c0]
   and       ebx, APMSIZE-1
-  mov       ecx, ebx
-  shl       ebx, 5
-  add       ebx, ecx
+  imul      ebx, ebx, byte 33
 
   ; calc pf/finish APMi
-  mov       ecx, [ebp+Work.stretch+eax*4]
+  mov       ecx, [ebp+W_stretch+eax*4]
   push      ecx
   sar       ecx, 7
   add       ebx, ecx
-  mov       [ebp+Work.APMi], ebx
+  mov       [ebp+W_APMi], ebx
   pop       ecx
-  
+
   ; calc p
   and       ecx, byte 127
-  lea       esi, [ebp+Work.APM+16*4+ebx*4]
+  lea       esi, [ebp+W_APM+16*4+ebx*4]
   lodsd
   mov       ebx, [esi]
   sub       ebx, eax
@@ -932,20 +893,20 @@ STAGE0ENTRY:
   imul      ebx, ecx
   add       eax, ebx
   shr       eax, 11
-  
-  mov       [ebp+Work.outprob], eax
-%endif  
-  
+  cmp       ah, 16
+  jb        .apmok
+  mov       ax, 4095
+.apmok:
+  mov       [ebp+W_outprob], eax
+
   pop       ebx
-  jmp       .decodebitloop  
+  jmp       .decodebitloop
 
 ; ---- initialized data
 
 section       .data
 
-squashTab     dw    1,   2,   4,   6,  10,  17,  27,  45,  74, 120, 194
-              dw  311, 488, 747,1102,1546,2048,2550,2994,3349,3608,3785
-              dw 3902,3976,4022,4051,4069,4079,4086,4090,4092,4094,4095
-masks         db 0x1f, 0x27, 0x88, 0x07, 0x0a, 0x09, 0x05, 0x03, 0x04, 0x02, 0x01
-bitm          db 0xff, 0xff, 0xff, 0xe0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-
+sqR0          dd    2980.9579870417283   ; e^8
+sqQ           dd    0.6065306597126334   ; e^-0.5
+sq4096        dd    4096
+MODEL_TABLES

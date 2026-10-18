@@ -1,0 +1,151 @@
+{
+  "schema": "eidolon-size-review-1",
+  "job": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/full44139",
+  "observed_utc": "2026-10-18T03:42:14.523775+00:00",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "delivered_bytes": 44139,
+  "capture_exit_code": 0,
+  "full": true,
+  "frames_requested": 27000,
+  "manifest_sha256": "8ee0ae15c949cac8446049db4f234f40e12591dd8de2ad84c4f9c72417e64403",
+  "state_sha256": "143a0e786afebbaffa6cdb6fc140b5e6eb0479d349700b0295f283161ea6f35d",
+  "oracle": {
+    "paths": {
+      "toolkit": "/home/rovshan/Work/asm/Eidolon/data/optimization/T30/vt",
+      "reference_checkout": "/home/rovshan/Work/asm/Eidolon/data/optimization/T30/vt",
+      "reference_data": "/home/rovshan/Work/asm/Eidolon/data",
+      "reference_shared": "/home/rovshan/Work/asm/Eidolon",
+      "prefix_template": "/home/rovshan/Work/asm/Eidolon/.tools/capture/T11-prefix-baseline"
+    },
+    "reference_manifest_sha256": "36c1f7f330682bb4f818ad22cd0dab99359ffcdf2b4abc60cfb9381d98e37c64",
+    "frame_index_sha256": "bd063d93c996da12e27554e8a6120aaaaa57fa0c4d8d4aac7c302911a3b6eb62",
+    "pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+    "native_times_sha256": "363ca20b3e537f57da1d0dd937a3e1fc9f3c92e3377af9c7d8d12706186cf406",
+    "physics_state_sha256": "f5a9a5d47cc649b05178dc47f7bc7579e44a4327806ae6138cd2e60a5d6afc63",
+    "physics_build_sha256": "75ea1b2cef34bcd1b9f10c81d1c8716d91eafd038f1799ae0ef060f403a75c21",
+    "physics_sha256": "63b8e81989d03824dc7c8633a0f8a24fd5d1d95ff89fce163c35504e57b7c976",
+    "toolkit_pins": {
+      "tools/verify/reference.py": "4aa95c4551f74c63374661e2404801999e446eabed9f5e5b0db9a7990e362d89",
+      "tools/verify/rust/conformance.py": "0e20bbe883067f65d27e9167455f8c9d5a35b70818ff7e9659a3b494163cf9b3",
+      "tools/verify/rust/monitor_full.py": "97a3d2a9acf2975c8b1f44ff0f64945432270e00e098c8577ecb8f171714db83",
+      "tools/verify/rust/runtime_events.py": "658376e10f4de0342208817c3d8a6915322e2fe3b1a0ff2f328b3a2881e64664",
+      "tools/verify/rust/native_vectors.py": "20186b7ac784ce56bedc7b175e3e16d6f53e70db13444784592962a0830047a3",
+      "tools/verify/optimization/pe.py": "a504858d06c923033b8f165c7467a41ea12aca8fea07f385bd5a52d620dfa420",
+      "tools/verify/optimization/full.py": "662f35c08fabc4e9070096a36a990aaf2b572f921f84366503076c790982e745",
+      "tools/capture/rust/capture.c": "5e27b5de1070ed9b648b71b75e5180eba85bf889d6b1212d2edf772742889c4d",
+      "tools/capture/rust/live.c": "7b2777cc3ba35f1259b7fb48d13769a586c978dbb9f714bd1a0409c8bc3d3670",
+      "tools/capture/rust/hook.S": "c1491cae08f390c1c1c94d246d8f2063e0fabe5b1588c7417c62ef7f27b01573",
+      "tools/capture/rust/semantic.c": "339371060ee3a78205b65b7e7a36e88c4ed33b5bfe67c508c0a34215cfdf1ce8",
+      "tools/capture/rust/curves.c": "b4e61e8897e0b0322463bfcf65f3d4fdd117c6d6eea57ce2b7eab926cc2ff020",
+      "tools/capture/optimization/launch_kkrunchy.c": "1c6bc1315fceb1f96592dabd088334a17c8b518ab3505d2e44cf17e4fcd88c22",
+      "tools/capture/optimization/kkrunchy.py": "37f818686d75d7134b04d35d544b8745ddd674408afc73b9d2f1e4fc3f159f78",
+      "tools/verify/optimization/kkrunchy_review.py": "f0e1fd027b88f38dbc3a1c4da05eb2987376f2bfc1f58476c7f8b630e9787a49",
+      "tools/wine-headless": "21266ad341387735b3e9867302527dbdbc4368d21f83be405933089b6391bc6a"
+    }
+  },
+  "production_accepted": false,
+  "native_windows_tested": false,
+  "verifier_sha256": "450d94c2b1c4f5846e077cf4e2eb9a0ed526c8e556d0e2aa4e5d94ffbace4c2f",
+  "status": "FULL_MEDIA_EXACT_PARTIAL",
+  "failures": [],
+  "remaining": [
+    "formal milestone acceptance",
+    "native Windows execution"
+  ],
+  "not_assessed_by_media_review": [
+    "matched playback performance/resource observations",
+    "clean checkout rebuild; see a separate candidate-keyed attestation"
+  ],
+  "evidence_sha256": {
+    "capture_sources": {
+      "capture.c": "5e27b5de1070ed9b648b71b75e5180eba85bf889d6b1212d2edf772742889c4d",
+      "live.c": "6afa9fa65a9177a925d7468638c487fb909cbb1c8a6d8f79b33d8af93d063667",
+      "hook.S": "c1491cae08f390c1c1c94d246d8f2063e0fabe5b1588c7417c62ef7f27b01573",
+      "semantic.c": "339371060ee3a78205b65b7e7a36e88c4ed33b5bfe67c508c0a34215cfdf1ce8",
+      "curves.c": "b4e61e8897e0b0322463bfcf65f3d4fdd117c6d6eea57ce2b7eab926cc2ff020",
+      "launch.c": "1c6bc1315fceb1f96592dabd088334a17c8b518ab3505d2e44cf17e4fcd88c22",
+      "verify.py": "87d1e0d7e9b6f9716a90eaa3b631c6196181819e9b2d7d829414e1d9e7ac001c",
+      "headless.sh": "4e60b9f171b823680341cf20e5396b5b499db09307430ca6bf2fc741ab9ec7b9"
+    },
+    "helper": "223beb0a2d5001d2bb02b0f7e17457a3d47fea5f28ad2d35bb42270acbb42c60",
+    "launcher": "d33905595ee48ad5a7dfe11e32c914df34e0d33efc9b954fd6681b4850be7604",
+    "retention": "12951edab18d98ae32a8d6dcc58bfa5bbda88a6636165e90b3b6da4f138e3566",
+    "runner_log": "ef776168cba17612c6781ba4fed5dc5a943216ff0ad1354cbd14d95fe3103609",
+    "live_identity": "97b7f2378747adf5d8c80e786184eb17bc05a5128f6d850a9cd338fc637b7952",
+    "original_pe": "f448f284e1400dc10b145e0b3893b96954ac7e4b8b5b781a534cb8ce41020dd2",
+    "prepared_pe": "455f2486ce5f48d945bbd60f78915a56f9a328178fce7286273bdce42bdda475",
+    "events": "261759675ab4f770b000734b75e8f7e3e683ad1eb6446a76f969e267da486988",
+    "decoded_image": "460d2bddda50a910501e3aa8b80d340f12fcfb8691cc60d032632baf48fb5557"
+  },
+  "decoder_stages_restored": 3,
+  "decoded_sections_exact": [
+    ".text",
+    ".data",
+    ".rdata",
+    ".edata"
+  ],
+  "pcm_bytes_exact": 159716352,
+  "pcm_sha256": "9b1aa5f18aea89e27415ce82bd142b2e66bab3adaa7db4eab64f119fd33e631d",
+  "observations": {
+    "records": 135005,
+    "queries": 27001,
+    "post_presents": 27000,
+    "frame_hashes": 27000,
+    "matching_frame_hashes": 27000,
+    "frame_mismatches": 0,
+    "first_frame_mismatch": null,
+    "time_mismatches": 0,
+    "first_time_mismatch": null,
+    "initial_physics": true,
+    "pcm_digest_observations": 3,
+    "endpoint": true,
+    "terminal_stability": true
+  },
+  "pending_bytes": 0,
+  "raw_anchors_exact": 510,
+  "raw_anchor_failures": [],
+  "gl_restoration_frames": 27000,
+  "physics_samples": 151,
+  "physics_differences": [],
+  "hook_physical_restoration": true,
+  "process_exit": {
+    "capture": 0,
+    "child_records": [
+      [
+        "0",
+        "111"
+      ]
+    ],
+    "wrapper_records": [
+      [
+        "0",
+        "0"
+      ]
+    ],
+    "child_stages_complete": true,
+    "wine": "0",
+    "gamescope": 0,
+    "clean": true
+  },
+  "gl": {
+    "vendor": "NVIDIA Corporation",
+    "renderer": "NVIDIA GeForce RTX 3070 Ti",
+    "version": "4.6.0 NVIDIA 610.57.04"
+  },
+  "timing_observations": {
+    "runner_seconds": 1077.9563433239236,
+    "markers": {
+      "6": 228378,
+      "1": 229329,
+      "5": 1067750
+    },
+    "scope": "instrumented capture; concurrent host work; not a solo benchmark"
+  },
+  "media_bytes_and_sampled_state_exact": true,
+  "cleanup": {
+    "remaining_pids": [],
+    "sink_present": false,
+    "runner_exists": false,
+    "supervisor_exists": false
+  }
+}

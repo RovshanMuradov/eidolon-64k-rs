@@ -4,6 +4,10 @@ The port reproduces the original intro byte for byte: same 27 000 frames, same 1
 
 How the original works is described in [docs/en](../en/README.md); this section covers the Rust side.
 
+The module paths and architecture below describe the regular `src/` build.
+The compact `size/crate/` variant and its modified assembly packer are covered
+in [Size-optimized variant](#size-optimized-variant).
+
 | File | Contents |
 |---|---|
 | [README.md](README.md) | Architecture, executables, differences from the original |
@@ -76,5 +80,27 @@ The port is exact because it copies the original's arithmetic, not just its form
 | Start of playback | Plays while the synth thread is still writing the buffer | Waits until the whole soundtrack is synthesized (a few minutes) |
 | Instrument samples | Reads the system `gm.dls` | Embeds the 15 samples it uses |
 | Shader program 0 | `#version 450` | `#version 450 compatibility`, needed by strict drivers; the reference was captured with the same header |
-| Size | 60 928 bytes, packed | about 730 KB unpacked; 48 128 bytes in the size-optimized build ([size/](../../size/README.md)) |
+| Size | 60 928 bytes, packed | about 730 KB unpacked; compact variant below |
 | Extra modes | — | `--capture`, `--pcm-sha256`, diagnostic streams |
+
+## Size-optimized variant
+
+The compact build is **44 139 bytes**. A clean checkout reproduces the exact EXE,
+and all frames and PCM match the original. Build and verification results:
+[size/README.md](../../size/README.md#verification).
+
+| Area | Compact implementation |
+|---|---|
+| Runtime | `size/crate/`: `no_std`, custom entry/allocator/imports and a fixed playback path; natural completion calls `ExitProcess` |
+| Samples | Reads and checks the standard 3 440 660-byte system `gm.dls` bank |
+| Audio data | Generated compact patch/score streams, controller deltas, unused graph inputs removed and unused formant rows zeroed |
+| Graphics data | `graphics.cg29`: compact tables and the reconstructed fo2 shader pool; source bytes and fragment order differ from the regular build |
+| DSP code | Selected routines kept out of line; backend flags chosen using complete packed-file size |
+| Linker | Validated content-derived constant sections and a frozen function/data order, followed by conservative FP-load redirection |
+| Packer | Modified kkrunchy: 14 contexts, 8 mixers, compact assembly decoder and import table |
+
+Data reductions and shader transformations have separate tests. Constant-only
+products are folded when exactly representable; runtime FP order and modes are
+preserved. The [size verifier](verification.md#size-build-verification) captures
+the packed EXE through its decoder. The low-level source map is in
+[asm-map.md](asm-map.md#compact-build-and-modified-assembly).

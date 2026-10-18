@@ -1,0 +1,8 @@
+{
+  "candidate_sha256": "a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3",
+  "original_pe_sha256": "138ff55f6b9ce262a29415cca31343b4a60471ed242261875d2557a44b868d55",
+  "reference_capture_state_sha256": "dba257cf8811158c7fec9a1742a6316076f5d8d5b2f51681679797d00b93b8c1",
+  "reference_capture_state": "/home/rovshan/Work/asm/Eidolon/data/optimization/T30/verification/full-order/state.json",
+  "reference_review": "/home/rovshan/Work/asm/Eidolon/data/optimization/T30/verification/full-order-review.json",
+  "reference_review_sha256": "5ee70c8c5ad254e08a32929dadcf459cc19fb2f7fded252985789afc04111e7e"
+}

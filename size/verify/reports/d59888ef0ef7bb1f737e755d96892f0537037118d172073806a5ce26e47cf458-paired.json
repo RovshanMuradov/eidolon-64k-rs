@@ -1,0 +1,129 @@
+{
+  "schema": "eidolon-size-paired-review-1",
+  "status": "FULL_MEDIA_EXACT_AND_PAIRED_PLAYBACK_OBSERVED",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "candidate_bytes": 44139,
+  "baseline_sha256": "a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3",
+  "baseline_bytes": 47561,
+  "observed_utc": "2026-10-18T04:15:33.349290+00:00",
+  "verifier_sha256": "9c2b87a19dab4fae290f37de968e12ebf1368a930f0d50348b08636221bf7e40",
+  "production_accepted": false,
+  "native_windows_tested": false,
+  "reports": {
+    "full_media": {
+      "path": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-full.json",
+      "sha256": "b873dba475f1edf40469099e0369bad8897bd6e98891715b35061970c6329e79"
+    },
+    "baseline_playback": {
+      "path": "a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3-playback.json",
+      "sha256": "420133bf7aa323b3c775ecb069f9aac94a340c4162f53bccf7cf1b090e556399"
+    },
+    "final_playback": {
+      "path": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-playback.json",
+      "sha256": "3a3152645fa075491ac0e39e26cb183a685944420130aa2875c9bc6f5de67a05"
+    }
+  },
+  "matched_conditions": {
+    "prefix_seed_sha256": {
+      "system.reg": "61f8ce3c8f7e44b4543eb4cc55effb0b22448b0d9454f270d2122e30161f0131",
+      "user.reg": "5e70e3659c529142b50b849fa2b8db3acb4622bd1682b35c1f09b8ba4e6a242d",
+      "userdef.reg": "e2d3ddb64535fd64880a4b46f1fb53d1a97daf10e6ee466fd943f18ae8d4dbcb",
+      "drive_c/windows/system32/drivers/gm.dls": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0",
+      "drive_c/windows/syswow64/drivers/gm.dls": "3229b09b9d7d9f3f4793b0d9b34fe6abc75cfa4a2503c0c90f43ff651ba7f2c0"
+    },
+    "wine": "wine-11.17",
+    "context_log_lines": [
+      "[gamescope] [\u001b[0;34mInfo\u001b[0m]  \u001b[0;37mconsole:\u001b[0m gamescope version 3.16.25 (gcc 16.1.1)",
+      "[gamescope] [\u001b[0;34mInfo\u001b[0m]  \u001b[0;37mvulkan:\u001b[0m selecting physical device 'NVIDIA GeForce RTX 3070 Ti': queue family 2 (general queue family 0)"
+    ],
+    "source_pins": {
+      "playback.py": "001969dcb79c92852f9b96bb816b0b6db3bf93438dbc51e3ff10d8b62f5e0b21",
+      "headless.sh": "4e60b9f171b823680341cf20e5396b5b499db09307430ca6bf2fc741ab9ec7b9"
+    },
+    "resolution": [
+      1920,
+      1080
+    ],
+    "cache_policy": "fresh separate Wine prefixes and distinct requested shader-cache paths; no cold-cache claim",
+    "order": "baseline then final; serialized after full capture"
+  },
+  "shader_cache_observations": {
+    "baseline": {
+      "configured_path": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-baseline47561/cache/nvidia",
+      "directory_exists": false,
+      "files_observed": 0,
+      "effective_driver_cache_behavior": "not established by external telemetry; no cold-cache claim"
+    },
+    "final": {
+      "configured_path": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139/cache/nvidia",
+      "directory_exists": false,
+      "files_observed": 0,
+      "effective_driver_cache_behavior": "not established by external telemetry; no cold-cache claim"
+    }
+  },
+  "observations": {
+    "launcher_wall_seconds": {
+      "baseline": 670.0532794479514,
+      "final": 691.0547557240352,
+      "observed_delta": 21.00147627608385,
+      "observed_delta_percent": 3.1342994535280333
+    },
+    "launch_to_first_uncorked_audio_seconds": {
+      "baseline": 217.01824,
+      "final": 237.019337,
+      "observed_delta": 20.001097000000016,
+      "observed_delta_percent": 9.216320711107052
+    },
+    "target_peak_sampled_rss_bytes": {
+      "baseline": 1001336832,
+      "final": 1043046400,
+      "observed_delta": 41709568,
+      "observed_delta_percent": 4.165388375527157
+    },
+    "target_max_observed_hwm_bytes": {
+      "baseline": 1020108800,
+      "final": 1043046400,
+      "observed_delta": 22937600,
+      "observed_delta_percent": 2.2485444689821277
+    },
+    "owned_process_peak_sampled_rss_bytes": {
+      "baseline": 2004742144,
+      "final": 2046193664,
+      "observed_delta": 41451520,
+      "observed_delta_percent": 2.0676733975020456
+    }
+  },
+  "timed_runner_total_seconds": 1361.1080351719866,
+  "playback_runs": 2,
+  "run_limit": 2,
+  "cleanup_verified": true,
+  "limitations": [
+    "One run per executable; external approximately one-second sampling, no statistical speedup claim.",
+    "First uncorked audio is an external startup-to-device-submission observation, not an internal synthesis-only or depacker timestamp.",
+    "Owned-process RSS sums can double-count shared pages; GPU VRAM, kernel memory, and shared audio-server memory are excluded.",
+    "Observed target VmHWM is the kernel high-water mark at sampled times; process exit can hide a later peak.",
+    "Fresh copied Wine prefixes and distinct requested shader-cache paths; effective driver-cache behavior, filesystem/page caches, and ambient desktop activity are not established as cold or controlled.",
+    "Private null sink measures live-clock playback submission, not physical-speaker output.",
+    "No per-frame latency distribution is measured; presentation counts are from the real-clock endpoint, not capture-file I/O.",
+    "Wine on Linux; native Windows execution is untested."
+  ],
+  "interpretation": "Observed deltas describe one sequential pair. No statistical speedup, slowdown cause, or formal performance acceptance is inferred.",
+  "separate_attestations": [
+    "Clean-checkout reproducibility belongs to a separate integrating-session attestation; this report makes no claim about its completion."
+  ],
+  "remaining": [
+    "agreed formal acceptance criteria",
+    "native Windows execution"
+  ],
+  "observer_console": {
+    "path": ".build/verify/paired-playback-console.txt",
+    "sha256": "814163d0372173d06cbd85ae180e93436150ae555a99661fe564959c143aa14c",
+    "warning_count": 129,
+    "warning_kinds": [
+      "Invalid ASCII character: 0xffffffc3",
+      "Invalid ASCII character: 0xffffffe2",
+      "Invalid ASCII character: 0xfffffff0"
+    ],
+    "scope": "Warnings were emitted on the external observer console, not either target runner log. The pactl JSON/audio attribution checks succeeded; the triggering metadata was not isolated."
+  }
+}
