@@ -963,29 +963,27 @@ sU8 *EXEPacker::Pack(sU8 *source,sInt &outSize,DebugInfo *info,PackerCallback cb
     WarningsPtr += sGetStringLen(WarningsPtr) + 1;
   }
 
-  // import loookup table
+  // import address table (also the lookup table: OriginalFirstThunk = 0); its zero
+  // terminator doubles as the hint of LoadLibraryA, the NUL after LoadLibraryA as
+  // the hint of GetProcAddress
   iltOffs = OutSize;
   p = (sU32 *) (OutImage + OutSize);
-  *p++ = iltOffs+24+12;
-  *p++ = iltOffs+24+26;
-  *p++ = 0;
-  *p++ = iltOffs+24+12;
-  *p++ = iltOffs+24+26;
-  *p++ = 0;
+  *p++ = iltOffs+10;
+  *p++ = iltOffs+24;
   OutSize = ((sU8 *) p) - OutImage;
 
   // import names
-  AppendImage("KERNEL32.DLL\x00\x00LoadLibraryA\x00\x00GetProcAddress\x00\x00",44);
+  AppendImage("\x00\x00\x00\x00LoadLibraryA\x00\x00GetProcAddress\x00KERNEL32.DLL\x00",54-8);
 
   // import directory
   outDir[2] = OutSize;
   outDir[3] = 40;
 
   p = (sU32 *) (OutImage + OutSize);
-  *p++ = iltOffs + 12;
   *p++ = 0;
   *p++ = 0;
-  *p++ = iltOffs + 24;
+  *p++ = 0;
+  *p++ = iltOffs + 41;
   *p++ = iltOffs;
   OutSize = ((sU8 *) p) - OutImage;
   ActualSize = OutSize;

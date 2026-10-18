@@ -37,14 +37,15 @@ Milestones; from 59 392 bytes on, each passed a full capture before it replaced 
 | 48 128 | Note-off times derived from note durations; kkrunchy x86 filter extended to SSE and three-byte opcodes |
 | 47 616 | One section per function and static, linked in an order found by hill-climbing the packed size (`crate/tools/rust/sizecoded.ld`) |
 | 47 561 | Trailing zero padding after the packed data dropped; `SizeOfRawData` shrunk to match |
+| 46 083 | Stronger kkrunchy context model (14 hashed models with position and word terms, 7 mixer weight sets), reworked smaller stage-1 depacker, compact stage-0 import table |
 
 Techniques in the final build:
 
 - **No standard library.** `no_std` with its own entry point, allocator and import loader; custom i686 target and a linker wrapper without CRT; `opt-level = "z"`, `panic = immediate-abort`, fail-fast errors.
 - **Audio.** Instrument samples read from the system `gm.dls` instead of embedded; score and patch stored as transposed byte streams and compact records; note-off events derived from note-on durations.
 - **Graphics.** Timeline, curves and pass tables packed as byte columns; curve tangents predicted from neighbouring keys, only residuals stored; unreachable curve keys removed; shader fragments pooled, renamed and ordered for the packer.
-- **Packer.** kkrunchy_k7 whose x86 filter also understands SSE and three-byte opcodes, so the compiler's SSE code compresses better.
-- **Layout.** Functions and statics are linked in the order that packs smallest, and the zero padding kkrunchy adds to the 512-byte file alignment is cut off.
+- **Packer.** kkrunchy_k7 whose x86 filter also understands SSE and three-byte opcodes, so the compiler's SSE code compresses better. Its context model (`model_asm.asm` for the packer, `depacker.asm` for the decoder; both must stay in step) has 14 hashed contexts whose byte masks, bit masks and position/word terms were tuned on this intro's data with a C mirror of the model, 7 mixer weight sets (previous byte, partial byte, confidence, position mod 4, high nibble, second and third previous byte), and tuned learning rates; the stage-1 decoder was reworked for size (squash table computed with the FPU, compact context init, `ebp`-relative layout). The stage-0 import table uses only a FirstThunk array with overlapped hints.
+- **Link order.** `minimal-linker` renames rustc's anonymous `.rdata` constants to `.rd$xxxx` (hash of the contents) so `sizecoded.ld` can order them individually.
 
 ## Layout
 
