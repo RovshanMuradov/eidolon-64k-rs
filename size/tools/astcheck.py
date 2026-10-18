@@ -1,121 +1,134 @@
 #!/usr/bin/env python3
-"""Compare the glslang front-end ASTs of every program in two fragment directories.
+"""Fail-closed shader comparison: unmodified glslang compile + binding-aware tokens.
 
-astcheck.py DIR_A DIR_B [--names]: each DIR holds NN.glsl fragments and recipes.json (as written by
-dump_pool.py). Programs are compiled as fragment shaders with `glslangValidator -i`; the dumped
-intermediate trees (after constant folding) are normalized (source locations and, unless --names,
-identifier spellings are dropped) and compared. Prints one line per program."""
+Inputs are CG29 blobs or fragment directories. Exit 0 means every program compiled
+and matched, 1 means a difference/error, 2 means explicitly unsupported compilation.
+An unsupported baseline NEVER counts as PASS. No texture2D macro is injected.
+"""
+import argparse
+from concurrent.futures import ThreadPoolExecutor
+import difflib
 import json
 from pathlib import Path
+import pprint
 import re
 import subprocess
-import sys
 import tempfile
 
+import bindings
+import cg29
 
-def programs(d):
-    d = Path(d)
-    recipes = json.loads((d / 'recipes.json').read_text())
-    frags = {int(p.stem): p.read_bytes() for p in d.glob('[0-9][0-9].glsl')}
+
+def programs(path):
+    path = Path(path)
+    if path.is_file():
+        _, frags, recipes = cg29.parse(path.read_bytes())
+    else:
+        recipes = json.loads((path / 'recipes.json').read_text())
+        files = sorted(path.glob('*.glsl'))
+        if [p.name for p in files] != [f'{i:02d}.glsl' for i in range(len(files))]:
+            raise ValueError('fragments must be contiguous NN.glsl files')
+        frags = [p.read_bytes() for p in files]
+    if not isinstance(recipes, list) or not recipes or not frags:
+        raise ValueError('empty or invalid program/fragment set')
+    for r in recipes:
+        if not isinstance(r, list) or not r or any(type(i) is not int or not 0 <= i < len(frags) for i in r):
+            raise ValueError('invalid recipe/fragment reference')
     return [b''.join(frags[i] for i in r) for r in recipes]
 
 
-def collapse(lines):
-    """Indentation tree; drop single-child Sequence nodes (braces around one statement)."""
-    root = ('', [])
-    stack = [(-1, root)]
-    for line in lines:
-        depth = len(line) - len(line.lstrip(' '))
-        node = (line.strip(), [])
-        while stack[-1][0] >= depth:
-            stack.pop()
-        stack[-1][1][1].append(node)
-        stack.append((depth, node))
+def compile_source(src, validator='glslangValidator', temp_dir=None):
+    with tempfile.TemporaryDirectory(prefix='shader-check-', dir=temp_dir) as d:
+        path = Path(d) / 'shader.frag'
+        path.write_bytes(src)
+        compiled = subprocess.run([validator, '--dump-builtin-symbols', str(path)],
+                                  capture_output=True, text=True, timeout=60)
+        before, marker, tail = compiled.stdout.partition('BuiltinSymbolTable {\n')
+        table, end, after = tail.partition('\n}\n')
+        builtins = set(re.findall(r'^([A-Za-z_]\w*):', table, re.M)) if marker and end else set()
+        diagnostic = before + after + compiled.stderr
+        if compiled.returncode or 'ERROR:' in diagnostic:
+            return False, diagnostic, None, builtins
+        if not builtins:
+            return False, 'unsupported glslang builtin-symbol dump format', None, set()
+        pre = subprocess.run([validator, '-E', str(path)], capture_output=True, text=True, timeout=60)
+        if pre.returncode or 'ERROR:' in pre.stderr:
+            return False, diagnostic + pre.stdout + pre.stderr, None, builtins
+        return True, diagnostic, pre.stdout, builtins
 
-    def norm(n):
-        kids = []
-        for k in n[1]:
-            k = norm(k)
-            if n[0] == 'Sequence' and k[0] == 'Sequence':
-                kids.extend(k[1])  # nested sequences (multi-declarator initializers) splice
+
+def compare(a, b, *, names=None, fields=None, keep_names=False, reorder=False,
+            uniforms_by_name=False, validator='glslangValidator', temp_dir=None):
+    # Compile both inputs exactly as supplied, before preprocessing/canonicalization.
+    ca, da, pa, ba = compile_source(a, validator, temp_dir)
+    cb, db, pb, bb = compile_source(b, validator, temp_dir)
+    if not ca or not cb:
+        return 'COMPILE_FAILURE', f'baseline compiled={ca}; candidate compiled={cb}\n{da}\n{db}'
+    try:
+        opts = dict(keep_names=keep_names, reorder=reorder, uniforms_by_name=uniforms_by_name)
+        left = bindings.canonical(pa, builtins=ba, **opts)
+        right = bindings.canonical(pb, builtins=bb, names=names, fields=fields, **opts)
+    except bindings.Fail as e:
+        return 'UNSUPPORTED_SYNTAX', str(e)
+    if left == right:
+        return 'PASS', 'unmodified compilation and binding-aware token equivalence'
+    diff = difflib.unified_diff(pprint.pformat(left, width=120).splitlines(),
+                                pprint.pformat(right, width=120).splitlines(), lineterm='', n=2)
+    return 'DIFFERS', '\n'.join(list(diff)[:60])
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('baseline', type=Path)
+    ap.add_argument('candidate', type=Path)
+    ap.add_argument('--rename-map', type=Path, help='JSON candidate-to-baseline names and fields maps')
+    ap.add_argument('--names', action='store_true', help='also retain local spellings')
+    ap.add_argument('--reorder-functions', action='store_true', help='ignore only function/type definition order')
+    ap.add_argument('--uniforms-by-name', action='store_true', help='host looks up uniforms by name; ignore their declaration order')
+    ap.add_argument('--unsupported', type=int, action='append', default=[], help='report failed program as unsupported (still exit 2)')
+    ap.add_argument('--validator', default='glslangValidator')
+    ap.add_argument('--work', type=Path, default=Path('.build/shader-check'))
+    ap.add_argument('--jobs', type=int, choices=range(1, 5), default=4)
+    ap.add_argument('-v', '--verbose', action='store_true')
+    args = ap.parse_args(argv)
+    try:
+        a, b = programs(args.baseline), programs(args.candidate)
+        if len(a) != len(b):
+            raise ValueError(f'unequal program counts: {len(a)} != {len(b)}')
+        if any(i < 0 or i >= len(a) for i in args.unsupported):
+            raise ValueError('unsupported program index out of range')
+        mapping = json.loads(args.rename_map.read_text()) if args.rename_map else {}
+        if not isinstance(mapping, dict) or set(mapping) - {'names', 'fields'}:
+            raise ValueError('invalid rename map')
+        if any(not isinstance(m, dict) for m in mapping.values()):
+            raise ValueError('rename maps must be objects')
+        args.work.mkdir(parents=True, exist_ok=True)
+
+        def check(pair):
+            return compare(*pair, names=mapping.get('names'), fields=mapping.get('fields'),
+                           keep_names=args.names, reorder=args.reorder_functions,
+                           uniforms_by_name=args.uniforms_by_name, validator=args.validator, temp_dir=args.work)
+
+        with ThreadPoolExecutor(args.jobs) as ex:
+            results = list(ex.map(check, zip(a, b, strict=True)))
+        bad = unsupported = passed = 0
+        for i, (status, detail) in enumerate(results):
+            if status == 'PASS':
+                passed += 1
+            elif status == 'COMPILE_FAILURE' and detail.startswith('baseline compiled=False;') and i in args.unsupported:
+                status = 'UNSUPPORTED'
+                unsupported += 1
             else:
-                kids.append(k)
-        if n[0] == 'Sequence' and len(kids) == 1:
-            return kids[0]
-        return (n[0], kids)
-
-    out = []
-    top = norm(root)
-    if SORT:
-        # order-insensitive at top level: function definitions and linker objects
-        def ser(n):
-            return n[0] + '(' + ','.join(ser(k) for k in n[1]) + ')'
-        def srt(n, d):
-            kids = [srt(k, d + 1) for k in n[1]]
-            if d <= 1 or n[0] == 'Linker Objects':
-                kids.sort(key=ser)
-            return (n[0], kids)
-        top = srt(top, 0)
-
-    def emit(n, d):
-        out.append('  ' * d + n[0])
-        for k in n[1]:
-            emit(k, d + 1)
-    for k in top[1]:
-        emit(k, 0)
-    return out
-
-
-def ast(src, keep_names):
-    # glslang is stricter than the drivers the intro targets: map texture2D for checking only.
-    src = src.replace(b'#version 450\n', b'#version 450\n#define texture2D texture\n', 1)
-    with tempfile.NamedTemporaryFile(suffix='.frag') as f:
-        f.write(src)
-        f.flush()
-        r = subprocess.run(['glslangValidator', '-i', f.name], capture_output=True, text=True)
-    lines = []
-    for line in r.stdout.splitlines()[1:]:
-        if line.startswith('Linked') or line.startswith('ERROR') and 'link' in line.lower():
-            break
-        if line.startswith('ERROR') or line.startswith('WARNING'):
-            lines.append(re.sub(r'0:\d+:', '', line))
-            continue
-        line = re.sub(r'^\d+:\d+ ', '', line)
-        line = re.sub(r'^0:\? ', '', line)
-        line = re.sub(r'\(\d+:\d+\)', '', line)
-        line = re.sub(r'0:\d+', '', line)
-        if not keep_names:
-            line = re.sub(r"'[A-Za-z_]\w*'", "'_'", line)
-            line = re.sub(r'(global|temp|in|out|inout|uniform|const) ([\w -]*?(?:float|int|bool|uint|structure\{[^}]*\})) [A-Za-z_]\w*([,}])', r'\1 \2 _\3', line)
-            line = re.sub(r'(?:global|temp) ([\w -]*?float|int) [A-Za-z_]\w*(?=[,}])', r'\1 _', line)
-            line = re.sub(r'struct-[A-Za-z_]\w*-', 'struct-_-', line)
-            line = re.sub(r'\b[A-Za-z_]\w*: direct index for structure', '_: direct index for structure', line)
-            line = re.sub(r'structure\{[^}]*\}', lambda m: re.sub(r' [A-Za-z_]\w*(?=[,}])', ' _', m.group()), line)
-            line = re.sub(r'\b(Function Definition|Function Call): [\w(;)]*', r'\1', line)
-        lines.append(line.rstrip())
-    lines = collapse(lines)
-    return r.returncode, lines
-
-
-SORT = '--sort' in sys.argv
-
-
-def main():
-    a, b = programs(sys.argv[1]), programs(sys.argv[2])
-    names = '--names' in sys.argv
-    bad = 0
-    for i, (x, y) in enumerate(zip(a, b)):
-        ra, la = ast(x, names)
-        rb, lb = ast(y, names)
-        same = la == lb and ra == rb
-        bad += not same
-        print(i, 'same' if same else 'DIFFERS', ra, rb, len(la), len(lb))
-        if not same and '-v' in sys.argv:
-            import difflib
-            print('\n'.join(list(difflib.unified_diff(la, lb, lineterm='', n=1))[:40]))
-    print('differing programs:', bad)
-    sys.exit(1 if bad else 0)
+                bad += 1
+            print(i, status)
+            if args.verbose and status != 'PASS':
+                print(detail)
+        print(f'{passed} passed; {bad} failed; {unsupported} unsupported; {len(a)} total')
+        return 1 if bad else 2 if unsupported else 0
+    except (OSError, ValueError, KeyError, IndexError, AssertionError, subprocess.SubprocessError) as e:
+        print(f'FAIL: {e}')
+        return 1
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())

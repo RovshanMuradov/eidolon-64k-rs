@@ -99,6 +99,8 @@ def main():
     args = sys.argv[1:]
     seconds = float(args[args.index('--seconds') + 1]) if '--seconds' in args else 1e9
     passes = int(args[args.index('--passes') + 1]) if '--passes' in args else 1
+    seed = int(args[args.index('--seed') + 1]) if '--seed' in args else 1
+    poolcost.start(args[1], seed)
     frags, recipes = minify.load(args[0])
     for f in frags:
         STRUCTS.update(re.findall(r'\bstruct\s+(\w+)', f))
@@ -118,12 +120,12 @@ def main():
     best = poolcost.cost(pool(frags))
     print('start', best, flush=True)
     t0 = time.time()
-    rng = random.Random(1)
+    rng = random.Random(seed)
     for p in range(passes):
         order = list(range(len(funcs)))
         rng.shuffle(order)
         for k in order:
-            if time.time() - t0 > seconds:
+            if time.time() - t0 > seconds or not poolcost.remaining():
                 break
             fi, ii = funcs[k]
 
@@ -141,12 +143,13 @@ def main():
                 text = frags[fi][a:b]
                 t_ids = set(glsl.ids(text))
                 trials = [(y, rename(text, x, y)) for y in pool_names if y not in t_ids]
+                trials = trials[:poolcost.remaining()]
 
                 def cost(tr):
                     fr = list(frags)
                     fr[fi] = fr[fi][:a] + tr[1] + fr[fi][b:]
                     return poolcost.cost(pool(fr))
-                with ThreadPoolExecutor(16) as ex:
+                with ThreadPoolExecutor(poolcost.WORKERS) as ex:
                     cs = list(ex.map(cost, trials))
                 if not cs:
                     continue
@@ -156,7 +159,6 @@ def main():
                     frags[fi] = frags[fi][:a] + new + frags[fi][b:]
                     best = cs[j]
                     print(round(time.time() - t0), 'f%d' % fi, x, '->', y, best, flush=True)
-                    minify.save(args[1], frags, recipes)
     minify.save(args[1], frags, recipes)
     print('final', best)
 

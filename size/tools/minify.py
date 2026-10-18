@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-"""Exact lexical/preprocessor minification passes over the CG29 shader pool.
+"""Research lexical/preprocessor minification candidates for the CG29 shader pool.
 
-minify.py IN OUT [pass ...]: IN/OUT are fragment directories (NN.glsl + recipes.json). Every pass keeps
-each program's meaning: the preprocessed token stream (pp) or the glslang AST (others) is unchanged, which
-astcheck.py confirms. Passes:
+minify.py IN OUT [pass ...]: IN/OUT are fragment directories (NN.glsl + recipes.json).
+These heuristics are NOT equivalence proofs. Validate the actual candidate and its
+host ABI, then capture the integrated executable. Passes:
   pp      resolve #if/#ifdef/#ifndef groups whose outcome is the same in every program that includes the
           fragment, then drop #defines that no including program references
   empty   drop empty fragments from pool and recipes
   unizero drop `=0.` / `=vecN(0.,...)` initializers of uniforms (uniforms default to zero)
 """
 import json
+import os
 from pathlib import Path
 import re
+import shutil
 import sys
+import tempfile
 
 ID = re.compile(r'[A-Za-z_]\w*')
 
@@ -20,18 +23,38 @@ ID = re.compile(r'[A-Za-z_]\w*')
 def load(d):
     d = Path(d)
     recipes = json.loads((d / 'recipes.json').read_text())
-    frags = [f.read_text('latin1') for f in sorted(d.glob('[0-9][0-9].glsl'))]
+    files = sorted(d.glob('*.glsl'))
+    if [p.name for p in files] != [f'{i:02d}.glsl' for i in range(len(files))]:
+        raise ValueError('fragment indices must be contiguous')
+    frags = [f.read_text('latin1') for f in files]
+    if not recipes or any(not r or any(type(i) is not int or not 0 <= i < len(frags) for i in r) for r in recipes):
+        raise ValueError('invalid recipes')
     return frags, recipes
 
 
 def save(d, frags, recipes):
+    """Publish a complete, new experiment atomically; never overwrite an old run."""
     d = Path(d)
-    d.mkdir(parents=True, exist_ok=True)
-    for old in d.glob('[0-9][0-9].glsl'):
-        old.unlink()
-    for i, f in enumerate(frags):
-        (d / f'{i:02d}.glsl').write_bytes(f.encode('latin1'))
-    (d / 'recipes.json').write_text(json.dumps(recipes))
+    d.parent.mkdir(parents=True, exist_ok=True)
+    lock = d.with_name(d.name + '.lock')
+    with lock.open('x'):
+        try:
+            if d.exists():
+                raise FileExistsError(f'experiment output already exists: {d}')
+            stage = Path(tempfile.mkdtemp(prefix=d.name + '-', dir=d.parent))
+            try:
+                for i, f in enumerate(frags):
+                    (stage / f'{i:02d}.glsl').write_bytes(f.encode('latin1'))
+                (stage / 'recipes.json').write_text(json.dumps(recipes) + '\n')
+                proxy = sys.modules.get('poolcost')
+                if proxy is not None and proxy._pack is not None:
+                    (stage / 'experiment.json').write_text(json.dumps(proxy.metadata(), indent=2) + '\n')
+                os.rename(stage, d)
+            finally:
+                if stage.exists():
+                    shutil.rmtree(stage)
+        finally:
+            lock.unlink()
 
 
 def users(recipes, n):

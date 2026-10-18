@@ -4,8 +4,9 @@
 permute.py IN OUT [--seconds S] [--seed N]: a move swaps two internal names, or renames one to a fresh
 name, uniformly in every fragment (including #define lines and struct field selections of field names).
 Internal names are declared in the pool and are not uniforms, outputs, `main`, or swizzle-like.
-A uniform consistent permutation of internal identifiers is an alpha-renaming of every program.
-Cost: native kkrunchy model of the whole pool."""
+The name inventory is heuristic, not a scope/type proof. Run the binding-aware
+checker on the assembled programs before using a candidate.
+Cost: native kkrunchy model of the whole pool (not whole EXE)."""
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import random
@@ -102,6 +103,7 @@ def main():
     args = sys.argv[1:]
     seconds = float(args[args.index('--seconds') + 1]) if '--seconds' in args else 600
     seed = int(args[args.index('--seed') + 1]) if '--seed' in args else 1
+    poolcost.start(args[1], seed)
     frags, recipes = minify.load(args[0])
     internal, fields, used = analyse(frags)
     names = sorted(internal)
@@ -127,13 +129,17 @@ def main():
             return None
         return {x: y}
 
-    with ThreadPoolExecutor(16) as ex:
-        while time.time() - t0 < seconds:
+    with ThreadPoolExecutor(poolcost.WORKERS) as ex:
+        while time.time() - t0 < seconds and poolcost.remaining() and names and fresh:
             props = []
-            while len(props) < 32:
+            for _ in range(128):
+                if len(props) >= min(32, poolcost.remaining()):
+                    break
                 p = propose()
                 if p:
                     props.append(p)
+            if not props:
+                break
             costs = list(ex.map(lambda m: poolcost.cost(pool(apply(frags, m, fields))), props))
             k = min(range(len(costs)), key=costs.__getitem__)
             if costs[k] < best:
@@ -161,7 +167,6 @@ def main():
                         fields.add(x)
                 names.sort()
                 print(round(time.time() - t0), m, best, flush=True)
-                minify.save(args[1], frags, recipes)
     minify.save(args[1], frags, recipes)
     print('final', best)
 

@@ -17,6 +17,7 @@ def main():
     args = sys.argv[1:]
     seconds = float(args[args.index('--seconds') + 1]) if '--seconds' in args else 600
     seed = int(args[args.index('--seed') + 1]) if '--seed' in args else 1
+    poolcost.start(args[1], seed)
     frags, recipes = minify.load(args[0])
     enc = [f.encode('latin1') + b'\0' for f in frags]
     cost = lambda order: poolcost.cost(b''.join(enc[j] for j in order))
@@ -25,15 +26,17 @@ def main():
     print('start', best, flush=True)
     rng = random.Random(seed)
     t0 = time.time()
-    with ThreadPoolExecutor(16) as ex:
-        while time.time() - t0 < seconds:
+    with ThreadPoolExecutor(poolcost.WORKERS) as ex:
+        while time.time() - t0 < seconds and poolcost.remaining() and len(cur) > 1:
             cands = []
-            for _ in range(32):
+            for _ in range(min(32, poolcost.remaining())):
                 i, j = rng.randrange(len(cur)), rng.randrange(len(cur))
                 if i != j:
                     o = list(cur)
                     o.insert(j, o.pop(i))
                     cands.append(o)
+            if not cands:
+                break
             cs = list(ex.map(cost, cands))
             k = min(range(len(cs)), key=cs.__getitem__)
             if cs[k] < best:
