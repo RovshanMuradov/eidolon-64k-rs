@@ -81,14 +81,8 @@ def build_pe(tree):
     target = WORK / 'target'
     linker_dir = tree / 'tools/rust'
     run([sys.executable, linker_dir / 'layout.py', '--check'], tree)
-    # Cargo does not track the contents of a custom linker or its -T script.
-    # Invalidate its products when layout inputs change, even with identical
-    # Rust sources/RUSTFLAGS; otherwise a cached PE silently keeps the old order.
-    link_inputs = ('minimal-linker', 'coff.py', 'layout.py', 'lay2.json', 'sizecoded.ld')
-    link_hash = sha(b''.join(name.encode() + b'\0' + (linker_dir / name).read_bytes() for name in link_inputs))
-    stamp = WORK / 'link-inputs.sha256'
-    if not stamp.exists() or stamp.read_text().strip() != link_hash:
-        shutil.rmtree(target, ignore_errors=True)
+    # size/crate/build.rs watches tools/rust (including the manifest, scripts,
+    # and post-link merger), so Cargo relinks without discarding core/alloc.
     env = dict(os.environ, CARGO_TARGET_DIR=str(target), CARGO_PROFILE_SIZECODED_OPT_LEVEL='z',
                CARGO_TARGET_I686_PC_WINDOWS_GNU_LINKER=str(tree / 'tools/rust/minimal-linker'),
                EIDOLON_COMPACT_GRAPHICS_BLOB=str(tree / 'src/data/graphics.cg29'), RUSTC_BOOTSTRAP='1',
@@ -98,7 +92,6 @@ def build_pe(tree):
     run(['cargo', 'build', '--target', tree / 'tools/rust/i686-pc-windows-gnu.json', '--profile', 'sizecoded',
          '--features', 'sizecoded,compact-graphics,fixed-core', '--bin', 'eidolon-runtime', '--locked', '--offline',
          '-Z', 'build-std=core,alloc', '-Z', 'json-target-spec'], tree, env)
-    stamp.write_text(link_hash + '\n')
     return (target / 'i686-pc-windows-gnu/sizecoded/eidolon-runtime.exe').read_bytes()
 
 
@@ -191,10 +184,14 @@ def main():
     parser.add_argument('--output', type=Path, default=OUTPUT,
                         help='delivered EXE path (default: .build/eidolon-size.exe)')
     parser.add_argument('--link-order', type=Path,
-                        help='use this linker script in the staged tree (requires --candidate)')
+                        help='staged linker script override (requires --candidate and --layout-manifest)')
+    parser.add_argument('--layout-manifest', type=Path,
+                        help='matching strict layout manifest for --link-order')
     args = parser.parse_args()
+    if bool(args.link_order) != bool(args.layout_manifest):
+        parser.error('--link-order and --layout-manifest must be supplied together')
     if args.link_order and not args.candidate:
-        parser.error('--link-order requires --candidate')
+        parser.error('--link-order/--layout-manifest require --candidate')
     WORK, OUTPUT = args.work_dir.resolve(), args.output.resolve()
     if WORK == ROOT or ROOT.is_relative_to(WORK):
         parser.error('--work-dir must not be the repository or one of its parents')
@@ -207,6 +204,7 @@ def main():
     tree = stage()
     if args.link_order:
         shutil.copyfile(args.link_order, tree / 'tools/rust/sizecoded.ld')
+        shutil.copyfile(args.layout_manifest, tree / 'tools/rust/lay2.json')
     inputs = input_hashes(tree)
     unprepared = build_pe(tree)
     (WORK / 'unprepared.exe').write_bytes(unprepared)
