@@ -35,6 +35,18 @@ This prints `CANDIDATE`, not `PASS`, and leaves the accepted hash unchanged. The
 packer identity, and delivered EXE identity. A successful build does not perform a media comparison.
 `--link-order path/to/order.ld` overrides only the staged linker script and requires `--candidate`.
 
+To compare packers against the same already-built PE:
+
+```sh
+python3 size/tools/pack_matrix.py \
+  --input combined=.build/candidate/unprepared.exe \
+  --packer tuned=.build/candidate/packer/kkrunchy.exe \
+  --work-dir .build/matrix
+```
+
+Repeat `--input` or `--packer` for a finite matrix. The fresh output directory retains each candidate
+and its manifest; measurements never replace the accepted hash.
+
 ## How the bytes were saved
 
 Milestones; from 59 392 bytes on, each passed a full capture before it replaced the previous one:
