@@ -126,6 +126,9 @@ def run(args):
             write(path, manifest)
             rejects('repinned prepared-code corruption', lambda: inputs(path, oracle))
     return dict(status='OFFLINE_CORRUPTION_CONTROLS_PASS', checks=len(results), results=results,
+                checker_sha256=sha(__file__),
+                candidate_manifest_sha256=sha(args.manifest) if args.manifest else None,
+                candidate_sha256=load(args.manifest)['files']['candidate']['sha256'] if args.manifest else None,
                 reference_state_sha256=args.reference_state_sha256,
                 ledger_sha256=state['output']['output/events.bin']['sha256'],
                 reference_manifest_sha256=oracle.provenance['reference_manifest_sha256'],

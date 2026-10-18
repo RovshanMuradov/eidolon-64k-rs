@@ -1,0 +1,113 @@
+{
+  "schema": "eidolon-size-phase2-summary-1",
+  "status": "TASK_GOALS_VERIFIED_WITH_EXPLICIT_LIMITATIONS",
+  "candidate_sha256": "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458",
+  "delivered_bytes": 44139,
+  "source_commit": "6b4a4657e46d8659b473ab4698ce16fc33c55a5f",
+  "observed_utc": "2026-10-18T04:15:33.446680+00:00",
+  "production_accepted": false,
+  "native_windows_tested": false,
+  "checks": {
+    "full_media": "FULL_MEDIA_EXACT_PARTIAL",
+    "matching_frame_hashes": 27000,
+    "raw_anchors_exact": 510,
+    "pcm_bytes_exact": 159716352,
+    "physics_samples_exact": 151,
+    "decoder_stages_restored": 3,
+    "natural_terminal_cursor": 19845000,
+    "all_three_runs_clean_exit_and_cleanup": true,
+    "source_files_hash_matched": 194,
+    "media_and_input_controls": 22,
+    "paired_playback_controls": 5,
+    "uninjected_playback_runs": 2
+  },
+  "baseline_sha256": "a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3",
+  "baseline_bytes": 47561,
+  "playback_observations": {
+    "launcher_wall_seconds": {
+      "baseline": 670.0532794479514,
+      "final": 691.0547557240352,
+      "observed_delta": 21.00147627608385,
+      "observed_delta_percent": 3.1342994535280333
+    },
+    "launch_to_first_uncorked_audio_seconds": {
+      "baseline": 217.01824,
+      "final": 237.019337,
+      "observed_delta": 20.001097000000016,
+      "observed_delta_percent": 9.216320711107052
+    },
+    "target_peak_sampled_rss_bytes": {
+      "baseline": 1001336832,
+      "final": 1043046400,
+      "observed_delta": 41709568,
+      "observed_delta_percent": 4.165388375527157
+    },
+    "target_max_observed_hwm_bytes": {
+      "baseline": 1020108800,
+      "final": 1043046400,
+      "observed_delta": 22937600,
+      "observed_delta_percent": 2.2485444689821277
+    },
+    "owned_process_peak_sampled_rss_bytes": {
+      "baseline": 2004742144,
+      "final": 2046193664,
+      "observed_delta": 41451520,
+      "observed_delta_percent": 2.0676733975020456
+    }
+  },
+  "timed_playback_runner_seconds": 1361.1080351719866,
+  "performance_interpretation": "Final has +20.00 s observed startup and +39.78 MiB sampled target RSS in this single pair. No formal performance threshold or statistical conclusion is asserted.",
+  "observer_diagnostics": {
+    "path": ".build/verify/paired-playback-console.txt",
+    "sha256": "814163d0372173d06cbd85ae180e93436150ae555a99661fe564959c143aa14c",
+    "warning_count": 129,
+    "warning_kinds": [
+      "Invalid ASCII character: 0xffffffc3",
+      "Invalid ASCII character: 0xffffffe2",
+      "Invalid ASCII character: 0xfffffff0"
+    ],
+    "scope": "Warnings were emitted on the external observer console, not either target runner log. The pactl JSON/audio attribution checks succeeded; the triggering metadata was not isolated."
+  },
+  "reports": {
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-inputs.json": "8ee0ae15c949cac8446049db4f234f40e12591dd8de2ad84c4f9c72417e64403",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-build.json": "364a79673ec7aa97652f7a1bad6c56320aebe91a121b04b5309c2d968ea14988",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-source-validation.json": "669abcef72f949d337db29ef0474f0afee9f0516e98510ed3023411ea2f27bb7",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-controls.json": "3199a91c8ae8f60a3055e43d741e8031b52517a078a9502c5cfe3ec873b0d40b",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-full.json": "b873dba475f1edf40469099e0369bad8897bd6e98891715b35061970c6329e79",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-playback.json": "3a3152645fa075491ac0e39e26cb183a685944420130aa2875c9bc6f5de67a05",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-paired.json": "79e0e2ef75b367381055215c6e682725232555fa0dd5a1c40b04920437b7380a",
+    "d59888ef0ef7bb1f737e755d96892f0537037118d172073806a5ce26e47cf458-playback-controls.json": "e498eb0c0817766859d4d98ce3b1d5c826d2dc82db271d5e3929af38a032f3c8",
+    "a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3-playback.json": "420133bf7aa323b3c775ecb069f9aac94a340c4162f53bccf7cf1b090e556399",
+    "a46ecc05529d07d3f0ab333595f327681dd509a61853ce779611c1ae412964c3-provenance.json": "273312517930f909f714e2d5e9f9d3d5bafaf4b56489fea0f7e4e28407d2f966"
+  },
+  "clean_rebuild": "Separate integrating-session attestation; no assertion about its completion is made here.",
+  "remaining": [
+    "agreed formal acceptance criteria",
+    "native Windows execution"
+  ],
+  "gpu_reservation": "released; no owned acquisition remains",
+  "shader_cache_observations": {
+    "baseline": {
+      "configured_path": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-baseline47561/cache/nvidia",
+      "directory_exists": false,
+      "files_observed": 0,
+      "effective_driver_cache_behavior": "not established by external telemetry; no cold-cache claim"
+    },
+    "final": {
+      "configured_path": "/home/rovshan/Work/asm/eidolon-finish-verification/.build/verify/playback-final44139/cache/nvidia",
+      "directory_exists": false,
+      "files_observed": 0,
+      "effective_driver_cache_behavior": "not established by external telemetry; no cold-cache claim"
+    }
+  },
+  "performance_limitations": [
+    "One run per executable; external approximately one-second sampling, no statistical speedup claim.",
+    "First uncorked audio is an external startup-to-device-submission observation, not an internal synthesis-only or depacker timestamp.",
+    "Owned-process RSS sums can double-count shared pages; GPU VRAM, kernel memory, and shared audio-server memory are excluded.",
+    "Observed target VmHWM is the kernel high-water mark at sampled times; process exit can hide a later peak.",
+    "Fresh copied Wine prefixes and distinct requested shader-cache paths; effective driver-cache behavior, filesystem/page caches, and ambient desktop activity are not established as cold or controlled.",
+    "Private null sink measures live-clock playback submission, not physical-speaker output.",
+    "No per-frame latency distribution is measured; presentation counts are from the real-clock endpoint, not capture-file I/O.",
+    "Wine on Linux; native Windows execution is untested."
+  ]
+}
