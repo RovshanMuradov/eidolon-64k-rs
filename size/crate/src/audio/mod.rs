@@ -34,8 +34,6 @@ fn fatal() -> ! {
 
 /// Render every sample of the fixed score; controls and state are private to this call.
 pub fn render(output: &mut [f32]) -> Result<(), &'static str> {
-    // The sizecoded worker always passes the exact allocation.
-    #[cfg(not(feature="sizecoded"))]
     if output.len() != TOTAL_FRAMES as usize * CHANNELS {
         return Err("pcm size");
     }
