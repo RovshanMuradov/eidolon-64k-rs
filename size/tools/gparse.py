@@ -2,6 +2,7 @@
 
 Works on the significant tokens of glsl.lex(); returns trees of tuples. Used to validate token
 deletions: a deletion is kept only if the reparsed tree is unchanged after normalization."""
+from decimal import Decimal
 import re
 
 TYPES = {'float', 'int', 'bool', 'uint', 'vec2', 'vec3', 'vec4', 'ivec2', 'ivec3', 'ivec4', 'bvec2', 'bvec3',
@@ -225,24 +226,30 @@ SWZ = str.maketrans('rgbastpq', 'xyzwxyzw')
 
 
 def number(tok):
-    """('f', value) for float literals, ('i', value) for int literals."""
-    t = tok.rstrip('fF')
-    if re.fullmatch(r'\d+', t):
-        return ('i', int(t))
-    return ('f', float(t))
+    """Exact spelling-value normalization; never round through Python floats."""
+    if re.fullmatch(r'(?:0[xX][0-9a-fA-F]+|\d+)[uU]?', tok):
+        unsigned = tok[-1:] in ('u', 'U')
+        t = tok[:-1] if unsigned else tok
+        base = 16 if t.lower().startswith('0x') else 8 if len(t) > 1 and t.startswith('0') else 10
+        try:
+            return ('u' if unsigned else 'i', int(t, base))
+        except ValueError:
+            return ('literal', tok)
+    if re.fullmatch(r'(?:\d+\.\d*|\.\d+|\d+)(?:[eE][+-]?\d+)?[fF]?', tok):
+        return ('f', Decimal(tok.rstrip('fF')))
+    return ('literal', tok)
 
 
 def strip(tree):
     """Normalize: drop parens, unwrap single-statement blocks used as if/for bodies, split decls,
-    canonical literal spelling, rgba/stpq swizzles as xyzw, and vecN(c,..,c) of one literal as vecN(c)."""
+    exact literal spelling values, and vecN(c,..,c) of one literal as vecN(c).
+    Field spellings are never treated as swizzles without type information."""
     if not isinstance(tree, tuple):
         return tree
     if tree and tree[0] == 'paren':
         return strip(tree[1])
     if tree and tree[0] == 'num':
         return ('num', number(tree[1]))
-    if tree and tree[0] == 'field' and re.fullmatch(r'[rgbastpq]{1,4}', tree[2]):
-        return ('field', strip(tree[1]), tree[2].translate(SWZ))
     if tree and tree[0] == 'call' and tree[1][0] == 'id' and re.fullmatch(r'[ib]?vec[234]', tree[1][1]):
         args = tuple(strip(a) for a in tree[2])
         if len(args) == int(tree[1][1][-1]) and all(a[0] == 'num' for a in args) and len(set(args)) == 1:

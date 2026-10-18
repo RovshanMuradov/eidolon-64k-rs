@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Hill-climb the order of top-level functions/declarations inside each fragment of the CG29 pool.
+"""Research function-order proposals inside each fragment of the CG29 pool.
 
-itemorder.py IN OUT [--seconds S] [--seed N]: items move only within runs of func/decl items between
+itemorder.py IN OUT [--seconds S] [--seed N]: functions move only within runs of func/decl items between
 preprocessor lines, and only to positions where every name an item uses that is defined in the same
 run is still defined earlier (functions, globals, structs). Overload sets keep their relative order.
-Cost: native kkrunchy model of the whole pool."""
+Declarations keep their order. Name dependencies are conservative heuristics: run
+the binding-aware checker on assembled programs. Cost is only a pool proxy."""
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import random
@@ -66,14 +67,8 @@ def valid(run):
     for kind, text in run:
         d = defined(kind, text)
         used = set(glsl.ids(text)) & names_in_run
-        if kind == 'func':
-            # body uses; own name may recurse into an earlier overload, which must stay earlier
-            pass
         if (used - d) - seen:
             return False
-        if kind == 'func' and glsl.func_name(text) in seen and not all(
-                True for _ in [0]):
-            pass
         seen |= d
     return True
 
@@ -86,6 +81,7 @@ def main():
     args = [a for a in sys.argv[1:]]
     seconds = float(args[args.index('--seconds') + 1]) if '--seconds' in args else 300
     seed = int(args[args.index('--seed') + 1]) if '--seed' in args else 1
+    poolcost.start(args[1], seed)
     frags, recipes = minify.load(args[0])
     segs = [runs(f) for f in frags]
     # overload order: functions sharing a name keep relative order (checked in move)
@@ -103,8 +99,10 @@ def main():
         i, j = rng.randrange(len(run)), rng.randrange(len(run))
         if i == j:
             return None
-        if re.match(r'\s*out\b', run[i][1]):
-            return None  # output declarations keep their order (fragment output locations)
+        # Move functions only. Declaration/global initializer/interface order is
+        # not a name-dependency problem and must never be shuffled heuristically.
+        if run[i][0] != 'func':
+            return None
         item = run.pop(i)
         run.insert(j, item)
         names = [glsl.func_name(t) if k == 'func' else None for k, t in run]
@@ -124,13 +122,17 @@ def main():
         S[fi] = s
         return poolcost.cost(pool(S))
 
-    with ThreadPoolExecutor(16) as ex:
-        while time.time() - t0 < seconds:
+    with ThreadPoolExecutor(poolcost.WORKERS) as ex:
+        while time.time() - t0 < seconds and poolcost.remaining() and movable:
             props = []
-            while len(props) < 32:
+            for _ in range(128):
+                if len(props) >= min(32, poolcost.remaining()):
+                    break
                 p = propose()
                 if p:
                     props.append(p)
+            if not props:
+                break
             costs = list(ex.map(cost, props))
             k = min(range(len(costs)), key=costs.__getitem__)
             if costs[k] < best:
@@ -140,7 +142,6 @@ def main():
                 s[si] = ('run', run)
                 segs[fi] = s
                 print(round(time.time() - t0), best, flush=True)
-                minify.save(args[1], [join(s) for s in segs], recipes)
     minify.save(args[1], [join(s) for s in segs], recipes)
     print('final', best)
 

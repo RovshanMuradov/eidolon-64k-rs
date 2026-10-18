@@ -44,7 +44,7 @@ def literal_forms(tok):
     if not a2 and b2:
         forms.add('0.' + b2)
     forms.discard(tok)
-    return [f for f in forms if f != '.' and float(f) == float(tok)]
+    return sorted(f for f in forms if f != '.' and gparse.number(f) == gparse.number(tok))
 
 
 def candidates(text, kinds):
@@ -99,6 +99,9 @@ def main():
     if '--rounds' in sys.argv:
         args.remove(str(rounds))
     src, dst, kinds = args[0], args[1], args[2:]
+    if 'swz' in kinds:
+        raise ValueError('swz requires typed field resolution; the untyped rewrite is disabled')
+    poolcost.start(dst)
     frags, recipes = minify.load(src)
     for f in frags:
         STRUCTS.update(re.findall(r'\bstruct\s+(\w+)', f))
@@ -118,9 +121,7 @@ def main():
                     new = apply_edits(text, e)
                     if tree(new) != t0:
                         continue
-                    # no token fusion
-                    if [t for t, _, _ in lexmin.sig(new)] != [t for t, _, _ in lexmin.sig(new)]:
-                        continue
+                    # The parser is a proposal filter, not a binding/type proof.
                     cands.append((fi, a, b, tuple((x + a, y + a, r) for x, y, r in e)))
 
         def gain(c):
@@ -128,7 +129,9 @@ def main():
             fr = list(frags)
             fr[fi] = apply_edits(fr[fi], e)
             return best - poolcost.cost(pool(fr))
-        with ThreadPoolExecutor(16) as ex:
+        # Reserve half the remaining budget for sequential acceptance checks.
+        cands = cands[:poolcost.remaining() // 2]
+        with ThreadPoolExecutor(poolcost.WORKERS) as ex:
             gains = list(ex.map(gain, cands))
         order = sorted((g, i) for i, g in enumerate(gains) if g > 0)[::-1]
         print('round', rnd, 'candidates', len(cands), 'positive', len(order), flush=True)
@@ -140,6 +143,8 @@ def main():
         base = list(frags)
         cur = best
         for g, i in order:
+            if not poolcost.remaining():
+                break
             fi, a, b, e = cands[i]
             if overlaps(e, used.get(fi, [])):
                 continue
@@ -148,10 +153,6 @@ def main():
             for fj, es in accepted.items():
                 fr[fj] = apply_edits(base[fj], es)
             fr[fi] = apply_edits(base[fi], trial)
-            # whole-fragment tree check of affected functions
-            ok = True
-            for x, y in func_spans(base[fi]):
-                pass
             c = poolcost.cost(pool(fr))
             if c < cur:
                 # verify all functions of this fragment still parse to the original trees
